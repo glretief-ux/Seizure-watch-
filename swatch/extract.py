@@ -103,7 +103,7 @@ def _drugs(title_n, text_n):
 # Words that show a number is a running total / comparison / campaign figure, not one seizure.
 CUMUL = re.compile(
     r"\bsince\b|\bso far\b|\bthis year\b|year[- ]to[- ]date|\blast (?:year|month|week)\b|\bin 20\d\d\b|during 20\d\d"
-    r"|over the (?:past|last|summer|year|month|week|weekend)|in the (?:past|last|first)\b|\bpast (?:few )?(?:days|weeks|months|years)\b"
+    r"|over (?:the )?(?:past|last|summer|year|month|week|weekend)|in the (?:past|last|first)\b|\bpast (?:few )?(?:days|weeks|months|years)\b"
     r"|\bin (?:\d+|two|three|four|five|six|seven|eight|nine|ten) (?:days|weeks|months)\b"
     r"|\baltogether\b|\boverall\b|\bcumulative\b|\bcompared (?:with|to)\b|\bannual(?:ly)?\b|\bpreviously\b|\bearlier this\b"
     r"|\bcampaign\b|\bcrackdown\b|\boperations\b"
@@ -154,6 +154,11 @@ def _sentence(t, s, e, reach=100):
     right = t.find(". ", e)
     right = len(t) if right < 0 else right
     return t[max(left, s - reach): min(right, e + reach)]
+
+
+# "storage container", "plastic container" etc. are not shipping containers
+NON_SHIP_CONTAINER = re.compile(r"\b(?:storage|plastic|glass|metal|food|liquid|chemical|empty|small|gallon|paint|coffee|"
+                                r"tupperware|sealed|airtight|foam)\s+containers?\b|\bcontainers?\s+(?:of|with)\b")
 
 
 def _quantities(t, primary, title_len=0, en=True):
@@ -340,7 +345,7 @@ def extract(title, text="", source_country=None):
     if not primary or not L.SEIZURE.search(t) or L.EXCLUDE.search(title_n):
         return rec
     kg, units, unit_type = _quantities(t, primary, len(title_n) + 2, _english(t))
-    in_container = 1 if L.CONTAINER.search(t) else 0
+    in_container = 1 if L.CONTAINER.search(NON_SHIP_CONTAINER.sub(" ", t)) else 0
     cats, detail = _concealment(t, in_container)
     route = _route(t, source_country)
     arrests = _arrests(t)
