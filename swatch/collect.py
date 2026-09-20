@@ -80,18 +80,64 @@ def google_news(query, ed, days):
     return out
 
 
+def _decoded(res):
+    """The publisher address from a googlenewsdecoder result. Old versions answer {"status": True, ...},
+    version 0.2 and later answer {"success": True, ...}; accept both."""
+    if isinstance(res, dict) and (res.get("success") or res.get("status")) and res.get("decoded_url"):
+        return res["decoded_url"]
+    return None
+
+
 def resolve_google_link(url):
     """Google News links are redirects; googlenewsdecoder (optional) turns them into the publisher URL."""
     if "news.google.com" not in url:
         return url
     try:
         from googlenewsdecoder import gnewsdecoder
-        res = gnewsdecoder(url, interval=0.5)
-        if res.get("status") and res.get("decoded_url"):
-            return res["decoded_url"]
+        return _decoded(gnewsdecoder(url, interval=0.5)) or url
     except Exception:
-        pass
-    return url
+        return url
+
+
+def resolve_google_links(items, interval=0.3, chunk=25):
+    """Turn the Google News redirect links of many items into real article addresses (in place).
+    One polite pass, one small batch at a time. Returns (resolved, failed) and logs why links failed."""
+    todo = [it for it in items if "news.google.com" in it.get("url", "")]
+    if not todo:
+        return 0, 0
+    try:
+        from googlenewsdecoder import gnewsdecoder
+    except Exception as e:
+        log(f"   ! googlenewsdecoder is not available ({type(e).__name__}: {e}); reading headlines and snippets only")
+        return 0, len(todo)
+    done, why = 0, {}
+    for i in range(0, len(todo), chunk):
+        batch = todo[i:i + chunk]
+        urls = [b["url"] for b in batch]
+        try:
+            res = gnewsdecoder(urls, interval=interval)      # newer versions take a whole list in one go
+            if not isinstance(res, list) or len(res) != len(urls):
+                raise TypeError("list answer expected")
+        except Exception:
+            res = []
+            for u in urls:                                    # older versions: one link at a time
+                try:
+                    res.append(gnewsdecoder(u, interval=interval))
+                except Exception as e:
+                    res.append({"success": False, "message": f"{type(e).__name__}: {e}"})
+        for it, r in zip(batch, res):
+            real = _decoded(r)
+            if real:
+                it["url"] = clean_url(real)
+                done += 1
+            else:
+                msg = str((r or {}).get("message", r))[:110] if isinstance(r, dict) else str(r)[:110]
+                why[msg] = why.get(msg, 0) + 1
+    failed = len(todo) - done
+    log(f"      links resolved: {done} of {len(todo)}")
+    for msg, n in sorted(why.items(), key=lambda kv: -kv[1])[:3]:
+        log(f"   ! {n} links failed: {msg}")
+    return done, failed
 
 
 # ---------------------------------------------------------------------- GDELT
@@ -220,9 +266,15 @@ def fetch_text(item, resolve=True, max_chars=9000):
 
 
 def fetch_all(items, resolve=True, workers=6):
+    if resolve:
+        resolve_google_links(items)
+
     def one(it):
-        txt, mode = fetch_text(it, resolve)
+        txt, mode = fetch_text(it, resolve=False)
         it["text"], it["text_mode"] = txt, mode
         return it
     with ThreadPoolExecutor(max_workers=workers) as ex:
-        return list(ex.map(one, items))
+        out = list(ex.map(one, items))
+    full = sum(1 for i in out if i.get("text_mode") == "full")
+    log(f"      read in full: {full}; headline + snippet only: {len(out) - full}")
+    return out
