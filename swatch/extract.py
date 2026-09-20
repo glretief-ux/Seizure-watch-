@@ -344,8 +344,13 @@ def extract(title, text="", source_country=None):
     cats, detail = _concealment(t, in_container)
     route = _route(t, source_country)
     arrests = _arrests(t)
-    has_substance = bool(kg or units or arrests or cats or route["seizure_country"])
-    if not has_substance or (primary == "Unspecified" and not (kg or units)):
+    # A headline that names a drug and says it was seized is a real report even without a weight
+    # ("Heroin worth R2m seized at OR Tambo"); a generic "drugs" headline needs a stated value or weight.
+    seized_in_title = bool(L.SEIZURE.search(title_n))
+    valued = bool(re.search(r"\b(?:worth|valued|value of)\b", title_n))
+    has_substance = bool(kg or units or arrests or cats or route["seizure_country"]
+                         or (seized_in_title and primary != "Unspecified") or (seized_in_title and valued))
+    if not has_substance or (primary == "Unspecified" and not (kg or units or (seized_in_title and valued))):
         return rec
     transport = _transport(t, cats, in_container)
     organized = 1 if L.ORGANIZED.search(t) else 0
