@@ -16,9 +16,9 @@ WORDNUM.update({"dos": 2, "tres": 3, "cuatro": 4, "cinco": 5, "seis": 6, "siete"
                 "diez": 10, "deux": 2, "trois": 3, "quatre": 4, "cinq": 5, "sept": 7, "huit": 8, "neuf": 9, "dix": 10})
 
 NUM = r"(\d{1,3}(?:[.,]\d{3})+(?:[.,]\d+)?|\d+(?:[.,]\d+)?)"
-MULT = r"(?:\s*(million|millions|millon|millones|milhao|milhoes|billion|thousand|mil)(?![a-z]))?"
+MULT = r"(?:\s*(million|millions|millon|millones|milhao|milhoes|billion|thousand|mil|k)(?![a-z]))?"
 W_UNITS = (r"(tonnes?|tons?|toneladas?|tonelada|kilograms?|kilogrammes?|kilogramos|kilogramas|quilogramas?|kilos?|kgs?|"
-           r"grams?|grammes?|gramos?|gramas?|g|lbs?|pounds?|libras?)")
+           r"grams?|grammes?|gramos?|gramas?|gms?|g|lbs?|pounds?|libras?)")
 WEIGHT_RX = re.compile(NUM + MULT + r"[\s-]*" + W_UNITS + r"(?![a-z])")
 UNIT_RX = re.compile(NUM + MULT + r"[\s-]*(?:[a-z]+\s+)?(pills|tablets|capsules|comprimidos|pastillas|pilulas|pilules|"
                      r"comprimes|cigarettes|cigarrillos|cigarros|sticks|packs|cartons|cajetillas|master\s+cases|"
@@ -40,8 +40,19 @@ ARREST_C = re.compile(r"(?:detenid\w+|arrestad\w+|capturad\w+|aprehendid\w+|inte
                       + NUMW + r"\s+\w+")
 
 
-def parse_num(s):
+def parse_num(s, en=None):
+    """en=True: English style (1,200 = 1200 and 40.255 = 40.255). en=False/None: Spanish/French/Portuguese
+    style as well (1.200 = 1200)."""
     s = s.strip()
+    if en:
+        if re.fullmatch(r"\d{1,3}(,\d{3})+(\.\d+)?", s):
+            return float(s.replace(",", ""))
+        if re.fullmatch(r"\d+\.\d+", s):
+            return float(s)
+        if re.fullmatch(r"\d{1,3}(\.\d{3}){2,}", s):
+            return float(s.replace(".", ""))
+        if re.fullmatch(r"\d+,\d{1,2}", s):
+            return float(s.replace(",", "."))
     if re.fullmatch(r"\d{1,3}([.,]\d{3})+", s) and not s.startswith("0"):
         return float(re.sub(r"[.,]", "", s))
     if "," in s and "." in s:
@@ -53,7 +64,7 @@ def parse_num(s):
 
 def _mult(m):
     return {"million": 1e6, "millions": 1e6, "millon": 1e6, "millones": 1e6, "milhao": 1e6, "milhoes": 1e6,
-            "billion": 1e9, "thousand": 1e3, "mil": 1e3}.get(m, 1.0) if m else 1.0
+            "billion": 1e9, "thousand": 1e3, "mil": 1e3, "k": 1e3}.get(m, 1.0) if m else 1.0
 
 
 def _kg_factor(u):
@@ -89,31 +100,98 @@ def _drugs(title_n, text_n):
     return None, []
 
 
-def _quantities(t, primary):
-    best_kg, kg_hits = None, []
+# Words that show a number is a running total / comparison / campaign figure, not one seizure.
+CUMUL = re.compile(
+    r"\bsince\b|\bso far\b|\bthis year\b|year[- ]to[- ]date|\blast (?:year|month|week)\b|\bin 20\d\d\b|during 20\d\d"
+    r"|over the (?:past|last|summer|year|month|week|weekend)|in the (?:past|last|first)\b|\bpast (?:few )?(?:days|weeks|months|years)\b"
+    r"|\bin (?:\d+|two|three|four|five|six|seven|eight|nine|ten) (?:days|weeks|months)\b"
+    r"|\baltogether\b|\boverall\b|\bcumulative\b|\bcompared (?:with|to)\b|\bannual(?:ly)?\b|\bpreviously\b|\bearlier this\b"
+    r"|\bcampaign\b|\bcrackdown\b|\boperations\b"
+    r"|\bdesde\b|en lo que va|durante (?:el|los|las|este|esta|2\d{3})|hasta la fecha|\ben el ano\b|\bdepuis\b|cette annee|\bau total\b"
+    r"|\bao longo\b|\bnos ultimos\b|ate agora")
+# Chemicals used to make drugs are not drugs: keep them out of the seized-weight figure.
+PRECURSOR = re.compile(r"precursor|chemical|quimic|chimique|\bacid|acido|acide|solvent|reagent|ephedrine|efedrina|acetone|acetic"
+                       r"|anhidrido|\bp2p\b|\bbmk\b|\bpmk\b")
+MAX_SINGLE_KG = 40000.0          # more than 40 t in one seizure is almost always a running total or a parsing slip
+_EN = re.compile(r"\b(?:the|and|of|was|were|with|has|have|said|police|been|for|that|at|from|after|by)\b")
+_LAT = re.compile(r"\b(?:de|la|el|los|las|del|con|por|una|que|fue|se|en|le|les|des|du|et|dans|pour|est|um|uma|os|nao|com|para|foi|da|do|das|dos|y|o|e|au|aux)\b")
+
+
+def _english(t):
+    seg = t[:2500]
+    return len(_EN.findall(seg)) >= len(_LAT.findall(seg))
+
+
+def _is_precursor(t, s, e):
+    after = t[e:e + 45]
+    m = PRECURSOR.search(after)
+    if m and not L.ANY_DRUG.search(after[:m.start()]):
+        return True
+    return bool(PRECURSOR.search(t[max(0, s - 18):s]))
+
+
+def _select(hits, title_len):
+    """Prefer numbers in the headline, then the opening of the article, then the first mention."""
+    head = [h for h in hits if h[0] < title_len]
+    if head:
+        return head
+    lead = [h for h in hits if h[0] < title_len + 700]
+    return lead or hits[:1]
+
+
+def _distinct(vals):
+    out = []
+    for v in vals:                       # "1 tonne (2,204 lbs)" is one quantity, not two
+        if not any(abs(v - o) <= 0.06 * max(v, o) for o in out):
+            out.append(v)
+    return out[:3]
+
+
+def _sentence(t, s, e, reach=100):
+    """The sentence around a hit (so a total quoted in the NEXT sentence does not discredit this one)."""
+    left = t.rfind(". ", 0, s)
+    left = 0 if left < 0 else left + 2
+    right = t.find(". ", e)
+    right = len(t) if right < 0 else right
+    return t[max(left, s - reach): min(right, e + reach)]
+
+
+def _quantities(t, primary, title_len=0, en=True):
+    kg_hits, unit_hits, agg_title = [], [], False
     for m in WEIGHT_RX.finditer(t):
-        if not _in_context(t, m.start(), m.end()):
+        if not _in_context(t, m.start(), m.end()) or _is_precursor(t, m.start(), m.end()):
+            continue
+        if CUMUL.search(_sentence(t, m.start(), m.end())):
+            agg_title = agg_title or m.start() < title_len
             continue
         try:
-            kg = parse_num(m.group(1)) * _mult(m.group(2)) * _kg_factor(m.group(3))
+            kg_hits.append((m.start(), parse_num(m.group(1), en) * _mult(m.group(2)) * _kg_factor(m.group(3))))
         except ValueError:
             continue
-        kg_hits.append(kg)
-    if kg_hits:
-        best_kg = max(kg_hits)
-    best_units, unit_type = None, None
     for m in UNIT_RX.finditer(t):
         if not _in_context(t, m.start(), m.end()):
             continue
+        if CUMUL.search(_sentence(t, m.start(), m.end())):
+            agg_title = agg_title or m.start() < title_len
+            continue
         try:
-            v = parse_num(m.group(1)) * _mult(m.group(2))
+            v = parse_num(m.group(1), en) * _mult(m.group(2))
         except ValueError:
             continue
         kind = UNIT_KIND.get(re.sub(r"\s+", " ", m.group(3)), "packages")
         if primary == "Cigarettes" and kind not in ("cigarettes", "packs", "cases"):
             continue
-        if best_units is None or v > best_units:
-            best_units, unit_type = v, kind
+        unit_hits.append((m.start(), v, kind))
+    best_kg, best_units, unit_type = None, None, None
+    if agg_title:                        # the headline itself quotes a running total: do not trust any figure
+        return None, None, None
+    if kg_hits:
+        tot = sum(_distinct([v for _, v in _select(kg_hits, title_len)]))
+        best_kg = tot if 0.001 <= tot <= MAX_SINGLE_KG else None
+    if unit_hits:
+        sel = _select([(p, v) for p, v, _ in unit_hits], title_len)
+        pos, best_units = max(sel, key=lambda x: x[1])
+        unit_type = next(k for p, v, k in unit_hits if p == pos)
     return best_kg, best_units, unit_type
 
 
@@ -261,7 +339,7 @@ def extract(title, text="", source_country=None):
     rec = {"relevant": 0}
     if not primary or not L.SEIZURE.search(t) or L.EXCLUDE.search(title_n):
         return rec
-    kg, units, unit_type = _quantities(t, primary)
+    kg, units, unit_type = _quantities(t, primary, len(title_n) + 2, _english(t))
     in_container = 1 if L.CONTAINER.search(t) else 0
     cats, detail = _concealment(t, in_container)
     route = _route(t, source_country)

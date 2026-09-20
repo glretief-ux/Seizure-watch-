@@ -202,20 +202,24 @@ def _spikes(ev, keys, asof, A, label):
     return out
 
 
+def _txt(x):
+    return x if isinstance(x, str) and x else None
+
+
 def build_alerts(ev, corridors, asof, cfg, history_ok):
     A = cfg["analysis"]
     alerts = []
     recent = ev[ev["date"] >= asof - pd.Timedelta(days=2)]
     for r in recent[recent["risk_band"] == "High"].sort_values("risk_score", ascending=False).head(10).itertuples():
         alerts.append({"severity": "High", "type": "HIGH-RISK EVENT",
-                       "title": f"{r.primary_drug} - {r.seizure_place or r.seizure_country or 'location unclear'} "
+                       "title": f"{r.primary_drug} - {_txt(r.seizure_place) or _txt(r.seizure_country) or 'location unclear'} "
                                 f"(score {r.risk_score})",
                        "detail": r.mo_summary + (f" | Flags: {r.risk_flags}" if r.risk_flags else ""),
                        "urls": r.urls[:2]})
     week = ev[ev["date"] >= asof - pd.Timedelta(days=6)]
     for r in week[week["insider"].fillna(0) == 1].head(5).itertuples():
         alerts.append({"severity": "High", "type": "INSIDER SIGNAL",
-                       "title": f"Possible insider involvement - {r.seizure_place or r.seizure_country or 'location unclear'}",
+                       "title": f"Possible insider involvement - {_txt(r.seizure_place) or _txt(r.seizure_country) or 'location unclear'}",
                        "detail": r.mo_summary, "urls": r.urls[:2]})
     if history_ok:
         for r in corridors.itertuples() if len(corridors) else []:
