@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Seizure Watch - open-source drug seizure risk indicators</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
 :root{--ink:#1c2733;--mute:#66758a;--line:#e3e8ef;--bg:#f5f7fa;--card:#fff;--brand:#12355b;
 --hi:#c0392b;--med:#e08a00;--lo:#2e8b57;--r:10px}
@@ -47,6 +49,12 @@ td.w2{min-width:170px}td.w3{min-width:250px}
 .heat td:first-child{text-align:left;white-space:nowrap}
 a{color:#1656a3}
 footer{color:var(--mute);font-size:11.5px;padding:8px 2px 24px}
+#map{height:460px;border-radius:8px;border:1px solid var(--line);background:#e9eef3}
+@media(max-width:700px){#map{height:340px}}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:8px;font-size:12px;color:var(--mute);align-items:center}
+.legend i{display:inline-block;width:22px;height:0;border-top:3px solid;vertical-align:middle;margin-right:5px;border-radius:2px}
+.legend b{display:inline-block;width:10px;height:10px;border-radius:50%;vertical-align:middle;margin-right:5px;box-sizing:border-box}
+.arrowicon{background:none;border:0}
 @media print{.filters{display:none}}
 </style>
 </head>
@@ -63,12 +71,21 @@ footer{color:var(--mute);font-size:11.5px;padding:8px 2px 24px}
   <select id="fBand"><option value="">All risk bands</option><option>High</option><option>Medium</option><option>Low</option></select>
   <select id="fDays"><option value="7">Last 7 days</option><option value="30">Last 30 days</option><option value="90" selected>Last 90 days</option><option value="9999">All loaded</option></select>
   <select id="fMode"><option value="">All transport</option></select>
-  <input id="fQ" type="search" placeholder="Search country, port, concealment, headline...">
+  <input id="fQ" type="search" placeholder="Search e.g. Ghana to Hong Kong, cocaine Antwerp, food cargo...">
 </div>
 
 <div class="kpis" id="kpis"></div>
 
 <div class="card"><h2>Alerts <span class="small" id="alertNote"></span></h2><div id="alerts"></div></div>
+
+<div class="card"><h2>Route map <span class="small" id="mapNote"></span></h2>
+  <div id="map"></div>
+  <div class="legend">
+    <span><i style="border-color:#c0392b"></i>High risk</span><span><i style="border-color:#e08a00"></i>Medium</span><span><i style="border-color:#2e8b57"></i>Low</span>
+    <span><b style="border:2px solid #555;background:#fff"></b>origin</span><span><b style="background:#c0392b"></b>seizure point</span><span><b style="background:#12355b;border:1px solid #fff"></b>destination</span>
+    <span>Arrows show direction. Lines join country centres or ports, so they show the reported route, not the actual path. Tap a line for the report. The map follows the filters and search above.</span>
+  </div>
+</div>
 
 <div class="grid2">
   <div class="card"><h2>Seizure reports over time (by drug)</h2><div class="chartbox"><canvas id="cTime"></canvas></div></div>
@@ -116,9 +133,9 @@ $('fQ').addEventListener('input', render);
 
 function view() {
   const days = +$('fDays').value, cut = fmt(new Date(asof.getTime() - (days - 1) * 864e5));
-  const q = $('fQ').value.trim().toLowerCase(), dr = $('fDrug').value, bd = $('fBand').value, md = $('fMode').value;
+  const q = $('fQ').value.trim().toLowerCase(), toks = q.split(/[\s>\u2192,;]+/).filter(t => t && !['to','from','via','-','->'].includes(t)), dr = $('fDrug').value, bd = $('fBand').value, md = $('fMode').value;
   return D.events.filter(e => e.date >= cut && (!dr || e.drug === dr) && (!bd || e.band === bd) && (!md || e.transport === md) &&
-    (!q || [e.country,e.place,e.origin,e.dest,e.transit,e.conceal,e.title,e.corridor,e.drug].join(' ').toLowerCase().includes(q)));
+    (!toks.length || toks.every(t => [e.country,e.place,e.origin,e.dest,e.transit,e.conceal,e.title,e.corridor,e.route,e.drug].join(' ').toLowerCase().includes(t))));
 }
 const by = (arr, f) => { const m = {}; arr.forEach(x => { const k = f(x); if (k != null && k !== '') m[k] = (m[k] || 0) + 1; }); return m; };
 const topN = (m, n) => Object.entries(m).sort((a,b) => b[1]-a[1]).slice(0, n);
@@ -200,7 +217,85 @@ function render() {
   kpis(v); timeChart(v);
   hbar('cConc', topN(by(v.flatMap(e => e.conceal ? e.conceal.split('; ') : []), x => x), 10), '#2a6f97');
   hbar('cCorr', topN(by(v, e => e.corridor), 10), '#12355b');
-  mode(v); matrix(v); evTable(v);
+  mode(v); matrix(v); evTable(v); drawMap(v);
+}
+// ---- route map (Leaflet; needs internet for the map tiles)
+const GEO = {"c":{"Afghanistan":[33.9,67.7],"Albania":[41.2,20.2],"Algeria":[28.0,2.6],"Angola":[-11.2,17.9],"Argentina":[-38.4,-63.6],"Armenia":[40.1,45.0],"Australia":[-25.3,133.8],"Austria":[47.5,14.6],"Azerbaijan":[40.1,47.6],"Bahamas":[25.0,-77.4],"Bahrain":[26.0,50.55],"Bangladesh":[23.7,90.4],"Belarus":[53.7,27.9],"Belgium":[50.5,4.5],"Benin":[9.3,2.3],"Bolivia":[-16.3,-63.6],"Bosnia and Herzegovina":[43.9,17.7],"Brazil":[-14.2,-51.9],"Bulgaria":[42.7,25.5],"Burkina Faso":[12.2,-1.6],"Cambodia":[12.6,104.9],"Cameroon":[7.4,12.4],"Canada":[56.1,-106.3],"Cape Verde":[16.0,-24.0],"Chile":[-35.7,-71.5],"China":[35.9,104.2],"Colombia":[4.6,-74.1],"Congo":[-2.9,23.7],"Costa Rica":[9.7,-83.8],"Croatia":[45.1,15.2],"Cuba":[21.5,-77.8],"Curacao":[12.17,-69.0],"Cyprus":[35.1,33.4],"Czech Republic":[49.8,15.5],"Denmark":[56.3,9.5],"Dominican Republic":[18.7,-70.2],"Ecuador":[-1.8,-78.2],"Egypt":[26.8,30.8],"El Salvador":[13.8,-88.9],"Equatorial Guinea":[1.65,10.27],"Estonia":[58.6,25.0],"Ethiopia":[9.1,40.5],"Finland":[61.9,25.7],"France":[46.2,2.2],"French Guiana":[3.9,-53.1],"Gambia":[13.4,-15.3],"Germany":[51.2,10.4],"Ghana":[7.95,-1.0],"Greece":[39.1,21.8],"Guadeloupe":[16.25,-61.55],"Guatemala":[15.8,-90.2],"Guinea":[9.9,-9.7],"Guinea-Bissau":[11.8,-15.2],"Guyana":[4.9,-58.9],"Haiti":[18.97,-72.3],"Honduras":[15.2,-86.2],"Hong Kong":[22.32,114.17],"Hungary":[47.2,19.5],"Iceland":[64.96,-19.0],"India":[20.6,78.96],"Indonesia":[-0.8,113.9],"Iran":[32.4,53.7],"Iraq":[33.2,43.7],"Ireland":[53.4,-8.2],"Israel":[31.0,34.9],"Italy":[41.9,12.6],"Ivory Coast":[7.5,-5.5],"Jamaica":[18.1,-77.3],"Japan":[36.2,138.3],"Jordan":[30.6,36.2],"Kazakhstan":[48.0,66.9],"Kenya":[-0.02,37.9],"Kosovo":[42.6,20.9],"Kuwait":[29.3,47.5],"Kyrgyzstan":[41.2,74.8],"Laos":[19.9,102.5],"Latvia":[56.9,24.6],"Lebanon":[33.85,35.86],"Liberia":[6.4,-9.4],"Libya":[26.3,17.2],"Lithuania":[55.2,23.9],"Luxembourg":[49.8,6.1],"Madagascar":[-18.8,46.9],"Malaysia":[4.2,101.98],"Maldives":[3.2,73.2],"Mali":[17.6,-4.0],"Malta":[35.9,14.4],"Martinique":[14.6,-61.0],"Mauritania":[21.0,-10.9],"Mauritius":[-20.3,57.55],"Mexico":[23.6,-102.6],"Moldova":[47.4,28.4],"Mongolia":[46.9,103.8],"Montenegro":[42.7,19.4],"Morocco":[31.8,-7.1],"Mozambique":[-18.7,35.5],"Myanmar":[21.9,95.96],"Namibia":[-22.96,18.5],"Nepal":[28.4,84.1],"Netherlands":[52.1,5.3],"New Zealand":[-40.9,174.9],"Nicaragua":[12.9,-85.2],"Niger":[17.6,8.1],"Nigeria":[9.1,8.7],"North Macedonia":[41.6,21.7],"Norway":[60.5,8.5],"Oman":[21.5,55.9],"Pakistan":[30.4,69.3],"Panama":[8.5,-80.8],"Papua New Guinea":[-6.3,143.96],"Paraguay":[-23.4,-58.4],"Peru":[-9.2,-75.0],"Philippines":[12.9,121.8],"Poland":[51.9,19.1],"Portugal":[39.4,-8.2],"Puerto Rico":[18.2,-66.6],"Qatar":[25.35,51.2],"Romania":[45.9,25.0],"Russia":[61.5,105.3],"Rwanda":[-1.9,29.9],"Saudi Arabia":[23.9,45.1],"Senegal":[14.5,-14.5],"Serbia":[44.0,21.0],"Sierra Leone":[8.5,-11.8],"Singapore":[1.35,103.8],"Slovakia":[48.7,19.7],"Slovenia":[46.15,14.99],"Somalia":[5.15,46.2],"South Africa":[-30.6,22.9],"South Korea":[35.9,127.8],"Spain":[40.5,-3.7],"Sri Lanka":[7.9,80.8],"Sudan":[12.9,30.2],"Suriname":[3.9,-56.0],"Sweden":[60.1,18.6],"Switzerland":[46.8,8.2],"Syria":[34.8,38.99],"Taiwan":[23.7,121.0],"Tajikistan":[38.9,71.3],"Tanzania":[-6.4,34.9],"Thailand":[15.9,100.99],"Togo":[8.6,0.8],"Trinidad and Tobago":[10.7,-61.2],"Tunisia":[33.9,9.5],"Turkey":[38.96,35.2],"Turkmenistan":[38.97,59.6],"Uganda":[1.4,32.3],"Ukraine":[48.4,31.2],"United Arab Emirates":[23.4,53.8],"United Kingdom":[54.0,-2.5],"United States":[39.8,-98.6],"Uruguay":[-32.5,-55.8],"Uzbekistan":[41.4,64.6],"Venezuela":[6.4,-66.6],"Vietnam":[14.06,108.3],"Yemen":[15.55,48.5],"Zambia":[-13.1,27.85],"Zimbabwe":[-19.0,29.15]},"p":{"Abidjan":[5.32,-4.02,"Ivory Coast"],"Algeciras":[36.13,-5.45,"Spain"],"Antwerp":[51.26,4.4,"Belgium"],"Aqaba":[29.53,35.0,"Jordan"],"Bandar Abbas":[27.18,56.27,"Iran"],"Beirut":[33.9,35.5,"Lebanon"],"Buenaventura":[3.88,-77.03,"Colombia"],"Buenos Aires":[-34.6,-58.4,"Argentina"],"Busan":[35.1,129.04,"South Korea"],"Callao":[-12.05,-77.15,"Peru"],"Caucedo":[18.43,-69.63,"Dominican Republic"],"Colombo":[6.95,79.85,"Sri Lanka"],"Colon / Balboa":[9.35,-79.9,"Panama"],"Constanta":[44.17,28.65,"Romania"],"Cotonou":[6.36,2.43,"Benin"],"Dakar":[14.68,-17.43,"Senegal"],"Dar es Salaam":[-6.82,39.29,"Tanzania"],"Durban":[-29.87,31.03,"South Africa"],"Felixstowe":[51.96,1.35,"United Kingdom"],"Freeport":[26.53,-78.7,"Bahamas"],"Gdansk / Gdynia":[54.4,18.6,"Poland"],"Gioia Tauro":[38.43,15.9,"Italy"],"Gothenburg":[57.7,11.9,"Sweden"],"Guayaquil":[-2.2,-79.9,"Ecuador"],"Hamburg":[53.55,9.97,"Germany"],"Ho Chi Minh City":[10.78,106.7,"Vietnam"],"Jakarta":[-6.1,106.85,"Indonesia"],"Jebel Ali":[25.0,55.06,"United Arab Emirates"],"Karachi":[24.85,67.0,"Pakistan"],"Kingston":[17.97,-76.79,"Jamaica"],"Koper":[45.55,13.73,"Slovenia"],"Laem Chabang":[13.08,100.88,"Thailand"],"Lagos":[6.45,3.4,"Nigeria"],"Latakia":[35.52,35.78,"Syria"],"Lazaro Cardenas":[17.96,-102.2,"Mexico"],"Le Havre":[49.49,0.11,"France"],"Lome":[6.13,1.22,"Togo"],"Manila":[14.6,120.97,"Philippines"],"Mersin":[36.8,34.63,"Turkey"],"Mombasa":[-4.05,39.67,"Kenya"],"Montevideo":[-34.9,-56.2,"Uruguay"],"Nhava Sheva / Mundra":[18.95,72.95,"India"],"Paramaribo":[5.85,-55.2,"Suriname"],"Piraeus":[37.94,23.64,"Greece"],"Port Everglades":[26.09,-80.12,"United States"],"Port Klang":[3.0,101.4,"Malaysia"],"Port Said":[31.26,32.3,"Egypt"],"Port of Spain":[10.65,-61.5,"Trinidad and Tobago"],"Puerto Cortes":[15.84,-87.95,"Honduras"],"Puerto Limon":[9.99,-83.03,"Costa Rica"],"Rijeka":[45.33,14.44,"Croatia"],"Rotterdam":[51.95,4.14,"Netherlands"],"Santos":[-23.96,-46.33,"Brazil"],"Shanghai":[31.23,121.47,"China"],"Sines / Lisbon":[38.7,-9.14,"Portugal"],"Sydney":[-33.87,151.2,"Australia"],"Tanger Med":[35.89,-5.5,"Morocco"],"Tauranga":[-37.65,176.17,"New Zealand"],"Tema":[5.62,0.02,"Ghana"],"Valparaiso / Iquique":[-33.05,-71.62,"Chile"],"Vancouver":[49.29,-123.1,"Canada"],"Varna / Burgas":[43.2,27.93,"Bulgaria"]}};
+const BC = {High:'#c0392b', Medium:'#e08a00', Low:'#2e8b57'};
+let map = null, mapLayer = null;
+function pt(name, role, isPlace) {
+  if (!name) return null;
+  const p = isPlace ? GEO.p[name] : null;
+  if (p) return {c: [p[0], p[1]], role, name, cty: p[2], place: true};
+  const c = GEO.c[name] || (GEO.p[name] ? GEO.p[name].slice(0, 2) : null);
+  return c ? {c, role, name, cty: name, place: false} : null;
+}
+function eventPoints(e) {
+  const out = [];
+  const add = q => {
+    if (!q) return;
+    const last = out[out.length - 1];
+    if (last && last.cty === q.cty) {              // same country as the previous stop: keep one point
+      if (q.role === 'seizure' || (q.place && !last.place)) out[out.length - 1] = Object.assign({}, q, {role: q.role === 'seizure' ? 'seizure' : last.role});
+      return;
+    }
+    out.push(q);
+  };
+  add(pt(e.origin, 'origin'));
+  (e.transit || '').split(';').map(x => x.trim()).filter(Boolean).forEach(t => add(pt(t, 'transit')));
+  add(e.place ? pt(e.place, 'seizure', true) : pt(e.country, 'seizure'));
+  add(pt(e.dest, 'dest'));
+  return out;
+}
+function arc(a, b) {
+  let lon2 = b[1]; const d = lon2 - a[1];
+  if (d > 180) lon2 -= 360; else if (d < -180) lon2 += 360;
+  const p0 = [a[0], a[1]], p2 = [b[0], lon2], dl = p2[0] - p0[0], dn = p2[1] - p0[1];
+  if (Math.abs(dl) + Math.abs(dn) < 0.6) return [p0, p2];
+  const c = [(p0[0] + p2[0]) / 2 - 0.18 * dn, (p0[1] + p2[1]) / 2 + 0.18 * dl], pts = [];
+  for (let i = 0; i <= 24; i++) { const t = i / 24, u = 1 - t; pts.push([u*u*p0[0] + 2*u*t*c[0] + t*t*p2[0], u*u*p0[1] + 2*u*t*c[1] + t*t*p2[1]]); }
+  return pts;
+}
+function popupHtml(e) {
+  return '<b>' + esc(e.title) + '</b><br>' + esc(e.date) + ' | ' + esc(e.drug) + (qty(e) ? ' | ' + esc(qty(e)) : '') +
+    '<br>' + esc(e.route || e.corridor || '') + '<br><a href="' + esc(safe(e.url)) + '" target="_blank" rel="noopener noreferrer">open article</a>';
+}
+function drawMap(v) {
+  if (typeof L === 'undefined') { $('map').innerHTML = '<div class="small" style="padding:20px">The map library could not load (no internet?).</div>'; return; }
+  if (!map) {
+    map = L.map('map', {worldCopyJump: true, minZoom: 1, scrollWheelZoom: false}).setView([20, 10], 2);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 8, attribution: '&copy; OpenStreetMap contributors'}).addTo(map);
+    mapLayer = L.layerGroup().addTo(map);
+  }
+  mapLayer.clearLayers();
+  const ev = v.slice().sort((a, b) => b.score - a.score).slice(0, 500);
+  const bounds = []; let routes = 0, pointsOnly = 0;
+  ev.forEach(e => {
+    const col = BC[e.band] || '#666', pts = eventPoints(e);
+    if (!pts.length) return;
+    pts.forEach(q => bounds.push(q.c));
+    if (pts.length > 1) {
+      routes++;
+      const w = 1.5 + Math.min(3.5, Math.log10((e.kg || 0) + 1));
+      for (let i = 0; i < pts.length - 1; i++) {
+        const path = arc(pts[i].c, pts[i + 1].c);
+        L.polyline(path, {color: col, weight: w, opacity: 0.6}).bindPopup(popupHtml(e)).addTo(mapLayer);
+        const n = path.length, a = path[Math.max(0, n - 4)], b = path[n - 1];
+        const ang = Math.atan2((b[1] - a[1]) * Math.cos(b[0] * Math.PI / 180), b[0] - a[0]) * 180 / Math.PI;
+        L.marker(path[n - 3] || b, {interactive: false, keyboard: false, icon: L.divIcon({className: 'arrowicon', iconSize: [12, 12], iconAnchor: [6, 6],
+          html: '<div style="transform:rotate(' + ang.toFixed(0) + 'deg);color:' + col + ';font-size:12px;line-height:12px;text-align:center">&#9650;</div>'})}).addTo(mapLayer);
+      }
+    } else pointsOnly++;
+    pts.forEach(q => {
+      const o = q.role === 'origin' ? {radius: 4, color: col, weight: 2, fillColor: '#fff', fillOpacity: 1}
+        : q.role === 'seizure' ? {radius: 6, color: '#fff', weight: 1, fillColor: col, fillOpacity: 0.9}
+        : q.role === 'dest' ? {radius: 4, color: '#fff', weight: 1, fillColor: '#12355b', fillOpacity: 1}
+        : {radius: 3, color: '#666', weight: 1, fillColor: '#bbb', fillOpacity: 1};
+      L.circleMarker(q.c, o).bindTooltip(esc(q.name) + ' (' + (q.role === 'dest' ? 'destination' : q.role) + ')').bindPopup(popupHtml(e)).addTo(mapLayer);
+    });
+  });
+  $('mapNote').textContent = '(' + routes + ' routes, ' + pointsOnly + ' seizure points only' + (v.length > 500 ? '; top 500 by risk shown' : '') + ')';
+  setTimeout(() => { map.invalidateSize(); if (bounds.length) map.fitBounds(bounds, {padding: [30, 30], maxZoom: 5}); else map.setView([20, 10], 2); }, 50);
 }
 alerts(); staticTables(); render();
 $('foot').innerHTML = 'Open-source news only. Facts are extracted automatically from headlines and articles and can be wrong - always verify through the link. Risk scores rank reports for analyst attention; they are indicators, not findings. Only extracted facts and links are stored, not article text.';
