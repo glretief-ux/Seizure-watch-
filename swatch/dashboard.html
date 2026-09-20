@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Seizure Watch - open-source drug seizure risk indicators</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1"></script>
+<style>
+:root{--ink:#1c2733;--mute:#66758a;--line:#e3e8ef;--bg:#f5f7fa;--card:#fff;--brand:#12355b;
+--hi:#c0392b;--med:#e08a00;--lo:#2e8b57;--r:10px}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+.wrap{max-width:1280px;margin:0 auto;padding:12px}
+header{background:var(--brand);color:#fff;border-radius:var(--r);padding:16px 18px;margin-bottom:12px}
+header h1{margin:0 0 2px;font-size:19px}
+header .sub{opacity:.8;font-size:12px}
+.banner{border-radius:var(--r);padding:10px 14px;margin-bottom:12px;font-size:13px}
+.banner.demo{background:#fff4d6;border:1px solid #f0d58a}
+.banner.hist{background:#e8f1fb;border:1px solid #bcd3ee}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.filters select,.filters input{padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;font-size:14px;min-width:0;flex:1 1 140px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:12px}
+.kpi{background:var(--card);border-radius:var(--r);padding:12px 14px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+.kpi .l{font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--mute)}
+.kpi .v{font-size:24px;font-weight:700;margin-top:2px}
+.kpi .d{font-size:12px;color:var(--mute)}
+.card{background:var(--card);border-radius:var(--r);padding:14px 16px;box-shadow:0 1px 2px rgba(0,0,0,.06);margin-bottom:12px;overflow:hidden}
+.card h2{font-size:14px;margin:0 0 10px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:12px}
+.chartbox{position:relative;height:260px}
+.alert{border-left:4px solid var(--med);padding:8px 10px;margin-bottom:8px;background:#fafbfc;border-radius:0 8px 8px 0}
+.alert.High{border-color:var(--hi)}
+.alert .t{font-weight:600}
+.alert .d{color:var(--mute);font-size:12.5px;margin-top:2px}
+.alert .k{font-size:10.5px;font-weight:700;letter-spacing:.4px;color:var(--mute);text-transform:uppercase}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+th{position:sticky;top:0;background:#f0f3f7;text-align:left;padding:8px 8px;cursor:pointer;white-space:nowrap;font-size:11px;text-transform:uppercase;letter-spacing:.3px;color:var(--mute)}
+td{padding:7px 8px;border-top:1px solid var(--line);vertical-align:top}
+tr:hover td{background:#f8fafc}
+.chip{display:inline-block;padding:1px 8px;border-radius:99px;font-size:11px;font-weight:700;color:#fff}
+.chip.High{background:var(--hi)}.chip.Medium{background:var(--med)}.chip.Low{background:var(--lo)}
+.chip.NEW{background:#6a3fb5}.chip.SURGING{background:var(--hi)}.chip.STABLE{background:#8894a5}.chip.DECLINING{background:#3d7ea6}.chip.INACTIVE{background:#b5bcc7}
+.small{font-size:11.5px;color:var(--mute)}
+td.w2{min-width:170px}td.w3{min-width:250px}
+.heat td{text-align:center}
+.heat td:first-child{text-align:left;white-space:nowrap}
+a{color:#1656a3}
+footer{color:var(--mute);font-size:11.5px;padding:8px 2px 24px}
+@media print{.filters{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>Seizure Watch</h1>
+  <div class="sub" id="sub"></div>
+</header>
+<div id="banners"></div>
+
+<div class="filters">
+  <select id="fDrug"><option value="">All drug types</option></select>
+  <select id="fBand"><option value="">All risk bands</option><option>High</option><option>Medium</option><option>Low</option></select>
+  <select id="fDays"><option value="7">Last 7 days</option><option value="30">Last 30 days</option><option value="90" selected>Last 90 days</option><option value="9999">All loaded</option></select>
+  <select id="fMode"><option value="">All transport</option></select>
+  <input id="fQ" type="search" placeholder="Search country, port, concealment, headline...">
+</div>
+
+<div class="kpis" id="kpis"></div>
+
+<div class="card"><h2>Alerts <span class="small" id="alertNote"></span></h2><div id="alerts"></div></div>
+
+<div class="grid2">
+  <div class="card"><h2>Seizure reports over time (by drug)</h2><div class="chartbox"><canvas id="cTime"></canvas></div></div>
+  <div class="card"><h2>How it was hidden</h2><div class="chartbox"><canvas id="cConc"></canvas></div></div>
+  <div class="card"><h2>Top corridors in view</h2><div class="chartbox"><canvas id="cCorr"></canvas></div></div>
+  <div class="card"><h2>Transport type</h2><div class="chartbox"><canvas id="cMode"></canvas></div></div>
+</div>
+
+<div class="card"><h2>Concealment x drug (events in view)</h2><div class="tw" id="matrix"></div></div>
+
+<div class="grid2">
+  <div class="card"><h2>Corridors <span class="small">(all history; trend = last 30 days vs the 30 before)</span></h2><div class="tw" id="corr"></div></div>
+  <div class="card"><h2>Seizure hotspots <span class="small">(countries)</span></h2><div class="tw" id="hot"></div></div>
+</div>
+
+<div class="card"><h2>Events <span class="small" id="evCount"></span></h2><div class="tw" style="max-height:640px"><table id="evT"></table></div></div>
+
+<footer id="foot"></footer>
+</div>
+
+<script type="application/json" id="data">__DATA__</script>
+<script>
+const D = JSON.parse(document.getElementById('data').textContent);
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const safe = u => /^https?:\/\//i.test(u || '') ? u : '#';
+const COL = {'Cocaine':'#1f77b4','Cannabis':'#2ca02c','Heroin/Opium':'#8c564b','Methamphetamine':'#ff7f0e','NSA':'#9467bd','Cigarettes':'#7f7f7f','Unspecified':'#bcbd22'};
+const col = d => COL[d] || '#999';
+const num = n => n == null ? '' : Number(n).toLocaleString(undefined, {maximumFractionDigits: 1});
+const qty = e => { const p = []; if (e.kg) p.push(e.kg >= 1000 ? (e.kg/1000).toFixed(1) + ' t' : Math.round(e.kg) + ' kg'); if (e.units) p.push(num(e.units) + ' ' + (e.unit_type||'')); return p.join(', '); };
+const asof = new Date(D.meta.asof + 'T00:00:00Z');
+const fmt = d => d.toISOString().slice(0,10);
+let sortKey = 'score', sortDir = -1, charts = {};
+
+// ---- static bits
+$('sub').textContent = 'Data as of ' + D.meta.asof + ' | generated ' + D.meta.generated + ' | ' + D.meta.total_events + ' seizure events tracked';
+const bn = [];
+if (D.meta.demo) bn.push('<div class="banner demo"><b>SAMPLE DATA.</b> These are made-up articles used to demonstrate the platform. Run the real collector to replace them.</div>');
+if (!D.meta.history_ok) bn.push('<div class="banner hist">Building history: trend, spike and new-corridor alerts switch on after ' + D.meta.min_history + ' days of data (currently ' + D.meta.history_days + ').</div>');
+$('banners').innerHTML = bn.join('');
+[...new Set(D.events.map(e => e.drug))].sort().forEach(d => $('fDrug').insertAdjacentHTML('beforeend', '<option>' + esc(d) + '</option>'));
+[...new Set(D.events.map(e => e.transport).filter(Boolean))].sort().forEach(d => $('fMode').insertAdjacentHTML('beforeend', '<option>' + esc(d) + '</option>'));
+['fDrug','fBand','fDays','fMode'].forEach(i => $(i).addEventListener('change', render));
+$('fQ').addEventListener('input', render);
+
+function view() {
+  const days = +$('fDays').value, cut = fmt(new Date(asof.getTime() - (days - 1) * 864e5));
+  const q = $('fQ').value.trim().toLowerCase(), dr = $('fDrug').value, bd = $('fBand').value, md = $('fMode').value;
+  return D.events.filter(e => e.date >= cut && (!dr || e.drug === dr) && (!bd || e.band === bd) && (!md || e.transport === md) &&
+    (!q || [e.country,e.place,e.origin,e.dest,e.transit,e.conceal,e.title,e.corridor,e.drug].join(' ').toLowerCase().includes(q)));
+}
+const by = (arr, f) => { const m = {}; arr.forEach(x => { const k = f(x); if (k != null && k !== '') m[k] = (m[k] || 0) + 1; }); return m; };
+const topN = (m, n) => Object.entries(m).sort((a,b) => b[1]-a[1]).slice(0, n);
+
+function kpis(v) {
+  const hi = v.filter(e => e.band === 'High').length, cont = v.filter(e => e.container).length,
+        ins = v.filter(e => e.insider).length, kg = v.reduce((s,e) => s + (e.kg || 0), 0);
+  const K = [['Seizure events', v.length, D.kpis.events_7d + ' in last 7 days (prev ' + D.kpis.events_prev_7d + ')'],
+    ['High risk', hi, v.length ? Math.round(100*hi/v.length) + '% of events' : ''],
+    ['Container cases', cont, v.length ? Math.round(100*cont/v.length) + '% of events' : ''],
+    ['Insider signals', ins, 'port / airport / customs staff'],
+    ['Total weight', kg >= 1000 ? (kg/1000).toFixed(1) + ' t' : Math.round(kg) + ' kg', 'excl. pills / sticks']];
+  $('kpis').innerHTML = K.map(k => '<div class="kpi"><div class="l">' + k[0] + '</div><div class="v">' + k[1] + '</div><div class="d">' + esc(k[2]) + '</div></div>').join('');
+}
+
+function alerts() {
+  const A = D.alerts;
+  $('alertNote').textContent = A.length ? '(' + A.length + ' today)' : '';
+  $('alerts').innerHTML = A.length ? A.slice(0, 25).map(a => '<div class="alert ' + esc(a.severity) + '"><div class="k">' + esc(a.type) + ' | ' + esc(a.severity) + '</div><div class="t">' + esc(a.title) + '</div><div class="d">' + esc(a.detail) + '</div><div class="small">' +
+    (a.urls || []).map((u,i) => '<a href="' + esc(safe(u)) + '" target="_blank" rel="noopener noreferrer">source ' + (i+1) + '</a>').join(' &middot; ') + '</div></div>').join('')
+    : '<div class="small">No alerts today. (Trend alerts need ' + D.meta.min_history + '+ days of history.)</div>';
+}
+
+function chart(id, cfg) {
+  if (!window.Chart) return;
+  if (charts[id]) { charts[id].data = cfg.data; charts[id].update('none'); return; }
+  cfg.options = Object.assign({responsive: true, maintainAspectRatio: false, animation: false}, cfg.options || {});
+  charts[id] = new Chart($(id), cfg);
+}
+
+function timeChart(v) {
+  const days = +$('fDays').value, weekly = days > 31;
+  const key = d => { if (!weekly) return d; const t = new Date(d + 'T00:00:00Z'), dow = (t.getUTCDay() + 6) % 7; return fmt(new Date(t.getTime() - dow * 864e5)); };
+  const labels = [...new Set(v.map(e => key(e.date)))].sort();
+  const drugs = [...new Set(v.map(e => e.drug))].sort();
+  chart('cTime', {type: 'bar', data: {labels, datasets: drugs.map(d => ({label: d, backgroundColor: col(d),
+    data: labels.map(l => v.filter(e => e.drug === d && key(e.date) === l).length)}))},
+    options: {scales: {x: {stacked: true, ticks: {maxRotation: 60}}, y: {stacked: true, beginAtZero: true, ticks: {precision: 0}}}, plugins: {legend: {position: 'bottom', labels: {boxWidth: 10}}}}});
+}
+function hbar(id, pairs, color) {
+  chart(id, {type: 'bar', data: {labels: pairs.map(p => p[0].length > 42 ? p[0].slice(0,40) + '...' : p[0]), datasets: [{data: pairs.map(p => p[1]), backgroundColor: color}]},
+    options: {indexAxis: 'y', plugins: {legend: {display: false}}, scales: {x: {beginAtZero: true, ticks: {precision: 0}}}}});
+}
+function mode(v) {
+  const m = topN(by(v, e => e.transport || 'Unknown'), 8);
+  chart('cMode', {type: 'doughnut', data: {labels: m.map(x => x[0]), datasets: [{data: m.map(x => x[1]), backgroundColor: ['#12355b','#2a6f97','#61a5c2','#89c2d9','#a9d6e5','#c9a227','#8894a5','#b5bcc7']}]},
+    options: {plugins: {legend: {position: 'right', labels: {boxWidth: 10}}}}});
+}
+
+function matrix(v) {
+  const rows = {}, drugs = [...new Set(v.map(e => e.drug))].sort();
+  v.forEach(e => (e.conceal ? e.conceal.split('; ') : []).forEach(c => { rows[c] = rows[c] || {}; rows[c][e.drug] = (rows[c][e.drug] || 0) + 1; }));
+  const names = Object.keys(rows).sort((a,b) => Object.values(rows[b]).reduce((s,x)=>s+x,0) - Object.values(rows[a]).reduce((s,x)=>s+x,0));
+  if (!names.length) { $('matrix').innerHTML = '<div class="small">No concealment details in view.</div>'; return; }
+  const mx = Math.max(...names.flatMap(n => Object.values(rows[n])));
+  $('matrix').innerHTML = '<table class="heat"><tr><th>Concealment</th>' + drugs.map(d => '<th>' + esc(d) + '</th>').join('') + '</tr>' +
+    names.map(n => '<tr><td>' + esc(n) + '</td>' + drugs.map(d => { const c = rows[n][d] || 0; return '<td style="background:rgba(18,53,91,' + (c ? (0.08 + 0.6 * c / mx).toFixed(2) : 0) + ');color:' + (c/mx > .5 ? '#fff' : 'inherit') + '">' + (c || '') + '</td>'; }).join('') + '</tr>').join('') + '</table>';
+}
+
+function staticTables() {
+  $('corr').innerHTML = D.corridors.length ? '<table><tr><th>Corridor</th><th>Trend</th><th>30d</th><th>Prev 30d</th><th>Total</th><th>Main drug</th><th>Avg risk</th></tr>' +
+    D.corridors.slice(0, 25).map(c => '<tr><td>' + esc(c.corridor) + '</td><td><span class="chip ' + esc(c.trend) + '">' + esc(c.trend) + '</span></td><td>' + c.events_recent + '</td><td>' + c.events_prior + '</td><td>' + c.events_total + '</td><td>' + esc(c.top_drug) + '</td><td>' + c.avg_risk + '</td></tr>').join('') + '</table>' : '<div class="small">No corridors with a known origin/destination yet.</div>';
+  $('hot').innerHTML = D.hotspots.length ? '<table><tr><th>Country</th><th>30d</th><th>Prev 30d</th><th>Total</th><th>High risk</th><th>Main drug</th><th>Main place</th></tr>' +
+    D.hotspots.slice(0, 20).map(c => '<tr><td>' + esc(c.country) + '</td><td>' + c.events_recent + '</td><td>' + c.events_prior + '</td><td>' + c.events_total + '</td><td>' + c.high_risk + '</td><td>' + esc(c.top_drug) + '</td><td>' + esc(c.top_place) + '</td></tr>').join('') + '</table>' : '';
+}
+
+const COLS = [['date','Date'],['score','Risk'],['drug','Drug'],['qty','Quantity'],['corridor','Route'],['country','Seized in'],['conceal','Concealment'],['transport','Transport'],['flags','Flags'],['n','Reports'],['url','Link']];
+function evTable(v) {
+  const val = (e, k) => k === 'qty' ? (e.kg || 0) : k === 'corridor' ? (e.corridor || '') : (e[k] ?? '');
+  const s = v.slice().sort((a,b) => { const x = val(a, sortKey), y = val(b, sortKey); return (x > y ? 1 : x < y ? -1 : 0) * sortDir || (b.score - a.score); });
+  $('evCount').textContent = '(' + v.length + ' in view' + (v.length > 300 ? ', first 300 shown' : '') + ')';
+  $('evT').innerHTML = '<tr>' + COLS.map(c => '<th data-k="' + c[0] + '">' + c[1] + (sortKey === c[0] ? (sortDir > 0 ? ' &#9650;' : ' &#9660;') : '') + '</th>').join('') + '</tr>' +
+    s.slice(0, 300).map(e => '<tr><td>' + esc(e.date) + '</td><td><span class="chip ' + esc(e.band) + '">' + e.score + '</span></td><td>' + esc(e.drug) + '</td><td>' + esc(qty(e)) + '</td><td class="w2">' + esc(e.route || e.corridor || '') + '</td><td class="w2">' + esc([e.place, e.country].filter(Boolean).join(', ')) + '</td><td class="w2">' + esc(e.conceal || '') + '</td><td>' + esc(e.transport || '') + '</td><td class="small w3">' + esc(e.flags) + '</td><td>' + e.n + '</td><td><a href="' + esc(safe(e.url)) + '" target="_blank" rel="noopener noreferrer" title="' + esc(e.title) + '">open</a></td></tr>').join('');
+  $('evT').querySelectorAll('th').forEach(th => th.onclick = () => { const k = th.dataset.k; if (k === 'url' || k === 'flags') return; sortDir = (sortKey === k) ? -sortDir : -1; sortKey = k; render(); });
+}
+
+function render() {
+  const v = view();
+  kpis(v); timeChart(v);
+  hbar('cConc', topN(by(v.flatMap(e => e.conceal ? e.conceal.split('; ') : []), x => x), 10), '#2a6f97');
+  hbar('cCorr', topN(by(v, e => e.corridor), 10), '#12355b');
+  mode(v); matrix(v); evTable(v);
+}
+alerts(); staticTables(); render();
+$('foot').innerHTML = 'Open-source news only. Facts are extracted automatically from headlines and articles and can be wrong - always verify through the link. Risk scores rank reports for analyst attention; they are indicators, not findings. Only extracted facts and links are stored, not article text.';
+</script>
+</body>
+</html>

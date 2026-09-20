@@ -1,0 +1,87 @@
+# =====================================================================
+#  SEIZURE WATCH - configuration
+#  Everything you may want to tune is here. Comments explain each block.
+# =====================================================================
+
+run:
+  lookback_days: 2            # how far back each daily run searches (2 = safe overlap)
+  max_articles_per_run: 250   # cap on article downloads per run (keeps runs short and polite)
+  fetch_full_text: true       # false = headline/snippet only (faster, less accurate)
+  resolve_google_links: true  # needs the optional 'googlenewsdecoder' package (in requirements.txt)
+  report_days: 180            # how much history the dashboard shows
+
+sources:
+  google_news:
+    enabled: true
+    delay_seconds: 1.0
+    # Each edition = one Google News country/language front page. More editions = wider coverage.
+    editions:
+      - {lang: en, hl: en-US,  gl: US, ceid: "US:en"}
+      - {lang: en, hl: en-GB,  gl: GB, ceid: "GB:en"}
+      - {lang: en, hl: en-AU,  gl: AU, ceid: "AU:en"}
+      - {lang: en, hl: en-IN,  gl: IN, ceid: "IN:en"}
+      - {lang: en, hl: en-ZA,  gl: ZA, ceid: "ZA:en"}
+      - {lang: en, hl: en-NG,  gl: NG, ceid: "NG:en"}
+      - {lang: es, hl: es-419, gl: MX, ceid: "MX:es-419"}
+      - {lang: es, hl: es,     gl: ES, ceid: "ES:es"}
+      - {lang: es, hl: es-419, gl: CO, ceid: "CO:es-419"}
+      - {lang: fr, hl: fr,     gl: FR, ceid: "FR:fr"}
+      - {lang: pt, hl: pt-BR,  gl: BR, ceid: "BR:pt-419"}
+      - {lang: pt, hl: pt-PT,  gl: PT, ceid: "PT:pt-150"}
+    queries:
+      en: ["drug seizure", "cocaine seized", "heroin seized", "methamphetamine seized",
+           "cannabis seized customs", "captagon seized", "fentanyl seized", "MDMA ecstasy seized",
+           "cigarettes seized customs", "drugs seized container port", "drugs seized airport"]
+      es: ["incautan cocaína", "decomisan droga puerto contenedor", "incautan marihuana",
+           "incautan metanfetamina", "incautan drogas sintéticas aeropuerto"]
+      fr: ["saisie cocaïne", "saisie drogue port conteneur", "saisie cannabis douane", "saisie captagon"]
+      pt: ["apreensão cocaína porto", "apreensão droga contêiner", "apreendem maconha"]
+
+  gdelt:                       # global news index; free, no key. Set enabled: false to skip.
+    enabled: true
+    queries:
+      en: ['(cocaine OR heroin OR methamphetamine OR cannabis OR captagon OR fentanyl) (seized OR seizure OR intercepted)']
+      es: ['(cocaína OR heroína OR metanfetamina OR marihuana) (incautan OR decomisan OR incautación)']
+      fr: ['(cocaïne OR héroïne OR cannabis OR captagon) (saisie OR saisi OR saisis)']
+      pt: ['(cocaína OR heroína OR maconha) (apreensão OR apreendem OR apreendida)']
+
+  # Add agency / newsroom RSS feeds here (customs, police, UNODC, national news agencies...).
+  # I have NOT pre-filled URLs because feed addresses change - paste the ones you trust.
+  rss_feeds: []
+  #  - {name: "Example Customs", url: "https://example.org/news/rss.xml", lang: en, country: "Kenya"}
+
+# ---------------------------------------------------------------------
+#  RISK MODEL  (event score 0-100; all numbers are yours to tune)
+# ---------------------------------------------------------------------
+risk:
+  weights:
+    container_cargo: 10            # seized from / travelling in a shipping container
+    concealed_in_legit_cargo: 15   # hidden inside food, goods or a cover load
+    advanced_concealment: 15       # false compartments, impregnation, hull attachments...
+    quantity_outlier: 20           # very large for its drug type (see thresholds below)
+    multi_country_route: 10        # 3+ countries in the route, or a named transit country
+    emerging_corridor: 10          # origin->destination pair not seen before in the recent past
+    organized_network: 5           # article mentions cartel / organised crime network
+    insider_indicator: 15          # port / airport / customs staff involvement, rip-on/rip-off
+    polydrug: 5                    # more than one drug type in the same consignment
+  bands: {high: 50, medium: 25}    # score >= high -> High ; >= medium -> Medium ; else Low
+  quantity_thresholds_kg:          # weight above which a seizure counts as "large"
+    Cocaine: 500
+    Cannabis: 2000
+    Heroin/Opium: 100
+    Methamphetamine: 100
+    NSA: 100
+    Cigarettes: 5000
+    default: 200
+  unit_thresholds:                 # for pills / sticks when no weight is given
+    pills: 500000
+    cigarettes: 2000000
+    packs: 100000
+  percentile_min_events: 30        # once a drug has this many events, also flag its own top 5%
+
+analysis:
+  trend_window_days: 30            # "recent" vs "prior" window for corridor / hotspot trends
+  min_history_days: 42             # below this, NEW-corridor and spike alerts stay quiet (not enough history)
+  emerging_days: 60                # a corridor first seen within this many days counts as emerging
+  spike_min_events: 3              # minimum events in the last 7 days to raise a spike alert
+  spike_z: 2.0                     # how far above the 8-week average counts as a spike

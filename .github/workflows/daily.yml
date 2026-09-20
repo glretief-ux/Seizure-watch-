@@ -1,0 +1,33 @@
+name: daily-seizure-watch
+
+on:
+  schedule:
+    - cron: "30 5 * * *"          # every day 05:30 UTC - change to suit your time zone
+  workflow_dispatch:               # lets you press "Run workflow" by hand
+    inputs:
+      days:
+        description: "Look-back days (use 30 for the very first run to back-fill history)"
+        default: "2"
+
+permissions:
+  contents: write                  # so the job can save the updated database and dashboard
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - run: python run_daily.py --days "${{ github.event.inputs.days || '2' }}"
+      - name: Save results
+        run: |
+          git config user.name  "seizure-watch-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/seizure_watch.db docs
+          git diff --cached --quiet || git commit -m "Daily update $(date -u +%F)"
+          git push
