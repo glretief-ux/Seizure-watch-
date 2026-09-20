@@ -55,6 +55,10 @@ footer{color:var(--mute);font-size:11.5px;padding:8px 2px 24px}
 .legend i{display:inline-block;width:22px;height:0;border-top:3px solid;vertical-align:middle;margin-right:5px;border-radius:2px}
 .legend b{display:inline-block;width:10px;height:10px;border-radius:50%;vertical-align:middle;margin-right:5px;box-sizing:border-box}
 .arrowicon{background:none;border:0}
+.seizdot{background:none;border:0}
+.plist{max-height:210px;overflow:auto;margin-top:6px;-webkit-overflow-scrolling:touch}
+.pi{padding:5px 0;border-top:1px solid #e3e8ef;font-size:12px;line-height:1.35}
+.leaflet-container a.pop-open{font-weight:600}
 @media print{.filters{display:none}}
 </style>
 </head>
@@ -82,7 +86,7 @@ footer{color:var(--mute);font-size:11.5px;padding:8px 2px 24px}
   <div id="map"></div>
   <div class="legend">
     <span><i style="border-color:#c0392b"></i>High risk</span><span><i style="border-color:#e08a00"></i>Medium</span><span><i style="border-color:#2e8b57"></i>Low</span>
-    <span><b style="border:2px solid #555;background:#fff"></b>origin</span><span><b style="background:#c0392b"></b>seizure point</span><span><b style="background:#12355b;border:1px solid #fff"></b>destination</span>
+    <span><b style="border:2px solid #555;background:#fff"></b>origin</span><span><b style="background:#c0392b"></b>seizure place (number = reports; tap to list them)</span><span><b style="background:#12355b;border:1px solid #fff"></b>destination</span>
     <span>Arrows show direction. Lines join country centres or ports, so they show the reported route, not the actual path. Tap a line for the report. The map follows the filters and search above.</span>
   </div>
 </div>
@@ -269,32 +273,49 @@ function drawMap(v) {
   }
   mapLayer.clearLayers();
   const ev = v.slice().sort((a, b) => b.score - a.score).slice(0, 500);
-  const bounds = []; let routes = 0, pointsOnly = 0;
+  const bounds = [], groups = {}; let routes = 0;
   ev.forEach(e => {
     const col = BC[e.band] || '#666', pts = eventPoints(e);
     if (!pts.length) return;
     pts.forEach(q => bounds.push(q.c));
+    const s = pts.find(q => q.role === 'seizure');
+    if (s) { const k = s.c[0] + ',' + s.c[1]; (groups[k] = groups[k] || {c: s.c, name: s.name, evs: []}).evs.push(e); }
     if (pts.length > 1) {
       routes++;
       const w = 1.5 + Math.min(3.5, Math.log10((e.kg || 0) + 1));
       for (let i = 0; i < pts.length - 1; i++) {
         const path = arc(pts[i].c, pts[i + 1].c);
-        L.polyline(path, {color: col, weight: w, opacity: 0.6}).bindPopup(popupHtml(e)).addTo(mapLayer);
+        L.polyline(path, {color: col, weight: w, opacity: 0.6, interactive: false}).addTo(mapLayer);
+        L.polyline(path, {color: col, weight: 18, opacity: 0.01}).bindPopup(popupHtml(e)).addTo(mapLayer);   // wide invisible line = easy to tap
         const n = path.length, a = path[Math.max(0, n - 4)], b = path[n - 1];
         const ang = Math.atan2((b[1] - a[1]) * Math.cos(b[0] * Math.PI / 180), b[0] - a[0]) * 180 / Math.PI;
         L.marker(path[n - 3] || b, {interactive: false, keyboard: false, icon: L.divIcon({className: 'arrowicon', iconSize: [12, 12], iconAnchor: [6, 6],
           html: '<div style="transform:rotate(' + ang.toFixed(0) + 'deg);color:' + col + ';font-size:12px;line-height:12px;text-align:center">&#9650;</div>'})}).addTo(mapLayer);
       }
-    } else pointsOnly++;
-    pts.forEach(q => {
-      const o = q.role === 'origin' ? {radius: 4, color: col, weight: 2, fillColor: '#fff', fillOpacity: 1}
-        : q.role === 'seizure' ? {radius: 6, color: '#fff', weight: 1, fillColor: col, fillOpacity: 0.9}
-        : q.role === 'dest' ? {radius: 4, color: '#fff', weight: 1, fillColor: '#12355b', fillOpacity: 1}
-        : {radius: 3, color: '#666', weight: 1, fillColor: '#bbb', fillOpacity: 1};
+    }
+    pts.filter(q => q.role !== 'seizure').forEach(q => {
+      const o = q.role === 'origin' ? {radius: 5, color: col, weight: 2, fillColor: '#fff', fillOpacity: 1}
+        : q.role === 'dest' ? {radius: 5, color: '#fff', weight: 1, fillColor: '#12355b', fillOpacity: 1}
+        : {radius: 4, color: '#666', weight: 1, fillColor: '#bbb', fillOpacity: 1};
       L.circleMarker(q.c, o).bindTooltip(esc(q.name) + ' (' + (q.role === 'dest' ? 'destination' : q.role) + ')').bindPopup(popupHtml(e)).addTo(mapLayer);
     });
   });
-  $('mapNote').textContent = '(' + routes + ' routes, ' + pointsOnly + ' seizure points only' + (v.length > 500 ? '; top 500 by risk shown' : '') + ')';
+  // one dot per place; the number is how many reports are there; tap it to list them
+  Object.values(groups).forEach(g => {
+    const n = g.evs.length, list = g.evs.slice().sort((a, b) => b.score - a.score);
+    const rank = list.reduce((m, e) => Math.max(m, e.band === 'High' ? 3 : e.band === 'Medium' ? 2 : 1), 1);
+    const col = rank === 3 ? BC.High : rank === 2 ? BC.Medium : BC.Low, size = Math.round(22 + Math.min(16, 4 * Math.sqrt(n)));
+    const icon = L.divIcon({className: 'seizdot', iconSize: [size, size], iconAnchor: [size / 2, size / 2],
+      html: '<div style="width:' + size + 'px;height:' + size + 'px;border-radius:50%;background:' + col + ';border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.3);' +
+        'color:#fff;font:700 11px/' + (size - 4) + 'px sans-serif;text-align:center">' + (n > 1 ? n : '') + '</div>'});
+    const html = '<b>' + esc(g.name) + '</b> - ' + n + ' report' + (n > 1 ? 's' : '') + '<div class="plist">' +
+      list.slice(0, 12).map(e => '<div class="pi"><span class="chip ' + esc(e.band) + '">' + e.score + '</span> ' + esc(e.date) + ' | ' + esc(e.drug) + (qty(e) ? ' (' + esc(qty(e)) + ')' : '') +
+        (e.route || e.corridor ? '<br><span class="small">' + esc(e.route || e.corridor) + '</span>' : '') +
+        '<br>' + esc((e.title || '').slice(0, 110)) + ' <a class="pop-open" href="' + esc(safe(e.url)) + '" target="_blank" rel="noopener noreferrer">open</a></div>').join('') +
+      (n > 12 ? '<div class="small">+ ' + (n - 12) + ' more, see the events table</div>' : '') + '</div>';
+    L.marker(g.c, {icon, riseOnHover: true}).bindPopup(html, {maxWidth: 320}).addTo(mapLayer);
+  });
+  $('mapNote').textContent = '(' + routes + ' routes, ' + Object.keys(groups).length + ' places with seizures' + (v.length > 500 ? '; top 500 by risk shown' : '') + ')';
   setTimeout(() => { map.invalidateSize(); if (bounds.length) map.fitBounds(bounds, {padding: [30, 30], maxZoom: 5}); else map.setView([20, 10], 2); }, 50);
 }
 alerts(); staticTables(); render();
