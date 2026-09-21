@@ -56,6 +56,17 @@ footer{color:var(--mute);font-size:11.5px;padding:8px 2px 24px}
 .legend b{display:inline-block;width:10px;height:10px;border-radius:50%;vertical-align:middle;margin-right:5px;box-sizing:border-box}
 .arrowicon{background:none;border:0}
 .seizdot{background:none;border:0}
+#wQ{flex:1;min-width:220px;padding:10px;border:1px solid var(--line);border-radius:8px;font:inherit;background:#fff}
+#wBand,#wAdd{padding:10px 12px;border:1px solid var(--line);border-radius:8px;font:inherit;background:#fff}
+#wAdd{background:#12355b;color:#fff;border-color:#12355b;font-weight:600;cursor:pointer}
+.wrow{display:flex;gap:8px;flex-wrap:wrap}
+.wchip{display:inline-flex;gap:6px;align-items:center;margin:10px 8px 0 0;padding:6px 10px;border:1px solid var(--line);border-radius:999px;background:#f6f8fb;font-size:13px}
+.wgo{cursor:pointer;font-weight:600;color:#12355b}
+.wx{cursor:pointer;color:#888;font-size:18px;line-height:1;padding:0 2px}
+.wnew{background:#c0392b;color:#fff;border-radius:999px;padding:1px 8px;font-size:11px;font-weight:700}
+.wbanner{background:#fff4e5;border:1px solid #f0c78a;border-radius:8px;padding:10px 12px;margin-bottom:12px;font-size:13px}
+.wbanner .wi{margin-top:6px;line-height:1.35}
+tr.watched td:first-child{box-shadow:inset 4px 0 0 #e08a00}
 .plist{max-height:210px;overflow:auto;margin-top:6px;-webkit-overflow-scrolling:touch}
 .pi{padding:5px 0;border-top:1px solid #e3e8ef;font-size:12px;line-height:1.35}
 .leaflet-container a.pop-open{font-weight:600}
@@ -81,6 +92,15 @@ footer{color:var(--mute);font-size:11.5px;padding:8px 2px 24px}
 <div class="kpis" id="kpis"></div>
 
 <div class="card"><h2>Alerts <span class="small" id="alertNote"></span></h2><div id="alerts"></div></div>
+
+<div class="card"><h2>My watchlist <span class="small" id="watchNote"></span></h2>
+  <div id="watchNew"></div>
+  <div class="wrow"><input id="wQ" type="search" placeholder="Watch for... e.g. Antwerp cocaine, Ecuador Belgium, food cargo, OR Tambo">
+    <select id="wBand"><option value="1">Any risk</option><option value="2">Medium and above</option><option value="3">High only</option></select>
+    <button id="wAdd" type="button">Add watch</button></div>
+  <div id="watchList"></div>
+  <div class="small" style="margin-top:10px">Watches are saved on this device only (not on the website). "New" means not shown on your previous visit. Tap a watch to see its events; highlighted rows in the table match a watch.</div>
+</div>
 
 <div class="card"><h2>Route map <span class="small" id="mapNote"></span></h2>
   <div id="map"></div>
@@ -212,7 +232,7 @@ function evTable(v) {
   const s = v.slice().sort((a,b) => { const x = val(a, sortKey), y = val(b, sortKey); return (x > y ? 1 : x < y ? -1 : 0) * sortDir || (b.score - a.score); });
   $('evCount').textContent = '(' + v.length + ' in view' + (v.length > 300 ? ', first 300 shown' : '') + ')';
   $('evT').innerHTML = '<tr>' + COLS.map(c => '<th data-k="' + c[0] + '">' + c[1] + (sortKey === c[0] ? (sortDir > 0 ? ' &#9650;' : ' &#9660;') : '') + '</th>').join('') + '</tr>' +
-    s.slice(0, 300).map(e => '<tr><td>' + esc(e.date) + '</td><td><span class="chip ' + esc(e.band) + '">' + e.score + '</span></td><td>' + esc(e.drug) + '</td><td>' + esc(qty(e)) + '</td><td class="w2">' + esc(e.route || e.corridor || '') + '</td><td class="w2">' + esc([e.place, e.country].filter(Boolean).join(', ')) + '</td><td class="w2">' + esc(e.conceal || '') + '</td><td>' + esc(e.transport || '') + '</td><td class="small w3">' + esc(e.flags) + '</td><td>' + e.n + '</td><td><a href="' + esc(safe(e.url)) + '" target="_blank" rel="noopener noreferrer" title="' + esc(e.title) + '">open</a></td></tr>').join('');
+    s.slice(0, 300).map(e => '<tr' + (isWatched(e) ? ' class="watched"' : '') + '><td>' + esc(e.date) + '</td><td><span class="chip ' + esc(e.band) + '">' + e.score + '</span></td><td>' + esc(e.drug) + '</td><td>' + esc(qty(e)) + '</td><td class="w2">' + esc(e.route || e.corridor || '') + '</td><td class="w2">' + esc([e.place, e.country].filter(Boolean).join(', ')) + '</td><td class="w2">' + esc(e.conceal || '') + '</td><td>' + esc(e.transport || '') + '</td><td class="small w3">' + esc(e.flags) + '</td><td>' + e.n + '</td><td><a href="' + esc(safe(e.url)) + '" target="_blank" rel="noopener noreferrer" title="' + esc(e.title) + '">open</a></td></tr>').join('');
   $('evT').querySelectorAll('th').forEach(th => th.onclick = () => { const k = th.dataset.k; if (k === 'url' || k === 'flags') return; sortDir = (sortKey === k) ? -sortDir : -1; sortKey = k; render(); });
 }
 
@@ -318,6 +338,63 @@ function drawMap(v) {
   $('mapNote').textContent = '(' + routes + ' routes, ' + Object.keys(groups).length + ' places with seizures' + (v.length > 500 ? '; top 500 by risk shown' : '') + ')';
   setTimeout(() => { map.invalidateSize(); if (bounds.length) map.fitBounds(bounds, {padding: [30, 30], maxZoom: 5}); else map.setView([20, 10], 2); }, 50);
 }
+// ---- watchlist: saved in this browser only
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } }
+};
+const RANK = {High: 3, Medium: 2, Low: 1};
+const tokens = q => q.toLowerCase().split(/[\s>\u2192,;]+/).filter(t => t && !['to', 'from', 'via', '-', '->'].includes(t));
+const hay = e => [e.country, e.place, e.origin, e.dest, e.transit, e.conceal, e.title, e.corridor, e.route, e.drug].join(' ').toLowerCase();
+const matchW = (e, w) => (RANK[e.band] || 1) >= w.min && tokens(w.q).every(t => hay(e).includes(t));
+let watches = store.get('sw_watches', []);
+const prevSeen = store.get('sw_seen', null);                 // null = first visit on this device
+const seenSet = new Set(prevSeen || []);
+const isNew = e => prevSeen !== null && !seenSet.has(e.url);
+store.set('sw_seen', [...new Set([...(prevSeen || []), ...D.events.map(e => e.url)])].slice(-6000));
+const isWatched = e => watches.some(w => matchW(e, w));
+
+function renderWatch() {
+  const newHits = [];
+  $('watchList').innerHTML = watches.length ? watches.map((w, i) => {
+    const hits = D.events.filter(e => matchW(e, w)), nn = hits.filter(isNew);
+    nn.forEach(e => { if (!newHits.includes(e)) newHits.push(e); });
+    return '<span class="wchip"><a class="wgo" data-go="' + i + '">' + esc(w.q) + (w.min > 1 ? ' <span class="small">(' + (w.min === 3 ? 'high only' : 'medium+') + ')</span>' : '') + '</a> <b>' + hits.length + '</b>' +
+      (nn.length ? ' <span class="wnew">' + nn.length + ' new</span>' : '') + ' <a class="wx" data-x="' + i + '" title="Remove">&times;</a></span>';
+  }).join('') : '<div class="small" style="margin-top:10px">No watches yet. Add a port, a route, a drug or a concealment method above.</div>';
+  newHits.sort((a, b) => b.score - a.score);
+  const lines = newHits.slice(0, 12).map(e => e.date + ' | ' + e.drug + (qty(e) ? ' (' + qty(e) + ')' : '') + ' | ' + (e.route || e.corridor || e.country || '') + '\n' + e.title + '\n' + safe(e.url));
+  const body = 'New Seizure Watch events matching my watchlist:\n\n' + lines.join('\n\n');
+  $('watchNew').innerHTML = newHits.length
+    ? '<div class="wbanner"><b>' + newHits.length + ' new event' + (newHits.length > 1 ? 's' : '') + ' match your watchlist</b> &nbsp; <a href="mailto:?subject=' +
+      encodeURIComponent('Seizure Watch: ' + newHits.length + ' new matches') + '&body=' + encodeURIComponent(body.slice(0, 1800)) + '" id="wMail">Email these</a>' +
+      newHits.slice(0, 8).map(e => '<div class="wi"><span class="chip ' + esc(e.band) + '">' + e.score + '</span> ' + esc(e.date) + ' | ' + esc(e.drug) + ' | ' + esc(e.route || e.corridor || e.country || '') +
+        '<br>' + esc((e.title || '').slice(0, 120)) + ' <a href="' + esc(safe(e.url)) + '" target="_blank" rel="noopener noreferrer">open</a></div>').join('') +
+      (newHits.length > 8 ? '<div class="wi small">+ ' + (newHits.length - 8) + ' more: tap a watch below</div>' : '') + '</div>'
+    : (watches.length && prevSeen !== null ? '<div class="small" style="margin-bottom:8px">No new events match your watchlist since your last visit.</div>' : '');
+  $('watchNote').textContent = watches.length ? '(' + watches.length + ' watch' + (watches.length > 1 ? 'es' : '') + ')' : '';
+}
+function addWatch() {
+  const q = $('wQ').value.trim();
+  if (!tokens(q).length) return;
+  watches.push({q, min: +$('wBand').value});
+  if (!store.set('sw_watches', watches)) $('watchNote').textContent = '(cannot save: private browsing is on)';
+  $('wQ').value = '';
+  renderWatch(); render();
+}
+$('wAdd').onclick = addWatch;
+$('wQ').addEventListener('keydown', ev => { if (ev.key === 'Enter') addWatch(); });
+$('watchList').addEventListener('click', ev => {
+  const go = ev.target.closest('[data-go]'), x = ev.target.closest('[data-x]');
+  if (x) { watches.splice(+x.dataset.x, 1); store.set('sw_watches', watches); renderWatch(); render(); }
+  else if (go) {
+    const w = watches[+go.dataset.go];
+    $('fQ').value = w.q; $('fDays').value = '9999'; $('fBand').value = w.min === 3 ? 'High' : '';
+    render(); $('evT').scrollIntoView({behavior: 'smooth', block: 'start'});
+  }
+});
+renderWatch();
+
 alerts(); staticTables(); render();
 $('foot').innerHTML = 'Open-source news only. Facts are extracted automatically from headlines and articles and can be wrong - always verify through the link. Risk scores rank reports for analyst attention; they are indicators, not findings. Only extracted facts and links are stored, not article text.';
 </script>
