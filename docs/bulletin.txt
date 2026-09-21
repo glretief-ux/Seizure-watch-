@@ -1,0 +1,33 @@
+SEIZURE WATCH - weekly bulletin, 15 Sep - 21 Sep 2026
+
+335 seizure reports this week (previous week 140); 16 high risk; 105.0 t reported.
+Main drugs: Cocaine (112), Cannabis (72), NSA (49)
+Main countries: United States (49), India (28), South Africa (13), Hong Kong (12)
+
+NEW AND SURGING CORRIDORS
+- Trend detection starts after 42 days of data (now 31). Busiest corridors instead:
+  Thailand -> Hong Kong: 12 reports
+  Ghana -> South Africa: 10 reports
+  Pakistan -> India: 7 reports
+  Ghana -> France: 5 reports
+
+UNUSUAL EVENTS (highest risk first)
+- [High 60] 20 Sep | Cannabis | 6.9 t | Lagos | Canada -> Nigeria | Legitimate cargo (industrial/goods); Postal / parcel
+  https://dailyreport.ng/ndlea-seizes-n3-4bn-drugs-arrests-fake-policeman-mechanic-in-nationwide-raids/
+- [High 60] 20 Sep | Cannabis | 6.0 t | Abuja | Canada -> Nigeria | Legitimate cargo (industrial/goods); Postal / parcel
+  https://ua.news/en/world/u-nigeriyi-zaiavili-pro-viluchennia-narkotikiv-na-3-4-mlrd-nair-premium-times-nigeria
+- [High 60] 20 Sep | Cannabis | 292 kg | Lagos | Canada -> Nigeria | Legitimate cargo (industrial/goods); Postal / parcel
+  https://prnigeria.com/2026/09/20/ndlea-seizes-worth-cannabis/
+- [High 60] 20 Sep | Methamphetamine | 219 kg | Tauranga | China -> New Zealand | Legitimate cargo (industrial/goods); Luggage / passenger goods; Postal / parcel
+  https://www.1news.co.nz/2026/09/20/number-of-meth-pipes-bongs-seized-by-customs-soars/
+- [High 60] 19 Sep | Cannabis | 43 kg | Lagos | Pakistan -> United Kingdom | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Luggage / passenger goods; Postal / parcel; Vehicle compartment
+  https://gazettengr.com/20-tactics-traffickers-used-to-hide-drugs-uncovered-by-hi-tech-scanners-eagle-eyed-ndlea-officers/
+- [High 55] 20 Sep | Cocaine | 3.0 t | Manta | Hidden compartment (unspecified); Legitimate cargo (food/produce)
+  https://www.extra.ec/noticia/ecuador/manabi-incautan-cerca-3-toneladas-cocaina-choneros-caletas-manta-163033.html
+
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (106), Luggage / passenger goods (38), Postal / parcel (26)
+Cover cargo named: cement (42), plastic (4), meat (1), “tofu cat litter” (1), chemical (1)
+
+Coverage: searching 9 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Chinese). 49 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
+Leads from open sources, not confirmed facts. Verify before acting.
+https://glretief-ux.github.io/Seizure-watch-/
