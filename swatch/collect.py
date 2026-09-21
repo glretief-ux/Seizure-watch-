@@ -141,7 +141,8 @@ def resolve_google_links(items, interval=0.3, chunk=25):
 
 
 # ---------------------------------------------------------------------- GDELT
-GDELT_LANGS = {"en": "english", "es": "spanish", "fr": "french", "pt": "portuguese"}
+GDELT_LANGS = {"en": "english", "es": "spanish", "fr": "french", "pt": "portuguese", "ar": "arabic", "tr": "turkish",
+               "ru": "russian", "zh": "chinese", "hi": "hindi"}
 
 
 def gdelt(query, lang, days, maxrec=100):
@@ -261,7 +262,7 @@ def prefilter(items, cutoff_date):
         if L.EXCLUDE.search(blob):
             continue
         it["url"] = clean_url(it["url"])
-        key = re.sub(r"[^a-z0-9]+", " ", L.norm(it["title"]))[:90]
+        key = L.slug(it["title"])[:90]
         if key in seen:
             continue
         seen.add(key)

@@ -54,6 +54,7 @@ def main():
     ap.add_argument("--reanalyse", action="store_true", help="skip collection, rebuild analysis from the database")
     ap.add_argument("--days", type=int, help="override lookback days (e.g. 30 for a first back-fill)")
     ap.add_argument("--out", default=os.path.join(HERE, "docs"))
+    ap.add_argument("--send-bulletin", action="store_true", help="e-mail the weekly bulletin now (needs the mail secrets)")
     args = ap.parse_args()
 
     cfg = yaml.safe_load(open(args.config, encoding="utf-8"))
@@ -96,6 +97,18 @@ def main():
     db.save_alerts(conn, res["asof"].strftime("%Y-%m-%d"), res["alerts"])
     out = report.write_all(res, args.out, cfg, demo=args.demo)
     log(f"Done. {out['events']} events in report, {out['alerts']} alerts.")
+    bcfg = cfg.get("bulletin", {}) or {}
+    if bcfg.get("enabled", True):
+        from swatch import bulletin
+        b = bulletin.build(res, cfg, args.out)
+        log(f"Weekly bulletin written ({os.path.join(args.out, 'bulletin.html')}).")
+        if not args.demo:
+            last = db.get_meta(conn, "bulletin_sent")
+            if args.send_bulletin or bulletin.is_due(last, today, bcfg.get("weekday", 0)):
+                ok, msg = bulletin.send_email(b)
+                log(f"Bulletin e-mail: {msg}")
+                if ok:
+                    db.set_meta(conn, "bulletin_sent", today.isoformat())
     log(f"Open: {os.path.join(args.out, 'index.html')}")
     for a in res["alerts"][:8]:
         log(f"  [{a['severity']:6}] {a['type']}: {a['title']}")

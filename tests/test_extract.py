@@ -70,6 +70,38 @@ def test_insider():
                 "Port workers were arrested; an extraction crew is suspected.")
     assert r["insider"] == 1
 
+def _kg(title, text=""):
+    return extract(title, text)["qty_kg"] if extract(title, text).get("relevant") else "not-relevant"
+
+def test_english_three_decimals():
+    assert abs(_kg("NDLEA nabs fugitive drug kingpin linked to 49.700kg heroin seizure", "Heroin worth millions was seized.") - 49.7) < 0.01
+    assert abs(_kg("Police seize 9.549 kg heroin in Amritsar") - 9.549) < 0.001
+
+def test_spanish_thousands_still_work():
+    assert abs(_kg("Incautan 1.500 kilos de cocaina en el puerto de Guayaquil") - 1500) < 1
+
+def test_running_totals_are_ignored():
+    assert _kg("Colombia capturo a 21.940 criminales e incauto casi 100 toneladas de droga desde agosto") in (None, "not-relevant")
+    assert _kg("Rs 14.47cr drugs seized in Mizoram in 4 days, six held", "Police seized 12 kg heroin and 3,000 kg of poppy. Since January police seized 12,746 kg.") in (None, 12.0, 3012.0)
+    assert _kg("Turkiye seizes 35 tons of drugs as anti-drug operations intensify") in (None, "not-relevant")
+
+def test_precursors_are_not_drug_weight():
+    q = _kg("Aseguran en Lazaro Cardenas 27 toneladas de acido tartarico, precursor de metanfetaminas")
+    assert q in (None, "not-relevant")
+    assert abs(_kg("Police seize 300 kg of methamphetamine and 10 tonnes of chemical precursors") - 300) < 1
+
+def test_k_pounds_and_first_mention():
+    assert abs(_kg("Coast Guard seizes 7K pounds of cocaine near Puerto Rico") - 3175.1) < 1
+    q = _kg("Cocaine seized at port", "Officers found 120 kg of cocaine in a container. In 2024 the port seized 40,255 kg of cocaine.")
+    assert abs(q - 120) < 1
+
+def test_implausible_single_seizure_dropped():
+    assert _kg("Customs seize 60 tonnes of cannabis at border") in (None, "not-relevant")
+
+def test_two_drugs_named_in_the_headline_count():
+    r = extract("Police seize cocaine and cannabis in port raid", "Officers seized 40 kg of cocaine and 10 kg of cannabis.")
+    assert set(r["drugs"].split("|")) == {"Cocaine", "Cannabis"}, r["drugs"]
+
 if __name__ == "__main__":
     bad = 0
     for k, v in list(globals().items()):

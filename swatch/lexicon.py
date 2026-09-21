@@ -13,11 +13,25 @@ import unicodedata
 
 
 def strip_accents(s):
+    s = s.replace("\u0131", "i")                     # Turkish dotless i
     return "".join(c for c in unicodedata.normalize("NFKD", s) if not unicodedata.combining(c))
 
 
+# Arabic-Indic, Persian and Devanagari digits -> 0-9 ; Arabic decimal / thousands marks
+_DIGITS = str.maketrans("\u0660\u0661\u0662\u0663\u0664\u0665\u0666\u0667\u0668\u0669"
+                        "\u06f0\u06f1\u06f2\u06f3\u06f4\u06f5\u06f6\u06f7\u06f8\u06f9"
+                        "\u0966\u0967\u0968\u0969\u096a\u096b\u096c\u096d\u096e\u096f\u066b\u066c",
+                        "0123456789" "0123456789" "0123456789" ".,")
+
+
 def norm(s):
-    return strip_accents((s or "").replace("\u2019", "'")).lower()
+    return strip_accents((s or "").replace("\u2019", "'").translate(_DIGITS)).lower()
+
+
+def slug(s):
+    """Letters and digits of any script, single spaces (used to compare headlines)."""
+    t = norm(s)
+    return re.sub(r"\s+", " ", "".join(" " if unicodedata.category(c)[0] in "PSZC" else c for c in t)).strip()
 
 
 def rx(*parts):
@@ -692,15 +706,451 @@ _PLACES += [
     ('Nassau', 'Bahamas', ['nassau']),
     ('San Juan', 'Puerto Rico', ['san juan']),
 ]
+# --- more ports and airports (display, country, [aliases])
+_PLACES_MORE = [
+    ('Posorja', 'Ecuador', ['posorja']),
+    ('Esmeraldas', 'Ecuador', ['esmeraldas']),
+    ('Puerto Bolivar', 'Ecuador', ['puerto bolivar']),
+    ('Santa Marta', 'Colombia', ['santa marta']),
+    ('Barranquilla', 'Colombia', ['barranquilla']),
+    ('Tumaco', 'Colombia', ['tumaco']),
+    ('Paita', 'Peru', ['paita']),
+    ('Chancay', 'Peru', ['chancay']),
+    ('Paranagua', 'Brazil', ['paranagua']),
+    ('Itajai', 'Brazil', ['itajai']),
+    ('Rio Grande', 'Brazil', ['rio grande']),
+    ('Suape', 'Brazil', ['suape']),
+    ('Pecem', 'Brazil', ['pecem']),
+    ('Rosario', 'Argentina', ['rosario']),
+    ('Cristobal', 'Panama', ['cristobal']),
+    ('Bocas del Toro', 'Panama', ['bocas del toro']),
+    ('Puerto Quetzal', 'Guatemala', ['puerto quetzal']),
+    ('Santo Tomas de Castilla', 'Guatemala', ['santo tomas de castilla']),
+    ('Puerto Moin', 'Costa Rica', ['puerto moin', 'limon-moin']),
+    ('Haina', 'Dominican Republic', ['haina']),
+    ('Point Lisas', 'Trinidad and Tobago', ['point lisas']),
+    ('Willemstad', 'Curacao', ['willemstad']),
+    ('Veracruz', 'Mexico', ['veracruz']),
+    ('Altamira', 'Mexico', ['altamira']),
+    ('Ensenada', 'Mexico', ['ensenada']),
+    ('Los Angeles', 'United States', ['los angeles', 'port of los angeles']),
+    ('Long Beach', 'United States', ['long beach']),
+    ('Oakland', 'United States', ['oakland']),
+    ('Savannah', 'United States', ['savannah']),
+    ('Charleston', 'United States', ['charleston']),
+    ('Norfolk', 'United States', ['norfolk']),
+    ('Newark', 'United States', ['newark', 'port newark']),
+    ('Philadelphia', 'United States', ['philadelphia']),
+    ('JFK airport', 'United States', ['jfk']),
+    ('LAX airport', 'United States', ['lax']),
+    ('Marseille-Fos', 'France', ['marseille', 'marseilles', 'marseille-fos', 'fos-sur-mer', 'marsella']),
+    ('Bremerhaven', 'Germany', ['bremerhaven']),
+    ('Zeebrugge', 'Belgium', ['zeebrugge']),
+    ('Valencia', 'Spain', ['valenciaport', 'port of valencia', 'puerto de valencia']),
+    ('Vigo', 'Spain', ['vigo']),
+    ('Bilbao', 'Spain', ['bilbao']),
+    ('Las Palmas', 'Spain', ['las palmas']),
+    ('Tenerife', 'Spain', ['tenerife']),
+    ('Genoa', 'Italy', ['genoa', 'genova']),
+    ('La Spezia', 'Italy', ['la spezia']),
+    ('Livorno', 'Italy', ['livorno']),
+    ('Naples', 'Italy', ['naples', 'napoli']),
+    ('Trieste', 'Italy', ['trieste']),
+    ('Salerno', 'Italy', ['salerno']),
+    ('Southampton', 'United Kingdom', ['southampton', 'port of southampton']),
+    ('London Gateway', 'United Kingdom', ['london gateway', 'tilbury']),
+    ('Dover', 'United Kingdom', ['dover', 'port of dover']),
+    ('Klaipeda', 'Lithuania', ['klaipeda']),
+    ('Riga', 'Latvia', ['riga']),
+    ('Tallinn', 'Estonia', ['tallinn']),
+    ('Leixoes', 'Portugal', ['leixoes']),
+    ('Heathrow airport', 'United Kingdom', ['heathrow']),
+    ('Gatwick airport', 'United Kingdom', ['gatwick']),
+    ('Schiphol airport', 'Netherlands', ['schiphol']),
+    ('Charles de Gaulle airport', 'France', ['charles de gaulle', 'roissy', 'cdg']),
+    ('Barajas airport', 'Spain', ['barajas']),
+    ('Monrovia', 'Liberia', ['monrovia']),
+    ('Banjul', 'Gambia', ['banjul']),
+    ('Nouakchott', 'Mauritania', ['nouakchott']),
+    ('Bissau', 'Guinea-Bissau', ['bissau']),
+    ('Takoradi', 'Ghana', ['takoradi']),
+    ('Pointe-Noire', 'Congo', ['pointe-noire', 'pointe noire']),
+    ('Walvis Bay', 'Namibia', ['walvis bay']),
+    ('Beira', 'Mozambique', ['beira']),
+    ('Nacala', 'Mozambique', ['nacala']),
+    ('Khor Fakkan', 'United Arab Emirates', ['khor fakkan']),
+    ('Sharjah', 'United Arab Emirates', ['sharjah']),
+    ('Salalah', 'Oman', ['salalah']),
+    ('Sohar', 'Oman', ['sohar']),
+    ('Dammam', 'Saudi Arabia', ['dammam']),
+    ('Izmir', 'Turkey', ['izmir']),
+    ('Ambarli', 'Turkey', ['ambarli']),
+    ('Haifa', 'Israel', ['haifa']),
+    ('Ashdod', 'Israel', ['ashdod']),
+    ('Umm Qasr', 'Iraq', ['umm qasr', 'basra']),
+    ('Chittagong', 'Bangladesh', ['chittagong', 'chattogram']),
+    ('Tanjung Pelepas', 'Malaysia', ['tanjung pelepas']),
+    ('Surabaya', 'Indonesia', ['surabaya']),
+    ('Haiphong', 'Vietnam', ['haiphong', 'hai phong']),
+    ('Ningbo', 'China', ['ningbo']),
+    ('Shenzhen', 'China', ['shenzhen', 'yantian', 'shekou', '深圳', '深圳港']),
+    ('Qingdao', 'China', ['qingdao', '青岛', '青島']),
+    ('Tianjin', 'China', ['tianjin', '天津']),
+    ('Yokohama', 'Japan', ['yokohama']),
+    ('Kaohsiung', 'Taiwan', ['kaohsiung', '高雄']),
+    ('Kandla', 'India', ['kandla']),
+    ('Tuticorin', 'India', ['tuticorin']),
+    ('Visakhapatnam', 'India', ['visakhapatnam']),
+    ('Gwadar', 'Pakistan', ['gwadar']),
+    ('Melbourne', 'Australia', ['melbourne']),
+    ('Brisbane', 'Australia', ['brisbane']),
+    ('Fremantle', 'Australia', ['fremantle']),
+    ('Auckland', 'New Zealand', ['auckland']),
+]
+_PLACES += _PLACES_MORE
 PLACE_ALIAS = {}
 for _disp, _ctry, _als in _PLACES:
     for _a in _als:
         PLACE_ALIAS[norm(_a)] = (_disp, _ctry)
 
 
+# --------------------------------------------------------------------------
+# MORE LANGUAGES: Arabic, Turkish, Russian, Chinese (simplified and traditional), Hindi
+# --------------------------------------------------------------------------
+def _bs(x):
+    return re.sub(r"\\+", r"\\", x)               # tidy doubled backslashes in the word lists
+
+
+def _ext(rxobj, *parts):
+    """Same pattern plus more alternatives."""
+    return re.compile(rxobj.pattern + "|" + "|".join(strip_accents(_bs(p)) for p in parts), re.I)
+
+
+# (the word lists below were written for Arabic, Turkish, Russian, Chinese and Hindi)
+"""Words for Arabic, Turkish, Russian, Chinese (simplified + traditional) and Hindi.
+Every string is passed through lexicon.strip_accents / norm, so accents, Arabic vowel marks, hamza forms and
+Devanagari nukta are normalised on both sides."""
+
+# ---- drug words (regex parts, appended to the existing category patterns)
+DRUG_EXTRA = {
+    "Cocaine": [
+        "كوكايين", "كوكاين", "kokain", "кокаин", "可卡因", "古柯碱", "古柯堿", "古柯鹼", "कोकीन", "कोकेन"],
+    "Cannabis": [
+        "حشيش", "ماريجوانا", "ماريجوانه", "بانجو", "القنب", "esrar", "kenevir", "hashis", "марихуан", "гашиш", "каннабис",
+        "конопл", "анаша", "大麻", "गांजा", "चरस", "मारिजुआना", "हशीश", r"(?<![\u0900-\u097f])भांग(?![\u0900-\u097f])"],
+    "Heroin/Opium": [
+        "هيروين", "افيون", "أفيون", "eroin", "afyon", "героин", "опий", "опиат", "海洛因", "海洛英", "鸦片", "鴉片", "阿片",
+        "हेरोइन", "हीरोइन", "अफीम", "स्मैक", "ब्राउन शुगर", "डोडा चूरा"],
+    "Methamphetamine": [
+        "ميثامفيتامين", "ميثامفيتامين", "الشابو", "metamfetamin", "метамфетамин", "冰毒", "甲基苯丙胺", "甲基安非他命",
+        "मेथामफेटामाइन", "मेथएम्फेटामाइन", r"(?<![\u0900-\u097f])मेथ(?![\u0900-\u097f])"],
+    "NSA": [
+        "كبتاجون", "كابتاجون", "كبتاغون", "كابتاغون", "ترامادول", "امفيتامين", "أمفيتامين", "اكستاسي", "كيتامين", "فنتانيل",
+        "مخدرات تخليقية", "حبوب مخدرة", "اقراص مخدرة", "أقراص مخدرة",
+        "kaptagon", "ekstazi", "sentetik uyusturucu", "uyusturucu hap", "bonzai", "amfetamin", "ketamin", "fentanil",
+        "(?<!мет)амфетамин", "мефедрон", r"синтетическ\w+\s+наркотик", "спайс", "экстази", "кетамин", "фентанил",
+        "трамадол", "каптагон", "психотропн",
+        "摇头丸", "搖頭丸", "k粉", "氯胺酮", "芬太尼", "卡西酮", "新型毒品", "合成毒品", "曲马多", "曲馬多", "依托咪酯",
+        "太空油", "(?<!甲基)安非他命", "(?<!甲基)苯丙胺",
+        "ट्रामाडोल", "कैप्टागन", "एक्स्टसी", "सिंथेटिक ड्रग", "नशीली गोलियां", "नशीली गोलियाँ", "नशीले कैप्सूल", "एमडीएमए",
+        "मेफेड्रोन", "फेंटेनिल", "केटामाइन"],
+    "Cigarettes": [
+        "سجائر", "تبغ", "kacak sigara", "sigara kacakciligi", "сигарет", "табачн", "香烟", "香菸", "卷烟", "捲菸", "私烟",
+        "烟草", "菸草", "सिगरेट", "तंबाकू"],
+}
+GENERIC_EXTRA = ["مخدرات", "مواد مخدرة", "المخدر", "uyusturucu", "narkotik", "наркотик", "наркотическ", "психотропн",
+                 "毒品", "ड्रग्स", "नशीला पदार्थ", "नशीले पदार्थ", "मादक पदार्थ", "नारकोटिक्स"]
+SEIZURE_EXTRA = [
+    "ضبط", "احباط", "احبط", "مصادر", "تهريب", "القبض على",
+    "ele gecir", "el konul", "yakalan", "kacakcilik",
+    "изъял", "изъят", "конфиск", "задержа", "пресек", "контрабанд", "обнаружил",
+    "缴获", "繳獲", "查获", "查獲", "截获", "截獲", "破获", "破獲", "缉获", "緝獲", "起获", "檢獲", "检获", "查扣", "扣押", "走私",
+    "जब्त", "बरामद", "पकडा", "पकडे", "तस्करी", "भंडाफोड",
+]
+CONTAINER_EXTRA = ["حاوية", "حاويات", "konteyner", "контейнер", "集装箱", "集裝箱", "货柜", "貨櫃", "कंटेनर"]
+PORT_WORDS = [r"ميناء", r"(?<![a-z])liman", r"морск\w+\s+порт", r"(?<![а-я])порт", r"港口", r"(?<!香)港", r"बंदरगाह"]
+AIR_WORDS = ["مطار", "havalimani", "havaalani", "аэропорт", "机场", "機場", "एयरपोर्ट", "हवाई अड्डा"]
+ROAD_WORDS = ["شاحنة", "شاحنات", r"tir\b", "kamyon", "грузовик", "фур[аы]", "卡车", "貨車", "货车", "ट्रक"]
+
+# ---- weight units: (regex part, kg factor)
+UNITS_EXTRA = [
+    ("كيلوغرام", 1), ("كيلوجرام", 1), ("كغ", 1), ("كجم", 1), ("طن", 1000),
+    (r"килограмм\w*", 1), ("кг", 1), (r"тонн\w*", 1000),
+    ("公斤", 1), ("千克", 1), ("公吨", 1000), ("吨", 1000), ("噸", 1000),
+    ("किलोग्राम", 1), ("किलो", 1), ("किग्रा", 1), ("टन", 1000), ("क्विंटल", 100),
+]
+
+# ---- countries: English name | Arabic | Turkish | Russian stem | Chinese simplified | Chinese traditional | Hindi
+# (blank field = none). Russian stems get case endings automatically.
+COUNTRIES = r"""
+Afghanistan|أفغانستان|afganistan|афганистан|阿富汗||अफगानिस्तान
+Albania|ألبانيا|arnavutluk|албани|阿尔巴尼亚|阿爾巴尼亞|अल्बानिया
+Algeria|الجزائر|cezayir|алжир|阿尔及利亚|阿爾及利亞|अल्जीरिया
+Angola|أنغولا|angola|ангол|安哥拉||अंगोला
+Argentina|الأرجنتين|arjantin|аргентин|阿根廷||अर्जेंटीना
+Australia|أستراليا|avustralya|австрали|澳大利亚|澳洲|ऑस्ट्रेलिया
+Austria|النمسا|avusturya|австри|奥地利|奧地利|ऑस्ट्रिया
+Bahrain|البحرين|bahreyn|бахрейн|巴林||बहरीन
+Bangladesh|بنغلاديش|banglades|бангладеш|孟加拉国|孟加拉|बांग्लादेश
+Belgium|بلجيكا|belcika|бельги|比利时|比利時|बेल्जियम
+Bolivia|بوليفيا|bolivya|боливи|玻利维亚|玻利維亞|बोलीविया
+Brazil|البرازيل|brezilya|бразили|巴西||ब्राज़ील
+Bulgaria|بلغاريا|bulgaristan|болгари|保加利亚|保加利亞|बुल्गारिया
+Cambodia|كمبوديا|kambocya|камбодж|柬埔寨||कंबोडिया
+Cameroon|الكاميرون|kamerun|камерун|喀麦隆|喀麥隆|कैमरून
+Canada|كندا|kanada|канад|加拿大||कनाडा
+Chile|تشيلي|sili|чили|智利||चिली
+China|الصين|cin|китай|中国|中國|चीन
+Colombia|كولومبيا|kolombiya|колумби|哥伦比亚|哥倫比亞|कोलंबिया
+Costa Rica|كوستاريكا|kosta rika|коста-рик|哥斯达黎加|哥斯大黎加|कोस्टा रिका
+Croatia|كرواتيا|hirvatistan|хорвати|克罗地亚|克羅地亞|क्रोएशिया
+Cuba|كوبا|kuba|куб|古巴||क्यूबा
+Cyprus|قبرص|kibris|кипр|塞浦路斯||साइप्रस
+Czech Republic|التشيك|cekya|чехи|捷克||चेक गणराज्य
+Denmark|الدنمارك|danimarka|дани|丹麦|丹麥|डेनमार्क
+Dominican Republic|الدومينيكان|dominik cumhuriyeti|доминикан|多米尼加||डोमिनिकन गणराज्य
+Ecuador|الإكوادور|ekvador|эквадор|厄瓜多尔|厄瓜多爾|इक्वाडोर
+Egypt|مصر|misir|египет|埃及||मिस्र
+El Salvador|السلفادور|el salvador|сальвадор|萨尔瓦多|薩爾瓦多|अल साल्वाडोर
+Finland|فنلندا|finlandiya|финлянди|芬兰|芬蘭|फिनलैंड
+France|فرنسا|fransa|франци|法国|法國|फ्रांस
+Germany|ألمانيا|almanya|германи|德国|德國|जर्मनी
+Ghana|غانا|gana|гана|加纳|加納|घाना
+Greece|اليونان|yunanistan|греци|希腊|希臘|ग्रीस
+Guatemala|غواتيمالا|guatemala|гватемал|危地马拉|瓜地馬拉|ग्वाटेमाला
+Guinea|غينيا|gine|гвине|几内亚|幾內亞|गिनी
+Haiti|هايتي|haiti|гаити|海地||हैती
+Honduras|هندوراس|honduras|гондурас|洪都拉斯||होंडुरास
+Hong Kong|هونغ كونغ|hong kong|гонконг|香港||हांगकांग
+Hungary|المجر|macaristan|венгри|匈牙利||हंगरी
+India|الهند|hindistan|инди|印度||भारत
+Indonesia|إندونيسيا|endonezya|индонези|印度尼西亚|印尼|इंडोनेशिया
+Iran|إيران|iran|иран|伊朗||ईरान
+Iraq|العراق|irak|ирак|伊拉克||इराक
+Ireland|أيرلندا|irlanda|ирланди|爱尔兰|愛爾蘭|आयरलैंड
+Israel|إسرائيل|israil|израил|以色列||इज़राइल
+Italy|إيطاليا|italya|итали|意大利||इटली
+Ivory Coast|ساحل العاج|fildisi sahili|кот-д'ивуар|科特迪瓦||आइवरी कोस्ट
+Jamaica|جامايكا|jamaika|ямайк|牙买加|牙買加|जमैका
+Japan|اليابان|japonya|япони|日本||जापान
+Jordan|الأردن|urdun|иордани|约旦|約旦|जॉर्डन
+Kazakhstan|كازاخستان|kazakistan|казахстан|哈萨克斯坦|哈薩克|कजाकिस्तान
+Kenya|كينيا|kenya|кени|肯尼亚|肯亞|केन्या
+Kuwait|الكويت|kuveyt|кувейт|科威特||कुवैत
+Kyrgyzstan|قرغيزستان|kirgizistan|киргиз|吉尔吉斯斯坦|吉爾吉斯|किर्गिस्तान
+Laos|لاوس|laos|лаос|老挝|寮國|लाओस
+Lebanon|لبنان|lubnan|ливан|黎巴嫩||लेबनान
+Libya|ليبيا|libya|ливи|利比亚|利比亞|लीबिया
+Malaysia|ماليزيا|malezya|малайзи|马来西亚|馬來西亞|मलेशिया
+Mali||mali|мали|马里|馬利|माली
+Mexico|المكسيك|meksika|мексик|墨西哥||मेक्सिको
+Morocco|المغرب|fas|марокко|摩洛哥||मोरक्को
+Mozambique|موزمبيق|mozambik|мозамбик|莫桑比克||मोज़ाम्बिक
+Myanmar|ميانمار|myanmar|мьянм|缅甸|緬甸|म्यांमार
+Nepal|نيبال|nepal|непал|尼泊尔|尼泊爾|नेपाल
+Netherlands|هولندا|hollanda|нидерланд|荷兰|荷蘭|नीदरलैंड
+New Zealand|نيوزيلندا|yeni zelanda|новой зеланди|新西兰|紐西蘭|न्यूज़ीलैंड
+Nicaragua|نيكاراغوا|nikaragua|никарагуа|尼加拉瓜||निकारागुआ
+Nigeria|نيجيريا|nijerya|нигери|尼日利亚|奈及利亞|नाइजीरिया
+Norway|النرويج|norvec|норвеги|挪威||नॉर्वे
+Oman|سلطنة عمان|umman|оман|阿曼||ओमान
+Pakistan|باكستان|pakistan|пакистан|巴基斯坦||पाकिस्तान
+Panama|بنما|panama|панам|巴拿马|巴拿馬|पनामा
+Paraguay|باراغواي|paraguay|парагва|巴拉圭||पैराग्वे
+Peru|بيرو|peru|перу|秘鲁|秘魯|पेरू
+Philippines|الفلبين|filipinler|филиппин|菲律宾|菲律賓|फिलीपींस
+Poland|بولندا|polonya|польш|波兰|波蘭|पोलैंड
+Portugal|البرتغال|portekiz|португали|葡萄牙||पुर्तगाल
+Qatar|قطر|katar|катар|卡塔尔|卡塔爾|कतर
+Romania|رومانيا|romanya|румыни|罗马尼亚|羅馬尼亞|रोमानिया
+Russia|روسيا|rusya|росси|俄罗斯|俄羅斯|रूस
+Saudi Arabia|السعودية|suudi arabistan|саудовск|沙特||सऊदी अरब
+Senegal|السنغال|senegal|сенегал|塞内加尔|塞內加爾|सेनेगल
+Serbia|صربيا|sirbistan|серби|塞尔维亚|塞爾維亞|सर्बिया
+Singapore|سنغافورة|singapur|сингапур|新加坡||सिंगापुर
+South Africa|جنوب أفريقيا|guney afrika|южн\w+ африк|南非||दक्षिण अफ्रीका
+South Korea|كوريا الجنوبية|guney kore|южн\w+ коре|韩国|南韓|दक्षिण कोरिया
+Spain|إسبانيا|ispanya|испани|西班牙||स्पेन
+Sri Lanka|سريلانكا|sri lanka|шри-ланк|斯里兰卡|斯里蘭卡|श्रीलंका
+Sudan|السودان|sudan|судан|苏丹|蘇丹|सूडान
+Sweden|السويد|isvec|швеци|瑞典||स्वीडन
+Switzerland|سويسرا|isvicre|швейцари|瑞士||स्विट्ज़रलैंड
+Syria|سوريا|suriye|сири|叙利亚|敘利亞|सीरिया
+Taiwan|تايوان|tayvan|тайван|台湾|台灣|ताइवान
+Tajikistan|طاجيكستان|tacikistan|таджикистан|塔吉克斯坦||ताजिकिस्तान
+Tanzania|تنزانيا|tanzanya|танзани|坦桑尼亚|坦尚尼亞|तंजानिया
+Thailand|تايلاند|tayland|таиланд|泰国|泰國|थाईलैंड
+Tunisia|تونس|tunus|тунис|突尼斯||ट्यूनीशिया
+Turkey|تركيا|turkiye|турци|土耳其||तुर्की
+Turkmenistan|تركمانستان|turkmenistan|туркменистан|土库曼斯坦|土庫曼|तुर्कमेनिस्तान
+Uganda|أوغندا|uganda|уганд|乌干达|烏干達|युगांडा
+Ukraine|أوكرانيا|ukrayna|украин|乌克兰|烏克蘭|यूक्रेन
+United Arab Emirates|الإمارات|birlesik arap emirlikleri|оаэ|阿联酋|阿聯酋|संयुक्त अरब अमीरात
+United Kingdom|بريطانيا|ingiltere|великобритани|英国|英國|ब्रिटेन
+United States|الولايات المتحدة|amerika birlesik devletleri|сша|美国|美國|अमेरिका
+Uruguay|أوروغواي|uruguay|уругва|乌拉圭|烏拉圭|उरुग्वे
+Uzbekistan|أوزبكستان|ozbekistan|узбекистан|乌兹别克斯坦|烏茲別克|उज़्बेकिस्तान
+Venezuela|فنزويلا|venezuela|венесуэл|委内瑞拉|委內瑞拉|वेनेज़ुएला
+Vietnam|فيتنام|vietnam|вьетнам|越南||वियतनाम
+Yemen|اليمن|yemen|йемен|也门|葉門|यमन
+Zambia|زامبيا|zambiya|замби|赞比亚|尚比亞|ज़ाम्बिया
+Zimbabwe|زيمبابوي|zimbabve|зимбабве|津巴布韦|辛巴威|जिम्बाब्वे
+"""
+# extra names for the same country (each line: English name | alias | alias ...)
+COUNTRY_MORE = r"""
+Hong Kong|هونج كونج|香港特区
+Ivory Coast|كوت ديفوار|côte d'ivoire
+Iraq|العراق
+Myanmar|بورما
+United Kingdom|المملكة المتحدة|uk|britanya|соединенн\w+ королевств
+United States|أمريكا|abd|америк|соединенные штаты
+United Arab Emirates|بأبوظبي|bae|эмират
+Dominican Republic|جمهورية الدومينيكان
+South Africa|جنوب افريقيا
+Czech Republic|جمهورية التشيك|cekya cumhuriyeti|чехия
+Taiwan|臺灣
+Turkey|türkiye|turkey
+Guinea|غينيا كوناكري
+Guinea-Bissau|غينيا بيساو|gine bisau|гвине-бисау|几内亚比绍|幾內亞比索
+Equatorial Guinea|غينيا الاستوائية|ekvator ginesi|экваториальн\w+ гвине|赤道几内亚|赤道幾內亞
+"""
+
+# ---- places (ports, airports, hubs) in other scripts: (display name as used in the gazetteer, country, [aliases])
+PLACES = [
+    ("Dubai", "United Arab Emirates", ["dubai", "دبي", "дубай", "迪拜", "杜拜", "दुबई"]),
+    ("Abu Dhabi", "United Arab Emirates", ["ابو ظبي", "أبوظبي", "абу-даби", "阿布扎比", "अबू धाबी"]),
+    ("Istanbul", "Turkey", ["istanbul", "اسطنبول", "إسطنبول", "стамбул", "伊斯坦布尔", "伊斯坦堡", "इस्तांबुल"]),
+    ("Doha", "Qatar", ["doha", "الدوحة", "доха", "多哈", "दोहा"]),
+    ("Cairo", "Egypt", ["القاهرة", "каир", "开罗", "開羅", "काहिरा"]),
+    ("Riyadh", "Saudi Arabia", ["الرياض", "эр-рияд", "利雅得", "रियाद"]),
+    ("Jeddah", "Saudi Arabia", ["جدة", "джидда", "吉达", "जेद्दा"]),
+    ("Beirut", "Lebanon", ["بيروت", "бейрут", "贝鲁特", "貝魯特", "बेरूत"]),
+    ("Baghdad", "Iraq", ["بغداد", "багдад", "巴格达", "巴格達", "बगदाद"]),
+    ("Tehran", "Iran", ["طهران", "тегеран", "德黑兰", "德黑蘭", "तेहरान"]),
+    ("Karachi", "Pakistan", ["كراتشي", "карачи", "卡拉奇", "कराची"]),
+    ("Delhi", "India", ["دلهي", "دلهى", "дели", "德里", "新德里", "दिल्ली"]),
+    ("Mumbai", "India", ["مومباي", "мумбаи", "孟买", "孟買", "मुंबई", "मुम्बई"]),
+    ("Moscow", "Russia", ["موسكو", "москв", "莫斯科", "मास्को"]),
+    ("Beijing", "China", ["بكين", "пекин", "北京", "बीजिंग"]),
+    ("Shanghai", "China", ["شنغهاي", "шанхай", "上海", "शंघाई"]),
+    ("Guangzhou", "China", ["غوانغتشو", "гуанчжоу", "广州", "廣州", "ग्वांगझू"]),
+    ("Kabul", "Afghanistan", ["كابول", "кабул", "喀布尔", "喀布爾", "काबुल"]),
+    ("Ankara", "Turkey", ["انقرة", "анкара", "安卡拉", "अंकारा"]),
+    ("Aqaba", "Jordan", ["العقبة", "акаба", "亚喀巴", "亞喀巴"]),
+    ("Latakia", "Syria", ["اللاذقية", "латакия", "拉塔基亚", "拉塔基亞"]),
+    ("Mersin", "Turkey", ["mersin", "мерсин", "梅尔辛"]),
+    ("Tel Aviv", "Israel", ["تل ابيب", "тель-авив", "特拉维夫", "特拉維夫"]),
+    ("Bangkok", "Thailand", ["بانكوك", "бангкок", "曼谷", "बैंकॉक"]),
+    ("Hong Kong airport", "Hong Kong", ["مطار هونغ كونغ", "аэропорт гонконга", "香港国际机场", "香港國際機場", "赤鱲角"]),
+    ("Hamburg", "Germany", ["hamburg", "гамбург", "汉堡", "漢堡", "हैम्बर्ग", "هامبورغ"]),
+    ("Rotterdam", "Netherlands", ["rotterdam", "роттердам", "鹿特丹", "روتردام"]),
+    ("Antwerp", "Belgium", ["antwerp", "антверпен", "安特卫普", "安特衛普", "أنتويرب"]),
+    ("Saint Petersburg", "Russia", ["saint petersburg", "st petersburg", "st. petersburg", "санкт-петербург", "петербург", "圣彼得堡", "聖彼得堡"]),
+    ("Novorossiysk", "Russia", ["novorossiysk", "новороссийск", "新罗西斯克"]),
+    ("Vladivostok", "Russia", ["vladivostok", "владивосток", "符拉迪沃斯托克", "海参崴"]),
+    ("Odesa", "Ukraine", ["odesa", "odessa", "одесс", "敖德萨", "敖德薩"]),
+    ("Sheremetyevo airport", "Russia", ["sheremetyevo", "шереметьев", "谢列梅捷沃"]),
+    ("Domodedovo airport", "Russia", ["domodedovo", "домодедов"]),
+    ("Almaty", "Kazakhstan", ["almaty", "алмат", "阿拉木图"]),
+    ("Tashkent", "Uzbekistan", ["tashkent", "ташкент", "塔什干"]),
+]
+
+
+for _k, _parts in DRUG_EXTRA.items():
+    DRUG_PATTERNS[_k] = _ext(DRUG_PATTERNS[_k], *_parts)
+GENERIC_DRUG = _ext(GENERIC_DRUG, *GENERIC_EXTRA)
+CONCEAL_EXTRA = {
+    "Legitimate cargo (food/produce)": [
+        "موز", "فواكه", "فاكهة", "قهوة", "خضروات", "لحوم", "أرز", "muz", "meyve", "kahve", "sebze", "pirinc", "(?<![a-z])balik",
+        "банан", "фрукт", "кофе", "овощ", "мороженн", "香蕉", "水果", "咖啡", "冷冻", "冷凍", "蔬菜", "大米", "केला", "फल", "कॉफी", "मछली", "सब्जी", "चावल"],
+    "Legitimate cargo (industrial/goods)": [
+        "خشب", "أثاث", "اثاث", "آلات", "ملابس", "ألعاب", "إلكترونيات", "خردة", "kereste", "mobilya", "makine", "tekstil", "hurda", "oyuncak",
+        "elektronik", "древесин", "мебел", "оборудован", "станк", "одежд", "игрушк", "металлолом", "木材", "家具", "机械", "機械", "服装",
+        "玩具", "废金属", "廢金屬", "फर्नीचर", "मशीन", "खिलौने", "लकडी", "कपडे"],
+    "Body concealment": ["ابتلاع", "كبسولات", "yutmus", "проглоти", "吞食", "निगल"],
+    "Luggage / passenger goods": ["حقيبة", "حقائب", "امتعة", "أمتعة", "bavul", "valiz", "чемодан", "багаж", "行李", "手提箱", "सूटकेस"],
+    "Postal / parcel": ["طرد", "طرود", "(?<![a-z])kargo", "(?<![a-z])posta", "посылк", "почтов", "包裹", "邮包", "郵包", "पार्सल"],
+    "Container structure / false compartment": ["جدار الحاوية", "قاع مزدوج", "çift taban", "cift taban", "двойн\\w+ дн", "夹层", "夾層", "暗格"],
+}
+for _k, _parts in CONCEAL_EXTRA.items():
+    CONCEALMENT[_k] = _ext(CONCEALMENT[_k], *_parts)
+SEIZURE = _ext(SEIZURE, *SEIZURE_EXTRA)
+CONTAINER = _ext(CONTAINER, *CONTAINER_EXTRA)
+TRANSPORT["Sea - container/cargo"] = _ext(TRANSPORT["Sea - container/cargo"], *PORT_WORDS)
+TRANSPORT["Air"] = _ext(TRANSPORT["Air"], *AIR_WORDS)
+TRANSPORT["Road"] = _ext(TRANSPORT["Road"], *ROAD_WORDS)
+ANY_DRUG = re.compile("|".join(p.pattern for p in list(DRUG_PATTERNS.values()) + [GENERIC_DRUG]), re.I)
+
+
+# "from X", "to X", "via X" in the new languages
+def _cue_ext(old, extra):
+    return _cue(old.pattern[3:-(len(_TAIL) + 1)] + "|" + extra)
+
+
+ORIGIN_CUE = _cue_ext(ORIGIN_CUE, r"قادم[ةا]?\s+من|واردة\s+من|(?<![\u0600-\u06ff])من|(?<![\u0430-\u044f])из(?:-за)?|"
+                                  r"прибывш\w+\s+из|вывезенн\w+\s+из|来自|來自|从|從|自")
+DEST_CUE = _cue_ext(DEST_CUE, r"متجه[ةا]?\s+(?:إلى|الى)|في\s+طريقها\s+(?:إلى|الى)|المرسل[ةا]\s+(?:إلى|الى)|"
+                              r"в\s+направлении|направлявш\w+\s+в|следовавш\w+\s+в|для\s+отправки\s+в|предназначавш\w+\s+для|"
+                              r"运往|運往|前往|发往|發往|运抵|運抵|销往|銷往")
+TRANSIT_CUE = _cue_ext(TRANSIT_CUE, r"(?<![\u0600-\u06ff])عبر|(?<![\u0430-\u044f])через|途经|途經|经由|經由|经过|經過|转运|轉運|取道")
+TO_CUE = _cue_ext(TO_CUE, r"(?<![\u0600-\u06ff])(?:إلى|الى)|(?<![\u0430-\u044f])в|到|至")
+# suffixes that come AFTER the country: Turkish 'dan / 'e, Hindi "se" (from) / "tak" (to)
+POST_ORIGIN = re.compile(r"^(?:'(?:dan|den|tan|ten)(?![a-z])|\s*से(?![\u0900-\u097f]))")
+POST_DEST = re.compile(r"^(?:'(?:ya|ye|na|ne|a|e)(?![a-z])|\s*(?:तक|के\s+लिए)(?![\u0900-\u097f]))")
+
+# countries in other languages (Russian names need case endings, so they are matched as stems)
+_RU_STEMS = []            # (stem regex, English name)
+
+
+def _add_country(eng, alias):
+    alias = _bs(alias).strip()
+    if not alias:
+        return
+    if re.search(r"[\u0400-\u04ff]", alias):
+        _RU_STEMS.append((norm(alias).replace("\\w+", "[\u0430-\u044f]+"), eng))
+    else:
+        COUNTRY_ALIAS[norm(alias)] = eng
+
+
+for _line in COUNTRIES.strip().splitlines():
+    _f = [x.strip() for x in _line.split("|")]
+    for _a in _f[1:]:
+        _add_country(_f[0], _a)
+for _line in COUNTRY_MORE.strip().splitlines():
+    _f = [x.strip() for x in _line.split("|")]
+    for _a in _f[1:]:
+        _add_country(_f[0], _a)
+for _disp, _ctry, _als in PLACES:
+    for _a in _als:
+        PLACE_ALIAS[norm(_a)] = (_disp, _ctry)
+
+# Russian place names inflect too, so they are matched as stems as well
+_RU_PLACES = []
+for _k in [k for k in PLACE_ALIAS if re.search(r"[\u0400-\u04ff]", k)]:
+    _RU_PLACES.append((_k, PLACE_ALIAS.pop(_k)))
+_RU_PLACES.sort(key=lambda x: len(x[0]), reverse=True)
+PLACE_RX_RU = re.compile("|".join("(?P<p%d>(?<![\u0430-\u044f])%s[\u0430-\u044f]{0,4}(?![\u0430-\u044f]))" % (i, re.escape(k))
+                                  for i, (k, _) in enumerate(_RU_PLACES)))
+
+
+def ru_place(m):
+    """(display, country) for a match of PLACE_RX_RU."""
+    return _RU_PLACES[int(m.lastgroup[1:])][1]
+
+
+_RU_STEMS.sort(key=lambda x: len(x[0]), reverse=True)
+COUNTRY_RX_RU = re.compile("|".join("(?P<c%d>(?<![\u0430-\u044f])%s[\u0430-\u044f]{0,4}(?![\u0430-\u044f]))" % (i, st)
+                                    for i, (st, _) in enumerate(_RU_STEMS)))
+
+
+def ru_country(m):
+    """Country for a match of COUNTRY_RX_RU."""
+    return _RU_STEMS[int(m.lastgroup[1:])][1]
+
+
 def _alt(keys):
     return "|".join(re.escape(k) for k in sorted(keys, key=len, reverse=True))
 
 
-COUNTRY_RX = re.compile(r"(?<![a-z])(" + _alt(COUNTRY_ALIAS) + r")(?![a-z])")
-PLACE_RX = re.compile(r"(?<![a-z])(" + _alt(PLACE_ALIAS) + r")(?![a-z])")
+COUNTRY_RX = re.compile(r"(?<![a-z])(" + _alt(COUNTRY_ALIAS) + r")(?![a-z\u0600-\u06ff\u0900-\u097f])")
+PLACE_RX = re.compile(r"(?<![a-z])(" + _alt(PLACE_ALIAS) + r")(?![a-z\u0600-\u06ff\u0900-\u097f])")

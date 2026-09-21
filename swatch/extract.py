@@ -15,10 +15,11 @@ WORDNUM = {w: i for i, w in enumerate(
 WORDNUM.update({"dos": 2, "tres": 3, "cuatro": 4, "cinco": 5, "seis": 6, "siete": 7, "ocho": 8, "nueve": 9,
                 "diez": 10, "deux": 2, "trois": 3, "quatre": 4, "cinq": 5, "sept": 7, "huit": 8, "neuf": 9, "dix": 10})
 
-NUM = r"(\d{1,3}(?:[.,]\d{3})+(?:[.,]\d+)?|\d+(?:[.,]\d+)?)"
+NUM = r"(?<![\d.,])(\d{1,3}(?:[.,]\d{3})+(?:[.,]\d+)?|\d{1,3}(?:[ \u00a0\u202f]\d{3})+(?:[.,]\d+)?|\d+(?:[.,]\d+)?)"
 MULT = r"(?:\s*(million|millions|millon|millones|milhao|milhoes|billion|thousand|mil|k)(?![a-z]))?"
+_EXTRA_UNITS = [(L.strip_accents(re.sub(r"\\+", r"\\", u)), f) for u, f in L.UNITS_EXTRA]
 W_UNITS = (r"(tonnes?|tons?|toneladas?|tonelada|kilograms?|kilogrammes?|kilogramos|kilogramas|quilogramas?|kilos?|kgs?|"
-           r"grams?|grammes?|gramos?|gramas?|gms?|g|lbs?|pounds?|libras?)")
+           r"grams?|grammes?|gramos?|gramas?|gms?|" + "|".join(u for u, _ in _EXTRA_UNITS) + r"|g|lbs?|pounds?|libras?)")
 WEIGHT_RX = re.compile(NUM + MULT + r"[\s-]*" + W_UNITS + r"(?![a-z])")
 UNIT_RX = re.compile(NUM + MULT + r"[\s-]*(?:[a-z]+\s+)?(pills|tablets|capsules|comprimidos|pastillas|pilulas|pilules|"
                      r"comprimes|cigarettes|cigarrillos|cigarros|sticks|packs|cartons|cajetillas|master\s+cases|"
@@ -43,7 +44,7 @@ ARREST_C = re.compile(r"(?:detenid\w+|arrestad\w+|capturad\w+|aprehendid\w+|inte
 def parse_num(s, en=None):
     """en=True: English style (1,200 = 1200 and 40.255 = 40.255). en=False/None: Spanish/French/Portuguese
     style as well (1.200 = 1200)."""
-    s = s.strip()
+    s = re.sub(r"[ \u00a0\u202f]", "", s.strip())
     if en:
         if re.fullmatch(r"\d{1,3}(,\d{3})+(\.\d+)?", s):
             return float(s.replace(",", ""))
@@ -67,7 +68,13 @@ def _mult(m):
             "billion": 1e9, "thousand": 1e3, "mil": 1e3, "k": 1e3}.get(m, 1.0) if m else 1.0
 
 
+_EXTRA_FACTORS = [(re.sub(r"\\.*$", "", u), f) for u, f in _EXTRA_UNITS]      # literal start of each unit word
+
+
 def _kg_factor(u):
+    for lit, f in _EXTRA_FACTORS:
+        if lit and u.startswith(lit):
+            return float(f)
     if u.startswith("ton"):
         return 1000.0
     if u.startswith(("kilo", "kg", "quilo")):
@@ -243,10 +250,20 @@ def _mentions(t):
         ments.append([m.start(), m.end(), "place", disp, ctry])
         for i in range(m.start(), m.end()):
             masked[i] = " "
+    for m in L.PLACE_RX_RU.finditer(t):                         # Russian place names with case endings
+        disp, ctry = L.ru_place(m)
+        if not any(x[0] <= m.start() < x[1] for x in ments):
+            ments.append([m.start(), m.end(), "place", disp, ctry])
+            for i in range(m.start(), m.end()):
+                masked[i] = " "
     mt = "".join(masked)
     for m in L.COUNTRY_RX.finditer(mt):
         c = L.COUNTRY_ALIAS[m.group(1)]
         ments.append([m.start(), m.end(), "country", c, c])
+    for m in L.COUNTRY_RX_RU.finditer(mt):                      # Russian names with case endings
+        c = L.ru_country(m)
+        if not any(x[0] <= m.start() < x[1] for x in ments):
+            ments.append([m.start(), m.end(), "country", c, c])
     ments.sort(key=lambda x: x[0])
     # a country written right after one of its own ports ("Guayaquil, Ecuador") is a duplicate
     out = []
@@ -268,6 +285,10 @@ def _route(t, source_country):
         elif L.TRANSIT_CUE.search(pre):
             role = "transit"
         elif L.DEST_CUE.search(pre):
+            role = "dest"
+        elif L.POST_ORIGIN.match(t[e: e + 14]):
+            role = "origin"
+        elif L.POST_DEST.match(t[e: e + 14]):
             role = "dest"
         elif L.TO_CUE.search(pre) and i > 0 and roles[i - 1] in ("origin", "transit") and s - ments[i - 1][1] <= 30:
             role = "dest"
@@ -336,6 +357,118 @@ def fmt_qty(kg, units, unit_type):
     return ", ".join(parts)
 
 
+# --------------------------------------------------------------------------
+# PRECISE DETAILS: vessel names, shipping lines, container numbers, the cover cargo
+# --------------------------------------------------------------------------
+SHIPPING_LINES = {
+    "MSC": [r"\bmsc\b", r"mediterranean\s+shipping"], "Maersk": [r"maersk"], "CMA CGM": [r"cma\s*cgm"],
+    "COSCO": [r"\bcosco\b"], "Hapag-Lloyd": [r"hapag"], "ONE (Ocean Network Express)": [r"ocean\s+network\s+express"],
+    "Evergreen": [r"evergreen\s+(?:marine|line)"], "HMM": [r"\bhmm\b", r"hyundai\s+merchant"], "Yang Ming": [r"yang\s+ming"],
+    "ZIM": [r"\bzim\s+(?:integrated|line|shipping)"], "PIL": [r"pacific\s+international\s+lines"], "Wan Hai": [r"wan\s+hai"],
+    "OOCL": [r"\boocl\b", r"orient\s+overseas"], "APL": [r"\bapl\b"], "Seaboard Marine": [r"seaboard\s+marine"],
+    "Hamburg Sud": [r"hamburg\s+s[uu]d"], "Crowley": [r"\bcrowley\b"], "Sea Star Line": [r"sea\s+star\s+line"],
+    "Great White Fleet": [r"great\s+white\s+fleet"], "Dole": [r"\bdole\s+(?:ocean|food|shipping)"], "Del Monte": [r"del\s+monte"],
+    "Chiquita": [r"chiquita"], "Fyffes": [r"fyffes"], "Turbana": [r"turbana"], "Seatrade": [r"seatrade"], "K Line": [r"\bk\s+line\b"],
+    "MOL": [r"mitsui\s+o\.?s\.?k"], "NYK": [r"\bnyk\b"], "Grimaldi": [r"grimaldi"], "Marfret": [r"marfret"],
+    "Messina": [r"\bmessina\s+line"], "Sinotrans": [r"sinotrans"], "Sealand": [r"\bsealand\b"], "Gold Star Line": [r"gold\s+star\s+line"],
+    "Arkas": [r"\barkas\b"], "Emirates Shipping (ESL)": [r"emirates\s+shipping"], "SeaLead": [r"sealead"], "Tropical Shipping": [r"tropical\s+shipping"],
+}
+_SHIP_RX = {k: re.compile("|".join(v)) for k, v in SHIPPING_LINES.items()}
+
+
+def _shipping_lines(t):
+    return [k for k, rx in _SHIP_RX.items() if rx.search(t)][:2]
+
+
+_LET = dict(zip("ABCDEFGHIJKLMNOPQRSTUVWXYZ", [10, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 34, 35, 36, 37, 38]))
+_CONT_RX = re.compile(r"\b([A-Z]{3}[UJZ])[\s-]?(\d{6})[\s-]?(\d)\b")
+
+
+def _iso6346_ok(prefix, six, check):
+    chars = prefix + six
+    total = sum((_LET[c] if c.isalpha() else int(c)) * (2 ** i) for i, c in enumerate(chars))
+    return total % 11 % 10 == int(check)
+
+
+def _containers(raw):
+    out = []
+    for m in _CONT_RX.finditer(raw):
+        num = m.group(1) + m.group(2) + m.group(3)
+        if _iso6346_ok(m.group(1), m.group(2), m.group(3)) and num not in out:
+            out.append(num)
+    return out[:5]
+
+
+_NAME = r"[A-Z][A-Za-z0-9'\-]{1,20}(?:\s+(?:[A-Z][A-Za-z0-9'\-]{1,20}|\d{1,3}|de|del|of|da|do)){0,3}"
+_VESSEL_RX = [
+    re.compile(r"\b(?:M/V|MV|M\.V\.|M/S|M/T|MT|F/V|FV|M/N)\s+(" + _NAME + r")"),
+    re.compile(r"\b(?i:container\s+ship|cargo\s+ship|cargo\s+vessel|container\s+vessel|bulk\s+carrier|freighter|tanker|fishing\s+vessel|"
+               r"fishing\s+boat|trawler|yacht|sailboat|motor\s+vessel|ship|vessel|boat)\s+(?i:named|called|identified\s+as|dubbed)?\s*[\"\u201c'\u2018]?(" + _NAME + r")"),
+    re.compile(r"\b(?i:buque|barco|nave|embarcaci[o\u00f3]n|motonave|portacontenedores|velero|pesquero)\s+(?i:llamado|denominado|de\s+nombre)?\s*[\"\u201c]?(" + _NAME + r")"),
+    re.compile(r"\b(?i:navire|porte-conteneurs|bateau|voilier|chalutier|cargo)\s+(?i:nomm[e\u00e9]|baptis[e\u00e9])?\s*[\"\u201c]?(" + _NAME + r")"),
+    re.compile(r"\b(?i:navio|embarca[c\u00e7][a\u00e3]o|porta-contentores)\s+(?i:chamado|denominado)?\s*[\"\u201c]?(" + _NAME + r")"),
+]
+_NOT_A_NAME = set("""the a an this that its his her their which was were is are carrying bound arrived from in at on of with had has after when
+while loaded registered flagged owned operated sailing docked anchored berthed seized intercepted discovered being began by for to and or
+but as he she they it we who during near off had carrying el la los las un una que con en de del fue era llevaba procedente le les des du
+une qui avec dans etait o os as um uma com no na do da foi police customs officers coast guard navy port authorities""".split())
+
+
+def _vessel(raw):
+    for rx in _VESSEL_RX:
+        for m in rx.finditer(raw):
+            name = m.group(1).strip(" .,'\"")
+            first = name.split()[0].lower()
+            if first in _NOT_A_NAME or len(name) < 3:
+                continue
+            words = []
+            for w in name.split():           # stop at a lower-case connecting word that ends the name
+                if w.lower() in _NOT_A_NAME and words:
+                    break
+                words.append(w)
+            return " ".join(words)
+    return None
+
+
+_DECLARED_RX = re.compile(r"(?:declared|described|labell?ed|listed|manifested|registered|presented|documented|declarad[oa]s?|"
+                          r"descrit[oa]s?|etiquetad[oa]s?|declares?)\s+(?:as|como|comme)\s+(?:being\s+|being\s+a\s+)?"
+                          r"(?:a\s+|an\s+|the\s+|some\s+|un\s+|una\s+|des\s+)?([^.;:()\n]{3,60}?)"
+                          r"(?=[,.;:()]|\s+(?:but|and|which|that|when|while|was|were|in|from|to|at|for|by|on|with|pero|y|que|cuando|en|de|mais|et)\b|$)")
+_GOODS_MARKERS = {"declared as", "mislabelled", "mislabeled", "cover load", "coverload", "carga de cobertura", "sacks of",
+                  "sack of", "pallets of", "pallet of", "fresh produce"}
+_CARGO_CUE = re.compile(r"hidden|concealed|found|discovered|stashed|packed|loaded|mixed|among|amid|inside|within|behind|declared|"
+                        r"described|labell?ed|listed|manifest|cover|disguised|camouflaged|ocult|escond|entre|dentro|declar|cach|dissimul|"
+                        r"carga|shipment|consignment|cargo|load")
+
+
+def _cover_cargo(t):
+    """The goods the drugs were hidden in / declared as, in plain words (bananas, timber, frozen fish ...)."""
+    goods = []
+    for m in _DECLARED_RX.finditer(t):
+        g = m.group(1).strip(" ,.")
+        if 2 < len(g) <= 60 and not L.ANY_DRUG.search(g):
+            goods.append(g)
+    for sent in re.split(r"(?<=[.!?])\s+|\n+", t):
+        if not (L.ANY_DRUG.search(sent) or _CARGO_CUE.search(sent)):
+            continue
+        for cat in ("Legitimate cargo (food/produce)", "Legitimate cargo (industrial/goods)"):
+            for m in L.CONCEALMENT[cat].finditer(sent):
+                g = m.group(0).strip()
+                if g and g not in _GOODS_MARKERS and len(g) >= 2:
+                    goods.append(g)
+    out = []
+    for g in goods:
+        if not any(g == o or g in o or o in g for o in out):
+            out.append(g)
+    return "; ".join(out[:4]) or None
+
+
+def _details(title, text, t):
+    raw = (title or "") + ". " + (text or "")
+    return {"vessel": _vessel(raw), "shipping_line": "; ".join(_shipping_lines(t)) or None,
+            "container_numbers": "; ".join(_containers(raw)) or None, "cover_cargo": _cover_cargo(t)}
+
+
 def extract(title, text="", source_country=None):
     """Return a dict of facts. rec['relevant'] tells whether it is a real seizure story."""
     title_n, text_n = L.norm(title), L.norm(text)
@@ -371,6 +504,7 @@ def extract(title, text="", source_country=None):
         "controlled_delivery": controlled, "coverload": coverload,
     })
     rec.update(route)
+    rec.update(_details(title, text, t))
     q = fmt_qty(kg, units, unit_type)
     bits = [f"{primary}" + (f" ({q})" if q else ""), transport if transport != "Unknown" else None,
             ("concealed: " + "; ".join(cats)) if cats else None,

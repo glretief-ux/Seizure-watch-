@@ -41,8 +41,14 @@ def load_events(conn):
                 in_container_any=("in_container", "max"), insider_any=("insider", "max"),
                 organized_any=("organized", "max"), coverload_any=("coverload", "max"),
                 controlled_any=("controlled_delivery", "max"), arrests_any=("arrests", "max"),
-                conceal_any=("concealment", lambda s: "|".join(sorted({c for x in s.dropna() for c in x.split("|") if c}))))
+                conceal_any=("concealment", lambda s: "|".join(sorted({c for x in s.dropna() for c in x.split("|") if c}))),
+                vessel_any=("vessel", lambda s: next((x for x in s.dropna() if x), None)),
+                line_any=("shipping_line", lambda s: "; ".join(sorted({c.strip() for x in s.dropna() for c in x.split(";") if c.strip()})) or None),
+                cont_any=("container_numbers", lambda s: "; ".join(sorted({c.strip() for x in s.dropna() for c in x.split(";") if c.strip()})[:5]) or None),
+                cover_any=("cover_cargo", lambda s: "; ".join(list(dict.fromkeys(c.strip() for x in s.dropna() for c in x.split(";") if c.strip()))[:4]) or None))
     ev = best.join(agg).reset_index()
+    for a, b in [("vessel", "vessel_any"), ("shipping_line", "line_any"), ("container_numbers", "cont_any"), ("cover_cargo", "cover_any")]:
+        ev[a] = ev[b]
     for a, b in [("in_container", "in_container_any"), ("insider", "insider_any"), ("organized", "organized_any"),
                  ("coverload", "coverload_any"), ("controlled_delivery", "controlled_any"), ("arrests", "arrests_any")]:
         ev[a] = ev[b]

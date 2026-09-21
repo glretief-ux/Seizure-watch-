@@ -3,7 +3,7 @@
 import os
 import re
 import sqlite3
-from .lexicon import norm
+from .lexicon import norm, slug
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS articles(
@@ -16,7 +16,8 @@ CREATE TABLE IF NOT EXISTS articles(
   origin TEXT, origin_place TEXT, destination TEXT, destination_place TEXT, transit TEXT,
   seizure_country TEXT, seizure_place TEXT, location_conf TEXT,
   arrests INTEGER, organized INTEGER, insider INTEGER, controlled_delivery INTEGER, coverload INTEGER,
-  route TEXT, corridor TEXT, mo_summary TEXT, completeness INTEGER, event_id INTEGER
+  route TEXT, corridor TEXT, mo_summary TEXT, completeness INTEGER, event_id INTEGER,
+  vessel TEXT, shipping_line TEXT, container_numbers TEXT, cover_cargo TEXT
 );
 CREATE INDEX IF NOT EXISTS ix_pub ON articles(published);
 CREATE INDEX IF NOT EXISTS ix_event ON articles(event_id);
@@ -34,6 +35,11 @@ def connect(path):
     conn.executescript(SCHEMA)
     global COLS
     COLS = {r["name"] for r in conn.execute("PRAGMA table_info(articles)")}
+    for col in ("vessel", "shipping_line", "container_numbers", "cover_cargo"):      # databases made by older versions
+        if col not in COLS:
+            conn.execute(f"ALTER TABLE articles ADD COLUMN {col} TEXT")
+    COLS = {r["name"] for r in conn.execute("PRAGMA table_info(articles)")}
+    conn.execute("CREATE TABLE IF NOT EXISTS meta(k TEXT PRIMARY KEY, v TEXT)")
     return conn
 
 
@@ -42,7 +48,7 @@ def title_key(title, source=None):
     if source:
         t = re.sub(r"\s+-\s+" + re.escape(norm(source)) + r"\s*$", "", t)
     t = re.sub(r"\s+-\s+[^-]{2,40}$", "", t)          # strip trailing " - Outlet"
-    return re.sub(r"[^a-z0-9]+", " ", t).strip()[:90]
+    return slug(t)[:90]
 
 
 def known_urls(conn):
@@ -67,7 +73,12 @@ _STOP = set("with from that this into after over their they were have been will 
 
 
 def _tokens(title):
-    return {w for w in re.findall(r"[a-z0-9]{4,}", norm(title)) if w not in _STOP}
+    """Words of 4+ letters (3+ in Arabic, Cyrillic, Devanagari); Chinese text is compared by pairs of characters."""
+    t = slug(title)
+    words = {w for w in t.split() if (len(w) >= 4 or (len(w) >= 3 and not w.isascii())) and w not in _STOP}
+    for run in re.findall(r"[\u4e00-\u9fff]+", t):
+        words |= {run[i:i + 2] for i in range(len(run) - 1)}
+    return words
 
 
 def _jaccard(a, b):
@@ -131,4 +142,14 @@ def save_alerts(conn, run_date, alerts):
     conn.executemany("INSERT INTO alerts VALUES (?,?,?,?,?,?)",
                      [(run_date, a["severity"], a["type"], a["title"], a["detail"], "\n".join(a.get("urls", [])))
                       for a in alerts])
+    conn.commit()
+
+
+def get_meta(conn, key, default=None):
+    row = conn.execute("SELECT v FROM meta WHERE k=?", (key,)).fetchone()
+    return row["v"] if row is not None else default
+
+
+def set_meta(conn, key, value):
+    conn.execute("INSERT OR REPLACE INTO meta(k, v) VALUES(?, ?)", (key, str(value)))
     conn.commit()

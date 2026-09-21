@@ -160,6 +160,17 @@ def demo_articles(today=None, seed=7):
     # planted signal 3: insider cases
     add(1, insider, port="Antwerp", dup=False)
     add(4, insider, port="Rotterdam", dup=False)
+    # one invented report in each newly supported language (made-up facts)
+    for i, (lang, t, x) in enumerate([
+        ("ar", "ضبط 2.5 طن من الكوكايين في ميناء جدة قادمة من كولومبيا", "ضبطت الجمارك شحنة كوكايين مخبأة بين شحنة موز داخل حاوية."),
+        ("tr", "Mersin Limanı'nda konteynerde 1,2 ton kokain ele geçirildi", "Ekvador'dan gelen konteynerde muz sevkiyatı arasına gizlenmiş kokain bulundu."),
+        ("ru", "В порту Гамбурга изъяли 1,5 тонны кокаина из Эквадора", "Таможенники обнаружили кокаин среди бананов в контейнере."),
+        ("zh", "海关在深圳港查获3.2吨可卡因，来自厄瓜多尔", "海关人员在一批香蕉集装箱中发现藏匿的可卡因。"),
+        ("hi", "मुंबई एयरपोर्ट पर 5 किलो कोकीन जब्त, दो गिरफ्तार", "कस्टम अधिकारियों ने सूटकेस में छिपाई गई कोकीन बरामद की।"),
+    ]):
+        uid[0] += 1
+        items.append({"url": f"https://example.com/demo/{lang}{i}", "title": t, "text": x, "published": (today - dt.timedelta(days=i)).isoformat(),
+                      "source": "Demo Daily", "lang": lang, "source_country": None, "text_mode": "full"})
     # a few unrelated / irrelevant headlines to prove the filter works
     for i, (t, x) in enumerate([("Cannabis stocks rally as legalization bill advances", "Shares rose on the stock market."),
                                 ("Local bakery wins national award", "The bakery was praised for its bread.")]):

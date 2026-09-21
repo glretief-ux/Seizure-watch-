@@ -11,6 +11,10 @@ on:
       days:
         description: "Look-back days (use 30 for the very first run to back-fill history)"
         default: "2"
+      send_bulletin:
+        description: "Also e-mail the weekly bulletin now (only works once the e-mail secrets are added)"
+        type: boolean
+        default: false
 
 permissions:
   contents: write                  # so the job can save the updated database and dashboard
@@ -30,7 +34,16 @@ jobs:
           python-version: "3.12"
           cache: pip
       - run: pip install -r requirements.txt
-      - run: python run_daily.py --days "${{ github.event.inputs.days || '2' }}"
+      - name: Collect, analyse, build the dashboard and bulletin
+        run: python run_daily.py --days "${{ github.event.inputs.days || '2' }}" ${{ github.event.inputs.send_bulletin == 'true' && '--send-bulletin' || '' }}
+        env:
+          # optional: only needed to e-mail the weekly bulletin (add them under Settings > Secrets and variables > Actions)
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          BULLETIN_TO: ${{ secrets.BULLETIN_TO }}
+          BULLETIN_FROM: ${{ secrets.BULLETIN_FROM }}
       - name: Save results
         run: |
           git config user.name  "seizure-watch-bot"

@@ -5,6 +5,7 @@ import math
 import os
 import datetime as dt
 import pandas as pd
+from . import coverage, geo, lexicon
 
 
 def _clean(v):
@@ -32,7 +33,10 @@ def event_records(ev):
             "container": bool(r.in_container == 1), "insider": bool(r.insider == 1), "score": int(r.risk_score),
             "band": r.risk_band, "flags": r.risk_flags, "mo": _clean(r.mo_summary), "n": int(r.n_sources),
             "url": r.urls[0] if r.urls else None, "title": r.title, "outlets": ", ".join(r.outlets),
-            "arrests": _clean(r.arrests), "mode": r.text_mode,
+            "arrests": _clean(r.arrests), "mode": r.text_mode, "lang": _clean(r.lang),
+            "origin_place": _clean(r.origin_place), "dest_place": _clean(r.destination_place),
+            "vessel": _clean(r.vessel), "line": _clean(r.shipping_line), "containers": _clean(r.container_numbers),
+            "cover": _clean(r.cover_cargo),
         })
     return out
 
@@ -43,6 +47,9 @@ def export_table(ev):
         "Date": ev["date"].dt.strftime("%Y-%m-%d"), "Drug type": ev["primary_drug"],
         "Origin": ev["origin"], "Transit": ev["transit_list"].apply("; ".join), "Destination": ev["destination"],
         "Seizure country": ev["seizure_country"], "Seizure place": ev["seizure_place"],
+        "Origin place": ev["origin_place"], "Destination place": ev["destination_place"],
+        "Vessel": ev["vessel"], "Shipping line": ev["shipping_line"], "Container no.": ev["container_numbers"],
+        "Cover cargo": ev["cover_cargo"],
         "Routing": ev["route"], "Concealment": ev["conceal_list"].apply("; ".join),
         "Modus operandi": ev["mo_summary"], "Total quantity (kg)": ev["qty_kg"],
         "Other quantity": ev["qty_units"], "Other unit": ev["unit_type"], "Case count": 1,
@@ -50,7 +57,7 @@ def export_table(ev):
         "Container": ev["in_container"].fillna(0).astype(int).map({1: "Yes", 0: "No"}),
         "Risk score": ev["risk_score"], "Risk band": ev["risk_band"], "Risk flags": ev["risk_flags"],
         "Reports (n)": ev["n_sources"], "Outlets": ev["outlets"].apply(", ".join),
-        "Text used": ev["text_mode"], "Headline": ev["title"], "Link": ev["urls"].apply(lambda u: u[0] if u else ""),
+        "Text used": ev["text_mode"], "Language": ev["lang"], "Headline": ev["title"], "Link": ev["urls"].apply(lambda u: u[0] if u else ""),
         "Event ID": ev["event_id"],
     })
     return df.sort_values(["Date", "Risk score"], ascending=[False, False]).reset_index(drop=True)
@@ -85,10 +92,11 @@ METHOD_NOTES = [
 
 def build_dashboard(path, payload):
     data = json.dumps(payload, ensure_ascii=False, default=_clean).replace("</", "<\\/")
+    geo_json = json.dumps(geo.payload(lexicon.PLACE_ALIAS), ensure_ascii=False, separators=(",", ":"))
     with open(os.path.join(os.path.dirname(__file__), "dashboard.html"), encoding="utf-8") as f:
         html = f.read()
     with open(path, "w", encoding="utf-8") as f:
-        f.write(html.replace("__DATA__", data))
+        f.write(html.replace("__DATA__", data).replace("__GEO__", geo_json))
 
 
 def write_all(res, out_dir, cfg, demo=False):
@@ -105,6 +113,7 @@ def write_all(res, out_dir, cfg, demo=False):
         "meta": {"asof": res["asof"].strftime("%Y-%m-%d"), "generated": dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
                  "demo": demo, "history_days": res["history_days"], "history_ok": res["history_ok"],
                  "min_history": cfg["analysis"]["min_history_days"], "total_events": res["kpis"]["events_total"]},
+        "coverage": coverage.payload(cfg),
         "kpis": res["kpis"], "events": event_records(ev_r), "alerts": res["alerts"],
         "corridors": res["corridors"].head(40).to_dict("records") if len(res["corridors"]) else [],
         "hotspots": res["hotspots"].head(25).to_dict("records") if len(res["hotspots"]) else [],
