@@ -168,7 +168,20 @@ def gdelt(query, lang, days, maxrec=100):
 
 
 # ------------------------------------------------------------------ RSS feeds
+ATOM = "{http://www.w3.org/2005/Atom}"
+RDF = "{http://purl.org/rss/1.0/}"
+
+
+def _first(it, *tags):
+    for t in tags:
+        v = it.findtext(t)
+        if v and v.strip():
+            return v.strip()
+    return ""
+
+
 def rss_feed(feed):
+    """RSS 2.0, RSS 1.0 and Atom feeds."""
     r = _get(feed["url"])
     if r is None:
         return []
@@ -177,28 +190,46 @@ def rss_feed(feed):
     except ET.ParseError:
         return []
     out = []
-    for it in list(root.iter("item")) + list(root.iter("{http://www.w3.org/2005/Atom}entry")):
-        link = it.findtext("link") or ""
+    for it in list(root.iter("item")) + list(root.iter(RDF + "item")) + list(root.iter(ATOM + "entry")):
+        link = _first(it, "link", RDF + "link")
         if not link:
-            le = it.find("{http://www.w3.org/2005/Atom}link")
-            link = le.get("href") if le is not None else ""
-        pub = it.findtext("pubDate") or it.findtext("{http://www.w3.org/2005/Atom}updated") or ""
+            for le in it.findall(ATOM + "link"):
+                if le.get("rel", "alternate") == "alternate" and le.get("href"):
+                    link = le.get("href")
+                    break
+        pub = _first(it, "pubDate", ATOM + "published", ATOM + "updated", "{http://purl.org/dc/elements/1.1/}date")
         try:
             published = email.utils.parsedate_to_datetime(pub).date().isoformat()
         except Exception:
             published = pub[:10] or None
-        out.append({"url": link, "title": html.unescape(it.findtext("title") or ""), "source": feed.get("name", ""),
-                    "published": published,
-                    "snippet": _strip_html(it.findtext("description") or it.findtext(
-                        "{http://www.w3.org/2005/Atom}summary")),
-                    "lang": feed.get("lang", "en"), "source_country": feed.get("country"), "via": "rss"})
+        out.append({"url": link, "title": html.unescape(_first(it, "title", ATOM + "title", RDF + "title")),
+                    "source": feed.get("name", ""), "published": published,
+                    "snippet": _strip_html(_first(it, "description", ATOM + "summary", ATOM + "content", RDF + "description")),
+                    "lang": feed.get("lang", "en"), "source_country": feed.get("country"), "via": "rss", "official": True})
     return out
 
 
 # ------------------------------------------------------------------ orchestration
 def collect(cfg, days):
-    items = []
+    items, official = [], []
     s = cfg["sources"]
+    # 1. official newsrooms: your RSS feeds, and Google News searches limited to official websites
+    for feed in s.get("rss_feeds", []) or []:
+        got = rss_feed(feed)
+        official += got
+        log(f"   RSS {feed.get('name')}: {len(got)} items")
+    o = s.get("official_sites", {}) or {}
+    if o.get("enabled", False) and o.get("sites"):
+        ed = (s.get("google_news", {}).get("editions") or [{"lang": "en", "hl": "en-US", "gl": "US", "ceid": "US:en"}])[0]
+        n0 = len(official)
+        for site in o["sites"]:
+            got = google_news(o.get("query", "site:{site} (seized OR seizure)").format(site=site), ed, days)
+            for g_ in got:
+                g_["official"] = True
+            official += got
+            time.sleep(s.get("google_news", {}).get("delay_seconds", 1.0))
+        log(f"   Official websites ({len(o['sites'])} searched): {len(official) - n0} headlines")
+    # 2. general news
     if s.get("google_news", {}).get("enabled", True):
         g = s["google_news"]
         for ed in g["editions"]:
@@ -213,11 +244,7 @@ def collect(cfg, days):
             for q in queries:
                 items += gdelt(q, lang, days)
         log(f"   GDELT: {len(items) - n0} headlines")
-    for feed in s.get("rss_feeds", []) or []:
-        got = rss_feed(feed)
-        items += got
-        log(f"   RSS {feed.get('name')}: {len(got)} items")
-    return items
+    return official + items
 
 
 def prefilter(items, cutoff_date):
