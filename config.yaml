@@ -5,7 +5,7 @@
 
 run:
   lookback_days: 2            # how far back each daily run searches (2 = safe overlap)
-  max_articles_per_run: 600   # cap on article downloads per run (official sources are read first)
+  max_articles_per_run: 1500   # cap on article downloads per run (official sources are read first)
   fetch_full_text: true       # false = headline/snippet only (faster, less accurate)
   resolve_google_links: true  # needs the optional 'googlenewsdecoder' package (in requirements.txt)
   report_days: 180            # how much history the dashboard shows
