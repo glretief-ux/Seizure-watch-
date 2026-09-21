@@ -5,7 +5,7 @@
 
 run:
   lookback_days: 2            # how far back each daily run searches (2 = safe overlap)
-  max_articles_per_run: 250   # cap on article downloads per run (keeps runs short and polite)
+  max_articles_per_run: 400   # cap on article downloads per run (official sources are read first)
   fetch_full_text: true       # false = headline/snippet only (faster, less accurate)
   resolve_google_links: true  # needs the optional 'googlenewsdecoder' package (in requirements.txt)
   report_days: 180            # how much history the dashboard shows
@@ -45,10 +45,48 @@ sources:
       fr: ['(cocaïne OR héroïne OR cannabis OR captagon) (saisie OR saisi OR saisis)']
       pt: ['(cocaína OR heroína OR maconha) (apreensão OR apreendem OR apreendida)']
 
-  # Add agency / newsroom RSS feeds here (customs, police, UNODC, national news agencies...).
-  # I have NOT pre-filled URLs because feed addresses change - paste the ones you trust.
-  rss_feeds: []
-  #  - {name: "Example Customs", url: "https://example.org/news/rss.xml", lang: en, country: "Kenya"}
+  # Official newsrooms. Google News is searched once per website below (site:...), so official press
+  # releases are picked up even when no newspaper reports them. Add or remove websites freely.
+  official_sites:
+    enabled: true
+    query: "site:{site} (seized OR seizure OR seizes OR intercepted OR incautan OR decomisan OR saisie OR apreensao) (cocaine OR heroin OR methamphetamine OR cannabis OR fentanyl OR captagon OR drugs OR cocaina OR droga OR cocaine OR drogue)"
+    sites:
+      - cbp.gov               # US Customs and Border Protection
+      - dea.gov               # US Drug Enforcement Administration
+      - justice.gov           # US Department of Justice / US attorneys
+      - ice.gov               # US Homeland Security Investigations
+      - uscg.mil              # US Coast Guard
+      - gov.uk                # UK National Crime Agency, Border Force, HMRC
+      - afp.gov.au            # Australian Federal Police
+      - abf.gov.au            # Australian Border Force
+      - europol.europa.eu     # Europol
+      - unodc.org             # UN Office on Drugs and Crime
+      - wcoomd.org            # World Customs Organization
+      - interpol.int          # Interpol
+      - sars.gov.za           # South African Revenue Service (customs)
+      - saps.gov.za           # South African Police Service
+      - ndlea.gov.ng          # Nigeria drug law enforcement agency
+      - nacoc.gov.gh          # Ghana Narcotics Control Commission
+      - pib.gov.in            # India government press releases (customs, DRI, NCB)
+      - pdea.gov.ph           # Philippine Drug Enforcement Agency
+      - cnb.gov.sg            # Singapore Central Narcotics Bureau
+      - douane.gouv.fr        # French customs
+      - zoll.de               # German customs
+      - guardiacivil.es       # Spanish Guardia Civil
+      - agenciatributaria.es  # Spanish tax and customs agency
+      - policia.gov.co        # Colombian national police
+      - aduana.gob.ec         # Ecuador customs
+      - gob.pe                # Peru government (police, customs)
+      - gob.mx                # Mexican government (navy, army, customs)
+      - gov.br                # Brazil government (federal police, Receita Federal)
+
+  # Extra RSS feeds. Each shows up in the run log as "RSS <name>: N items"; N = 0 means the address is wrong or blocked.
+  rss_feeds:
+    - {name: "Hong Kong government press releases (includes Customs)", url: "https://www.info.gov.hk/gia/rss/general_en.xml", lang: en, country: "Hong Kong"}
+    # Not checked yet - the log will tell you whether they work:
+    - {name: "UK National Crime Agency", url: "https://www.gov.uk/search/news-and-communications.atom?organisations%5B%5D=national-crime-agency", lang: en, country: "United Kingdom"}
+    - {name: "UK Border Force", url: "https://www.gov.uk/search/news-and-communications.atom?organisations%5B%5D=border-force", lang: en, country: "United Kingdom"}
+    - {name: "NDLEA Nigeria", url: "https://ndlea.gov.ng/feed/", lang: en, country: "Nigeria"}
 
 # ---------------------------------------------------------------------
 #  RISK MODEL  (event score 0-100; all numbers are yours to tune)
