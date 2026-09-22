@@ -1,19 +1,21 @@
 SEIZURE WATCH - weekly bulletin, 16 Sep - 22 Sep 2026
 
-1081 seizure reports this week (previous week 149); 24 high risk; 339.6 t reported.
-Main drugs: Cannabis (408), Cocaine (245), NSA (189)
-Main countries: India (102), United States (66), Turkey (48), Egypt (28)
+1199 seizure reports this week (previous week 149); 28 high risk; 380.9 t reported.
+Main drugs: Cannabis (435), Cocaine (307), NSA (206)
+Main countries: India (109), United States (71), Turkey (51), Egypt (45)
 
 NEW AND SURGING CORRIDORS
 - Trend detection starts after 42 days of data (now 32). Busiest corridors instead:
   Ghana -> South Africa: 15 reports
   Thailand -> Hong Kong: 13 reports
   Pakistan -> India: 8 reports
-  Nepal -> India: 6 reports
+  Canada -> Nigeria: 5 reports
 
 UNUSUAL EVENTS (highest risk first)
 - [High 80] 22 Sep | Methamphetamine | 320 kg | OR Tambo / Johannesburg | Ghana -> South Africa | Legitimate cargo (industrial/goods); Luggage / passenger goods; Postal / parcel | cargo: bags of charcoal; cement; plastic
   https://www.modernghana.com/news/1529767/fresh-south-africa-drug-arrest-puts-ghanas-border.amp
+- [High 75] 22 Sep | Cocaine | 32.0 t | Bissau | French Guiana -> Guinea-Bissau | Impregnation / liquid / disguised; Legitimate cargo (food/produce); Luggage / passenger goods; Vessel hull / underwater | cargo: fruits
+  https://adf-magazine.com/fr/2026/09/les-trafiquants-de-cocaine-prennent-pour-cible-le-senegal/
 - [High 75] 22 Sep | Cocaine | 320 kg | OR Tambo / Johannesburg | Ghana -> South Africa | Legitimate cargo (industrial/goods); Luggage / passenger goods; Postal / parcel; Vehicle compartment | cargo: bags of charcoal; cement; plastic
   https://dailyguidenetwork.com/cocaine-transit-crisis-another-shipment-pops-up-in-sa/
 - [High 60] 20 Sep | Cannabis | 6.9 t | Lagos | Canada -> Nigeria | Legitimate cargo (industrial/goods); Postal / parcel
@@ -22,11 +24,9 @@ UNUSUAL EVENTS (highest risk first)
   https://ua.news/en/world/u-nigeriyi-zaiavili-pro-viluchennia-narkotikiv-na-3-4-mlrd-nair-premium-times-nigeria
 - [High 60] 20 Sep | Cocaine | 3.0 t | Manta | Hidden compartment (unspecified); Legitimate cargo (food/produce)
   https://www.extra.ec/noticia/ecuador/manabi-incautan-cerca-3-toneladas-cocaina-choneros-caletas-manta-163033.html
-- [High 60] 20 Sep | Cannabis | 292 kg | Lagos | Canada -> Nigeria | Legitimate cargo (industrial/goods); Postal / parcel
-  https://prnigeria.com/2026/09/20/ndlea-seizes-worth-cannabis/
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (273), Legitimate cargo (food/produce) (119), Luggage / passenger goods (80)
-Cover cargo named: الات (83), cement (71), फल (25), ملابس (17), plastic (12)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (322), Legitimate cargo (food/produce) (126), Luggage / passenger goods (86)
+Cover cargo named: الات (101), cement (81), फल (25), ملابس (24), plastic (18)
 
 Coverage: searching 9 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Chinese). 49 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
 Leads from open sources, not confirmed facts. Verify before acting.
