@@ -1,15 +1,15 @@
-SEIZURE WATCH - weekly bulletin, 16 Sep - 22 Sep 2026
+SEIZURE WATCH - weekly bulletin, 17 Sep - 23 Sep 2026
 
-1199 seizure reports this week (previous week 149); 28 high risk; 380.9 t reported.
-Main drugs: Cannabis (435), Cocaine (307), NSA (206)
-Main countries: India (109), United States (71), Turkey (51), Egypt (45)
+1335 seizure reports this week (previous week 153); 31 high risk; 433.8 t reported.
+Main drugs: Cannabis (479), Cocaine (344), NSA (226)
+Main countries: India (115), United States (74), Turkey (59), Egypt (57)
 
 NEW AND SURGING CORRIDORS
-- Trend detection starts after 42 days of data (now 32). Busiest corridors instead:
+- Trend detection starts after 42 days of data (now 33). Busiest corridors instead:
   Ghana -> South Africa: 15 reports
   Thailand -> Hong Kong: 13 reports
   Pakistan -> India: 8 reports
-  Canada -> Nigeria: 5 reports
+  Ghana -> France: 6 reports
 
 UNUSUAL EVENTS (highest risk first)
 - [High 80] 22 Sep | Methamphetamine | 320 kg | OR Tambo / Johannesburg | Ghana -> South Africa | Legitimate cargo (industrial/goods); Luggage / passenger goods; Postal / parcel | cargo: bags of charcoal; cement; plastic
@@ -25,8 +25,8 @@ UNUSUAL EVENTS (highest risk first)
 - [High 60] 20 Sep | Cocaine | 3.0 t | Manta | Hidden compartment (unspecified); Legitimate cargo (food/produce)
   https://www.extra.ec/noticia/ecuador/manabi-incautan-cerca-3-toneladas-cocaina-choneros-caletas-manta-163033.html
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (322), Legitimate cargo (food/produce) (126), Luggage / passenger goods (86)
-Cover cargo named: الات (101), cement (81), फल (25), ملابس (24), plastic (18)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (362), Legitimate cargo (food/produce) (138), Luggage / passenger goods (95)
+Cover cargo named: الات (124), cement (83), फल (30), ملابس (27), plastic (21)
 
 Coverage: searching 9 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Chinese). 49 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
 Leads from open sources, not confirmed facts. Verify before acting.
