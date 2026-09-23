@@ -1,15 +1,15 @@
 SEIZURE WATCH - weekly bulletin, 17 Sep - 23 Sep 2026
 
-1490 seizure reports this week (previous week 153); 35 high risk; 483.6 t reported.
-Main drugs: Cannabis (548), Cocaine (380), NSA (245)
-Main countries: India (122), United States (81), Egypt (62), Turkey (61)
+1592 seizure reports this week (previous week 153); 36 high risk; 494.9 t reported.
+Main drugs: Cannabis (583), Cocaine (411), NSA (270)
+Main countries: India (124), United States (92), Egypt (69), Turkey (65)
 
 NEW AND SURGING CORRIDORS
 - Trend detection starts after 42 days of data (now 33). Busiest corridors instead:
   Ghana -> South Africa: 15 reports
   Thailand -> Hong Kong: 13 reports
   Pakistan -> India: 9 reports
-  Ghana -> France: 6 reports
+  Mexico -> United States: 8 reports
 
 UNUSUAL EVENTS (highest risk first)
 - [High 80] 23 Sep | Cocaine | 30.0 t | Algeciras | Sierra Leone -> Spain | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Vessel hull / underwater | cargo: cement; fish
@@ -25,8 +25,8 @@ UNUSUAL EVENTS (highest risk first)
 - [High 60] 20 Sep | Cannabis | 6.0 t | Abuja | Canada -> Nigeria | Legitimate cargo (industrial/goods); Postal / parcel | cargo: cement
   https://ua.news/en/world/u-nigeriyi-zaiavili-pro-viluchennia-narkotikiv-na-3-4-mlrd-nair-premium-times-nigeria
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (397), Legitimate cargo (food/produce) (151), Luggage / passenger goods (108)
-Cover cargo named: الات (136), cement (95), फल (33), ملابس (29), plastic (25)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (420), Legitimate cargo (food/produce) (159), Luggage / passenger goods (112)
+Cover cargo named: الات (145), cement (103), फल (34), ملابس (30), plastic (27)
 
 Coverage: searching 9 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Chinese). 49 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
 Leads from open sources, not confirmed facts. Verify before acting.
