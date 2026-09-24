@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Seizure Watch - open-source drug seizure risk indicators</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+:root{--ink:#1c2733;--mute:#66758a;--line:#e3e8ef;--bg:#f5f7fa;--card:#fff;--brand:#12355b;
+--hi:#c0392b;--med:#e08a00;--lo:#2e8b57;--r:10px}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+.wrap{max-width:1280px;margin:0 auto;padding:12px}
+header{background:var(--brand);color:#fff;border-radius:var(--r);padding:16px 18px;margin-bottom:12px}
+header h1{margin:0 0 2px;font-size:19px}
+header .sub{opacity:.8;font-size:12px}
+.banner{border-radius:var(--r);padding:10px 14px;margin-bottom:12px;font-size:13px}
+.banner.demo{background:#fff4d6;border:1px solid #f0d58a}
+.banner.hist{background:#e8f1fb;border:1px solid #bcd3ee}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.filters select,.filters input{padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;font-size:14px;min-width:0;flex:1 1 140px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:12px}
+.kpi{background:var(--card);border-radius:var(--r);padding:12px 14px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+.kpi .l{font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--mute)}
+.kpi .v{font-size:24px;font-weight:700;margin-top:2px}
+.kpi .d{font-size:12px;color:var(--mute)}
+.card{background:var(--card);border-radius:var(--r);padding:14px 16px;box-shadow:0 1px 2px rgba(0,0,0,.06);margin-bottom:12px;overflow:hidden}
+.card h2{font-size:14px;margin:0 0 10px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:12px}
+.chartbox{position:relative;height:260px}
+.alert{border-left:4px solid var(--med);padding:8px 10px;margin-bottom:8px;background:#fafbfc;border-radius:0 8px 8px 0}
+.alert.High{border-color:var(--hi)}
+.alert .t{font-weight:600}
+.alert .d{color:var(--mute);font-size:12.5px;margin-top:2px}
+.alert .k{font-size:10.5px;font-weight:700;letter-spacing:.4px;color:var(--mute);text-transform:uppercase}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+th{position:sticky;top:0;background:#f0f3f7;text-align:left;padding:8px 8px;cursor:pointer;white-space:nowrap;font-size:11px;text-transform:uppercase;letter-spacing:.3px;color:var(--mute)}
+td{padding:7px 8px;border-top:1px solid var(--line);vertical-align:top}
+tr:hover td{background:#f8fafc}
+.chip{display:inline-block;padding:1px 8px;border-radius:99px;font-size:11px;font-weight:700;color:#fff}
+.chip.High{background:var(--hi)}.chip.Medium{background:var(--med)}.chip.Low{background:var(--lo)}
+.chip.NEW{background:#6a3fb5}.chip.SURGING{background:var(--hi)}.chip.STABLE{background:#8894a5}.chip.DECLINING{background:#3d7ea6}.chip.INACTIVE{background:#b5bcc7}
+.small{font-size:11.5px;color:var(--mute)}
+td.w2{min-width:170px}td.w3{min-width:250px}
+.heat td{text-align:center}
+.heat td:first-child{text-align:left;white-space:nowrap}
+a{color:#1656a3}
+footer{color:var(--mute);font-size:11.5px;padding:8px 2px 24px}
+#map{height:460px;border-radius:8px;border:1px solid var(--line);background:#e9eef3}
+@media(max-width:700px){#map{height:340px}}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:8px;font-size:12px;color:var(--mute);align-items:center}
+.legend i{display:inline-block;width:22px;height:0;border-top:3px solid;vertical-align:middle;margin-right:5px;border-radius:2px}
+.legend b{display:inline-block;width:10px;height:10px;border-radius:50%;vertical-align:middle;margin-right:5px;box-sizing:border-box}
+.arrowicon{background:none;border:0}
+.seizdot{background:none;border:0}
+#wQ{flex:1;min-width:220px;padding:10px;border:1px solid var(--line);border-radius:8px;font:inherit;background:#fff}
+#wBand,#wAdd{padding:10px 12px;border:1px solid var(--line);border-radius:8px;font:inherit;background:#fff}
+#wAdd{background:#12355b;color:#fff;border-color:#12355b;font-weight:600;cursor:pointer}
+.wrow{display:flex;gap:8px;flex-wrap:wrap}
+.wchip{display:inline-flex;gap:6px;align-items:center;margin:10px 8px 0 0;padding:6px 10px;border:1px solid var(--line);border-radius:999px;background:#f6f8fb;font-size:13px}
+.wgo{cursor:pointer;font-weight:600;color:#12355b}
+.wx{cursor:pointer;color:#888;font-size:18px;line-height:1;padding:0 2px}
+.wnew{background:#c0392b;color:#fff;border-radius:999px;padding:1px 8px;font-size:11px;font-weight:700}
+.wbanner{background:#fff4e5;border:1px solid #f0c78a;border-radius:8px;padding:10px 12px;margin-bottom:12px;font-size:13px}
+.wbanner .wi{margin-top:6px;line-height:1.35}
+tr.watched td:first-child{box-shadow:inset 4px 0 0 #e08a00}
+.tabs{display:flex;gap:8px;margin:12px 0;flex-wrap:wrap}
+.tabs button{padding:8px 14px;border:1px solid var(--line);border-radius:999px;background:#fff;font:inherit;cursor:pointer}
+.tabs button.on{background:#12355b;color:#fff;border-color:#12355b}
+details.lk{border:1px solid var(--line);border-radius:10px;margin:8px 0;background:#fff}
+details.lk>summary{padding:10px 12px;cursor:pointer;list-style:none}
+details.lk>summary::-webkit-details-marker{display:none}
+details.lk>summary:before{content:"\25B8";margin-right:8px;color:#12355b}
+details.lk[open]>summary:before{content:"\25BE"}
+details.lk[open]>summary{border-bottom:1px solid var(--line);background:#f6f8fb;border-radius:10px 10px 0 0}
+details.lk .lks{display:block;margin:3px 0 0 20px;font-size:12px;color:#5b6b7f}
+.lkb{padding:4px 16px 14px}
+.lkb h4{margin:14px 0 4px;font-size:13px;color:#12355b}
+.lkb ul{margin:0;padding-left:18px}
+.lkb li{margin:4px 0;font-size:13px;line-height:1.4}
+.lkn{background:#fff4e5;border:1px solid #f0c78a;border-radius:8px;padding:8px 10px;margin-top:12px;font-size:12px;line-height:1.4}
+.cnt{display:inline-block;margin-left:8px;padding:1px 8px;border-radius:999px;background:#eaf0f7;color:#12355b;font-size:11px;font-weight:700;white-space:nowrap}
+.lkbtn{padding:8px 12px;border:1px solid #12355b;border-radius:8px;background:#fff;color:#12355b;font:inherit;font-weight:600;cursor:pointer;margin:12px 8px 0 0}
+.lkbtn[disabled]{opacity:.45;cursor:default}
+.lkchip{display:inline-block;margin:4px 6px 0 0;padding:2px 9px;border-radius:999px;background:#eaf0f7;color:#12355b;font-size:12px;cursor:pointer}
+#cardBar{margin:4px 0 8px}
+header .hl a{color:#cfe0f5;text-decoration:underline}
+#cmap{height:400px;border-radius:8px;border:1px solid var(--line);background:#e9eef3}
+@media(max-width:700px){#cmap{height:300px}}
+table.mini{border-collapse:collapse;font-size:13px;margin-top:6px}table.mini td{padding:3px 14px 3px 0}
+.plist{max-height:210px;overflow:auto;margin-top:6px;-webkit-overflow-scrolling:touch}
+.pi{padding:5px 0;border-top:1px solid #e3e8ef;font-size:12px;line-height:1.35}
+.leaflet-container a.pop-open{font-weight:600}
+@media print{.filters{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>Seizure Watch</h1>
+  <div class="sub" id="sub"></div>
+  <div class="sub hl"><a href="bulletin.html">Weekly bulletin</a> &nbsp;|&nbsp; <a href="events.csv">Events (CSV)</a> &nbsp;|&nbsp; <a href="seizure_watch.xlsx">Excel</a></div>
+</header>
+<div id="banners"></div>
+
+<div class="filters">
+  <select id="fDrug"><option value="">All drug types</option></select>
+  <select id="fBand"><option value="">All risk bands</option><option>High</option><option>Medium</option><option>Low</option></select>
+  <select id="fDays"><option value="7">Last 7 days</option><option value="30">Last 30 days</option><option value="90" selected>Last 90 days</option><option value="9999">All loaded</option></select>
+  <select id="fMode"><option value="">All transport</option></select>
+  <input id="fQ" type="search" placeholder="Search e.g. Ghana to Hong Kong, cocaine Antwerp, food cargo...">
+</div>
+
+<div class="kpis" id="kpis"></div>
+
+<div class="card"><h2>Alerts <span class="small" id="alertNote"></span></h2><div id="alerts"></div></div>
+
+<div class="card"><h2>My watchlist <span class="small" id="watchNote"></span></h2>
+  <div id="watchNew"></div>
+  <div class="wrow"><input id="wQ" type="search" placeholder="Watch for... e.g. Antwerp cocaine, Ecuador Belgium, food cargo, OR Tambo">
+    <select id="wBand"><option value="1">Any risk</option><option value="2">Medium and above</option><option value="3">High only</option></select>
+    <button id="wAdd" type="button">Add watch</button></div>
+  <div id="watchList"></div>
+  <div class="small" style="margin-top:10px">Watches are saved on this device only (not on the website). "New" means not shown on your previous visit. Tap a watch to see its events; highlighted rows in the table match a watch.</div>
+</div>
+
+<div class="card"><h2>Route map <span class="small" id="mapNote"></span></h2>
+  <div id="map"></div>
+  <div class="legend">
+    <span><i style="border-color:#c0392b"></i>High risk</span><span><i style="border-color:#e08a00"></i>Medium</span><span><i style="border-color:#2e8b57"></i>Low</span>
+    <span><b style="border:2px solid #555;background:#fff"></b>origin</span><span><b style="background:#c0392b"></b>seizure place (number = reports; tap to list them)</span><span><b style="background:#12355b;border:1px solid #fff"></b>destination</span>
+    <span>Arrows show direction. Lines join country centres or ports, so they show the reported route, not the actual path. Tap a line for the report. The map follows the filters and search above.</span>
+  </div>
+</div>
+
+<div class="card"><h2>Coverage: where the tool may be blind <span class="small" id="covNote"></span></h2>
+  <div id="cmap"></div>
+  <div class="legend">
+    <span><b style="background:#2e8b57"></b>reports found (bigger = more)</span><span><b style="background:#e0a800"></b>quiet: no reports, but its language is searched</span>
+    <span><b style="background:#c0392b"></b>blind: none of its main languages is searched</span><span><b style="background:#fff;border:3px solid #12355b"></b>official website searched</span>
+  </div>
+  <div class="small" id="covText" style="margin-top:8px;line-height:1.45"></div>
+  <details class="lk"><summary><b>Countries with no main language searched</b><span class="cnt" id="blindN"></span></summary><div class="lkb small" id="blindList"></div></details>
+  <details class="lk"><summary><b>Reports found by language</b></summary><div class="lkb" id="langList"></div></details>
+</div>
+
+<div class="grid2">
+  <div class="card"><h2>Seizure reports over time (by drug)</h2><div class="chartbox"><canvas id="cTime"></canvas></div></div>
+  <div class="card"><h2>How it was hidden</h2><div class="chartbox"><canvas id="cConc"></canvas></div></div>
+  <div class="card"><h2>Top corridors in view</h2><div class="chartbox"><canvas id="cCorr"></canvas></div></div>
+  <div class="card"><h2>Transport type</h2><div class="chartbox"><canvas id="cMode"></canvas></div></div>
+</div>
+
+<div class="card"><h2>Concealment x drug (events in view)</h2><div class="tw" id="matrix"></div></div>
+
+<div class="grid2">
+  <div class="card"><h2>Corridors <span class="small">(all history; trend = last 30 days vs the 30 before)</span></h2><div class="tw" id="corr"></div></div>
+  <div class="card"><h2>Seizure hotspots <span class="small">(countries)</span></h2><div class="tw" id="hot"></div></div>
+</div>
+
+<div class="card" id="lookCard"><h2>What to look for <span class="small">(indicator cards)</span></h2>
+  <div class="small" style="line-height:1.45">Practical starting points in the style of PCCP risk indicators. They are general guidance compiled from common customs practice and from the reports in this tool. They are <b>not official PCCP or WCO material</b>, so check them against your training and local procedures. An indicator is a reason to look closer, never proof. Use several together, base checks on cargo, documents and route (not on a person's nationality or appearance), and follow your agency's legal powers and safety rules.</div>
+  <div class="tabs"><button type="button" data-tab="c" class="on">Concealment methods</button><button type="button" data-tab="r">Route patterns</button></div>
+  <div id="lookList"></div>
+</div>
+
+<div class="card"><h2>Events <span class="small" id="evCount"></span></h2><div id="cardBar" class="small"></div><div class="tw" style="max-height:640px"><table id="evT"></table></div></div>
+
+<footer id="foot"></footer>
+</div>
+
+<script type="application/json" id="data">__DATA__</script>
+<script>
+const D = JSON.parse(document.getElementById('data').textContent);
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const safe = u => /^https?:\/\//i.test(u || '') ? u : '#';
+const COL = {'Cocaine':'#1f77b4','Cannabis':'#2ca02c','Heroin/Opium':'#8c564b','Methamphetamine':'#ff7f0e','NSA':'#9467bd','Cigarettes':'#7f7f7f','Unspecified':'#bcbd22'};
+const col = d => COL[d] || '#999';
+const num = n => n == null ? '' : Number(n).toLocaleString(undefined, {maximumFractionDigits: 1});
+const qty = e => { const p = []; if (e.kg) p.push(e.kg >= 1000 ? (e.kg/1000).toFixed(1) + ' t' : Math.round(e.kg) + ' kg'); if (e.units) p.push(num(e.units) + ' ' + (e.unit_type||'')); return p.join(', '); };
+const asof = new Date(D.meta.asof + 'T00:00:00Z');
+const fmt = d => d.toISOString().slice(0,10);
+let sortKey = 'score', sortDir = -1, charts = {};
+
+// ---- static bits
+$('sub').textContent = 'Data as of ' + D.meta.asof + ' | generated ' + D.meta.generated + ' | ' + D.meta.total_events + ' seizure events tracked';
+const bn = [];
+if (D.meta.demo) bn.push('<div class="banner demo"><b>SAMPLE DATA.</b> These are made-up articles used to demonstrate the platform. Run the real collector to replace them.</div>');
+if (!D.meta.history_ok) bn.push('<div class="banner hist">Building history: trend, spike and new-corridor alerts switch on after ' + D.meta.min_history + ' days of data (currently ' + D.meta.history_days + ').</div>');
+$('banners').innerHTML = bn.join('');
+[...new Set(D.events.map(e => e.drug))].sort().forEach(d => $('fDrug').insertAdjacentHTML('beforeend', '<option>' + esc(d) + '</option>'));
+[...new Set(D.events.map(e => e.transport).filter(Boolean))].sort().forEach(d => $('fMode').insertAdjacentHTML('beforeend', '<option>' + esc(d) + '</option>'));
+['fDrug','fBand','fDays','fMode'].forEach(i => $(i).addEventListener('change', render));
+$('fQ').addEventListener('input', render);
+
+function view() {
+  const days = +$('fDays').value, cut = fmt(new Date(asof.getTime() - (days - 1) * 864e5));
+  const q = $('fQ').value.trim().toLowerCase(), toks = q.split(/[\s>\u2192,;]+/).filter(t => t && !['to','from','via','-','->'].includes(t)), dr = $('fDrug').value, bd = $('fBand').value, md = $('fMode').value;
+  return D.events.filter(e => e.date >= cut && (!dr || e.drug === dr) && (!bd || e.band === bd) && (!md || e.transport === md) && (!cardFilter || cardFilter(e)) &&
+    (!toks.length || toks.every(t => [e.country,e.place,e.origin,e.dest,e.transit,e.conceal,e.title,e.title_en,e.corridor,e.route,e.drug,e.vessel,e.line,e.cover,e.containers,e.origin_place,e.dest_place].join(' ').toLowerCase().includes(t))));
+}
+const by = (arr, f) => { const m = {}; arr.forEach(x => { const k = f(x); if (k != null && k !== '') m[k] = (m[k] || 0) + 1; }); return m; };
+const topN = (m, n) => Object.entries(m).sort((a,b) => b[1]-a[1]).slice(0, n);
+
+function kpis(v) {
+  const hi = v.filter(e => e.band === 'High').length, cont = v.filter(e => e.container).length,
+        ins = v.filter(e => e.insider).length, kg = v.reduce((s,e) => s + (e.kg || 0), 0);
+  const K = [['Seizure events', v.length, D.kpis.events_7d + ' in last 7 days (prev ' + D.kpis.events_prev_7d + ')'],
+    ['High risk', hi, v.length ? Math.round(100*hi/v.length) + '% of events' : ''],
+    ['Container cases', cont, v.length ? Math.round(100*cont/v.length) + '% of events' : ''],
+    ['Insider signals', ins, 'port / airport / customs staff'],
+    ['Total weight', kg >= 1000 ? (kg/1000).toFixed(1) + ' t' : Math.round(kg) + ' kg', 'excl. pills / sticks']];
+  $('kpis').innerHTML = K.map(k => '<div class="kpi"><div class="l">' + k[0] + '</div><div class="v">' + k[1] + '</div><div class="d">' + esc(k[2]) + '</div></div>').join('');
+}
+
+function alerts() {
+  const A = D.alerts;
+  $('alertNote').textContent = A.length ? '(' + A.length + ' today)' : '';
+  $('alerts').innerHTML = A.length ? A.slice(0, 25).map(a => '<div class="alert ' + esc(a.severity) + '"><div class="k">' + esc(a.type) + ' | ' + esc(a.severity) + '</div><div class="t">' + esc(a.title) + '</div><div class="d">' + esc(a.detail) + '</div><div class="small">' +
+    (a.urls || []).map((u,i) => '<a href="' + esc(safe(u)) + '" target="_blank" rel="noopener noreferrer">source ' + (i+1) + '</a>').join(' &middot; ') + '</div></div>').join('')
+    : '<div class="small">No alerts today. (Trend alerts need ' + D.meta.min_history + '+ days of history.)</div>';
+}
+
+function chart(id, cfg) {
+  if (!window.Chart) return;
+  if (charts[id]) { charts[id].data = cfg.data; charts[id].update('none'); return; }
+  cfg.options = Object.assign({responsive: true, maintainAspectRatio: false, animation: false}, cfg.options || {});
+  charts[id] = new Chart($(id), cfg);
+}
+
+function timeChart(v) {
+  const days = +$('fDays').value, weekly = days > 31;
+  const key = d => { if (!weekly) return d; const t = new Date(d + 'T00:00:00Z'), dow = (t.getUTCDay() + 6) % 7; return fmt(new Date(t.getTime() - dow * 864e5)); };
+  const labels = [...new Set(v.map(e => key(e.date)))].sort();
+  const drugs = [...new Set(v.map(e => e.drug))].sort();
+  chart('cTime', {type: 'bar', data: {labels, datasets: drugs.map(d => ({label: d, backgroundColor: col(d),
+    data: labels.map(l => v.filter(e => e.drug === d && key(e.date) === l).length)}))},
+    options: {scales: {x: {stacked: true, ticks: {maxRotation: 60}}, y: {stacked: true, beginAtZero: true, ticks: {precision: 0}}}, plugins: {legend: {position: 'bottom', labels: {boxWidth: 10}}}}});
+}
+function hbar(id, pairs, color) {
+  chart(id, {type: 'bar', data: {labels: pairs.map(p => p[0].length > 42 ? p[0].slice(0,40) + '...' : p[0]), datasets: [{data: pairs.map(p => p[1]), backgroundColor: color}]},
+    options: {indexAxis: 'y', plugins: {legend: {display: false}}, scales: {x: {beginAtZero: true, ticks: {precision: 0}}}}});
+}
+function mode(v) {
+  const m = topN(by(v, e => e.transport || 'Unknown'), 8);
+  chart('cMode', {type: 'doughnut', data: {labels: m.map(x => x[0]), datasets: [{data: m.map(x => x[1]), backgroundColor: ['#12355b','#2a6f97','#61a5c2','#89c2d9','#a9d6e5','#c9a227','#8894a5','#b5bcc7']}]},
+    options: {plugins: {legend: {position: 'right', labels: {boxWidth: 10}}}}});
+}
+
+function matrix(v) {
+  const rows = {}, drugs = [...new Set(v.map(e => e.drug))].sort();
+  v.forEach(e => (e.conceal ? e.conceal.split('; ') : []).forEach(c => { rows[c] = rows[c] || {}; rows[c][e.drug] = (rows[c][e.drug] || 0) + 1; }));
+  const names = Object.keys(rows).sort((a,b) => Object.values(rows[b]).reduce((s,x)=>s+x,0) - Object.values(rows[a]).reduce((s,x)=>s+x,0));
+  if (!names.length) { $('matrix').innerHTML = '<div class="small">No concealment details in view.</div>'; return; }
+  const mx = Math.max(...names.flatMap(n => Object.values(rows[n])));
+  $('matrix').innerHTML = '<table class="heat"><tr><th>Concealment</th>' + drugs.map(d => '<th>' + esc(d) + '</th>').join('') + '</tr>' +
+    names.map(n => '<tr><td>' + esc(n) + '</td>' + drugs.map(d => { const c = rows[n][d] || 0; return '<td style="background:rgba(18,53,91,' + (c ? (0.08 + 0.6 * c / mx).toFixed(2) : 0) + ');color:' + (c/mx > .5 ? '#fff' : 'inherit') + '">' + (c || '') + '</td>'; }).join('') + '</tr>').join('') + '</table>';
+}
+
+function staticTables() {
+  $('corr').innerHTML = D.corridors.length ? '<table><tr><th>Corridor</th><th>Trend</th><th>30d</th><th>Prev 30d</th><th>Total</th><th>Main drug</th><th>Avg risk</th></tr>' +
+    D.corridors.slice(0, 25).map(c => '<tr><td>' + esc(c.corridor) + '</td><td><span class="chip ' + esc(c.trend) + '">' + esc(c.trend) + '</span></td><td>' + c.events_recent + '</td><td>' + c.events_prior + '</td><td>' + c.events_total + '</td><td>' + esc(c.top_drug) + '</td><td>' + c.avg_risk + '</td></tr>').join('') + '</table>' : '<div class="small">No corridors with a known origin/destination yet.</div>';
+  $('hot').innerHTML = D.hotspots.length ? '<table><tr><th>Country</th><th>30d</th><th>Prev 30d</th><th>Total</th><th>High risk</th><th>Main drug</th><th>Main place</th></tr>' +
+    D.hotspots.slice(0, 20).map(c => '<tr><td>' + esc(c.country) + '</td><td>' + c.events_recent + '</td><td>' + c.events_prior + '</td><td>' + c.events_total + '</td><td>' + c.high_risk + '</td><td>' + esc(c.top_drug) + '</td><td>' + esc(c.top_place) + '</td></tr>').join('') + '</table>' : '';
+}
+
+const detailText = e => [e.vessel && ('vessel ' + e.vessel), e.line && ('line ' + e.line), e.cover && ('cargo: ' + e.cover),
+  e.containers && ('container ' + e.containers), e.origin_place && ('from ' + e.origin_place), e.dest_place && ('to ' + e.dest_place)].filter(Boolean).join(' | ');
+const COLS = [['date','Date'],['score','Risk'],['drug','Drug'],['qty','Quantity'],['corridor','Route'],['country','Seized in'],['conceal','Concealment'],['detail','Details'],['transport','Transport'],['flags','Flags'],['n','Reports'],['url','Link']];
+function evTable(v) {
+  const val = (e, k) => k === 'qty' ? (e.kg || 0) : k === 'corridor' ? (e.corridor || '') : k === 'detail' ? detailText(e) : (e[k] ?? '');
+  const s = v.slice().sort((a,b) => { const x = val(a, sortKey), y = val(b, sortKey); return (x > y ? 1 : x < y ? -1 : 0) * sortDir || (b.score - a.score); });
+  $('evCount').textContent = '(' + v.length + ' in view' + (v.length > 300 ? ', first 300 shown' : '') + ')';
+  $('evT').innerHTML = '<tr>' + COLS.map(c => '<th data-k="' + c[0] + '">' + c[1] + (sortKey === c[0] ? (sortDir > 0 ? ' &#9650;' : ' &#9660;') : '') + '</th>').join('') + '</tr>' +
+    s.slice(0, 300).map(e => '<tr' + (isWatched(e) ? ' class="watched"' : '') + '><td>' + esc(e.date) + '</td><td><span class="chip ' + esc(e.band) + '">' + e.score + '</span></td><td>' + esc(e.drug) + '</td><td>' + esc(qty(e)) + '</td><td class="w2">' + esc(e.route || e.corridor || '') + '</td><td class="w2">' + esc([e.place, e.country].filter(Boolean).join(', ')) + '</td><td class="w2">' + esc(e.conceal || '') + '</td><td class="small w2">' + esc(detailText(e)) + '</td><td>' + esc(e.transport || '') + '</td><td class="small w3">' + esc(e.flags) + '</td><td>' + e.n + '</td><td><a href="' + esc(safe(e.url)) + '" target="_blank" rel="noopener noreferrer" title="' + esc(e.title_en || e.title) + '">open</a></td></tr>').join('');
+  $('evT').querySelectorAll('th').forEach(th => th.onclick = () => { const k = th.dataset.k; if (k === 'url' || k === 'flags') return; sortDir = (sortKey === k) ? -sortDir : -1; sortKey = k; render(); });
+}
+
+function render() {
+  const v = view();
+  kpis(v); timeChart(v);
+  hbar('cConc', topN(by(v.flatMap(e => e.conceal ? e.conceal.split('; ') : []), x => x), 10), '#2a6f97');
+  hbar('cCorr', topN(by(v, e => e.corridor), 10), '#12355b');
+  mode(v); matrix(v); evTable(v); drawMap(v);
+}
+// ---- route map (Leaflet; needs internet for the map tiles)
+const GEO = __GEO__;
+const BC = {High:'#c0392b', Medium:'#e08a00', Low:'#2e8b57'};
+let map = null, mapLayer = null;
+function pt(name, role, isPlace) {
+  if (!name) return null;
+  const p = isPlace ? GEO.p[name] : null;
+  if (p) return {c: [p[0], p[1]], role, name, cty: p[2], place: true};
+  const c = GEO.c[name] || (GEO.p[name] ? GEO.p[name].slice(0, 2) : null);
+  return c ? {c, role, name, cty: name, place: false} : null;
+}
+function eventPoints(e) {
+  const out = [];
+  const add = q => {
+    if (!q) return;
+    const last = out[out.length - 1];
+    if (last && last.cty === q.cty) {              // same country as the previous stop: keep one point
+      if (q.role === 'seizure' || (q.place && !last.place)) out[out.length - 1] = Object.assign({}, q, {role: q.role === 'seizure' ? 'seizure' : last.role});
+      return;
+    }
+    out.push(q);
+  };
+  add(pt(e.origin, 'origin'));
+  (e.transit || '').split(';').map(x => x.trim()).filter(Boolean).forEach(t => add(pt(t, 'transit')));
+  add((e.place && pt(e.place, 'seizure', true)) || pt(e.country, 'seizure'));
+  add(pt(e.dest, 'dest'));
+  return out;
+}
+function arc(a, b) {
+  let lon2 = b[1]; const d = lon2 - a[1];
+  if (d > 180) lon2 -= 360; else if (d < -180) lon2 += 360;
+  const p0 = [a[0], a[1]], p2 = [b[0], lon2], dl = p2[0] - p0[0], dn = p2[1] - p0[1];
+  if (Math.abs(dl) + Math.abs(dn) < 0.6) return [p0, p2];
+  const c = [(p0[0] + p2[0]) / 2 - 0.18 * dn, (p0[1] + p2[1]) / 2 + 0.18 * dl], pts = [];
+  for (let i = 0; i <= 24; i++) { const t = i / 24, u = 1 - t; pts.push([u*u*p0[0] + 2*u*t*c[0] + t*t*p2[0], u*u*p0[1] + 2*u*t*c[1] + t*t*p2[1]]); }
+  return pts;
+}
+function popupHtml(e) {
+  return '<b>' + esc(e.title_en || e.title) + '</b><br>' + esc(e.date) + ' | ' + esc(e.drug) + (qty(e) ? ' | ' + esc(qty(e)) : '') +
+    '<br>' + esc(e.route || e.corridor || '') + (detailText(e) ? '<br><span class="small">' + esc(detailText(e)) + '</span>' : '') + '<br><a href="' + esc(safe(e.url)) + '" target="_blank" rel="noopener noreferrer">open article</a>';
+}
+function drawMap(v) {
+  if (typeof L === 'undefined') { $('map').innerHTML = '<div class="small" style="padding:20px">The map library could not load (no internet?).</div>'; return; }
+  if (!map) {
+    map = L.map('map', {worldCopyJump: true, minZoom: 1, scrollWheelZoom: false}).setView([20, 10], 2);
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {maxZoom: 16, attribution: 'Tiles &copy; Esri'}).addTo(map);
+    mapLayer = L.layerGroup().addTo(map);
+  }
+  mapLayer.clearLayers();
+  const ev = v.slice().sort((a, b) => b.score - a.score).slice(0, 500);
+  const bounds = [], groups = {}; let routes = 0;
+  ev.forEach(e => {
+    const col = BC[e.band] || '#666', pts = eventPoints(e);
+    if (!pts.length) return;
+    pts.forEach(q => bounds.push(q.c));
+    const s = pts.find(q => q.role === 'seizure');
+    if (s) { const k = s.c[0] + ',' + s.c[1]; (groups[k] = groups[k] || {c: s.c, name: s.name, evs: []}).evs.push(e); }
+    if (pts.length > 1) {
+      routes++;
+      const w = 1.5 + Math.min(3.5, Math.log10((e.kg || 0) + 1));
+      for (let i = 0; i < pts.length - 1; i++) {
+        const path = arc(pts[i].c, pts[i + 1].c);
+        L.polyline(path, {color: col, weight: w, opacity: 0.6, interactive: false}).addTo(mapLayer);
+        L.polyline(path, {color: col, weight: 18, opacity: 0.01}).bindPopup(popupHtml(e)).addTo(mapLayer);   // wide invisible line = easy to tap
+        const n = path.length, a = path[Math.max(0, n - 4)], b = path[n - 1];
+        const ang = Math.atan2((b[1] - a[1]) * Math.cos(b[0] * Math.PI / 180), b[0] - a[0]) * 180 / Math.PI;
+        L.marker(path[n - 3] || b, {interactive: false, keyboard: false, icon: L.divIcon({className: 'arrowicon', iconSize: [12, 12], iconAnchor: [6, 6],
+          html: '<div style="transform:rotate(' + ang.toFixed(0) + 'deg);color:' + col + ';font-size:12px;line-height:12px;text-align:center">&#9650;</div>'})}).addTo(mapLayer);
+      }
+    }
+    pts.filter(q => q.role !== 'seizure').forEach(q => {
+      const o = q.role === 'origin' ? {radius: 5, color: col, weight: 2, fillColor: '#fff', fillOpacity: 1}
+        : q.role === 'dest' ? {radius: 5, color: '#fff', weight: 1, fillColor: '#12355b', fillOpacity: 1}
+        : {radius: 4, color: '#666', weight: 1, fillColor: '#bbb', fillOpacity: 1};
+      L.circleMarker(q.c, o).bindTooltip(esc(q.name) + ' (' + (q.role === 'dest' ? 'destination' : q.role) + ')').bindPopup(popupHtml(e)).addTo(mapLayer);
+    });
+  });
+  // one dot per place; the number is how many reports are there; tap it to list them
+  Object.values(groups).forEach(g => {
+    const n = g.evs.length, list = g.evs.slice().sort((a, b) => b.score - a.score);
+    const rank = list.reduce((m, e) => Math.max(m, e.band === 'High' ? 3 : e.band === 'Medium' ? 2 : 1), 1);
+    const col = rank === 3 ? BC.High : rank === 2 ? BC.Medium : BC.Low, size = Math.round(22 + Math.min(16, 4 * Math.sqrt(n)));
+    const icon = L.divIcon({className: 'seizdot', iconSize: [size, size], iconAnchor: [size / 2, size / 2],
+      html: '<div style="width:' + size + 'px;height:' + size + 'px;border-radius:50%;background:' + col + ';border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.3);' +
+        'color:#fff;font:700 11px/' + (size - 4) + 'px sans-serif;text-align:center">' + (n > 1 ? n : '') + '</div>'});
+    const html = '<b>' + esc(g.name) + '</b> - ' + n + ' report' + (n > 1 ? 's' : '') + '<div class="plist">' +
+      list.slice(0, 12).map(e => '<div class="pi"><span class="chip ' + esc(e.band) + '">' + e.score + '</span> ' + esc(e.date) + ' | ' + esc(e.drug) + (qty(e) ? ' (' + esc(qty(e)) + ')' : '') +
+        (e.route || e.corridor ? '<br><span class="small">' + esc(e.route || e.corridor) + '</span>' : '') +
+        '<br>' + esc((e.title_en || e.title || '').slice(0, 110)) + ' <a class="pop-open" href="' + esc(safe(e.url)) + '" target="_blank" rel="noopener noreferrer">open</a></div>').join('') +
+      (n > 12 ? '<div class="small">+ ' + (n - 12) + ' more, see the events table</div>' : '') + '</div>';
+    L.marker(g.c, {icon, riseOnHover: true}).bindPopup(html, {maxWidth: 320}).addTo(mapLayer);
+  });
+  $('mapNote').textContent = '(' + routes + ' routes, ' + Object.keys(groups).length + ' places with seizures' + (v.length > 500 ? '; top 500 by risk shown' : '') + ')';
+  setTimeout(() => { map.invalidateSize(); if (bounds.length) map.fitBounds(bounds, {padding: [30, 30], maxZoom: 5}); else map.setView([20, 10], 2); }, 50);
+}
+// ---- coverage map: where the tool can and cannot see
+let cmap = null;
+function drawCoverage() {
+  const cov = D.coverage;
+  if (!cov) { $('cmap').style.display = 'none'; return; }
+  const searched = new Set(cov.searched), name = c => cov.names[c] || c;
+  const counts = {}; D.events.forEach(e => { if (e.country) counts[e.country] = (counts[e.country] || 0) + 1; });
+  const rows = Object.keys(cov.countries).map(c => {
+    const v = cov.countries[c], n = counts[c] || 0, seen = v.langs.some(l => searched.has(l));
+    return {c, n, seen, official: v.official, langs: v.langs, status: n ? 'found' : seen ? 'quiet' : 'blind'};
+  });
+  const nf = rows.filter(r => r.status === 'found').length, nq = rows.filter(r => r.status === 'quiet').length, blind = rows.filter(r => r.status === 'blind');
+  $('covNote').textContent = '(' + nf + ' with reports, ' + nq + ' quiet, ' + blind.length + ' blind)';
+  $('covText').textContent = 'Languages searched: ' + cov.searched.map(name).join(', ') + '. A quiet country may simply have no seizure news, or the reports may be in a source or place the tool does not reach. A blind country cannot appear at all, whatever happens there. Only countries the tool knows (' + rows.length + ') are shown.';
+  $('blindN').textContent = blind.length + ' countries';
+  $('blindList').innerHTML = blind.sort((a, b) => a.c.localeCompare(b.c)).map(r => esc(r.c) + ' <span class="small">(' + esc(r.langs.map(name).join(', ')) + ')</span>').join(' &middot; ') || 'none';
+  const byLang = {}; D.events.forEach(e => { const k = e.lang || 'unknown'; byLang[k] = (byLang[k] || 0) + 1; });
+  $('langList').innerHTML = '<table class="mini">' + Object.keys(byLang).sort((a, b) => byLang[b] - byLang[a]).map(k => '<tr><td>' + esc(name(k)) + '</td><td><b>' + byLang[k] + '</b></td></tr>').join('') + '</table>' +
+    '<div class="small">Languages searched with no reports so far: ' + (cov.searched.filter(l => !byLang[l]).map(name).join(', ') || 'none') + '</div>';
+  if (typeof L === 'undefined') { $('cmap').innerHTML = '<div class="small" style="padding:20px">The map library could not load (no internet?).</div>'; return; }
+  if (!cmap) {
+    cmap = L.map('cmap', {worldCopyJump: true, minZoom: 1, scrollWheelZoom: false}).setView([25, 15], 2);
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {maxZoom: 16, attribution: 'Tiles &copy; Esri'}).addTo(cmap);
+  }
+  const col = {found: '#2e8b57', quiet: '#e0a800', blind: '#c0392b'};
+  rows.forEach(r => {
+    const c = GEO.c[r.c]; if (!c) return;
+    L.circleMarker(c, {radius: r.status === 'found' ? Math.min(18, 6 + 3 * Math.log2(1 + r.n)) : 6, color: r.official ? '#12355b' : '#fff', weight: r.official ? 3 : 1,
+      fillColor: col[r.status], fillOpacity: 0.85})
+      .bindTooltip(esc(r.c) + ': ' + (r.status === 'found' ? r.n + ' report' + (r.n > 1 ? 's' : '') : r.status === 'quiet' ? 'no reports' : 'blind') + '<br>main languages: ' + esc(r.langs.map(name).join(', ')) + (r.official ? '<br>official website searched' : '')).addTo(cmap);
+  });
+  setTimeout(() => cmap.invalidateSize(), 50);
+}
+// ---- "What to look for" cards
+var cardFilter = null, cardName = '';
+const CONCEAL_CARDS = [{"id":"food","t":"Hidden in food and produce cargo","key":"Legitimate cargo (food/produce)","s":"Drugs packed in or among ordinary fresh, frozen or dry food cargo, mostly in sea containers and often reefers.","look":["Cargo, shipper or origin that does not fit the company's usual business, or a first or one-off shipment","A few cartons or pallets that differ from the rest: different packaging, weight, tape, printing or stacking","Loads that are unusually well presented at the doors but poorly packed behind","Reefer settings or ventilation that do not suit the declared goods, or settings changed on the way","Seal changes, seal numbers that do not match the documents, or an unexplained long stay in a port or yard"],"check":["Compare the scan image with the declared goods: look for density anomalies, voids and dense organic material inside produce","Compare the weight with the declared and verified gross mass","Have a detector dog sweep the whole load, not only the doors, and take samples","Examine the reefer unit and its surroundings (see 'Container structure')"],"note":"Drugs may be loaded into a container without the shipper or consignee knowing (insiders at a port, or a container opened after sealing). Report the facts and do not assume intent."},{"id":"industrial","t":"Hidden in industrial goods and cover loads","key":"Legitimate cargo (industrial/goods)","s":"Drugs hidden in or behind ordinary goods such as timber, machinery, tiles, scrap or textiles, or in a 'cover load' placed to hide the real cargo.","look":["Vague descriptions ('general goods', 'spare parts') that do not match the packaging or weight","Goods with hollow parts or thick walls (machinery, pipes, furniture, ceramics, tyres) where a small load is easy to hide","Visible goods at the front or doors that look better packed than the rest","Goods with no obvious market at the destination, or a consignee with no trade history in them","Fresh glue, paint, sealant, foam, solder or welding on goods that should be untouched"],"check":["Scan and compare items of the same type: a single heavier or denser item is a lead","Check the tariff code, description and value against each other, and check the shipper and consignee's business","Open or drill a sample of hollow items under your procedures","In consolidated (LCL) loads, check every consignment in the container, not just the first"],"note":"A cover load is a legal cargo used to hide another. Finding the legal cargo in order does not clear the rest of the container."},{"id":"container","t":"Container structure and reefer units","key":"Container structure / false compartment","s":"Drugs hidden in the walls, roof, floor or doors of a container, or inside a refrigeration unit.","look":["Signs of alteration: fresh paint or weld, new rivets or bolts, mismatched panel colours, filler or sealant marks","Doors with new or replaced seals, handles or bolts","A reefer unit with loose or newly fixed panels, disturbed oil or grease, or running when the cargo does not need cooling","Inside length shorter than outside length, or a floor or wall thicker than it should be","A container whose age, condition or owner code does not fit its shipping line or history"],"check":["Measure inside and outside and compare","Sound-test walls and floor, use a density meter or fibre scope, and give the structure a focused scan","Check the container number, check digit and owner code, and its movement history","Photograph everything before opening anything"],"note":"Reefer units carry live electrics and refrigerant, and containers may hold fumigation gas. Follow safety procedures and use protective equipment."},{"id":"vehicle","t":"Vehicle compartments","key":"Vehicle compartment","s":"Drugs hidden in a vehicle: spare tyre, fuel tank, chassis, dashboard, door panels or a built compartment in a truck or trailer.","look":["Recent repairs: new bolts or screws, mismatched paint or trim, disturbed underseal","A vehicle that is heavier than it should be, sits low, or smells of glue, paint or strong air freshener","Fuel tank that holds less than its rated capacity, or spare wheel that does not fit its housing","A journey that does not fit: newly bought or registered vehicle, repeated crossings on the same route, documents produced late","Load that does not suit the vehicle, such as light cargo in a heavy truck"],"check":["Use the vehicle scanner and a detector dog","Use a fibre scope and check tank capacity and weight","Remove panels only as your procedures allow","Compare the vehicle's declared route and load with the crossing and registration history"],"note":"No single indicator proves anything. Two or three together are worth a full examination."},{"id":"hidden","t":"Hidden compartment (type not stated)","key":"Hidden compartment (unspecified)","s":"Reports mention a false floor, secret compartment or 'double bottom' without saying whether it was in a vehicle, container or object.","look":["Open the linked report and identify what was modified: vehicle, container, luggage or goods","Then use the matching card. Modified cargo spaces share the same signs: fresh work, extra weight, mismatched dimensions"],"check":["Read the source article to find the type and the route","Record the modification method: it can help spot repeat use"],"note":"This category exists because news reports are often vague. Treat it as a pointer to read the report."},{"id":"body","t":"Concealed on or inside a person","key":"Body concealment","s":"Drugs swallowed, or carried in body packs or on the body, mostly by air passengers.","look":["Itinerary: last-minute one-way or short-stay ticket, cash payment, tickets bought by someone else, routing through a hub that does not suit the trip","Story that does not hold together: purpose, accommodation, funds or contacts","Very little luggage for the stated stay, or new empty luggage","Behaviour such as reluctance to eat or drink, or apparent illness"],"check":["Use only the searches and scans your law allows, and follow your medical procedures","If someone may have swallowed drugs and feels unwell, treat it as a medical emergency first: packages can leak","Record the full itinerary and how the ticket was paid for, which helps trace organisers"],"note":"Base decisions on itinerary and behaviour, never on nationality, ethnicity, gender or appearance. Treat travellers with dignity, and remember many may be victims of coercion."},{"id":"postal","t":"Post, parcels and express couriers","key":"Postal / parcel","s":"Drugs sent in letters, parcels or express shipments, often in small quantities and often ordered online.","look":["Sender or addressee details that are false or incomplete, or several parcels to one address or from one sender under different names","Description does not match weight or packaging: heavy 'clothes', 'books' or 'gifts', or layers of tape, foil, vacuum wrap or carbon paper","Origin or routing typical of the drug type (for example synthetic drugs and new psychoactive substances via known hubs)","Prepaid or unusual payment, pick-up points, lockers or re-shipping addresses"],"check":["X-ray, detector dogs, and portable spectrometers or test kits","Coordinate with the postal or courier operator and use track and trace","Consider a controlled delivery where the law allows"],"note":"Very potent substances such as fentanyl analogues are dangerous in tiny amounts. Use protective equipment and never open or sniff suspect items unprotected."},{"id":"luggage","t":"Luggage and passenger goods","key":"Luggage / passenger goods","s":"Drugs hidden in suitcases, bags or personal goods, including false bottoms, lined bags and sealed gift items.","look":["A bag heavier than its contents explain, with a stiff base, glued lining or a chemical smell","Bags that are new, empty-looking or unusually large for the stay","Bulk purchases of sealed goods such as tins, cosmetics or food","Tag or ownership problems, multiple bags for a short stay, or unclaimed bags","Itinerary indicators as under 'Concealed on a person'"],"check":["X-ray with attention to dense layers and uniform panels","Targeted search, detector dog and surface swab (ion scan)","Weigh the empty bag when possible and compare"],"note":"Bags can be passed to a traveller without their knowledge. Record how the bag was packed and who handled it."},{"id":"impreg","t":"Impregnated, liquid or disguised drugs","key":"Impregnation / liquid / disguised","s":"Drugs dissolved in liquids, soaked into materials such as cloth, paper or plastic, or moulded to look like ordinary objects.","look":["Goods with a chemical, solvent or perfume smell, or that feel stiff, damp, heavy or oddly coloured","Ordinary items shaped as something else (moulded 'objects', fruit-shaped items, pipes)","Quantities of one material with no plausible commercial use, or repeated shipments of the same product","Liquid goods in unusual containers, such as wine or oil with mismatched labels"],"check":["Field test kits on samples, and laboratory analysis when a test is positive or unclear","Remember that scanners and dogs may miss impregnated material, so rely on tests and intelligence","Photograph and retain the packaging"],"note":"Chemical safety comes first: use protective equipment and ventilation when sampling."},{"id":"hull","t":"Vessel hulls and underwater attachments","key":"Vessel hull / underwater","s":"Drugs attached to a ship's hull, in a sea chest or rudder area, carried in towed packages, or moved by semi-submersibles.","look":["Unexplained hull work, new welds, patches or attachments below the waterline","Divers or small boats near a ship at berth, or a vessel waiting away from its berth","A voyage history including calls in source regions, route changes, long stops, gaps in AIS tracking or crew changes","Small craft far offshore without fishing gear, with extra fuel drums or long radio silence"],"check":["Hull inspection by divers or a remote vehicle, and a sonar sweep","Sea chest inspection in port","Share information with the port of the previous call, the coast guard and the navy"],"note":"Diving is dangerous. Use trained teams. Drugs attached to a hull are often meant to be recovered outside the port."}];
+const ROUTE_CARDS = [{"id":"sa_eu","t":"South America to Europe: cocaine in sea containers","s":"Cocaine shipped in containers from South American ports to large European ports, or to transhipment hubs and then onward.","concealed":["food","industrial","container"],"look":["Container loaded in a South American port for a European destination, with produce or timber, and a shipper or consignee that is new or has a small footprint","Late changes to the consignee, destination or routing, or containers moved or discharged at an intermediate port","Seal replaced or a container not collected promptly by the consignee, or collected by unfamiliar hauliers on short-notice authorisation","Container with an unexplained long stay at the terminal, or opened outside normal inspection"],"check":["Risk-target the whole chain: loading port, transhipment ports and routing","Use advance cargo information and the consignment history of the shipper and consignee","Alert the loading port and the ports of transhipment when you find something, so the network can be traced"],"note":"Large seizures often follow intelligence and a scan. Share the container history rather than waiting for the case to close."},{"id":"wa","t":"West Africa as origin or transit for cocaine","s":"Cocaine moved through West African ports, airports and roads on the way to Europe, or brought in from South America.","concealed":["industrial","food","luggage"],"look":["Consignments and passengers from or through West African ports and airports, especially with a cargo type that does not fit the seller's business","Used vehicles, timber, cocoa or general cargo with unclear ownership","Many small consignments or couriers, and short-notice route changes","Cases where an arrest or seizure in one country follows a shipment loaded in another"],"check":["Compare the routing history for the consignment and party, not for the country alone","Check the last port or airport of call in the passenger or cargo data","Share findings with the country of loading; many links only appear across borders"],"note":"A country appearing in the data reflects where reports come from, and is not a judgement about its agencies."},{"id":"carib","t":"Caribbean and Central America: transit for cocaine","s":"Cocaine moving through the Caribbean and Central America to North America and Europe by sea containers, small craft, and air.","concealed":["food","industrial","hull"],"look":["Containers or vessels calling at Caribbean or Central American ports before a European or US destination","Small craft such as go-fast boats or fishing vessels far from usual fishing grounds","Consignments re-routed through a transhipment port without a commercial reason","Air passengers on connecting flights through regional hubs"],"check":["Track transhipment and re-routing in the cargo data","Coordinate with the coast guard and navy for small craft","Check the sequence of ports and dwell time for containers"],"note":"Vessel movement and container tracking data are as valuable here as the goods themselves."},{"id":"courier","t":"Air couriers on passenger routes","s":"Individuals carrying drugs on passenger flights, in luggage or on the body, often on long-haul routes through connecting hubs.","concealed":["luggage","body","postal"],"look":["One-way or short-stay ticket, paid in cash or by a third party, sometimes bought at the last moment","Routing through several hubs, or a route that does not fit the stated purpose","Little luggage for the stay, or a new bag, and travel story that does not match documents","Several travellers on the same itinerary with a common contact or payment"],"check":["Use passenger information and previous travel records to target","Apply the search powers and medical procedures your law provides","Record ticket and payment details, phone data and contacts within the law: they lead to organisers"],"note":"Use patterns of itinerary and behaviour only. Never target by nationality, ethnicity or appearance, and remember some couriers are exploited or coerced."},{"id":"heroin","t":"Opiates: south-west Asia to Gulf, Africa and Europe","s":"Heroin and opium moving from Afghanistan and neighbouring countries to markets by land, sea and air, with routes through the Gulf and East Africa.","concealed":["industrial","vehicle","luggage"],"look":["Consignments from or via Afghanistan, Pakistan or Iran, or through Gulf and East African ports","Dhows and small vessels in the Indian Ocean, or containers with mixed cargo from the region","Vehicles crossing land borders with modified compartments","Payments and documents involving traders with no history in the declared goods"],"check":["Target by route and party as well as by cargo type","Check maritime routing and stops through Indian Ocean ports","Use vehicle scanning and detector dogs at land crossings"],"note":"Precursor chemicals such as acetic anhydride move in the opposite direction and are also worth watching."},{"id":"captagon","t":"Captagon: Levant to the Gulf","s":"Amphetamine-type tablets sold as captagon, produced mainly in and around the Levant and moved to Gulf markets by sea, road and air.","concealed":["industrial","impreg","food"],"look":["Large volumes of tablets hidden in goods such as fruit, plastic pipes, machinery, or other legal cargo","Shipments from or through Levant ports or land borders to Gulf destinations","Consignments where the product and packaging do not match the shipper's normal trade","Repeated seizures of the same product type or packaging: they can link cases"],"check":["Record tablet markings, packaging and concealment method: they help match cases","Scan and sample bulk cargo for density anomalies","Share details with neighbouring customs services quickly"],"note":"Tablets can be found in very large numbers. Count and weigh both, and record the batch markings."},{"id":"gt","t":"Synthetic drugs: Golden Triangle to Asia-Pacific","s":"Methamphetamine and other synthetic drugs made in and around Myanmar, Thailand and Laos and moved to markets across Asia and the Pacific.","concealed":["impreg","industrial","postal"],"look":["Consignments from or through the Golden Triangle to Asia-Pacific destinations, by sea, air freight or post","Drugs hidden in consumer packaging such as tea, coffee or snack packets, or inside industrial goods","Fast-changing routes, including transit through Southeast Asian ports and hubs","Very large seizures at sea or at ports, often after intelligence"],"check":["Use intelligence sharing with regional partners and joint operations","Target sea freight from source-region ports and air cargo and post","Check packaging for consistent marks that link seizures"],"note":"Traffickers change packaging and routes quickly. Keep packaging photographs so cases can be linked."},{"id":"mx","t":"Mexico and the US: methamphetamine and synthetic opioids","s":"Methamphetamine, fentanyl and related drugs crossing the border, in vehicles and cargo, and moving through ports in Mexico.","concealed":["vehicle","industrial","luggage"],"look":["Vehicles with hidden compartments at land crossings, especially with frequent crossings or a route that does not fit the load","Cargo through Mexican Pacific ports with chemical or industrial goods","Small, dense, high-value packages","Pill presses, chemicals and precursors in the same consignment or in separate flows"],"check":["Scan and use detector dogs, and use trace and portable identification tools with protective equipment","Check the documents of the vehicle and load, and its crossing history","Watch precursor chemical shipments, not only finished drugs"],"note":"Fentanyl-type drugs are dangerous to handle. Use protective equipment and follow safe-handling rules."},{"id":"cannabis","t":"Cannabis and hashish in and around Europe","s":"Bulk cannabis and hashish moving by road and sea, including across the Strait of Gibraltar, and cannabis shipped by air and post to distant markets.","concealed":["vehicle","industrial","postal"],"look":["Bulk loads in trucks and vans from Iberia and North Africa, hidden behind or within produce or general cargo","Small craft and cargo boats crossing short sea routes","Air freight and post from cannabis-legal jurisdictions to countries where it is banned, with vague descriptions","Strong odour masked with other products"],"check":["Use vehicle scanners and detector dogs","Check driver and vehicle documents against the declared load","Check parcel origin and description mismatches"],"note":"Cannabis laws differ. Check the legal situation of origin and destination when advising."},{"id":"hubs","t":"Transit hubs (air and sea)","s":"Big hubs such as Dubai, Istanbul, Doha, Addis Ababa, Johannesburg and Bangkok appear on many routes because goods and passengers change carriers there.","concealed":["luggage","body","industrial"],"look":["Consignments or passengers whose route passes through a hub without a commercial or personal reason","Re-export or re-labelling in free zones, and containers changing documents in a hub","Connecting itineraries with short layovers and tickets paid in cash","The same hub repeating in unrelated cases: it can indicate a service used by a network"],"check":["Check the last airport or port of call in the passenger and cargo data","Exchange information with the hub's customs service using your usual channels","Look at re-export documents in free zones"],"note":"Hubs are legitimate transit points for vast legal trade. Use hub appearances to add weight to other indicators, not as an indicator on their own."},{"id":"tobacco","t":"Illicit cigarettes in sea containers","s":"Cigarettes moved by sea container, usually mis-declared or hidden behind legal cargo, often through free zones and several countries.","concealed":["industrial","food"],"look":["Containers declared as another product but heavy for their declared contents","Routes through free zones and multiple transhipment ports","Consignee or shipper new or with no trade in tobacco or with an address that does not exist","Pallets at the rear or behind legal cargo"],"check":["Compare declared and measured weight, and scan for uniform dense blocks","Check the route and documents across the whole chain","Check the excise or transit documents"],"note":"Cigarettes are counted in packs and sticks. The tool leaves them out of the total weight."}];
+const RG = {
+  sa: ['Colombia','Ecuador','Peru','Bolivia','Brazil','Venezuela','Paraguay','Argentina','Chile','Uruguay','Suriname','Guyana','French Guiana'],
+  eu: ['Belgium','Netherlands','Spain','Portugal','France','Germany','Italy','United Kingdom','Ireland','Poland','Bulgaria','Romania','Greece','Croatia','Slovenia','Denmark','Sweden','Norway','Finland','Austria','Czech Republic','Hungary','Serbia','Albania','Malta','Cyprus','Lithuania','Latvia','Estonia','Slovakia','Switzerland','Luxembourg','Bosnia and Herzegovina','Montenegro','North Macedonia','Kosovo','Moldova','Ukraine','Iceland'],
+  wa: ['Ghana','Nigeria','Senegal','Guinea','Guinea-Bissau','Sierra Leone','Liberia','Ivory Coast','Togo','Benin','Cape Verde','Gambia','Mali','Mauritania','Burkina Faso','Niger','Cameroon'],
+  carib: ['Guatemala','Honduras','El Salvador','Nicaragua','Costa Rica','Panama','Jamaica','Dominican Republic','Haiti','Trinidad and Tobago','Bahamas','Cuba','Puerto Rico','Curacao','Martinique','Guadeloupe'],
+  levant: ['Syria','Lebanon','Jordan','Iraq','Turkey'],
+  gulf: ['United Arab Emirates','Saudi Arabia','Qatar','Kuwait','Bahrain','Oman','Yemen'],
+  gt: ['Myanmar','Thailand','Laos'],
+  apac: ['Australia','New Zealand','Japan','South Korea','Taiwan','Hong Kong','Philippines','Indonesia','Malaysia','Singapore','Thailand','Vietnam','Cambodia','Laos','Myanmar','China','Papua New Guinea'],
+  hubp: ['Dubai','Istanbul','Doha','Addis Ababa','OR Tambo / Johannesburg','Bangkok','Jebel Ali','Abu Dhabi','Hong Kong airport'],
+  hubc: ['United Arab Emirates','Qatar','Turkey','Ethiopia']
+};
+Object.keys(RG).forEach(k => RG[k] = new Set(RG[k]));
+const stops = e => [e.origin, e.dest, e.country, ...String(e.transit || '').split(';').map(x => x.trim())];
+const touches = (e, set) => stops(e).some(x => set.has(x));
+const transitIn = (e, set) => String(e.transit || '').split(';').some(x => set.has(x.trim()));
+const ROUTE_PRED = {
+  sa_eu: e => e.drug === 'Cocaine' && RG.sa.has(e.origin) && (RG.eu.has(e.dest) || RG.eu.has(e.country)),
+  wa: e => e.drug === 'Cocaine' && touches(e, RG.wa),
+  carib: e => e.drug === 'Cocaine' && touches(e, RG.carib),
+  courier: e => /^Air/.test(e.transport || '') && /Luggage|Body/.test(e.conceal || ''),
+  heroin: e => e.drug === 'Heroin/Opium',
+  captagon: e => /captagon/i.test((e.title_en || e.title || '')) || (e.drug === 'NSA' && touches(e, RG.levant) && touches(e, RG.gulf)),
+  gt: e => (e.drug === 'Methamphetamine' || e.drug === 'NSA') && (RG.gt.has(e.origin) || transitIn(e, RG.gt)) && (RG.apac.has(e.dest) || RG.apac.has(e.country)),
+  mx: e => ['Methamphetamine', 'NSA', 'Heroin/Opium'].includes(e.drug) && [e.origin, e.dest, e.country].includes('Mexico') && [e.origin, e.dest, e.country].includes('United States'),
+  cannabis: e => e.drug === 'Cannabis',
+  hubs: e => RG.hubp.has(e.place) || transitIn(e, RG.hubc),
+  tobacco: e => e.drug === 'Cigarettes'
+};
+const CONCEAL_PRED = c => e => (e.conceal || '').split('; ').includes(c.key);
+let lookTab = 'c';
+
+function cardText(c, kind) {
+  return c.t + '\n' + c.s + '\n\nLook for:\n- ' + c.look.join('\n- ') + '\n\nCheck:\n- ' + c.check.join('\n- ') + '\n\nNote: ' + c.note +
+    '\n\n(Seizure Watch indicator card - general guidance, not official PCCP or WCO material.)';
+}
+function renderLook() {
+  document.querySelectorAll('#lookCard .tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === lookTab));
+  const list = lookTab === 'c' ? CONCEAL_CARDS : ROUTE_CARDS;
+  $('lookList').innerHTML = list.map(c => {
+    const pred = lookTab === 'c' ? CONCEAL_PRED(c) : ROUTE_PRED[c.id], n = D.events.filter(pred).length;
+    return '<details class="lk" data-id="' + c.id + '"><summary><b>' + esc(c.t) + '</b><span class="cnt">' + n + ' report' + (n === 1 ? '' : 's') + ' in the data</span><span class="lks">' + esc(c.s) + '</span></summary><div class="lkb">' +
+      (c.concealed ? '<div class="small">Often hidden by: ' + c.concealed.map(id => { const cc = CONCEAL_CARDS.find(x => x.id === id); return cc ? '<a class="lkchip" data-open="' + id + '">' + esc(cc.t) + '</a>' : ''; }).join('') + '</div>' : '') +
+      '<h4>What to look for</h4><ul>' + c.look.map(x => '<li>' + esc(x) + '</li>').join('') + '</ul>' +
+      '<h4>What to check</h4><ul>' + c.check.map(x => '<li>' + esc(x) + '</li>').join('') + '</ul>' +
+      '<div class="lkn"><b>Note:</b> ' + esc(c.note) + '</div>' +
+      '<button type="button" class="lkbtn" data-show="' + c.id + '"' + (n ? '' : ' disabled') + '>Show these reports' + (n ? ' (' + n + ')' : '') + '</button>' +
+      '<button type="button" class="lkbtn" data-copy="' + c.id + '">Copy card text</button></div></details>';
+  }).join('');
+}
+function showCardBar() {
+  $('cardBar').innerHTML = cardFilter ? 'Showing only reports for <b>' + esc(cardName) + '</b> &nbsp; <a href="#" id="cardClear">Show all</a>' : '';
+}
+document.querySelectorAll('#lookCard .tabs button').forEach(b => b.onclick = () => { lookTab = b.dataset.tab; renderLook(); });
+$('lookList').addEventListener('click', ev => {
+  const open = ev.target.closest('[data-open]'), show = ev.target.closest('[data-show]'), copy = ev.target.closest('[data-copy]');
+  if (open) {
+    ev.preventDefault(); lookTab = 'c'; renderLook();
+    const d = document.querySelector('#lookList details[data-id="' + open.dataset.open + '"]');
+    if (d) { d.open = true; d.scrollIntoView({behavior: 'smooth', block: 'start'}); }
+  } else if (show) {
+    const list = lookTab === 'c' ? CONCEAL_CARDS : ROUTE_CARDS, c = list.find(x => x.id === show.dataset.show);
+    cardFilter = lookTab === 'c' ? CONCEAL_PRED(c) : ROUTE_PRED[c.id]; cardName = c.t;
+    ['fQ', 'fDrug', 'fBand', 'fMode'].forEach(id => $(id).value = ''); $('fDays').value = '9999';
+    showCardBar(); render(); $('evT').scrollIntoView({behavior: 'smooth', block: 'start'});
+  } else if (copy) {
+    const list = lookTab === 'c' ? CONCEAL_CARDS : ROUTE_CARDS, c = list.find(x => x.id === copy.dataset.copy);
+    const done = () => { copy.textContent = 'Copied'; setTimeout(() => copy.textContent = 'Copy card text', 1500); };
+    try { navigator.clipboard.writeText(cardText(c)).then(done, () => { copy.textContent = 'Copy not allowed'; }); } catch (e) { copy.textContent = 'Copy not allowed'; }
+  }
+});
+$('cardBar').addEventListener('click', ev => { if (ev.target.id === 'cardClear') { ev.preventDefault(); cardFilter = null; cardName = ''; showCardBar(); render(); } });
+renderLook();
+drawCoverage();
+
+// ---- watchlist: saved in this browser only
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } }
+};
+const RANK = {High: 3, Medium: 2, Low: 1};
+const tokens = q => q.toLowerCase().split(/[\s>\u2192,;]+/).filter(t => t && !['to', 'from', 'via', '-', '->'].includes(t));
+const hay = e => [e.country, e.place, e.origin, e.dest, e.transit, e.conceal, e.title, e.title_en, e.corridor, e.route, e.drug, e.vessel, e.line, e.cover, e.containers, e.origin_place, e.dest_place].join(' ').toLowerCase();
+const matchW = (e, w) => (RANK[e.band] || 1) >= w.min && tokens(w.q).every(t => hay(e).includes(t));
+let watches = store.get('sw_watches', []);
+const prevSeen = store.get('sw_seen', null);                 // null = first visit on this device
+const seenSet = new Set(prevSeen || []);
+const isNew = e => prevSeen !== null && !seenSet.has(e.url);
+store.set('sw_seen', [...new Set([...(prevSeen || []), ...D.events.map(e => e.url)])].slice(-6000));
+const isWatched = e => watches.some(w => matchW(e, w));
+
+function renderWatch() {
+  const newHits = [];
+  $('watchList').innerHTML = watches.length ? watches.map((w, i) => {
+    const hits = D.events.filter(e => matchW(e, w)), nn = hits.filter(isNew);
+    nn.forEach(e => { if (!newHits.includes(e)) newHits.push(e); });
+    return '<span class="wchip"><a class="wgo" data-go="' + i + '">' + esc(w.q) + (w.min > 1 ? ' <span class="small">(' + (w.min === 3 ? 'high only' : 'medium+') + ')</span>' : '') + '</a> <b>' + hits.length + '</b>' +
+      (nn.length ? ' <span class="wnew">' + nn.length + ' new</span>' : '') + ' <a class="wx" data-x="' + i + '" title="Remove">&times;</a></span>';
+  }).join('') : '<div class="small" style="margin-top:10px">No watches yet. Add a port, a route, a drug or a concealment method above.</div>';
+  newHits.sort((a, b) => b.score - a.score);
+  const lines = newHits.slice(0, 12).map(e => e.date + ' | ' + e.drug + (qty(e) ? ' (' + qty(e) + ')' : '') + ' | ' + (e.route || e.corridor || e.country || '') + '\n' + (e.title_en || e.title) + '\n' + safe(e.url));
+  const body = 'New Seizure Watch events matching my watchlist:\n\n' + lines.join('\n\n');
+  $('watchNew').innerHTML = newHits.length
+    ? '<div class="wbanner"><b>' + newHits.length + ' new event' + (newHits.length > 1 ? 's' : '') + ' match your watchlist</b> &nbsp; <a href="mailto:?subject=' +
+      encodeURIComponent('Seizure Watch: ' + newHits.length + ' new matches') + '&body=' + encodeURIComponent(body.slice(0, 1800)) + '" id="wMail">Email these</a>' +
+      newHits.slice(0, 8).map(e => '<div class="wi"><span class="chip ' + esc(e.band) + '">' + e.score + '</span> ' + esc(e.date) + ' | ' + esc(e.drug) + ' | ' + esc(e.route || e.corridor || e.country || '') +
+        '<br>' + esc((e.title_en || e.title || '').slice(0, 120)) + ' <a href="' + esc(safe(e.url)) + '" target="_blank" rel="noopener noreferrer">open</a></div>').join('') +
+      (newHits.length > 8 ? '<div class="wi small">+ ' + (newHits.length - 8) + ' more: tap a watch below</div>' : '') + '</div>'
+    : (watches.length && prevSeen !== null ? '<div class="small" style="margin-bottom:8px">No new events match your watchlist since your last visit.</div>' : '');
+  $('watchNote').textContent = watches.length ? '(' + watches.length + ' watch' + (watches.length > 1 ? 'es' : '') + ')' : '';
+}
+function addWatch() {
+  const q = $('wQ').value.trim();
+  if (!tokens(q).length) return;
+  watches.push({q, min: +$('wBand').value});
+  if (!store.set('sw_watches', watches)) $('watchNote').textContent = '(cannot save: private browsing is on)';
+  $('wQ').value = '';
+  renderWatch(); render();
+}
+$('wAdd').onclick = addWatch;
+$('wQ').addEventListener('keydown', ev => { if (ev.key === 'Enter') addWatch(); });
+$('watchList').addEventListener('click', ev => {
+  const go = ev.target.closest('[data-go]'), x = ev.target.closest('[data-x]');
+  if (x) { watches.splice(+x.dataset.x, 1); store.set('sw_watches', watches); renderWatch(); render(); }
+  else if (go) {
+    const w = watches[+go.dataset.go];
+    $('fQ').value = w.q; $('fDays').value = '9999'; $('fBand').value = w.min === 3 ? 'High' : '';
+    render(); $('evT').scrollIntoView({behavior: 'smooth', block: 'start'});
+  }
+});
+renderWatch();
+
+alerts(); staticTables(); render();
+$('foot').innerHTML = 'Open-source news only. Facts are extracted automatically from headlines and articles and can be wrong - always verify through the link. Risk scores rank reports for analyst attention; they are indicators, not findings. Only extracted facts and links are stored, not article text.';
+</script>
+</body>
+</html>
