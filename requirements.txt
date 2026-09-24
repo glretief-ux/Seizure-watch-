@@ -1,6 +1,0 @@
-requests>=2.31
-pyyaml>=6.0
-pandas>=2.0
-openpyxl>=3.1
-trafilatura>=1.8          # reads the article text from a web page
-googlenewsdecoder>=0.1.7  # optional: turns Google News redirect links into the publisher's real URL
