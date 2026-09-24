@@ -1,8 +1,8 @@
 SEIZURE WATCH - weekly bulletin, 18 Sep - 24 Sep 2026
 
-1696 seizure reports this week (previous week 161); 39 high risk; 537.2 t reported.
-Main drugs: Cannabis (627), Cocaine (442), NSA (276)
-Main countries: India (135), United States (93), Egypt (69), Turkey (67)
+1701 seizure reports this week (previous week 161); 40 high risk; 537.5 t reported.
+Main drugs: Cannabis (628), Cocaine (444), NSA (276)
+Main countries: India (135), United States (93), Egypt (69), Turkey (68)
 
 NEW AND SURGING CORRIDORS
 - Trend detection starts after 42 days of data (now 34). Busiest corridors instead:
@@ -25,8 +25,8 @@ UNUSUAL EVENTS (highest risk first)
 - [High 60] 24 Sep | Cigarettes | 7.4 t | Hong Kong | Hong Kong -> Australia | Legitimate cargo (industrial/goods) | cargo: carrying household goods
   https://www.info.gov.hk/gia/general/202609/24/P2026092400503.htm
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (438), Legitimate cargo (food/produce) (169), Luggage / passenger goods (112)
-Cover cargo named: الات (151), cement (104), फल (38), ملابس (30), plastic (29)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (439), Legitimate cargo (food/produce) (169), Luggage / passenger goods (112)
+Cover cargo named: الات (151), cement (106), फल (38), ملابس (30), plastic (29)
 
 Coverage: searching 9 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Chinese). 49 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
 Leads from open sources, not confirmed facts. Verify before acting.
