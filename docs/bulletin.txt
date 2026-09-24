@@ -1,8 +1,8 @@
 SEIZURE WATCH - weekly bulletin, 18 Sep - 24 Sep 2026
 
-1714 seizure reports this week (previous week 161); 40 high risk; 538.8 t reported.
-Main drugs: Cannabis (633), Cocaine (449), NSA (277)
-Main countries: India (136), United States (94), Egypt (69), Turkey (68)
+1742 seizure reports this week (previous week 161); 40 high risk; 541.1 t reported.
+Main drugs: Cannabis (641), Cocaine (459), NSA (282)
+Main countries: India (141), United States (95), Turkey (70), Egypt (69)
 
 NEW AND SURGING CORRIDORS
 - Trend detection starts after 42 days of data (now 34). Busiest corridors instead:
@@ -20,13 +20,13 @@ UNUSUAL EVENTS (highest risk first)
   https://adf-magazine.com/fr/2026/09/les-trafiquants-de-cocaine-prennent-pour-cible-le-senegal/
 - [High 75] 22 Sep | Cocaine | 320 kg | OR Tambo / Johannesburg | Ghana -> South Africa | Legitimate cargo (industrial/goods); Luggage / passenger goods; Postal / parcel; Vehicle compartment | cargo: bags of charcoal; cement; plastic
   https://dailyguidenetwork.com/cocaine-transit-crisis-another-shipment-pops-up-in-sa/
+- [High 65] 23 Sep | Methamphetamine | 2.4 t | Le Havre | Impregnation / liquid / disguised
+  https://www.tendanceouest.com/actualite-442783-le-havre-2-4-tonnes-de-methamphetamine-saisies-elle-etait-dissoute-dans-de-l-arome-de-vanille
 - [High 60] 18 Sep | Cocaine | 7.5 t | Dunkirk | Ghana -> Australia | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Postal / parcel | cargo: serious gaps; charcoal; plastic; cement
   https://www.myjoyonline.com/ghanas-name-is-on-the-line-cdm-demands-bi-partisan-probe-into-cocaine-saga/
-- [High 60] 24 Sep | Cigarettes | 7.4 t | Hong Kong | Hong Kong -> Australia | Legitimate cargo (industrial/goods) | cargo: carrying household goods
-  https://www.info.gov.hk/gia/general/202609/24/P2026092400503.htm
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (441), Legitimate cargo (food/produce) (170), Luggage / passenger goods (113)
-Cover cargo named: الات (152), cement (106), फल (38), ملابس (30), plastic (29)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (443), Legitimate cargo (food/produce) (173), Luggage / passenger goods (113)
+Cover cargo named: الات (153), cement (107), फल (39), ملابس (30), plastic (29)
 
 Coverage: searching 9 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Chinese). 49 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
 Leads from open sources, not confirmed facts. Verify before acting.
