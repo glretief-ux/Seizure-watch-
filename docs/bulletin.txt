@@ -1,8 +1,8 @@
 SEIZURE WATCH - weekly bulletin, 19 Sep - 25 Sep 2026
 
-2067 seizure reports this week (previous week 173); 42 high risk; 653.9 t reported.
-Main drugs: Cannabis (742), Cocaine (542), NSA (341)
-Main countries: India (171), United States (107), Turkey (87), Egypt (74)
+2153 seizure reports this week (previous week 173); 44 high risk; 704.3 t reported.
+Main drugs: Cannabis (768), Cocaine (572), NSA (356)
+Main countries: India (176), United States (116), Turkey (89), Egypt (76)
 
 NEW AND SURGING CORRIDORS
 - Trend detection starts after 42 days of data (now 35). Busiest corridors instead:
@@ -25,8 +25,8 @@ UNUSUAL EVENTS (highest risk first)
 - [High 65] 24 Sep | Cocaine | 12.1 t | OR Tambo / Johannesburg | Ghana -> South Africa | Legitimate cargo (industrial/goods); Postal / parcel | cargo: charcoal; cement
   https://www.modernghana.com/news/1530470/ghana-and-the-cocaine-challenge-from-crisis-to.html
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (514), Legitimate cargo (food/produce) (205), Luggage / passenger goods (139)
-Cover cargo named: الات (170), cement (122), फल (50), plastic (34), ملابس (31)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (541), Legitimate cargo (food/produce) (216), Luggage / passenger goods (143)
+Cover cargo named: الات (172), cement (132), फल (53), plastic (34), ملابس (32)
 
 Coverage: searching 9 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Chinese). 49 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
 Leads from open sources, not confirmed facts. Verify before acting.
