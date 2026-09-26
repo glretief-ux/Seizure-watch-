@@ -1,15 +1,15 @@
 SEIZURE WATCH - weekly bulletin, 20 Sep - 26 Sep 2026
 
-2093 seizure reports this week (previous week 318); 40 high risk; 692.3 t reported.
-Main drugs: Cannabis (741), Cocaine (546), NSA (357)
-Main countries: India (166), United States (116), Turkey (90), Egypt (77)
+2176 seizure reports this week (previous week 318); 41 high risk; 715.9 t reported.
+Main drugs: Cannabis (769), Cocaine (560), NSA (377)
+Main countries: India (169), United States (119), Turkey (92), Egypt (79)
 
 NEW AND SURGING CORRIDORS
 - Trend detection starts after 42 days of data (now 36). Busiest corridors instead:
   Thailand -> Hong Kong: 18 reports
   Ghana -> South Africa: 16 reports
+  Pakistan -> India: 14 reports
   Mexico -> United States: 12 reports
-  Pakistan -> India: 12 reports
 
 UNUSUAL EVENTS (highest risk first)
 - [High 80] 23 Sep | Cocaine | 30.0 t | Algeciras | Sierra Leone -> Spain | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Vessel hull / underwater | cargo: cement; fish; “narco welfare
@@ -18,15 +18,15 @@ UNUSUAL EVENTS (highest risk first)
   https://www.modernghana.com/news/1529767/fresh-south-africa-drug-arrest-puts-ghanas-border.amp
 - [High 75] 22 Sep | Cocaine | 32.0 t | Bissau | French Guiana -> Guinea-Bissau | Impregnation / liquid / disguised; Legitimate cargo (food/produce); Luggage / passenger goods; Vessel hull / underwater | cargo: fruits
   https://adf-magazine.com/fr/2026/09/les-trafiquants-de-cocaine-prennent-pour-cible-le-senegal/
+- [High 75] 26 Sep | Methamphetamine | 2.8 t | Islamabad | Container structure / false compartment; Legitimate cargo (industrial/goods) | cargo: cement
+  https://www.arabnews.pk/pakistan/pakistani-naval-ships-seize-narcotics-worth-750-million-in-major-arabian-sea-bust-3002400
 - [High 75] 22 Sep | Cocaine | 320 kg | OR Tambo / Johannesburg | Ghana -> South Africa | Legitimate cargo (industrial/goods); Luggage / passenger goods; Postal / parcel; Vehicle compartment | cargo: bags of charcoal; cement; plastic
   https://dailyguidenetwork.com/cocaine-transit-crisis-another-shipment-pops-up-in-sa/
 - [High 70] 24 Sep | Methamphetamine | 558,900 pills | Mexico City | Nigeria -> Mexico | Legitimate cargo (industrial/goods); Vehicle compartment | cargo: cement; chemicals
   https://nairametrics.com/2026/09/24/ndlea-busts-drug-kingpins-linked-to-mexican-cartel-uncovers-enugu-meth-lab/
-- [High 65] 24 Sep | Cocaine | 12.1 t | OR Tambo / Johannesburg | Ghana -> South Africa | Legitimate cargo (industrial/goods); Postal / parcel | cargo: charcoal; cement
-  https://www.modernghana.com/news/1530470/ghana-and-the-cocaine-challenge-from-crisis-to.html
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (524), Legitimate cargo (food/produce) (213), Luggage / passenger goods (138)
-Cover cargo named: الات (168), cement (140), फल (53), plastic (36), ملابس (32)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (540), Legitimate cargo (food/produce) (219), Luggage / passenger goods (150)
+Cover cargo named: الات (172), cement (145), फल (55), plastic (37), ملابس (34)
 
 Coverage: searching 9 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Chinese). 49 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
 Leads from open sources, not confirmed facts. Verify before acting.
