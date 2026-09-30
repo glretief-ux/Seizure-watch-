@@ -1,15 +1,15 @@
 SEIZURE WATCH - weekly bulletin, 24 Sep - 30 Sep 2026
 
-1982 seizure reports this week (previous week 1674); 26 high risk; 576.4 t reported.
-Main drugs: Cannabis (653), Cocaine (512), NSA (351)
-Main countries: India (135), United States (126), Turkey (65), Russia (49)
+2038 seizure reports this week (previous week 1674); 26 high risk; 582.3 t reported.
+Main drugs: Cannabis (667), Cocaine (531), NSA (359)
+Main countries: India (136), United States (132), Turkey (67), Russia (49)
 
 NEW AND SURGING CORRIDORS
 - Trend detection starts after 42 days of data (now 40). Busiest corridors instead:
   Thailand -> Hong Kong: 18 reports
   Pakistan -> India: 17 reports
   Ghana -> South Africa: 16 reports
-  Mexico -> United States: 12 reports
+  Mexico -> United States: 13 reports
 
 UNUSUAL EVENTS (highest risk first)
 - [High 75] 26 Sep | Methamphetamine | 2.8 t | Islamabad | Container structure / false compartment; Legitimate cargo (industrial/goods) | cargo: cement
@@ -25,8 +25,8 @@ UNUSUAL EVENTS (highest risk first)
 - [High 65] 27 Sep | Cocaine | 1.6 t | Lagos | India -> Ethiopia -> Qatar -> Nigeria -> Portugal | Body concealment; Legitimate cargo (industrial/goods); Vehicle compartment | cargo: cement
   https://ng.headtopics.com/news/ndlea-arrests-newlywed-businessman-over-72-wraps-of-cocaine-88188895
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (437), Legitimate cargo (food/produce) (183), Luggage / passenger goods (128)
-Cover cargo named: cement (135), الات (115), फल (46), plastic (32), chemicals (12)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (452), Legitimate cargo (food/produce) (190), Luggage / passenger goods (129)
+Cover cargo named: cement (142), الات (119), फल (47), plastic (34), chemicals (13)
 
 Coverage: searching 9 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Chinese). 49 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
 Leads from open sources, not confirmed facts. Verify before acting.
