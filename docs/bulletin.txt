@@ -1,8 +1,8 @@
 SEIZURE WATCH - weekly bulletin, 25 Sep - 01 Oct 2026
 
-1859 seizure reports this week (previous week 2008); 19 high risk; 521.4 t reported.
-Main drugs: Cannabis (621), Cocaine (475), NSA (355)
-Main countries: India (117), United States (113), Turkey (63), Russia (46)
+1955 seizure reports this week (previous week 2008); 21 high risk; 574.8 t reported.
+Main drugs: Cannabis (661), Cocaine (503), NSA (367)
+Main countries: United States (121), India (121), Turkey (64), Russia (49)
 
 NEW AND SURGING CORRIDORS
 - Trend detection starts after 42 days of data (now 41). Busiest corridors instead:
@@ -12,6 +12,8 @@ NEW AND SURGING CORRIDORS
   Mexico -> United States: 13 reports
 
 UNUSUAL EVENTS (highest risk first)
+- [High 80] 01 Oct | Cocaine | 4.5 t | Amsterdam | Ghana -> Netherlands | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods) | cargo: mere "plastic waste; personal effects; cement; timber
+  https://www.modernghana.com/news/1532422/the-gateway-is-compromised-how-international-drug.amp
 - [High 75] 26 Sep | Methamphetamine | 2.8 t | Islamabad | Container structure / false compartment; Legitimate cargo (industrial/goods) | cargo: cement
   https://www.arabnews.pk/pakistan/pakistani-naval-ships-seize-narcotics-worth-750-million-in-major-arabian-sea-bust-3002400
 - [High 70] 27 Sep | Cannabis | 1.6 t | Lagos | India -> Ethiopia -> Qatar -> Nigeria | Body concealment; Legitimate cargo (industrial/goods); Vehicle compartment | cargo: cement; agency's balanced approach
@@ -22,11 +24,9 @@ UNUSUAL EVENTS (highest risk first)
   https://ng.headtopics.com/news/ndlea-arrests-newlywed-businessman-over-72-wraps-of-cocaine-88188895
 - [High 65] 27 Sep | Cannabis | 262 kg | Abuja | India -> Ethiopia -> Qatar -> Portugal | Body concealment; Legitimate cargo (industrial/goods); Vehicle compartment | cargo: cement
   https://freedomonline.com.ng/25-year-old-newly-wed-businessman-arrested-with-72-wraps-of-cocaine/
-- [High 65] 28 Sep | NSA | 33 kg | Algiers | Impregnation / liquid / disguised; Legitimate cargo (industrial/goods)
-  https://www.afrik.com/pregabaline-algerie-onu-controle-international
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (410), Legitimate cargo (food/produce) (169), Luggage / passenger goods (127)
-Cover cargo named: cement (122), الات (109), फल (40), plastic (33), ملابس (13)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (433), Legitimate cargo (food/produce) (172), Luggage / passenger goods (129)
+Cover cargo named: cement (130), الات (111), फल (41), plastic (33), chemical (13)
 
 Coverage: searching 9 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Chinese). 49 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
 Leads from open sources, not confirmed facts. Verify before acting.
