@@ -1,14 +1,14 @@
 SEIZURE WATCH - weekly bulletin, 25 Sep - 01 Oct 2026
 
-1709 seizure reports this week (previous week 2008); 18 high risk; 481.8 t reported.
-Main drugs: Cannabis (567), Cocaine (443), NSA (319)
-Main countries: United States (110), India (109), Turkey (52), Russia (40)
+1859 seizure reports this week (previous week 2008); 19 high risk; 521.4 t reported.
+Main drugs: Cannabis (621), Cocaine (475), NSA (355)
+Main countries: India (117), United States (113), Turkey (63), Russia (46)
 
 NEW AND SURGING CORRIDORS
 - Trend detection starts after 42 days of data (now 41). Busiest corridors instead:
-  Thailand -> Hong Kong: 18 reports
-  Pakistan -> India: 17 reports
+  Thailand -> Hong Kong: 20 reports
   Ghana -> South Africa: 16 reports
+  Pakistan -> India: 16 reports
   Mexico -> United States: 13 reports
 
 UNUSUAL EVENTS (highest risk first)
@@ -25,8 +25,8 @@ UNUSUAL EVENTS (highest risk first)
 - [High 65] 28 Sep | NSA | 33 kg | Algiers | Impregnation / liquid / disguised; Legitimate cargo (industrial/goods)
   https://www.afrik.com/pregabaline-algerie-onu-controle-international
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (383), Legitimate cargo (food/produce) (157), Luggage / passenger goods (113)
-Cover cargo named: cement (117), الات (102), फल (40), plastic (33), ملابس (13)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (410), Legitimate cargo (food/produce) (169), Luggage / passenger goods (127)
+Cover cargo named: cement (122), الات (109), फल (40), plastic (33), ملابس (13)
 
 Coverage: searching 9 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Chinese). 49 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
 Leads from open sources, not confirmed facts. Verify before acting.
