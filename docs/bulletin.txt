@@ -1,16 +1,16 @@
 SEIZURE WATCH - weekly bulletin, 27 Sep - 03 Oct 2026
 
-1831 seizure reports this week (previous week 2370); 31 high risk; 473.8 t reported.
-Main drugs: Cannabis (617), Cocaine (484), NSA (323)
-Main countries: India (123), United States (99), Turkey (64), Canada (45)
+1916 seizure reports this week (previous week 2370); 32 high risk; 482.2 t reported.
+Main drugs: Cannabis (653), Cocaine (498), NSA (339)
+Main countries: India (134), United States (101), Turkey (74), Russia (47)
 
 NEW AND SURGING CORRIDORS
 - Thailand -> Hong Kong: SURGING (18 this period, 3 before; mainly Cannabis)
 - Ghana -> South Africa: NEW (16 this period, 0 before; mainly Heroin/Opium)
 - Pakistan -> India: NEW (16 this period, 0 before; mainly Heroin/Opium)
 - Mexico -> United States: NEW (15 this period, 0 before; mainly Methamphetamine)
-- Thailand -> India: NEW (10 this period, 0 before; mainly Cannabis)
 - Nepal -> India: NEW (10 this period, 0 before; mainly Cannabis)
+- Thailand -> India: NEW (9 this period, 0 before; mainly Cannabis)
 
 UNUSUAL EVENTS (highest risk first)
 - [High 90] 01 Oct | Cocaine | 4.5 t | Amsterdam | Ghana -> Netherlands | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods) | cargo: mere "plastic waste; personal effects; cement; timber
@@ -26,8 +26,8 @@ UNUSUAL EVENTS (highest risk first)
 - [High 75] 01 Oct | Cocaine | 1.2 t | Jalisco | Legitimate cargo (industrial/goods); Vehicle compartment | cargo: maquinaria
   https://www.eltiempo.com/colombia/otras-ciudades/incautan-en-el-meta-1-2-toneladas-de-clorhidrato-de-cocaina-a-disidentes-de-ivan-mordisco-que-tendrian-como-destino-los-estados-unidos-3590891
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (398), Legitimate cargo (food/produce) (168), Luggage / passenger goods (92)
-Cover cargo named: cement (112), الات (105), फल (37), plastic (27), flour (12)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (414), Legitimate cargo (food/produce) (180), Luggage / passenger goods (95)
+Cover cargo named: cement (114), الات (109), फल (38), plastic (29), flour (12)
 
 Coverage: searching 9 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Chinese). 49 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
 Leads from open sources, not confirmed facts. Verify before acting.
