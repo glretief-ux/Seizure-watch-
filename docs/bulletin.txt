@@ -1,11 +1,11 @@
-SEIZURE WATCH - weekly bulletin, 27 Sep - 03 Oct 2026
+SEIZURE WATCH - weekly bulletin, 28 Sep - 04 Oct 2026
 
-2004 seizure reports this week (previous week 2370); 32 high risk; 488.5 t reported.
-Main drugs: Cannabis (693), Cocaine (513), NSA (350)
-Main countries: India (134), United States (102), Turkey (75), Russia (47)
+1815 seizure reports this week (previous week 2343); 27 high risk; 397.8 t reported.
+Main drugs: Cannabis (619), Cocaine (470), NSA (320)
+Main countries: India (125), United States (91), Turkey (70), Canada (46)
 
 NEW AND SURGING CORRIDORS
-- Thailand -> Hong Kong: SURGING (18 this period, 3 before; mainly Cannabis)
+- Thailand -> Hong Kong: SURGING (17 this period, 4 before; mainly Cannabis)
 - Ghana -> South Africa: NEW (16 this period, 0 before; mainly Heroin/Opium)
 - Pakistan -> India: NEW (16 this period, 0 before; mainly Heroin/Opium)
 - Mexico -> United States: NEW (15 this period, 0 before; mainly Methamphetamine)
@@ -15,19 +15,19 @@ NEW AND SURGING CORRIDORS
 UNUSUAL EVENTS (highest risk first)
 - [High 90] 01 Oct | Cocaine | 4.5 t | Amsterdam | Ghana -> Netherlands | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods) | cargo: mere "plastic waste; personal effects; cement; timber
   https://www.modernghana.com/news/1532422/the-gateway-is-compromised-how-international-drug.amp
-- [High 80] 27 Sep | Cannabis | 1.6 t | Lagos | India -> Ethiopia -> Qatar -> Nigeria | Body concealment; Legitimate cargo (industrial/goods); Vehicle compartment | cargo: cement; agency's balanced approach
-  https://www.thecable.ng/newlywed-businessman-excretes-72-wraps-of-cocaine-at-enugu-airport/
 - [High 75] 02 Oct | Cocaine | 8.7 t | Amsterdam | Ghana -> Netherlands | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods) | cargo: timber; charcoal
   https://3news.com/news/leave-baffour-awuah-alone-and-pursue-the-kingpins-behind-drug-trade-afenyo-tells-eoco
 - [High 75] 29 Sep | Cocaine | 2.8 t | Antwerp | Ghana -> Belgium | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods) | cargo: largest; flour; timber; plastic
   https://ua.news/en/world/gana-stala-piatoiu-krayinoiu-vidpravlennia-kokayinu-do-antverpena-myjoyonline
-- [High 75] 27 Sep | Cocaine | 1.6 t | Lagos | India -> Ethiopia -> Qatar -> Nigeria -> Portugal | Body concealment; Legitimate cargo (industrial/goods); Vehicle compartment | cargo: cement
-  https://ng.headtopics.com/news/ndlea-arrests-newlywed-businessman-over-72-wraps-of-cocaine-88188895
 - [High 75] 01 Oct | Cocaine | 1.2 t | Jalisco | Legitimate cargo (industrial/goods); Vehicle compartment | cargo: maquinaria
   https://www.eltiempo.com/colombia/otras-ciudades/incautan-en-el-meta-1-2-toneladas-de-clorhidrato-de-cocaina-a-disidentes-de-ivan-mordisco-que-tendrian-como-destino-los-estados-unidos-3590891
+- [High 65] 02 Oct | Cocaine | 1.5 t | Spain | Colombia -> Spain | Legitimate cargo (industrial/goods) | cargo: الات
+  https://maghrebtimes.ma/2026/10/02/%D8%A7%D8%B9%D8%AA%D9%82%D8%A7%D9%84-27-%D8%B4%D8%AE%D8%B5%D8%A7-%D9%88%D8%AD%D8%AC%D8%B2-16-%D9%81%D9%8A%D9%84%D8%A7-%D9%81%D8%A7%D8%AE%D8%B1%D8%A9%D8%AA%D9%81%D9%83%D9%8A%D9%83-%D8%B4%D8%A8/
+- [High 65] 28 Sep | NSA | 33 kg | Algiers | Impregnation / liquid / disguised; Legitimate cargo (industrial/goods)
+  https://www.afrik.com/pregabaline-algerie-onu-controle-international
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (416), Legitimate cargo (food/produce) (180), Luggage / passenger goods (95)
-Cover cargo named: cement (114), الات (111), फल (38), plastic (29), flour (12)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (358), Legitimate cargo (food/produce) (169), Luggage / passenger goods (81)
+Cover cargo named: cement (99), الات (82), फल (34), plastic (26), flour (12)
 
 Coverage: searching 9 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Chinese). 49 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
 Leads from open sources, not confirmed facts. Verify before acting.
