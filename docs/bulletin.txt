@@ -1,11 +1,11 @@
-SEIZURE WATCH - weekly bulletin, 30 Sep - 06 Oct 2026
+SEIZURE WATCH - weekly bulletin, 01 Oct - 07 Oct 2026
 
-1806 seizure reports this week (previous week 2103); 20 high risk; 424.8 t reported.
-Main drugs: Cannabis (614), Cocaine (466), NSA (288)
-Main countries: India (112), United States (66), Turkey (61), Canada (41)
+1456 seizure reports this week (previous week 2099); 14 high risk; 329.6 t reported.
+Main drugs: Cannabis (513), Cocaine (367), NSA (215)
+Main countries: India (90), Turkey (51), United States (43), Canada (40)
 
 NEW AND SURGING CORRIDORS
-- Thailand -> Hong Kong: SURGING (18 this period, 4 before; mainly Cannabis)
+- Thailand -> Hong Kong: SURGING (16 this period, 6 before; mainly Cannabis)
 - Ghana -> South Africa: NEW (16 this period, 0 before; mainly Heroin/Opium)
 - Mexico -> United States: NEW (15 this period, 0 before; mainly Methamphetamine)
 - Pakistan -> India: SURGING (15 this period, 1 before; mainly Heroin/Opium)
@@ -26,8 +26,8 @@ UNUSUAL EVENTS (highest risk first)
 - [High 60] 01 Oct | NSA | 1 kg | Mumbai | Qatar -> India | Hidden compartment (unspecified); Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Luggage / passenger goods | cargo: carbon; फल
   https://gallinews.com/dri-nagpur-seizes-1-312-kg-amphetamine-from-woman-on-train/
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (253), Legitimate cargo (food/produce) (101), Luggage / passenger goods (55)
-Cover cargo named: cement (65), الات (60), फल (18), plastic (14), मशीन (8)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (162), Legitimate cargo (food/produce) (67), Postal / parcel (39)
+Cover cargo named: cement (38), الات (31), फल (15), plastic (7), मशीन (6)
 
 Coverage: searching 9 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Chinese). 49 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
 Leads from open sources, not confirmed facts. Verify before acting.
