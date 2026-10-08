@@ -42,11 +42,17 @@ sources:
     queries:
       en: ["drug seizure", "cocaine seized", "heroin seized", "methamphetamine seized",
            "cannabis seized customs", "captagon seized", "fentanyl seized", "MDMA ecstasy seized",
-           "cigarettes seized customs", "drugs seized container port", "drugs seized airport"]
+           "cigarettes seized customs", "drugs seized container port", "drugs seized airport",
+           "precursor chemicals seized", "clandestine drug lab chemicals seized",
+           "stolen vehicles recovered smuggling", "stolen cars seized border",
+           "illegal logging timber seized", "CITES protected timber seized", "rosewood seized trafficking"]
       es: ["incautan cocaína", "decomisan droga puerto contenedor", "incautan marihuana",
-           "incautan metanfetamina", "incautan drogas sintéticas aeropuerto"]
-      fr: ["saisie cocaïne", "saisie drogue port conteneur", "saisie cannabis douane", "saisie captagon"]
-      pt: ["apreensão cocaína porto", "apreensão droga contêiner", "apreendem maconha"]
+           "incautan metanfetamina", "incautan drogas sintéticas aeropuerto",
+           "incautan químicos precursores", "decomisan vehículos robados", "madera ilegal incautada"]
+      fr: ["saisie cocaïne", "saisie drogue port conteneur", "saisie cannabis douane", "saisie captagon",
+           "saisie précurseurs chimiques", "véhicules volés saisis", "bois illégal saisi"]
+      pt: ["apreensão cocaína porto", "apreensão droga contêiner", "apreendem maconha",
+           "apreensão de químicos precursores", "veículos roubados apreendidos", "madeira ilegal apreendida"]
       ar: ["ضبط مخدرات", "ضبط كوكايين", "ضبط حشيش", "ضبط كبتاجون", "إحباط تهريب مخدرات", "ضبط هيروين", "ضبط ترامادول"]
       tr: ["uyuşturucu ele geçirildi", "kokain ele geçirildi", "esrar ele geçirildi", "uyuşturucu hap ele geçirildi", "liman konteyner kokain", "captagon ele geçirildi"]
       ru: ["изъяли наркотики", "изъяли кокаин", "изъяли героин", "изъяли метамфетамин", "контрабанда наркотиков порт", "изъяли синтетические наркотики"]
@@ -56,10 +62,19 @@ sources:
   gdelt:                       # global news index; free, no key. Set enabled: false to skip.
     enabled: true
     queries:
-      en: ['(cocaine OR heroin OR methamphetamine OR cannabis OR captagon OR fentanyl) (seized OR seizure OR intercepted)']
-      es: ['(cocaína OR heroína OR metanfetamina OR marihuana) (incautan OR decomisan OR incautación)']
-      fr: ['(cocaïne OR héroïne OR cannabis OR captagon) (saisie OR saisi OR saisis)']
-      pt: ['(cocaína OR heroína OR maconha) (apreensão OR apreendem OR apreendida)']
+      en: ['(cocaine OR heroin OR methamphetamine OR cannabis OR captagon OR fentanyl) (seized OR seizure OR intercepted)',
+           '(precursor chemicals OR clandestine lab) (seized OR seizure)',
+           '(stolen vehicles OR stolen cars) (seized OR recovered OR smuggling)',
+           '(illegal logging OR protected timber OR rosewood) (seized OR seizure)']
+      es: ['(cocaína OR heroína OR metanfetamina OR marihuana) (incautan OR decomisan OR incautación)',
+           '(químicos precursores OR laboratorio clandestino) (incautan OR decomisan)',
+           '(vehículos robados) (decomisan OR recuperan)']
+      fr: ['(cocaïne OR héroïne OR cannabis OR captagon) (saisie OR saisi OR saisis)',
+           '(précurseurs chimiques) (saisie OR saisis)',
+           '(véhicules volés) (saisie OR récupérés)']
+      pt: ['(cocaína OR heroína OR maconha) (apreensão OR apreendem OR apreendida)',
+           '(químicos precursores) (apreensão OR apreendem)',
+           '(veículos roubados) (apreensão OR recuperados)']
       ar: ['(كوكايين OR هيروين OR حشيش OR كبتاجون) (ضبط OR إحباط)']
       tr: ['(kokain OR eroin OR esrar OR uyuşturucu) ("ele geçirildi" OR yakalandı)']
       ru: ['(кокаин OR героин OR метамфетамин OR наркотики) (изъяли OR изъято OR задержали)']
@@ -70,7 +85,7 @@ sources:
   # releases are picked up even when no newspaper reports them. Add or remove websites freely.
   official_sites:
     enabled: true
-    query: "site:{site} (seized OR seizure OR seizes OR intercepted OR incautan OR decomisan OR saisie OR apreensao) (cocaine OR heroin OR methamphetamine OR cannabis OR fentanyl OR captagon OR drugs OR cocaina OR droga OR cocaine OR drogue)"
+    query: "site:{site} (seized OR seizure OR seizes OR intercepted OR incautan OR decomisan OR saisie OR apreensao) (cocaine OR heroin OR methamphetamine OR cannabis OR fentanyl OR captagon OR drugs OR cocaina OR droga OR cocaine OR drogue OR \"precursor chemicals\" OR \"stolen vehicles\" OR \"illegal logging\" OR \"protected timber\" OR rosewood)"
     sites:
       - cbp.gov               # US Customs and Border Protection
       - dea.gov               # US Drug Enforcement Administration
@@ -142,11 +157,29 @@ risk:
     Methamphetamine: 100
     NSA: 100
     Cigarettes: 5000
+    # Precursor chemicals (kg) - thresholds reflect how much of each is needed
+    # to matter for a lab, not drug-equivalent weight
+    Acetic anhydride: 2000
+    Ephedrine/Pseudoephedrine: 50
+    P2P/BMK/PMK: 50
+    Potassium permanganate: 1000
+    Sodium cyanide: 500
+    Red phosphorus: 200
+    Acetone/solvents: 2000
+    # CITES-protected timber (kg)
+    Rosewood (Dalbergia): 5000
+    Mukula: 5000
+    Ebony: 2000
+    Agarwood: 50
+    Ramin: 5000
+    Afrormosia: 5000
+    Mahogany: 5000
     default: 200
   unit_thresholds:                 # for pills / sticks when no weight is given
     pills: 500000
     cigarettes: 2000000
     packs: 100000
+    vehicles: 10                   # 10+ stolen vehicles in one report is a large outlier
   percentile_min_events: 30        # once a drug has this many events, also flag its own top 5%
 
 analysis:

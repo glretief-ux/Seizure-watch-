@@ -120,9 +120,47 @@ def insider(rng, port):
     return title, text
 
 
+def stolen_vehicle(rng):
+    """Non-drug: stolen vehicles recovered in a cross-border theft/smuggling ring."""
+    ctry, dest = rng.choice([("South Africa", "Mozambique"), ("Germany", "Poland"),
+                             ("United Kingdom", "Nigeria"), ("United States", "Mexico")])
+    n = rng.choice([2, 3, 5, 8, 12])
+    kind = rng.choice(["cars", "trucks", "motorcycles"])
+    title = f"Police recover {n} stolen {kind} bound for {dest} in cross-border theft ring bust"
+    text = (f"Police in {ctry} recovered {n} stolen {kind} that investigators say were destined for {dest}. "
+            f"Officers say an organized network is behind the vehicle theft and smuggling operation. "
+            f"Three suspects were arrested.")
+    return title, text
+
+
+def precursor_chemical(rng):
+    """Non-drug: precursor chemicals seized en route to a clandestine lab."""
+    chem, qty = rng.choice([("acetic anhydride", rng.choice([500, 1200, 2500])),
+                            ("potassium permanganate", rng.choice([800, 1500])),
+                            ("ephedrine", rng.choice([40, 90, 150]))])
+    place = rng.choice(["Lagos", "Bangkok", "Lima", "Karachi"])
+    title = f"Customs seize {qty} kg of {chem} destined for clandestine drug lab near {place}"
+    text = (f"Customs officers seized {qty} kg of {chem}, a precursor chemical used to manufacture illegal drugs, "
+            f"in a shipment bound for a clandestine laboratory near {place}. Two suspects were detained.")
+    return title, text
+
+
+def cites_timber(rng):
+    """Non-drug: CITES-protected timber species seized from illegal logging."""
+    species = rng.choice(["rosewood", "ebony", "agarwood", "mahogany"])
+    o, d = rng.choice([("Madagascar", "China"), ("Democratic Republic of Congo", "Vietnam"),
+                       ("Peru", "United States")])
+    kg = rng.choice([3000, 8000, 15000])
+    title = f"Rangers seize {kg} kg of illegally logged {species}, a CITES protected timber species, bound for {d}"
+    text = (f"Wildlife rangers seized {kg} kg of {species}, a CITES-protected timber species, illegally logged in "
+            f"{o} and destined for {d}. The shipment was declared as general cargo to evade detection.")
+    return title, text
+
+
 LANG = {es_container: "es", fr_container: "fr"}
 BACKGROUND = [(coke_container, 36), (air_pax, 14), (road_cannabis, 12), (post_nsa, 8), (meth_sea, 5), (cigarettes, 8),
-              (captagon, 5), (es_container, 7), (fr_container, 5)]
+              (captagon, 5), (es_container, 7), (fr_container, 5),
+              (stolen_vehicle, 4), (precursor_chemical, 4), (cites_timber, 4)]
 
 
 def demo_articles(today=None, seed=7):
@@ -160,6 +198,13 @@ def demo_articles(today=None, seed=7):
     # planted signal 3: insider cases
     add(1, insider, port="Antwerp", dup=False)
     add(4, insider, port="Rotterdam", dup=False)
+    # planted signal 4: new contraband categories, recent enough to show up in the default 90-day view
+    for i in range(3):
+        add(2 + i * 5, stolen_vehicle, dup=False)
+    for i in range(2):
+        add(3 + i * 6, precursor_chemical, dup=False)
+    for i in range(2):
+        add(1 + i * 7, cites_timber, dup=False)
     # one invented report in each newly supported language (made-up facts)
     for i, (lang, t, x) in enumerate([
         ("ar", "ضبط 2.5 طن من الكوكايين في ميناء جدة قادمة من كولومبيا", "ضبطت الجمارك شحنة كوكايين مخبأة بين شحنة موز داخل حاوية."),

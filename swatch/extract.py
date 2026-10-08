@@ -23,13 +23,18 @@ W_UNITS = (r"(tonnes?|tons?|toneladas?|tonelada|kilograms?|kilogrammes?|kilogram
 WEIGHT_RX = re.compile(NUM + MULT + r"[\s-]*" + W_UNITS + r"(?![a-z])")
 UNIT_RX = re.compile(NUM + MULT + r"[\s-]*(?:[a-z]+\s+)?(pills|tablets|capsules|comprimidos|pastillas|pilulas|pilules|"
                      r"comprimes|cigarettes|cigarrillos|cigarros|sticks|packs|cartons|cajetillas|master\s+cases|"
-                     r"plants|plantas|plantes|doses|bricks|ladrillos|packages|packets|paquetes|bales|fardos|bundles)"
+                     r"plants|plantas|plantes|doses|bricks|ladrillos|packages|packets|paquetes|bales|fardos|bundles|"
+                     r"stolen\s+vehicles|vehicles|vehiculos|vehicules|veiculos|stolen\s+cars|cars|trucks|lorries|"
+                     r"motorcycles|motorbikes)"
                      r"(?![a-z])")
 UNIT_KIND = {"pills": "pills", "tablets": "pills", "capsules": "pills", "comprimidos": "pills", "pastillas": "pills",
              "pilulas": "pills", "pilules": "pills", "comprimes": "pills", "doses": "doses",
              "cigarettes": "cigarettes", "cigarrillos": "cigarettes", "cigarros": "cigarettes", "sticks": "cigarettes",
              "packs": "packs", "cartons": "packs", "cajetillas": "packs", "master cases": "cases",
-             "plants": "plants", "plantas": "plants", "plantes": "plants"}
+             "plants": "plants", "plantas": "plants", "plantes": "plants",
+             "stolen vehicles": "vehicles", "vehicles": "vehicles", "vehiculos": "vehicles",
+             "vehicules": "vehicles", "veiculos": "vehicles", "stolen cars": "vehicles", "cars": "vehicles",
+             "trucks": "vehicles", "lorries": "vehicles", "motorcycles": "vehicles", "motorbikes": "vehicles"}
 ARREST_A = re.compile(NUMW + r"\s+(?:\w+\s+){0,3}?(?:were\s+|was\s+|have\s+been\s+|fueron\s+|han\s+sido\s+|ont\s+ete\s+)?"
                       r"(?:arrested|detained|charged|apprehended|captured|detenid\w+|arrestad\w+|capturad\w+|"
                       r"aprehendid\w+|interpelad\w+|arrete\w*|interpelle\w*|presos|detidos|presas)")
@@ -107,6 +112,69 @@ def _drugs(title_n, text_n):
     return None, []
 
 
+# Label used for an unnamed/generic mention within each category - mirrors "Unspecified" for drugs.
+UNSPECIFIED_LABEL = {
+    "Drug": "Unspecified",
+    "Precursor chemical": "Unspecified precursor chemical",
+    "CITES protected timber": "Unspecified protected timber",
+    "Stolen vehicle": "Unspecified stolen vehicle",
+}
+
+
+def _classify(title_n, text_n):
+    """Generalised version of _drugs(): a *named* drug always wins first
+    (unchanged behaviour/priority, so existing drug extraction never
+    regresses), then the three non-drug contraband categories, each
+    checked by specific item name before falling back to a generic
+    catch-all. The generic "drugs"/"narcotics" fallback is tried LAST,
+    after the other categories' own specific and generic checks - a
+    precursor-chemical or protected-timber story will very often also
+    contain a passing, unrelated mention of "drug(s)" (e.g. "...used to
+    manufacture illegal drugs"), and that must not steal the story away
+    from its real category. Returns (primary_item, items_list, category)
+    or (None, [], None) if nothing matches."""
+    blob = title_n + " " + text_n
+
+    def _rank(patterns):
+        counts = {}
+        for name, pat in patterns.items():
+            c = len(pat.findall(text_n)) + 3 * len(pat.findall(title_n))
+            if c:
+                counts[name] = c
+        return sorted(counts, key=counts.get, reverse=True)
+
+    drug_ordered = _rank(L.DRUG_PATTERNS)
+    if drug_ordered:
+        return drug_ordered[0], drug_ordered, "Drug"
+
+    precursor_ordered = _rank(L.PRECURSOR_PATTERNS)
+    if precursor_ordered:
+        return precursor_ordered[0], precursor_ordered, "Precursor chemical"
+
+    timber_ordered = _rank(L.TIMBER_PATTERNS)
+    if timber_ordered:
+        return timber_ordered[0], timber_ordered, "CITES protected timber"
+
+    # Stolen vehicles: a vehicle noun alone is far too common in news text,
+    # so this category additionally requires a theft/recovery cue word
+    # somewhere in the article before it is considered at all.
+    has_theft_cue = bool(L.VEHICLE_THEFT_CUE.search(blob))
+    if has_theft_cue:
+        vehicle_ordered = _rank(L.STOLEN_VEHICLE_PATTERNS)
+        if vehicle_ordered:
+            return vehicle_ordered[0], vehicle_ordered, "Stolen vehicle"
+
+    if L.GENERIC_PRECURSOR.search(blob):
+        return UNSPECIFIED_LABEL["Precursor chemical"], [], "Precursor chemical"
+    if L.GENERIC_TIMBER.search(blob):
+        return UNSPECIFIED_LABEL["CITES protected timber"], [], "CITES protected timber"
+    if has_theft_cue and L.GENERIC_STOLEN_VEHICLE.search(blob):
+        return UNSPECIFIED_LABEL["Stolen vehicle"], [], "Stolen vehicle"
+    if L.GENERIC_DRUG.search(blob):
+        return UNSPECIFIED_LABEL["Drug"], [], "Drug"
+    return None, [], None
+
+
 # Words that show a number is a running total / comparison / campaign figure, not one seizure.
 CUMUL = re.compile(
     r"\bsince\b|\bso far\b|\bthis year\b|year[- ]to[- ]date|\blast (?:year|month|week)\b|\bin 20\d\d\b|during 20\d\d"
@@ -129,7 +197,16 @@ def _english(t):
     return len(_EN.findall(seg)) >= len(_LAT.findall(seg))
 
 
-def _is_precursor(t, s, e):
+def _is_precursor(t, s, e, skip=False):
+    """True if the weight at [s:e) looks like it belongs to a precursor
+    chemical mentioned alongside a drug, not the drug itself - e.g. "500kg
+    heroin and 10kg of acetone" should not count the 10kg as more heroin.
+    `skip` disables this check entirely: when the story's own category IS
+    "Precursor chemical" (nothing else was seized), the precursor wording
+    is exactly what the weight-of-interest belongs to, so it must not be
+    filtered out here."""
+    if skip:
+        return False
     after = t[e:e + 45]
     m = PRECURSOR.search(after)
     if m and not L.ANY_DRUG.search(after[:m.start()]):
@@ -168,10 +245,10 @@ NON_SHIP_CONTAINER = re.compile(r"\b(?:storage|plastic|glass|metal|food|liquid|c
                                 r"tupperware|sealed|airtight|foam)\s+containers?\b|\bcontainers?\s+(?:of|with)\b")
 
 
-def _quantities(t, primary, title_len=0, en=True):
+def _quantities(t, primary, title_len=0, en=True, category=None, skip_precursor_filter=False):
     kg_hits, unit_hits, agg_title = [], [], False
     for m in WEIGHT_RX.finditer(t):
-        if not _in_context(t, m.start(), m.end()) or _is_precursor(t, m.start(), m.end()):
+        if not _in_context(t, m.start(), m.end()) or _is_precursor(t, m.start(), m.end(), skip=skip_precursor_filter):
             continue
         if CUMUL.search(_sentence(t, m.start(), m.end())):
             agg_title = agg_title or m.start() < title_len
@@ -192,6 +269,15 @@ def _quantities(t, primary, title_len=0, en=True):
             continue
         kind = UNIT_KIND.get(re.sub(r"\s+", " ", m.group(3)), "packages")
         if primary == "Cigarettes" and kind not in ("cigarettes", "packs", "cases"):
+            continue
+        # "vehicles" is only a meaningful unit count for the Stolen vehicle
+        # category - elsewhere (e.g. "smuggled in 2 trucks") it describes
+        # the transport, not the contraband, so it must not leak into
+        # other categories' quantity, and other kinds must not leak into
+        # a stolen-vehicle count either.
+        if kind == "vehicles" and category != "Stolen vehicle":
+            continue
+        if category == "Stolen vehicle" and kind != "vehicles":
             continue
         unit_hits.append((m.start(), v, kind))
     best_kg, best_units, unit_type = None, None, None
@@ -476,25 +562,29 @@ def _details(title, text, t):
 
 
 def extract(title, text="", source_country=None):
-    """Return a dict of facts. rec['relevant'] tells whether it is a real seizure story."""
+    """Return a dict of facts. rec['relevant'] tells whether it is a real seizure story.
+    Covers drug seizures and the non-drug contraband categories (precursor
+    chemicals, CITES-protected timber, stolen vehicles) via rec['category']."""
     title_n, text_n = L.norm(title), L.norm(text)
     t = (title_n + ". " + text_n).strip()
-    primary, drugs = _drugs(title_n, text_n)
+    primary, drugs, category = _classify(title_n, text_n)
     rec = {"relevant": 0}
     if not primary or not L.SEIZURE.search(t) or L.EXCLUDE.search(title_n):
         return rec
-    kg, units, unit_type = _quantities(t, primary, len(title_n) + 2, _english(t))
+    unspecified = UNSPECIFIED_LABEL.get(category)
+    kg, units, unit_type = _quantities(t, primary, len(title_n) + 2, _english(t), category=category,
+                                        skip_precursor_filter=(category != "Drug"))
     in_container = 1 if L.CONTAINER.search(NON_SHIP_CONTAINER.sub(" ", t)) else 0
     cats, detail = _concealment(t, in_container)
     route = _route(t, source_country)
     arrests = _arrests(t)
-    # A headline that names a drug and says it was seized is a real report even without a weight
-    # ("Heroin worth R2m seized at OR Tambo"); a generic "drugs" headline needs a stated value or weight.
+    # A headline that names the item and says it was seized is a real report even without a weight
+    # ("Heroin worth R2m seized at OR Tambo"); a generic headline needs a stated value or weight.
     seized_in_title = bool(L.SEIZURE.search(title_n))
     valued = bool(re.search(r"\b(?:worth|valued|value of)\b", title_n))
     has_substance = bool(kg or units or arrests or cats or route["seizure_country"]
-                         or (seized_in_title and primary != "Unspecified") or (seized_in_title and valued))
-    if not has_substance or (primary == "Unspecified" and not (kg or units or (seized_in_title and valued))):
+                         or (seized_in_title and primary != unspecified) or (seized_in_title and valued))
+    if not has_substance or (primary == unspecified and not (kg or units or (seized_in_title and valued))):
         return rec
     transport = _transport(t, cats, in_container)
     organized = 1 if L.ORGANIZED.search(t) else 0
@@ -502,7 +592,7 @@ def extract(title, text="", source_country=None):
     controlled = 1 if L.CONTROLLED_DELIVERY.search(t) else 0
     coverload = 1 if re.search(r"cover\s*load|carga\s+de\s+cobertura", t) else 0
     rec.update({
-        "relevant": 1, "primary_drug": primary, "drugs": "|".join(drugs),
+        "relevant": 1, "primary_drug": primary, "drugs": "|".join(drugs), "category": category,
         "qty_kg": kg, "qty_units": units, "unit_type": unit_type,
         "concealment": "|".join(cats) or None, "concealment_detail": "; ".join(detail) or None,
         "transport": transport, "in_container": in_container,
@@ -519,6 +609,6 @@ def extract(title, text="", source_country=None):
             f"{arrests} arrests" if arrests else None,
             "insider indicators" if insider else None, "controlled delivery" if controlled else None]
     rec["mo_summary"] = " | ".join(b for b in bits if b)
-    rec["completeness"] = sum([primary != "Unspecified", bool(kg or units), bool(cats), transport != "Unknown",
+    rec["completeness"] = sum([primary != unspecified, bool(kg or units), bool(cats), transport != "Unknown",
                                bool(route["origin"]), bool(route["destination"]), bool(route["seizure_country"])])
     return rec

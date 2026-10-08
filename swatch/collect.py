@@ -249,7 +249,10 @@ def collect(cfg, days):
 
 
 def prefilter(items, cutoff_date):
-    """Cheap headline check so we only download articles that look like drug-seizure stories."""
+    """Cheap headline check so we only download articles that look like
+    seizure stories - drugs, precursor chemicals, CITES-protected timber,
+    or (vehicle noun + theft/recovery cue together, since a vehicle word
+    alone is far too common a false-positive trigger on its own)."""
     seen, out = set(), []
     for it in items:
         if not it.get("url") or not it.get("title"):
@@ -257,7 +260,10 @@ def prefilter(items, cutoff_date):
         if it["published"] and it["published"] < cutoff_date:
             continue
         blob = L.norm(it["title"] + " " + (it.get("snippet") or ""))
-        if not L.ANY_DRUG.search(blob):
+        is_contraband = L.ANY_CONTRABAND.search(blob)
+        is_vehicle = L.VEHICLE_THEFT_CUE.search(blob) and (
+            L.ANY_STOLEN_VEHICLE.search(blob) or L.VEHICLE_WORDS.search(blob))
+        if not (is_contraband or is_vehicle):
             continue
         if L.EXCLUDE.search(blob):
             continue

@@ -121,7 +121,8 @@ table.mini{border-collapse:collapse;font-size:13px;margin-top:6px}table.mini td{
 <div id="banners"></div>
 
 <div class="filters">
-  <select id="fDrug"><option value="">All drug types</option></select>
+  <select id="fCategory"><option value="">All categories</option></select>
+  <select id="fDrug"><option value="">All types</option></select>
   <select id="fBand"><option value="">All risk bands</option><option>High</option><option>Medium</option><option>Low</option></select>
   <select id="fDays"><option value="7">Last 7 days</option><option value="30">Last 30 days</option><option value="90" selected>Last 90 days</option><option value="9999">All loaded</option></select>
   <select id="fMode"><option value="">All transport</option></select>
@@ -201,7 +202,10 @@ const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const safe = u => /^https?:\/\//i.test(u || '') ? u : '#';
 const COL = {'Cocaine':'#1f77b4','Cannabis':'#2ca02c','Heroin/Opium':'#8c564b','Methamphetamine':'#ff7f0e','NSA':'#9467bd','Cigarettes':'#7f7f7f','Unspecified':'#bcbd22'};
-const col = d => COL[d] || '#999';
+const CATCOL = {'Precursor chemical':'#17becf','Stolen vehicle':'#d62728','CITES protected timber':'#8c6d31'};
+const ITEMCAT = {};
+D.events.forEach(e => { if (e.drug && e.category) ITEMCAT[e.drug] = e.category; });
+const col = d => COL[d] || CATCOL[ITEMCAT[d]] || '#999';
 const num = n => n == null ? '' : Number(n).toLocaleString(undefined, {maximumFractionDigits: 1});
 const qty = e => { const p = []; if (e.kg) p.push(e.kg >= 1000 ? (e.kg/1000).toFixed(1) + ' t' : Math.round(e.kg) + ' kg'); if (e.units) p.push(num(e.units) + ' ' + (e.unit_type||'')); return p.join(', '); };
 const asof = new Date(D.meta.asof + 'T00:00:00Z');
@@ -214,9 +218,10 @@ const bn = [];
 if (D.meta.demo) bn.push('<div class="banner demo"><b>SAMPLE DATA.</b> These are made-up articles used to demonstrate the platform. Run the real collector to replace them.</div>');
 if (!D.meta.history_ok) bn.push('<div class="banner hist">Building history: trend, spike and new-corridor alerts switch on after ' + D.meta.min_history + ' days of data (currently ' + D.meta.history_days + ').</div>');
 $('banners').innerHTML = bn.join('');
+[...new Set(D.events.map(e => e.category).filter(Boolean))].sort().forEach(d => $('fCategory').insertAdjacentHTML('beforeend', '<option>' + esc(d) + '</option>'));
 [...new Set(D.events.map(e => e.drug))].sort().forEach(d => $('fDrug').insertAdjacentHTML('beforeend', '<option>' + esc(d) + '</option>'));
 [...new Set(D.events.map(e => e.transport).filter(Boolean))].sort().forEach(d => $('fMode').insertAdjacentHTML('beforeend', '<option>' + esc(d) + '</option>'));
-['fDrug','fBand','fDays','fMode'].forEach(i => $(i).addEventListener('change', render));
+['fCategory','fDrug','fBand','fDays','fMode'].forEach(i => $(i).addEventListener('change', render));
 $('fQ').addEventListener('input', render);
 
 // ---- Infrastructure multi-select checkbox filter
@@ -254,10 +259,10 @@ $('fInfraClearBtn').addEventListener('click', () => { infraSelected.clear(); ren
 
 function view() {
   const days = +$('fDays').value, cut = fmt(new Date(asof.getTime() - (days - 1) * 864e5));
-  const q = $('fQ').value.trim().toLowerCase(), toks = q.split(/[\s>\u2192,;]+/).filter(t => t && !['to','from','via','-','->'].includes(t)), dr = $('fDrug').value, bd = $('fBand').value, md = $('fMode').value;
-  return D.events.filter(e => e.date >= cut && (!dr || e.drug === dr) && (!bd || e.band === bd) && (!md || e.transport === md) &&
+  const q = $('fQ').value.trim().toLowerCase(), toks = q.split(/[\s>\u2192,;]+/).filter(t => t && !['to','from','via','-','->'].includes(t)), dr = $('fDrug').value, bd = $('fBand').value, md = $('fMode').value, cg = $('fCategory').value;
+  return D.events.filter(e => e.date >= cut && (!cg || e.category === cg) && (!dr || e.drug === dr) && (!bd || e.band === bd) && (!md || e.transport === md) &&
     (!infraSelected.size || (e.infra || []).some(x => infraSelected.has(x))) && (!cardFilter || cardFilter(e)) &&
-    (!toks.length || toks.every(t => [e.country,e.place,e.origin,e.dest,e.transit,e.conceal,e.title,e.title_en,e.corridor,e.route,e.drug,e.vessel,e.line,e.cover,e.containers,e.origin_place,e.dest_place].join(' ').toLowerCase().includes(t))));
+    (!toks.length || toks.every(t => [e.country,e.place,e.origin,e.dest,e.transit,e.conceal,e.title,e.title_en,e.corridor,e.route,e.drug,e.category,e.vessel,e.line,e.cover,e.containers,e.origin_place,e.dest_place].join(' ').toLowerCase().includes(t))));
 }
 const by = (arr, f) => { const m = {}; arr.forEach(x => { const k = f(x); if (k != null && k !== '') m[k] = (m[k] || 0) + 1; }); return m; };
 const topN = (m, n) => Object.entries(m).sort((a,b) => b[1]-a[1]).slice(0, n);
@@ -265,11 +270,15 @@ const topN = (m, n) => Object.entries(m).sort((a,b) => b[1]-a[1]).slice(0, n);
 function kpis(v) {
   const hi = v.filter(e => e.band === 'High').length, cont = v.filter(e => e.container).length,
         ins = v.filter(e => e.insider).length, kg = v.reduce((s,e) => s + (e.kg || 0), 0);
+  const nd = v.filter(e => e.category && e.category !== 'Drug');
+  const byCat = {}; nd.forEach(e => byCat[e.category] = (byCat[e.category]||0)+1);
+  const catSummary = Object.entries(byCat).sort((a,b) => b[1]-a[1]).map(([c,n]) => n + ' ' + c).join(', ');
   const K = [['Seizure events', v.length, D.kpis.events_7d + ' in last 7 days (prev ' + D.kpis.events_prev_7d + ')'],
     ['High risk', hi, v.length ? Math.round(100*hi/v.length) + '% of events' : ''],
     ['Container cases', cont, v.length ? Math.round(100*cont/v.length) + '% of events' : ''],
     ['Insider signals', ins, 'port / airport / customs staff'],
-    ['Total weight', kg >= 1000 ? (kg/1000).toFixed(1) + ' t' : Math.round(kg) + ' kg', 'excl. pills / sticks']];
+    ['Total weight', kg >= 1000 ? (kg/1000).toFixed(1) + ' t' : Math.round(kg) + ' kg', 'excl. pills / sticks'],
+    ['Other contraband', nd.length, catSummary || 'stolen vehicles, precursor chemicals, protected timber']];
   $('kpis').innerHTML = K.map(k => '<div class="kpi"><div class="l">' + k[0] + '</div><div class="v">' + k[1] + '</div><div class="d">' + esc(k[2]) + '</div></div>').join('');
 }
 
@@ -326,7 +335,7 @@ function staticTables() {
 
 const detailText = e => [e.vessel && ('vessel ' + e.vessel), e.line && ('line ' + e.line), e.cover && ('cargo: ' + e.cover),
   e.containers && ('container ' + e.containers), e.origin_place && ('from ' + e.origin_place), e.dest_place && ('to ' + e.dest_place)].filter(Boolean).join(' | ');
-const COLS = [['date','Date'],['score','Risk'],['drug','Drug'],['qty','Quantity'],['corridor','Route'],['country','Seized in'],['conceal','Concealment'],['detail','Details'],['transport','Transport'],['flags','Flags'],['n','Reports'],['url','Link']];
+const COLS = [['date','Date'],['score','Risk'],['drug','Item'],['qty','Quantity'],['corridor','Route'],['country','Seized in'],['conceal','Concealment'],['detail','Details'],['transport','Transport'],['flags','Flags'],['n','Reports'],['url','Link']];
 function evTable(v) {
   const val = (e, k) => k === 'qty' ? (e.kg || 0) : k === 'corridor' ? (e.corridor || '') : k === 'detail' ? detailText(e) : (e[k] ?? '');
   const s = v.slice().sort((a,b) => { const x = val(a, sortKey), y = val(b, sortKey); return (x > y ? 1 : x < y ? -1 : 0) * sortDir || (b.score - a.score); });
@@ -538,7 +547,7 @@ $('lookList').addEventListener('click', ev => {
   } else if (show) {
     const list = lookTab === 'c' ? CONCEAL_CARDS : ROUTE_CARDS, c = list.find(x => x.id === show.dataset.show);
     cardFilter = lookTab === 'c' ? CONCEAL_PRED(c) : ROUTE_PRED[c.id]; cardName = c.t;
-    ['fQ', 'fDrug', 'fBand', 'fMode'].forEach(id => $(id).value = ''); $('fDays').value = '9999';
+    ['fQ', 'fCategory', 'fDrug', 'fBand', 'fMode'].forEach(id => $(id).value = ''); $('fDays').value = '9999';
     infraSelected.clear(); renderInfraList(''); updateInfraBtn();
     showCardBar(); render(); $('evT').scrollIntoView({behavior: 'smooth', block: 'start'});
   } else if (copy) {

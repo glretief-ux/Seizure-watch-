@@ -102,6 +102,59 @@ def test_two_drugs_named_in_the_headline_count():
     r = extract("Police seize cocaine and cannabis in port raid", "Officers seized 40 kg of cocaine and 10 kg of cannabis.")
     assert set(r["drugs"].split("|")) == {"Cocaine", "Cannabis"}, r["drugs"]
 
+# --- non-drug contraband categories ---------------------------------------
+
+def test_precursor_chemical():
+    r = extract("Customs seize 2 tonnes of acetic anhydride destined for a clandestine lab",
+                "The chemical, a precursor used to manufacture illegal narcotics, was found in a shipping container.")
+    assert r["relevant"] == 1
+    assert r["category"] == "Precursor chemical"
+    assert r["primary_drug"] == "Acetic anhydride"
+    assert abs(r["qty_kg"] - 2000) < 1
+
+def test_precursor_generic_fallback():
+    r = extract("Police seize 50 kg of precursor chemicals in raid on clandestine laboratory", "")
+    assert r["category"] == "Precursor chemical"
+    assert r["primary_drug"] == "Unspecified precursor chemical"
+
+def test_cites_timber():
+    r = extract("Rangers seize illegally logged rosewood timber bound for China",
+                "Wildlife officers seized 5 tonnes of rosewood, a CITES-protected timber species, hidden among general cargo.")
+    assert r["relevant"] == 1
+    assert r["category"] == "CITES protected timber"
+    assert r["primary_drug"] == "Rosewood (Dalbergia)"
+    assert abs(r["qty_kg"] - 5000) < 1
+
+def test_stolen_vehicles():
+    r = extract("Police recover 8 stolen cars in cross-border vehicle theft ring bust",
+                "Officers say a criminal network is behind the vehicle theft and smuggling operation. Three suspects were arrested.")
+    assert r["relevant"] == 1
+    assert r["category"] == "Stolen vehicle"
+    assert r["primary_drug"] == "Stolen car"
+    assert r["qty_units"] == 8 and r["unit_type"] == "vehicles"
+    assert r["arrests"] == 3 and r["organized"] == 1
+
+def test_vehicle_noun_alone_is_not_enough():
+    """A vehicle word with no theft/recovery cue must not be misread as a stolen-vehicle report."""
+    assert extract("Local car dealership opens new showroom", "The dealership sells used cars and trucks.")["relevant"] == 0
+    assert extract("Truck drivers protest fuel prices", "Hundreds of trucks blocked the highway.")["relevant"] == 0
+
+def test_named_drug_beats_passing_drug_word_in_other_categories():
+    """A precursor/timber story that happens to mention 'drugs' in passing must not be
+    reclassified as a generic drug report - only a NAMED drug should win that category."""
+    r = extract("Customs seize 40 kg of precursor chemicals used to manufacture illegal drugs", "")
+    assert r["category"] == "Precursor chemical"
+    r2 = extract("Rangers seize 4 tonnes of protected timber species logged illegally",
+                 "Wildlife trafficking networks also move drugs through the same routes.")
+    assert r2["category"] == "CITES protected timber"
+
+def test_stolen_vehicle_quantity_does_not_leak_into_drug_events():
+    """'2 trucks' describing the transport in a drug story must not be read as a vehicle count."""
+    r = extract("Police seize 300 kg of cocaine hidden in 2 trucks at the border", "Two trucks were stopped and searched.")
+    assert r["category"] == "Drug"
+    assert abs(r["qty_kg"] - 300) < 1
+    assert r["unit_type"] != "vehicles"
+
 if __name__ == "__main__":
     bad = 0
     for k, v in list(globals().items()):

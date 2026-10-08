@@ -25,6 +25,7 @@ def event_records(ev):
     for r in ev.itertuples():
         out.append({
             "id": int(r.event_id), "date": r.date.strftime("%Y-%m-%d"), "drug": r.primary_drug,
+            "category": _clean(getattr(r, "category", None)) or "Drug",
             "kg": _clean(r.qty_kg), "units": _clean(r.qty_units), "unit_type": _clean(r.unit_type),
             "origin": _clean(r.origin), "transit": "; ".join(r.transit_list) or None, "dest": _clean(r.destination),
             "country": _clean(r.seizure_country), "place": _clean(r.seizure_place), "corridor": _clean(r.corridor),
@@ -48,7 +49,9 @@ def export_table(ev, verifications=None):
     verif_status = ev["event_id"].map(lambda eid: verifications.get(eid, {}).get("status", "unverified"))
     verif_note = ev["event_id"].map(lambda eid: verifications.get(eid, {}).get("note") or None)
     df = pd.DataFrame({
-        "Date": ev["date"].dt.strftime("%Y-%m-%d"), "Drug type": ev["primary_drug"],
+        "Date": ev["date"].dt.strftime("%Y-%m-%d"),
+        "Category": ev["category"].fillna("Drug") if "category" in ev.columns else "Drug",
+        "Drug type": ev["primary_drug"],
         "Origin": ev["origin"], "Transit": ev["transit_list"].apply("; ".join), "Destination": ev["destination"],
         "Seizure country": ev["seizure_country"], "Seizure place": ev["seizure_place"],
         "Origin place": ev["origin_place"], "Destination place": ev["destination_place"],

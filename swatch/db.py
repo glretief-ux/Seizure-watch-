@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS articles(
   arrests INTEGER, organized INTEGER, insider INTEGER, controlled_delivery INTEGER, coverload INTEGER,
   route TEXT, corridor TEXT, mo_summary TEXT, completeness INTEGER, event_id INTEGER,
   vessel TEXT, shipping_line TEXT, container_numbers TEXT, cover_cargo TEXT, title_en TEXT, ner_places TEXT,
-  infrastructure TEXT
+  infrastructure TEXT, category TEXT
 );
 CREATE INDEX IF NOT EXISTS ix_pub ON articles(published);
 CREATE INDEX IF NOT EXISTS ix_event ON articles(event_id);
@@ -37,7 +37,7 @@ def connect(path):
     global COLS
     COLS = {r["name"] for r in conn.execute("PRAGMA table_info(articles)")}
     for col in ("vessel", "shipping_line", "container_numbers", "cover_cargo", "title_en", "ner_places",
-                "infrastructure"):      # databases made by older versions
+                "infrastructure", "category"):      # databases made by older versions
         if col not in COLS:
             conn.execute(f"ALTER TABLE articles ADD COLUMN {col} TEXT")
     COLS = {r["name"] for r in conn.execute("PRAGMA table_info(articles)")}

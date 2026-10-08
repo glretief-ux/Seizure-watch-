@@ -69,7 +69,10 @@ SEIZURE = rx(r"seiz", r"confiscat", r"intercept", r"\bbust(?:ed)?\b", r"\bhaul\b
              r"asegur", r"desarticul", r"frustr", r"saisi", r"demantel", r"apreen", r"detect",
              r"trafficking", r"trafico\s+de\s+drogas", r"tentative\s+de\s+trafic")
 EXCLUDE = rx(r"\bstock\s+market\b", r"dispensar", r"legali[sz]", r"netflix", r"\bmovie\b", r"\bfilm\b",
-             r"\bepisode\b", r"video\s+game", r"\bseason\s+\d")
+             r"\bepisode\b", r"video\s+game", r"\bseason\s+\d",
+             r"car\s+(?:dealership|insurance|show|auction|rental|wash)\b", r"\bused\s+cars?\b",
+             r"\btoy\s+cars?\b", r"model\s+car", r"\bfsc[- ]certifi", r"sustainable\s+forestry",
+             r"forest\s+stewardship\s+council")
 
 # --------------------------------------------------------------------------
 # CONCEALMENT METHODS
@@ -128,6 +131,69 @@ LEGIT_CATEGORIES = {"Legitimate cargo (food/produce)", "Legitimate cargo (indust
 ADVANCED_CATEGORIES = {"Container structure / false compartment", "Vehicle compartment",
                        "Hidden compartment (unspecified)", "Impregnation / liquid / disguised",
                        "Vessel hull / underwater"}
+
+# --------------------------------------------------------------------------
+# OTHER CONTRABAND CATEGORIES (non-drug) - Stolen vehicles, precursor
+# chemicals, CITES-protected timber. Each follows the same shape as
+# DRUG_PATTERNS above: {item name shown in the dashboard: regex}, plus a
+# GENERIC_* catch-all for unnamed mentions, mirroring GENERIC_DRUG.
+# --------------------------------------------------------------------------
+STOLEN_VEHICLE_PATTERNS = {
+    "Stolen car": rx(r"\bcars?\b", r"\bsedans?\b", r"\bsuvs?\b", r"automobiles?", r"turismo", r"\bautos?\b"),
+    "Stolen truck/heavy vehicle": rx(r"trucks?", r"lorr(?:y|ies)", r"\bvans?\b", r"trailers?",
+                                      r"heavy\s+(?:equipment|machinery|plant)",
+                                      r"construction\s+(?:vehicle|equipment)", r"camion(?:es|etas?)?"),
+    "Stolen motorcycle": rx(r"motorcycles?", r"motorbikes?", r"\bscooters?\b", r"\bmoto\b", r"motocicleta",
+                             r"motocyclette"),
+}
+GENERIC_STOLEN_VEHICLE = rx(r"stolen\s+vehicles?", r"vehiculos?\s+robados?", r"vehicules?\s+voles?",
+                            r"veiculos?\s+roubados?", r"\bcar\s+theft\b", r"\bvehicle\s+theft\b")
+VEHICLE_THEFT_CUE = rx(r"\bstol(?:en|e)\b", r"\btheft\b", r"\brobb?ed\b", r"hijack(?:ed|ing)?",
+                       r"carjack(?:ed|ing)?", r"robad", r"\brobo\s+de\s+veh", r"vole[es]?\s+de\s+vehic",
+                       r"roub(?:ado|o)\s+de\s+veic", r"recovered\s+stolen", r"cloned\s+(?:car|vehicle)",
+                       r"ringing", r"vin\s+(?:tamper|altered|cloned)", r"chop\s+shop")
+
+PRECURSOR_PATTERNS = {
+    "Acetic anhydride": rx(r"acetic\s+anhydride", r"anhidrido\s+acetico", r"anhydride\s+acetique"),
+    "Ephedrine/Pseudoephedrine": rx(r"ephedrine", r"pseudoephedrine", r"efedrina", r"pseudoefedrina",
+                                    r"ephedrine", r"ephedrina"),
+    "P2P/BMK/PMK": rx(r"\bp2p\b", r"\bbmk\b", r"\bpmk\b", r"phenylacetone", r"\bapaan\b"),
+    "Potassium permanganate": rx(r"potassium\s+permanganate", r"permanganato\s+de\s+potasio",
+                                 r"permanganate\s+de\s+potassium"),
+    "Sodium cyanide": rx(r"sodium\s+cyanide", r"cianuro\s+de\s+sodio", r"cyanure\s+de\s+sodium"),
+    "Red phosphorus": rx(r"red\s+phosphorus", r"fosforo\s+rojo", r"phosphore\s+rouge"),
+    "Acetone/solvents": rx(r"\bacetone\b", r"\bacetona\b", r"\btoluene\b", r"\btolueno\b",
+                           r"methyl\s+ethyl\s+ketone", r"\bmek\b"),
+}
+GENERIC_PRECURSOR = rx(r"precursor\s+chemicals?", r"quimicos?\s+precursores?", r"precurseurs?\s+chimiques?",
+                       r"drug[- ]making\s+chemicals?", r"clandestine\s+lab(?:oratory)?",
+                       r"laboratorio\s+clandestino", r"laboratoire\s+clandestin")
+
+TIMBER_PATTERNS = {
+    "Rosewood (Dalbergia)": rx(r"rosewood", r"dalbergia", r"palisandro", r"palissandre", r"bois\s+de\s+rose"),
+    "Mukula": rx(r"\bmukula\b"),
+    "Ebony": rx(r"\bebony\b", r"\bebano\b", r"\bebene\b"),
+    "Agarwood": rx(r"agarwood", r"\boud\b", r"aquilaria"),
+    "Ramin": rx(r"\bramin\b"),
+    "Afrormosia": rx(r"afrormosia", r"assamela"),
+    "Mahogany": rx(r"mahogany", r"\bcaoba\b", r"\bacajou\b"),
+}
+GENERIC_TIMBER = rx(r"cites[- ]protected", r"protected\s+(?:timber|wood|species)",
+                    r"illegal(?:ly)?\s+logg?ed", r"illegal\s+logging", r"tala\s+ilegal",
+                    r"madera\s+ilegal", r"exploitation\s+forestiere\s+illegale",
+                    r"endangered\s+(?:timber|wood|tree)s?",
+                    r"wildlife\s+trafficking.{0,30}(?:timber|wood|log)")
+
+ANY_PRECURSOR = re.compile("|".join(p.pattern for p in list(PRECURSOR_PATTERNS.values()) + [GENERIC_PRECURSOR]), re.I)
+ANY_TIMBER = re.compile("|".join(p.pattern for p in list(TIMBER_PATTERNS.values()) + [GENERIC_TIMBER]), re.I)
+ANY_STOLEN_VEHICLE = re.compile(
+    "|".join(p.pattern for p in list(STOLEN_VEHICLE_PATTERNS.values()) + [GENERIC_STOLEN_VEHICLE]), re.I)
+# Used by collect.py's prefilter() as the cheap headline gate - everything
+# that isn't a drug mention but should still be downloaded for full-text
+# extraction. Stolen vehicles are deliberately NOT included here: a vehicle
+# noun alone is far too common, so collect.py additionally requires
+# VEHICLE_THEFT_CUE to co-occur (see prefilter()).
+ANY_CONTRABAND = re.compile("|".join([ANY_DRUG.pattern, ANY_PRECURSOR.pattern, ANY_TIMBER.pattern]), re.I)
 
 # --------------------------------------------------------------------------
 # TRANSPORT
