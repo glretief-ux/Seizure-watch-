@@ -1,14 +1,14 @@
 SEIZURE WATCH - weekly bulletin, 02 Oct - 08 Oct 2026
 
-1360 seizure reports this week (previous week 2092); 9 high risk; 219.6 t reported.
-Main drugs: Cannabis (466), Cocaine (321), NSA (193)
-Main countries: India (77), Turkey (48), United States (31), Canada (25)
+1473 seizure reports this week (previous week 2092); 9 high risk; 224.9 t reported.
+Main drugs: Cannabis (504), Cocaine (350), NSA (209)
+Main countries: India (83), Turkey (51), United States (31), Canada (25)
 
 NEW AND SURGING CORRIDORS
 - Ghana -> South Africa: NEW (16 this period, 0 before; mainly Heroin/Opium)
+- Pakistan -> India: SURGING (16 this period, 1 before; mainly Heroin/Opium)
 - Thailand -> Hong Kong: SURGING (15 this period, 7 before; mainly Cannabis)
 - Mexico -> United States: NEW (15 this period, 0 before; mainly Methamphetamine)
-- Pakistan -> India: SURGING (15 this period, 1 before; mainly Heroin/Opium)
 - Nepal -> India: NEW (10 this period, 0 before; mainly Cannabis)
 - Thailand -> India: NEW (9 this period, 0 before; mainly Cannabis)
 
@@ -26,8 +26,8 @@ UNUSUAL EVENTS (highest risk first)
 - [High 50] 02 Oct | Heroin/Opium | 11.0 t | Madhya Pradesh | India -> Canada | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Postal / parcel
   https://www.pib.gov.in/PressReleaseDetail.aspx?PRID=2318182&reg=6&lang=1
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (97), Legitimate cargo (food/produce) (38), Postal / parcel (35)
-Cover cargo named: cement (26), الات (18), फल (10), plastic (4), balik (3)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (98), Postal / parcel (38), Legitimate cargo (food/produce) (38)
+Cover cargo named: cement (26), الات (18), फल (10), plastic (4), मशीन (4)
 
 Coverage: searching 9 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Chinese). 49 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
 Leads from open sources, not confirmed facts. Verify before acting.
