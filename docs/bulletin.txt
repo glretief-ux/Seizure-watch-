@@ -1,33 +1,33 @@
-SEIZURE WATCH - weekly bulletin, 01 Oct - 07 Oct 2026
+SEIZURE WATCH - weekly bulletin, 02 Oct - 08 Oct 2026
 
-1651 seizure reports this week (previous week 2099); 16 high risk; 336.5 t reported.
-Main drugs: Cannabis (581), Cocaine (404), NSA (250)
-Main countries: India (103), Turkey (60), United States (44), Canada (41)
+1320 seizure reports this week (previous week 2092); 9 high risk; 217.5 t reported.
+Main drugs: Cannabis (457), Cocaine (312), NSA (191)
+Main countries: India (75), Turkey (48), United States (30), Canada (25)
 
 NEW AND SURGING CORRIDORS
-- Thailand -> Hong Kong: SURGING (16 this period, 6 before; mainly Cannabis)
 - Ghana -> South Africa: NEW (16 this period, 0 before; mainly Heroin/Opium)
+- Thailand -> Hong Kong: SURGING (15 this period, 7 before; mainly Cannabis)
 - Mexico -> United States: NEW (15 this period, 0 before; mainly Methamphetamine)
 - Pakistan -> India: SURGING (15 this period, 1 before; mainly Heroin/Opium)
 - Nepal -> India: NEW (10 this period, 0 before; mainly Cannabis)
 - Thailand -> India: NEW (9 this period, 0 before; mainly Cannabis)
 
 UNUSUAL EVENTS (highest risk first)
-- [High 90] 01 Oct | Cocaine | 4.5 t | Amsterdam | Ghana -> Netherlands | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods) | cargo: mere "plastic waste; personal effects; cement; timber
-  https://www.modernghana.com/news/1532422/the-gateway-is-compromised-how-international-drug.amp
 - [High 75] 02 Oct | Cocaine | 8.7 t | Amsterdam | Ghana -> Netherlands | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods) | cargo: timber; charcoal
   https://3news.com/news/leave-baffour-awuah-alone-and-pursue-the-kingpins-behind-drug-trade-afenyo-tells-eoco
-- [High 75] 01 Oct | Cocaine | 1.2 t | Jalisco | Legitimate cargo (industrial/goods); Vehicle compartment | cargo: maquinaria
-  https://www.eltiempo.com/colombia/otras-ciudades/incautan-en-el-meta-1-2-toneladas-de-clorhidrato-de-cocaina-a-disidentes-de-ivan-mordisco-que-tendrian-como-destino-los-estados-unidos-3590891
 - [High 65] 02 Oct | Cocaine | 1.5 t | Spain | Colombia -> Spain | Legitimate cargo (industrial/goods) | cargo: الات
   https://maghrebtimes.ma/2026/10/02/%D8%A7%D8%B9%D8%AA%D9%82%D8%A7%D9%84-27-%D8%B4%D8%AE%D8%B5%D8%A7-%D9%88%D8%AD%D8%AC%D8%B2-16-%D9%81%D9%8A%D9%84%D8%A7-%D9%81%D8%A7%D8%AE%D8%B1%D8%A9%D8%AA%D9%81%D9%83%D9%8A%D9%83-%D8%B4%D8%A8/
-- [High 60] 01 Oct | Cocaine | 12.4 t | Amsterdam | Ghana -> Netherlands | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Postal / parcel | cargo: plastic waste; wood; flour; charcoal
-  https://www.myjoyonline.com/ghana-records-11-cocaine-cases-in-28-drug-busts-since-march-2025-biggest-hauls-seized-abroad/
-- [High 60] 01 Oct | NSA | 1 kg | Mumbai | Qatar -> India | Hidden compartment (unspecified); Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Luggage / passenger goods | cargo: carbon; फल
-  https://gallinews.com/dri-nagpur-seizes-1-312-kg-amphetamine-from-woman-on-train/
+- [High 60] 07 Oct | Cigarettes | 88 cigarettes | Hong Kong | Philippines -> Hong Kong | Legitimate cargo (industrial/goods); Luggage / passenger goods | cargo: cement
+  https://www.info.gov.hk/gia/general/202610/07/P2026100700698.htm
+- [High 55] 02 Oct | Cocaine | 180 kg | Zeebrugge | Lithuania -> Belgium | Legitimate cargo (industrial/goods); Luggage / passenger goods; Vehicle compartment
+  https://www.brusselstimes.com/belgium/2343795/over-180-kilograms-of-cocaine-found-in-lorry-at-zeebrugge-port
+- [High 55] 02 Oct | Cocaine | Bocas del Toro | Costa Rica -> Panama | Legitimate cargo (industrial/goods); Luggage / passenger goods
+  https://www.infobae.com/panama/2026/10/02/detienen-a-instructor-de-banda-musical-con-nueve-paquetes-de-supuesta-droga-en-panama-y-decomisan-otro-cargamento-que-tenia-como-destino-italia/
+- [High 50] 02 Oct | Heroin/Opium | 11.0 t | Madhya Pradesh | India -> Canada | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Postal / parcel
+  https://www.pib.gov.in/PressReleaseDetail.aspx?PRID=2318182&reg=6&lang=1
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (169), Legitimate cargo (food/produce) (69), Postal / parcel (42)
-Cover cargo named: cement (41), الات (31), फल (16), plastic (7), मशीन (6)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (96), Legitimate cargo (food/produce) (38), Postal / parcel (35)
+Cover cargo named: cement (25), الات (18), फल (10), plastic (4), balik (3)
 
 Coverage: searching 9 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Chinese). 49 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
 Leads from open sources, not confirmed facts. Verify before acting.
