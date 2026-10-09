@@ -30,6 +30,7 @@ header .sub{opacity:.8;font-size:12px}
 .card h2{font-size:14px;margin:0 0 10px}
 .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:12px}
 .chartbox{position:relative;height:260px}
+.alertbox{max-height:430px;overflow-y:auto;overscroll-behavior:contain;padding-right:4px;-webkit-overflow-scrolling:touch}
 .alert{border-left:4px solid var(--med);padding:8px 10px;margin-bottom:8px;background:#fafbfc;border-radius:0 8px 8px 0}
 .alert.High{border-color:var(--hi)}
 .alert .t{font-weight:600}
@@ -139,7 +140,16 @@ table.mini{border-collapse:collapse;font-size:13px;margin-top:6px}table.mini td{
 
 <div class="kpis" id="kpis"></div>
 
-<div class="card"><h2>Alerts <span class="small" id="alertNote"></span></h2><div id="alerts"></div></div>
+<div class="card"><h2>Route map <span class="small" id="mapNote"></span></h2>
+  <div id="map"></div>
+  <div class="legend">
+    <span><i style="border-color:#c0392b"></i>High risk</span><span><i style="border-color:#e08a00"></i>Medium</span><span><i style="border-color:#2e8b57"></i>Low</span>
+    <span><b style="border:2px solid #555;background:#fff"></b>origin</span><span><b style="background:#c0392b"></b>seizure place (number = reports; tap to list them)</span><span><b style="background:#12355b;border:1px solid #fff"></b>destination</span>
+    <span>Arrows show direction. Lines join country centres or ports, so they show the reported route, not the actual path. Tap a line for the report. The map follows the filters and search above.</span>
+  </div>
+</div>
+
+<div class="card"><h2>Alerts <span class="small" id="alertNote"></span></h2><div id="alerts" class="alertbox"></div></div>
 
 <div class="card"><h2>My watchlist <span class="small" id="watchNote"></span></h2>
   <div id="watchNew"></div>
@@ -148,15 +158,6 @@ table.mini{border-collapse:collapse;font-size:13px;margin-top:6px}table.mini td{
     <button id="wAdd" type="button">Add watch</button></div>
   <div id="watchList"></div>
   <div class="small" style="margin-top:10px">Watches are saved on this device only (not on the website). "New" means not shown on your previous visit. Tap a watch to see its events; highlighted rows in the table match a watch.</div>
-</div>
-
-<div class="card"><h2>Route map <span class="small" id="mapNote"></span></h2>
-  <div id="map"></div>
-  <div class="legend">
-    <span><i style="border-color:#c0392b"></i>High risk</span><span><i style="border-color:#e08a00"></i>Medium</span><span><i style="border-color:#2e8b57"></i>Low</span>
-    <span><b style="border:2px solid #555;background:#fff"></b>origin</span><span><b style="background:#c0392b"></b>seizure place (number = reports; tap to list them)</span><span><b style="background:#12355b;border:1px solid #fff"></b>destination</span>
-    <span>Arrows show direction. Lines join country centres or ports, so they show the reported route, not the actual path. Tap a line for the report. The map follows the filters and search above.</span>
-  </div>
 </div>
 
 <div class="card"><h2>Coverage: where the tool may be blind <span class="small" id="covNote"></span></h2>
@@ -283,12 +284,23 @@ function kpis(v) {
 }
 
 function alerts() {
-  const A = D.alerts;
-  $('alertNote').textContent = A.length ? '(' + A.length + ' today)' : '';
-  $('alerts').innerHTML = A.length ? A.slice(0, 25).map(a => '<div class="alert ' + esc(a.severity) + '"><div class="k">' + esc(a.type) + ' | ' + esc(a.severity) + '</div><div class="t">' + esc(a.title) + '</div><div class="d">' + esc(a.detail) + '</div><div class="small">' +
+  const A = D.alerts, SHOW = 5;
+  $('alertNote').textContent = A.length ? (A.length > SHOW ? '(' + A.length + ' today; ' + SHOW + ' shown, scroll for ' + (A.length > 100 ? 'the top 100' : 'more') + ')' : '(' + A.length + ' today)') : '';
+  $('alerts').innerHTML = A.length ? A.slice(0, 100).map(a => '<div class="alert ' + esc(a.severity) + '"><div class="k">' + esc(a.type) + ' | ' + esc(a.severity) + '</div><div class="t">' + esc(a.title) + '</div><div class="d">' + esc(a.detail) + '</div><div class="small">' +
     (a.urls || []).map((u,i) => '<a href="' + esc(safe(u)) + '" target="_blank" rel="noopener noreferrer">source ' + (i+1) + '</a>').join(' &middot; ') + '</div></div>').join('')
     : '<div class="small">No alerts today. (Trend alerts need ' + D.meta.min_history + '+ days of history.)</div>';
+  fitAlerts(SHOW);
 }
+
+// Size the alerts box so exactly the first few alerts are visible; the rest scroll.
+function fitAlerts(n) {
+  const box = $('alerts'), items = box.querySelectorAll('.alert');
+  if (items.length <= n) { box.style.maxHeight = 'none'; box.style.overflowY = 'visible'; return; }
+  const last = items[n - 1];
+  box.style.overflowY = 'auto';
+  box.style.maxHeight = (last.offsetTop - box.offsetTop + last.offsetHeight + 8) + 'px';
+}
+window.addEventListener('resize', () => { if (D.alerts.length) fitAlerts(5); });
 
 function chart(id, cfg) {
   if (!window.Chart) return;
