@@ -25,7 +25,10 @@ UNIT_RX = re.compile(NUM + MULT + r"[\s-]*(?:[a-z]+\s+)?(pills|tablets|capsules|
                      r"comprimes|cigarettes|cigarrillos|cigarros|sticks|packs|cartons|cajetillas|master\s+cases|"
                      r"plants|plantas|plantes|doses|bricks|ladrillos|packages|packets|paquetes|bales|fardos|bundles|"
                      r"stolen\s+vehicles|vehicles|vehiculos|vehicules|veiculos|stolen\s+cars|cars|trucks|lorries|"
-                     r"motorcycles|motorbikes)"
+                     r"motorcycles|motorbikes|"
+                     r"rounds\s+of\s+ammunition|rounds|cartridges|cartuchos|cartouches|"
+                     r"firearms|rifles|pistols|handguns|revolvers|shotguns|armas\s+de\s+fuego|fusiles|pistolas|"
+                     r"grenades|granadas)"
                      r"(?![a-z])")
 UNIT_KIND = {"pills": "pills", "tablets": "pills", "capsules": "pills", "comprimidos": "pills", "pastillas": "pills",
              "pilulas": "pills", "pilules": "pills", "comprimes": "pills", "doses": "doses",
@@ -34,7 +37,12 @@ UNIT_KIND = {"pills": "pills", "tablets": "pills", "capsules": "pills", "comprim
              "plants": "plants", "plantas": "plants", "plantes": "plants",
              "stolen vehicles": "vehicles", "vehicles": "vehicles", "vehiculos": "vehicles",
              "vehicules": "vehicles", "veiculos": "vehicles", "stolen cars": "vehicles", "cars": "vehicles",
-             "trucks": "vehicles", "lorries": "vehicles", "motorcycles": "vehicles", "motorbikes": "vehicles"}
+             "trucks": "vehicles", "lorries": "vehicles", "motorcycles": "vehicles", "motorbikes": "vehicles",
+             "rounds of ammunition": "rounds", "rounds": "rounds", "cartridges": "rounds", "cartuchos": "rounds",
+             "cartouches": "rounds",
+             "firearms": "firearms", "rifles": "firearms", "pistols": "firearms", "handguns": "firearms",
+             "revolvers": "firearms", "shotguns": "firearms", "armas de fuego": "firearms", "fusiles": "firearms",
+             "pistolas": "firearms", "grenades": "firearms", "granadas": "firearms"}
 ARREST_A = re.compile(NUMW + r"\s+(?:\w+\s+){0,3}?(?:were\s+|was\s+|have\s+been\s+|fueron\s+|han\s+sido\s+|ont\s+ete\s+)?"
                       r"(?:arrested|detained|charged|apprehended|captured|detenid\w+|arrestad\w+|capturad\w+|"
                       r"aprehendid\w+|interpelad\w+|arrete\w*|interpelle\w*|presos|detidos|presas)")
@@ -117,6 +125,7 @@ UNSPECIFIED_LABEL = {
     "Drug": "Unspecified",
     "Precursor chemical": "Unspecified precursor chemical",
     "CITES protected timber": "Unspecified protected timber",
+    "Arms and ammunition": "Unspecified arms/ammunition",
     "Stolen vehicle": "Unspecified stolen vehicle",
 }
 
@@ -155,6 +164,10 @@ def _classify(title_n, text_n):
     if timber_ordered:
         return timber_ordered[0], timber_ordered, "CITES protected timber"
 
+    arms_ordered = _rank(L.ARMS_PATTERNS)
+    if arms_ordered:
+        return arms_ordered[0], arms_ordered, "Arms and ammunition"
+
     # Stolen vehicles: a vehicle noun alone is far too common in news text,
     # so this category additionally requires a theft/recovery cue word
     # somewhere in the article before it is considered at all.
@@ -168,6 +181,8 @@ def _classify(title_n, text_n):
         return UNSPECIFIED_LABEL["Precursor chemical"], [], "Precursor chemical"
     if L.GENERIC_TIMBER.search(blob):
         return UNSPECIFIED_LABEL["CITES protected timber"], [], "CITES protected timber"
+    if L.GENERIC_ARMS.search(blob):
+        return UNSPECIFIED_LABEL["Arms and ammunition"], [], "Arms and ammunition"
     if has_theft_cue and L.GENERIC_STOLEN_VEHICLE.search(blob):
         return UNSPECIFIED_LABEL["Stolen vehicle"], [], "Stolen vehicle"
     if L.GENERIC_DRUG.search(blob):
@@ -274,10 +289,17 @@ def _quantities(t, primary, title_len=0, en=True, category=None, skip_precursor_
         # category - elsewhere (e.g. "smuggled in 2 trucks") it describes
         # the transport, not the contraband, so it must not leak into
         # other categories' quantity, and other kinds must not leak into
-        # a stolen-vehicle count either.
+        # a stolen-vehicle count either. Same idea for firearms/rounds and
+        # the Arms and ammunition category (a drug story can mention
+        # "2 pistols" found alongside the drugs without that being the
+        # story's own quantity).
         if kind == "vehicles" and category != "Stolen vehicle":
             continue
         if category == "Stolen vehicle" and kind != "vehicles":
+            continue
+        if kind in ("firearms", "rounds") and category != "Arms and ammunition":
+            continue
+        if category == "Arms and ammunition" and kind not in ("firearms", "rounds"):
             continue
         unit_hits.append((m.start(), v, kind))
     best_kg, best_units, unit_type = None, None, None

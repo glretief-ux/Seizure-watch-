@@ -155,6 +155,35 @@ def test_stolen_vehicle_quantity_does_not_leak_into_drug_events():
     assert abs(r["qty_kg"] - 300) < 1
     assert r["unit_type"] != "vehicles"
 
+def test_arms_and_ammunition():
+    r = extract("Police seize 15 rifles and 2,000 rounds of ammunition hidden in container",
+                "Officers say the weapons were destined for an armed criminal network. Three suspects were arrested.")
+    assert r["relevant"] == 1
+    assert r["category"] == "Arms and ammunition"
+    assert r["primary_drug"] == "Firearms"
+    assert r["qty_units"] == 2000 and r["unit_type"] == "rounds"
+    assert r["arrests"] == 3 and r["organized"] == 1
+
+def test_arms_generic_fallback():
+    r = extract("Customs seize large weapons cache destined for armed militia",
+                "Officers recovered 40 firearms hidden in a shipping container declared as machinery.")
+    assert r["category"] == "Arms and ammunition"
+
+def test_gun_control_and_arms_race_are_not_seizures():
+    """Political/diplomatic uses of 'arms' and 'gun' must not be misread as a contraband seizure."""
+    assert extract("Lawmakers debate gun control legislation after mass shooting", "")["relevant"] == 0
+    assert extract("Arms race between two nations escalates, experts warn", "")["relevant"] == 0
+    assert extract("Local gun store robbed overnight, no arrests made", "")["relevant"] == 0
+    assert extract("Government signs arms deal with ally nation", "")["relevant"] == 0
+
+def test_firearms_quantity_does_not_leak_into_drug_events():
+    """A pistol mentioned in passing in a drug story must not be read as the story's own quantity."""
+    r = extract("Police seize 300 kg of cocaine and 3 pistols found at the scene",
+                "Officers recovered the drugs and weapons together.")
+    assert r["category"] == "Drug"
+    assert abs(r["qty_kg"] - 300) < 1
+    assert r["unit_type"] != "firearms"
+
 if __name__ == "__main__":
     bad = 0
     for k, v in list(globals().items()):

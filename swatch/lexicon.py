@@ -72,7 +72,10 @@ EXCLUDE = rx(r"\bstock\s+market\b", r"dispensar", r"legali[sz]", r"netflix", r"\
              r"\bepisode\b", r"video\s+game", r"\bseason\s+\d",
              r"car\s+(?:dealership|insurance|show|auction|rental|wash)\b", r"\bused\s+cars?\b",
              r"\btoy\s+cars?\b", r"model\s+car", r"\bfsc[- ]certifi", r"sustainable\s+forestry",
-             r"forest\s+stewardship\s+council")
+             r"forest\s+stewardship\s+council",
+             r"\bgun\s+control\b", r"\barms\s+race\b", r"\barms\s+deal\b", r"\barms\s+embargo\b",
+             r"\btoy\s+guns?\b", r"\bnerf\b", r"gun\s+(?:show|range|store|shop)\b",
+             r"second\s+amendment", r"gun\s+rights")
 
 # --------------------------------------------------------------------------
 # CONCEALMENT METHODS
@@ -184,8 +187,26 @@ GENERIC_TIMBER = rx(r"cites[- ]protected", r"protected\s+(?:timber|wood|species)
                     r"endangered\s+(?:timber|wood|tree)s?",
                     r"wildlife\s+trafficking.{0,30}(?:timber|wood|log)")
 
+ARMS_PATTERNS = {
+    "Firearms": rx(r"firearms?", r"\bpistols?\b", r"\brevolvers?\b", r"handguns?", r"\brifles?\b",
+                   r"shotguns?", r"assault\s+rifles?", r"machine\s+guns?", r"\bsubmachine\b",
+                   r"armas\s+de\s+fuego", r"\bpistolas?\b", r"\brevolveres?\b", r"\bfusiles?\b",
+                   r"armes\s+a\s+feu", r"\bfusils?\b", r"\bpistolets?\b"),
+    "Ammunition": rx(r"ammunitions?", r"\bcartridges?\b", r"\brounds?\s+of\s+ammunition\b",
+                     r"\bbullets?\b", r"municiones?", r"\bcartuchos?\b", r"munitions?",
+                     r"\bcartouches?\b", r"municao", r"municoes"),
+    "Explosives/grenades": rx(r"\bexplosives?\b", r"\bgrenades?\b", r"\bdetonators?\b",
+                              r"\bdynamite\b", r"\bc-?4\b", r"\btnt\b", r"explosivos?",
+                              r"granadas?", r"explosifs?", r"grenades?"),
+}
+GENERIC_ARMS = rx(r"illegal\s+(?:weapons?|arms)", r"illicit\s+(?:weapons?|arms)", r"cache\s+of\s+weapons?",
+                  r"weapons?\s+cache", r"\barms\s+trafficking\b", r"\barms\s+smuggling\b",
+                  r"armas\s+ilegales", r"trafico\s+de\s+armas", r"armes\s+illegales",
+                  r"trafic\s+d.armes")
+
 ANY_PRECURSOR = re.compile("|".join(p.pattern for p in list(PRECURSOR_PATTERNS.values()) + [GENERIC_PRECURSOR]), re.I)
 ANY_TIMBER = re.compile("|".join(p.pattern for p in list(TIMBER_PATTERNS.values()) + [GENERIC_TIMBER]), re.I)
+ANY_ARMS = re.compile("|".join(p.pattern for p in list(ARMS_PATTERNS.values()) + [GENERIC_ARMS]), re.I)
 ANY_STOLEN_VEHICLE = re.compile(
     "|".join(p.pattern for p in list(STOLEN_VEHICLE_PATTERNS.values()) + [GENERIC_STOLEN_VEHICLE]), re.I)
 # Used by collect.py's prefilter() as the cheap headline gate - everything
@@ -193,7 +214,7 @@ ANY_STOLEN_VEHICLE = re.compile(
 # extraction. Stolen vehicles are deliberately NOT included here: a vehicle
 # noun alone is far too common, so collect.py additionally requires
 # VEHICLE_THEFT_CUE to co-occur (see prefilter()).
-ANY_CONTRABAND = re.compile("|".join([ANY_DRUG.pattern, ANY_PRECURSOR.pattern, ANY_TIMBER.pattern]), re.I)
+ANY_CONTRABAND = re.compile("|".join([ANY_DRUG.pattern, ANY_PRECURSOR.pattern, ANY_TIMBER.pattern, ANY_ARMS.pattern]), re.I)
 
 # --------------------------------------------------------------------------
 # TRANSPORT

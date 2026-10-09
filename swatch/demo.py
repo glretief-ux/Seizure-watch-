@@ -157,10 +157,22 @@ def cites_timber(rng):
     return title, text
 
 
+def arms_ammo(rng):
+    """Non-drug: illegal firearms and ammunition seized from an armed criminal group."""
+    kind, n = rng.choice([("rifles", rng.choice([8, 15, 22])), ("pistols", rng.choice([5, 12, 20])),
+                          ("handguns", rng.choice([6, 10, 18]))])
+    rounds = rng.choice([1500, 4000, 9000])
+    place = rng.choice(["Nairobi", "Manila", "Tegucigalpa", "Johannesburg"])
+    title = f"Police seize {n} {kind} and {rounds:,} rounds of ammunition in raid near {place}"
+    text = (f"Police seized {n} {kind} and {rounds} rounds of ammunition hidden in a cache near {place}. "
+            f"Officers say a criminal network is behind the arms trafficking operation. Four suspects were arrested.")
+    return title, text
+
+
 LANG = {es_container: "es", fr_container: "fr"}
 BACKGROUND = [(coke_container, 36), (air_pax, 14), (road_cannabis, 12), (post_nsa, 8), (meth_sea, 5), (cigarettes, 8),
               (captagon, 5), (es_container, 7), (fr_container, 5),
-              (stolen_vehicle, 4), (precursor_chemical, 4), (cites_timber, 4)]
+              (stolen_vehicle, 4), (precursor_chemical, 4), (cites_timber, 4), (arms_ammo, 4)]
 
 
 def demo_articles(today=None, seed=7):
@@ -205,6 +217,8 @@ def demo_articles(today=None, seed=7):
         add(3 + i * 6, precursor_chemical, dup=False)
     for i in range(2):
         add(1 + i * 7, cites_timber, dup=False)
+    for i in range(3):
+        add(0 + i * 4, arms_ammo, dup=False)
     # one invented report in each newly supported language (made-up facts)
     for i, (lang, t, x) in enumerate([
         ("ar", "ضبط 2.5 طن من الكوكايين في ميناء جدة قادمة من كولومبيا", "ضبطت الجمارك شحنة كوكايين مخبأة بين شحنة موز داخل حاوية."),
