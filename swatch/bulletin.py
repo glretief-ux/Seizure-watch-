@@ -107,6 +107,16 @@ def render_text(c):
     return "\n".join(L)
 
 
+def _logo_uri():
+    """The AIRCOP / Container Control Programme logo as an inline image (empty if the file is missing)."""
+    import base64
+    try:
+        with open(os.path.join(os.path.dirname(__file__), "..", "assets", "pccp", "aircop-ccp-logo.png"), "rb") as f:
+            return "data:image/png;base64," + base64.b64encode(f.read()).decode()
+    except OSError:
+        return ""
+
+
 def render_html(c):
     def li(items):
         return "".join(f"<li>{x}</li>" for x in items) or "<li>none</li>"
@@ -133,6 +143,7 @@ h1{{font-size:18px;margin:0;background:#12355b;color:#fff;padding:12px 14px;bord
 h2{{font-size:13px;margin:14px 0 4px;color:#12355b;border-bottom:1px solid #d9e1ea;padding-bottom:2px}}ul{{margin:4px 0;padding-left:18px}}li{{margin:3px 0}}
 .k{{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}}.k div{{flex:1;min-width:110px;background:#f3f6fa;border-radius:8px;padding:8px 10px}}.k b{{display:block;font-size:20px}}
 .s{{font-size:11px;color:#5b6b7f}}a{{color:#12355b}}</style></head><body>
+<div style="text-align:center;margin:0 0 10px">{("<img src=" + chr(34) + _logo_uri() + chr(34) + " alt=" + chr(34) + "AIRCOP - Container Control Programme" + chr(34) + " style=" + chr(34) + "height:64px;max-width:90%" + chr(34) + ">") if _logo_uri() else ""}</div>
 <h1>Seizure Watch - weekly bulletin<small>{esc(c['period'])}</small></h1>
 <div class="k"><div><b>{c['n']}</b>seizure reports<br><span class="s">{('previous week ' + str(c['n_prev'])) if c['n_prev'] is not None else 'no earlier week yet'}</span></div><div><b>{c['high']}</b>high risk</div>
 <div><b>{c['tonnes']} t</b>reported weight</div></div>
