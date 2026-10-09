@@ -150,6 +150,22 @@ table.mini{border-collapse:collapse;font-size:13px;margin-top:6px}table.mini td{
   </div>
 </div>
 
+<div class="card"><h2>Coverage: where the tool may be blind <span class="small" id="covNote"></span></h2>
+  <div id="cmap"></div>
+  <div class="legend">
+    <span><b style="background:#2e8b57"></b>reports found (bigger = more)</span><span><b style="background:#e0a800"></b>quiet: no reports, but its language is searched</span>
+    <span><b style="background:#c0392b"></b>blind: none of its main languages is searched</span><span><b style="background:#fff;border:3px solid #12355b"></b>official website searched</span>
+  </div>
+  <details class="lk" open><summary><b>How to read this map</b></summary><div class="lkb small" style="line-height:1.5">
+    <p style="margin:0 0 6px">This map checks the tool itself, not the drug trade. The dashboard only knows about seizures that appear in the news it searches, so it shows where that search is working and where it may be missing things.</p>
+    <p style="margin:0 0 6px"><b style="color:#2e8b57">Green</b>: seizure reports were found for this country (bigger circle = more reports). <b style="color:#b8860b">Yellow</b>: nothing found, although the country's language is searched. Either nothing was reported or the news was not picked up. <b style="color:#c0392b">Red</b>: none of the country's main languages is searched, so nothing can appear from there. <b style="color:#12355b">Dark ring</b>: an official customs or police website is searched as well.</p>
+    <p style="margin:0">Use it to judge gaps. Few or no reports from a country does not mean little smuggling; a yellow or red dot may only mean the tool cannot see it. Adding a language or an official website for those countries is the way to close the gap.</p>
+  </div></details>
+  <div class="small" id="covText" style="margin-top:8px;line-height:1.45"></div>
+  <details class="lk"><summary><b>Countries with no main language searched</b><span class="cnt" id="blindN"></span></summary><div class="lkb small" id="blindList"></div></details>
+  <details class="lk"><summary><b>Reports found by language</b></summary><div class="lkb" id="langList"></div></details>
+</div>
+
 <div class="card"><h2>Alerts <span class="small" id="alertNote"></span></h2><div id="alerts" class="alertbox"></div></div>
 
 <div class="card"><h2>My watchlist <span class="small" id="watchNote"></span></h2>
@@ -159,17 +175,6 @@ table.mini{border-collapse:collapse;font-size:13px;margin-top:6px}table.mini td{
     <button id="wAdd" type="button">Add watch</button></div>
   <div id="watchList"></div>
   <div class="small" style="margin-top:10px">Watches are saved on this device only (not on the website). "New" means not shown on your previous visit. Tap a watch to see its events; highlighted rows in the table match a watch.</div>
-</div>
-
-<div class="card"><h2>Coverage: where the tool may be blind <span class="small" id="covNote"></span></h2>
-  <div id="cmap"></div>
-  <div class="legend">
-    <span><b style="background:#2e8b57"></b>reports found (bigger = more)</span><span><b style="background:#e0a800"></b>quiet: no reports, but its language is searched</span>
-    <span><b style="background:#c0392b"></b>blind: none of its main languages is searched</span><span><b style="background:#fff;border:3px solid #12355b"></b>official website searched</span>
-  </div>
-  <div class="small" id="covText" style="margin-top:8px;line-height:1.45"></div>
-  <details class="lk"><summary><b>Countries with no main language searched</b><span class="cnt" id="blindN"></span></summary><div class="lkb small" id="blindList"></div></details>
-  <details class="lk"><summary><b>Reports found by language</b></summary><div class="lkb" id="langList"></div></details>
 </div>
 
 <div class="grid2">
