@@ -1,12 +1,12 @@
 SEIZURE WATCH - weekly bulletin, 03 Oct - 09 Oct 2026
 
-1401 seizure reports this week (previous week 2184); 3 high risk; 239.0 t reported.
-Main drugs: Cannabis (432), Cocaine (283), NSA (160)
+1403 seizure reports this week (previous week 2184); 3 high risk; 239.0 t reported.
+Main drugs: Cannabis (432), Cocaine (285), NSA (160)
 Main countries: India (78), Turkey (30), United States (22), Mexico (18)
 
 NEW AND SURGING CORRIDORS
-- Mexico -> United States: NEW (16 this period, 0 before; mainly Methamphetamine)
 - Ghana -> South Africa: NEW (16 this period, 0 before; mainly Heroin/Opium)
+- Mexico -> United States: NEW (16 this period, 0 before; mainly Methamphetamine)
 - Pakistan -> India: SURGING (16 this period, 1 before; mainly Heroin/Opium)
 - Thailand -> Hong Kong: SURGING (15 this period, 7 before; mainly Cannabis)
 - Ghana -> France: NEW (9 this period, 0 before; mainly Cocaine)
@@ -15,16 +15,16 @@ NEW AND SURGING CORRIDORS
 UNUSUAL EVENTS (highest risk first)
 - [High 60] 07 Oct | Cigarettes | 88 cigarettes | Hong Kong | Philippines -> Hong Kong | Legitimate cargo (industrial/goods); Luggage / passenger goods | cargo: cement
   https://www.info.gov.hk/gia/general/202610/07/P2026100700698.htm
-- [High 55] 06 Oct | Methamphetamine | 521 kg | Laos | Malaysia -> Laos | Legitimate cargo (industrial/goods); Postal / parcel | cargo: vape products
+- [High 50] 06 Oct | Methamphetamine | 521 kg | Laos | Malaysia -> Laos | Legitimate cargo (industrial/goods); Postal / parcel | cargo: vape products
   https://news.google.com/rss/articles/CBMiywFBVV95cUxNQ2c1M0VWTHFJRzB4YWd2OGJUR01aaHRjX2JqeFZlbWY4d21OOXFieWdpVTRBWV9IS1dzNmc5NU5tejZGZWRvN0dtNW5vbUFWWFUtYUoteWR1MmF5bi1jUjN0bWtTSUduU0VDbEt3aXFTZTBEaDJqazRXTjNqLVNENF9QU050anRja09Oc0NnbWxFNzRnVXNTZzhWd1VTTnpKTmF4WUhXdzRldGpzQjhtWTBTQTJNVXVMUThoRE1CV0RSSGFsNGkxLThYWdIB0AFBVV95cUxQWEZOSC1xOGpYMTY4R0ZOUWxvY3dKblpPWW4xamxnbVRKZ3BpYWFGbEdqUk1VX25rVEJmWlRLQ0Y4bHNfY0xtUTlWcUN1cm85VjVHVEd6b1NjLURDS0ZCNEZYdnMxeFF5V1BZSUd5Q19ic1NlaG94SDRZREQ3MlFmOUFGclhWX3E0b3ZZZGtMQnF3dGxOMkZ2LXN0b1k0T3p6N1pQbzVCTFJXSXNEZXFMVFRtQlBSX24xRUo0ak8wWWtsSkhDUG5SUnp1MUN5R0gw?oc=5
-- [High 50] 07 Oct | Cigarettes | Hong Kong | Hong Kong -> Australia | Legitimate cargo (industrial/goods) | cargo: carrying auto parts; cement | vessel: Examination Compound
-  https://www.info.gov.hk/gia/general/202610/07/P2026100700288.htm
-- [Medium 45] 05 Oct | Cannabis | Hong Kong airport | Thailand -> Hong Kong | Legitimate cargo (industrial/goods); Luggage / passenger goods | cargo: cement
+- [High 50] 05 Oct | Cannabis | Hong Kong airport | Thailand -> Hong Kong | Legitimate cargo (industrial/goods); Luggage / passenger goods | cargo: cement
   https://www.info.gov.hk/gia/general/202610/05/P2026100500343.htm
-- [Medium 40] 03 Oct | Heroin/Opium | 1.0 t | Izmir | Legitimate cargo (food/produce) | cargo: balik
-  https://www.egeyonhaber.com/gundem/75-ilde-dev-uyusturucu-operasyonu-1-ton-uyusturucu-ele-gecirildi/
 - [Medium 40] 06 Oct | Methamphetamine | 521 kg | Malaysia | Laos -> Malaysia
   https://news.google.com/rss/articles/CBMiuAFBVV95cUxOdXdMZHFCS2JzekpZNDFuQmQ5SGlYZmFJRWliekdpVTVYNlphbkNiM1VEZG1MYWpXWl81Q0xweXZXd0RvT012a2FraWM2b2pJUDByTnJTeUlnTUxrRVpWSjNneXFRNmFHeXo3UV91ZlVjN1dYd1pxc0d4MFVRc3BQaHMzX0VNME5MTkxWNzVDLVF5LVF3Y3ZVMEJGVGNFNmEzMWN5bWVNTFJwM09EaW14dFktX1BTMDIt0gG4AUFVX3lxTE51d0xkcUJLYnN6Slk0MW5CZDlIaVhmYUlFaWJ6R2lVNVg2WmFuQ2IzVURkbUxhaldaXzVDTHB5dld3RG9PTXZrYWtpYzZvaklQMHJOclN5SWdNTGtFWlZKM2d5cVE2YUd5ejdRX3VmVWM3V1h3WnFzR3gwVVFzcFBoczNfRU0wTkxOTFY3NUMtUXktUXdjdlUwQkZUY0U2YTMxY3ltZU1MUnAzT0RpbXh0WS1fUFMwMi0?oc=5
+- [Medium 40] 05 Oct | Methamphetamine | 73 kg | Philippines | Mexico -> Philippines | Legitimate cargo (industrial/goods) | cargo: machinery
+  https://news.google.com/rss/articles/CBMi1wFBVV95cUxQU1FwbGY0M0Y0TmRkbWpiY2pKdUpIWVh3VWlKQ2thejNlMVV3b1IzQ0JfajFKNVpQSWQ0NTNCX3NVdnFzSlJYdUFCZlVJRFBvT3hUdDJMbXVFMVExTVFhdnI1clFBTW51dzRIRGY1aTJVZW5IdjI1WnkyZDBlVk5QWnc5SldRZlhFRU1zd1c0emJHR1pRcnVWOVZuY01TSGt1QllNUWlUYUV6dTJ6OEJOMDdXWU8tQm1Bd1plcm9GTnNIa290NDhhd3VWRjhTMG1WTDJaUF9raw?oc=5
+- [Medium 40] 03 Oct | Cocaine | Hong Kong | Turkey -> Hong Kong | Hidden compartment (unspecified); Luggage / passenger goods
+  https://www.24horas.cl/actualidad/nacional/incautan-mas-de-6-kilos-de-cocaina-que-serian-enviados-a-hong-kong-desde
 
 HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (41), Postal / parcel (19), Legitimate cargo (food/produce) (17)
 Cover cargo named: cement (10), الات (8), फल (5), मशीन (4), balik (2)
