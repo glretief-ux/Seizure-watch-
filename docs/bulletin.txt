@@ -1,8 +1,8 @@
 SEIZURE WATCH - weekly bulletin, 03 Oct - 09 Oct 2026
 
-1323 seizure reports this week (previous week 2184); 3 high risk; 236.3 t reported.
-Main drugs: Cannabis (419), Cocaine (279), NSA (160)
-Main countries: India (73), Turkey (30), United States (22), Mexico (17)
+1373 seizure reports this week (previous week 2184); 3 high risk; 239.0 t reported.
+Main drugs: Cannabis (427), Cocaine (282), NSA (160)
+Main countries: India (76), Turkey (30), United States (22), Mexico (18)
 
 NEW AND SURGING CORRIDORS
 - Mexico -> United States: NEW (16 this period, 0 before; mainly Methamphetamine)
@@ -26,8 +26,8 @@ UNUSUAL EVENTS (highest risk first)
 - [Medium 40] 06 Oct | Methamphetamine | 521 kg | Malaysia | Laos -> Malaysia
   https://news.google.com/rss/articles/CBMiuAFBVV95cUxOdXdMZHFCS2JzekpZNDFuQmQ5SGlYZmFJRWliekdpVTVYNlphbkNiM1VEZG1MYWpXWl81Q0xweXZXd0RvT012a2FraWM2b2pJUDByTnJTeUlnTUxrRVpWSjNneXFRNmFHeXo3UV91ZlVjN1dYd1pxc0d4MFVRc3BQaHMzX0VNME5MTkxWNzVDLVF5LVF3Y3ZVMEJGVGNFNmEzMWN5bWVNTFJwM09EaW14dFktX1BTMDIt0gG4AUFVX3lxTE51d0xkcUJLYnN6Slk0MW5CZDlIaVhmYUlFaWJ6R2lVNVg2WmFuQ2IzVURkbUxhaldaXzVDTHB5dld3RG9PTXZrYWtpYzZvaklQMHJOclN5SWdNTGtFWlZKM2d5cVE2YUd5ejdRX3VmVWM3V1h3WnFzR3gwVVFzcFBoczNfRU0wTkxOTFY3NUMtUXktUXdjdlUwQkZUY0U2YTMxY3ltZU1MUnAzT0RpbXh0WS1fUFMwMi0?oc=5
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (40), Postal / parcel (18), Legitimate cargo (food/produce) (14)
-Cover cargo named: cement (10), الات (8), फल (4), मशीन (4), balik (2)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (40), Postal / parcel (18), Legitimate cargo (food/produce) (17)
+Cover cargo named: cement (10), الات (8), फल (5), मशीन (4), balik (2)
 
 Coverage: searching 9 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Chinese). 49 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
 Leads from open sources, not confirmed facts. Verify before acting.
