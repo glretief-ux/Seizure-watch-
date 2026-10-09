@@ -160,16 +160,36 @@ bulletin:
 #  RISK MODEL  (event score 0-100; all numbers are yours to tune)
 # ---------------------------------------------------------------------
 risk:
-  weights:
-    container_cargo: 10            # seized from / travelling in a shipping container
-    concealed_in_legit_cargo: 15   # hidden inside food, goods or a cover load
-    advanced_concealment: 15       # false compartments, impregnation, hull attachments...
-    quantity_outlier: 20           # very large for its drug type (see thresholds below)
-    multi_country_route: 10        # 3+ countries in the route, or a named transit country
-    emerging_corridor: 10          # origin->destination pair not seen before in the recent past
-    organized_network: 5           # article mentions cartel / organised crime network
-    insider_indicator: 15          # port / airport / customs staff involvement, rip-on/rip-off
-    polydrug: 5                    # more than one drug type in the same consignment
+  # The score is built from FIVE dimensions with their own caps, so no single factor (and
+  # in particular seizure weight) can decide the result. Max total = 100.
+  points:
+    method:                          # max 30 - how it was smuggled
+      advanced_concealment: 15       # false compartments, impregnation, hull attachments...
+      concealed_in_legit_cargo: 10   # hidden inside food, goods or a cover load
+      container_cargo: 5             # seized from / travelling in a shipping container
+    network:                         # max 30 - who was behind it
+      insider_indicator: 15          # port / airport / customs staff involvement, rip-on/rip-off
+      organized_network: 10          # article mentions cartel / organised crime network
+      polydrug: 5                    # more than one drug type in the same consignment
+    route:                           # max 20 - where it moved
+      multi_country_route: 15        # 3+ countries in the route, or a named transit country
+      emerging_corridor: 5           # origin->destination pair not seen before in the recent past
+    scale:                           # max 10 - deliberately small: weight alone must never decide
+      quantity_outlier: 10           # very large for its type (thresholds below)
+    commodity:                       # max 10 - how harmful the goods are (tiers below)
+      1: 10
+      2: 5
+      3: 0
+  commodity_tiers:
+    default: 2                       # anything not listed below
+    categories: {Precursor chemical: 2, Stolen vehicle: 2, CITES protected timber: 2}
+    items:                           # tier 1 = highest harm, tier 3 = lowest
+      1: [Cocaine, Heroin/Opium, Methamphetamine, NSA, Explosives/grenades, Firearms, Elephant ivory, Rhino horn, Pangolin, Big cat parts]
+      3: [Cigarettes]
+  # An event is only High if it scores >= high AND at least this many of method / network / route
+  # show something (Medium: at least 1). Scale and commodity alone can never lift an event.
+  min_dimensions_high: 2
+  min_dimensions_medium: 1
   bands: {high: 50, medium: 25}    # score >= high -> High ; >= medium -> Medium ; else Low
   quantity_thresholds_kg:          # weight above which a seizure counts as "large"
     Cocaine: 500

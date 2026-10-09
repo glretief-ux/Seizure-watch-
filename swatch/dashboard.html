@@ -41,6 +41,7 @@ table{border-collapse:collapse;width:100%;font-size:12.5px}
 th{position:sticky;top:0;background:#f0f3f7;text-align:left;padding:8px 8px;cursor:pointer;white-space:nowrap;font-size:11px;text-transform:uppercase;letter-spacing:.3px;color:var(--mute)}
 td{padding:7px 8px;border-top:1px solid var(--line);vertical-align:top}
 tr:hover td{background:#f8fafc}
+table.rm{border-collapse:collapse;margin:6px 0}table.rm th,table.rm td{border:1px solid var(--line);padding:5px 9px;text-align:left;vertical-align:top}table.rm th{background:#f1f3f7}
 .chip{display:inline-block;padding:1px 8px;border-radius:99px;font-size:11px;font-weight:700;color:#fff}
 .chip.High{background:var(--hi)}.chip.Medium{background:var(--med)}.chip.Low{background:var(--lo)}
 .chip.NEW{background:#6a3fb5}.chip.SURGING{background:var(--hi)}.chip.STABLE{background:#8894a5}.chip.DECLINING{background:#3d7ea6}.chip.INACTIVE{background:#b5bcc7}
@@ -189,6 +190,10 @@ table.mini{border-collapse:collapse;font-size:13px;margin-top:6px}table.mini td{
   <div class="small" style="line-height:1.45">Practical starting points in the style of PCCP risk indicators. They are general guidance compiled from common customs practice and from the reports in this tool. They are <b>not official PCCP or WCO material</b>, so check them against your training and local procedures. An indicator is a reason to look closer, never proof. Use several together, base checks on cargo, documents and route (not on a person's nationality or appearance), and follow your agency's legal powers and safety rules.</div>
   <div class="tabs"><button type="button" data-tab="c" class="on">Concealment methods</button><button type="button" data-tab="r">Route patterns</button></div>
   <div id="lookList"></div>
+</div>
+
+<div class="card"><h2>How risk is scored</h2>
+  <details class="lk"><summary><b>Open the explanation</b><span class="lks">The score (0-100) ranks reports for analyst attention. It is built from five separate dimensions, so no single factor decides it. Seizure weight is capped at 10 points.</span></summary><div class="lkb small" id="riskHow"></div></details>
 </div>
 
 <div class="card"><h2>Events <span class="small" id="evCount"></span></h2><div id="cardBar" class="small"></div><div class="tw" style="max-height:640px"><table id="evT"></table></div></div>
@@ -353,10 +358,22 @@ function evTable(v) {
   const s = v.slice().sort((a,b) => { const x = val(a, sortKey), y = val(b, sortKey); return (x > y ? 1 : x < y ? -1 : 0) * sortDir || (b.score - a.score); });
   $('evCount').textContent = '(' + v.length + ' in view' + (v.length > 300 ? ', first 300 shown' : '') + ')';
   $('evT').innerHTML = '<tr>' + COLS.map(c => '<th data-k="' + c[0] + '">' + c[1] + (sortKey === c[0] ? (sortDir > 0 ? ' &#9650;' : ' &#9660;') : '') + '</th>').join('') + '</tr>' +
-    s.slice(0, 300).map(e => '<tr' + (isWatched(e) ? ' class="watched"' : '') + '><td>' + esc(e.date) + '</td><td><span class="chip ' + esc(e.band) + '">' + e.score + '</span></td><td>' + esc(e.drug) + '</td><td>' + esc(qty(e)) + '</td><td class="w2">' + esc(e.route || e.corridor || '') + '</td><td class="w2">' + esc([e.place, e.country].filter(Boolean).join(', ')) + '</td><td class="w2">' + esc(e.conceal || '') + '</td><td class="small w2">' + esc(detailText(e)) + '</td><td>' + esc(e.transport || '') + '</td><td class="small w3">' + esc(e.flags) + '</td><td>' + e.n + '</td><td><a href="' + esc(safe(e.url)) + '" target="_blank" rel="noopener noreferrer" title="' + esc(e.title_en || e.title) + '">open</a></td></tr>').join('');
+    s.slice(0, 300).map(e => '<tr' + (isWatched(e) ? ' class="watched"' : '') + '><td>' + esc(e.date) + '</td><td><span class="chip ' + esc(e.band) + '" title="' + esc(e.why || '') + '">' + e.score + '</span></td><td>' + esc(e.drug) + '</td><td>' + esc(qty(e)) + '</td><td class="w2">' + esc(e.route || e.corridor || '') + '</td><td class="w2">' + esc([e.place, e.country].filter(Boolean).join(', ')) + '</td><td class="w2">' + esc(e.conceal || '') + '</td><td class="small w2">' + esc(detailText(e)) + '</td><td>' + esc(e.transport || '') + '</td><td class="small w3">' + esc(e.flags) + '</td><td>' + e.n + '</td><td><a href="' + esc(safe(e.url)) + '" target="_blank" rel="noopener noreferrer" title="' + esc(e.title_en || e.title) + '">open</a></td></tr>').join('');
   $('evT').querySelectorAll('th').forEach(th => th.onclick = () => { const k = th.dataset.k; if (k === 'url' || k === 'flags') return; sortDir = (sortKey === k) ? -sortDir : -1; sortKey = k; render(); });
 }
 
+
+function riskBox() {
+  const M = D.risk_model; if (!M) return;
+  let h = '<table class="rm"><tr><th>Dimension</th><th>What counts</th><th>Max</th></tr>';
+  M.dimensions.forEach(d => { h += '<tr><td><b>' + esc(d.name) + '</b></td><td>' + d.items.map(i => esc(i.label) + ' <b>+' + i.points + '</b>').join('<br>') + '</td><td>' + d.max + '</td></tr>'; });
+  h += '</table><p><b>Bands.</b> High = ' + M.high + ' or more, Medium = ' + M.medium + ' to ' + (M.high - 1) + ', Low = below ' + M.medium +
+    '. To be High an event must also show indicators in at least ' + M.min_high + ' of the three operational dimensions (concealment &amp; method, insiders &amp; organised crime, route); to be Medium, in at least ' + M.min_medium +
+    '. Scale and commodity alone can never raise an event, so a large seizure with no other warning signs stays low.</p>' +
+    '<p><b>Reading a score.</b> Hover over (or long-press) a risk number in the table to see its breakdown, e.g. "Route 15/20". The Excel and CSV downloads carry the same breakdown per event.</p>' +
+    '<p><b>Limits.</b> Indicators come from automated reading of news text. A thorough article shows more indicators than a short one, so well-reported cases can score higher. Treat the score as a prompt to look, not a finding.</p>';
+  $('riskHow').innerHTML = h;
+}
 function render() {
   const v = view();
   kpis(v); timeChart(v);
@@ -630,6 +647,7 @@ $('watchList').addEventListener('click', ev => {
 renderWatch();
 
 alerts(); staticTables(); render();
+riskBox();
 $('foot').innerHTML = 'Open-source news only. Facts are extracted automatically from headlines and articles and can be wrong - always verify through the link. Risk scores rank reports for analyst attention; they are indicators, not findings. Only extracted facts and links are stored, not article text.';
 </script>
 </body>

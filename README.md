@@ -15,7 +15,7 @@ Outputs (in `docs/`): `index.html` (dashboard), `events.csv`, `seizure_watch.xls
 Push this folder to a GitHub repo and enable Actions. `.github/workflows/daily.yaml` runs three times a day (05:17, 11:17 and 17:17 UTC), commits the updated database and `docs/`. Turn on GitHub Pages (branch, `/docs` folder) to get a live dashboard URL.
 
 ## Configure
-Edit `config.yaml`: Google News editions/queries, GDELT queries, risk weights and thresholds, and `rss_feeds` (add customs / police / agency feeds you trust).
+Edit `config.yaml`: Google News editions/queries, GDELT queries, risk points, commodity tiers and thresholds (the dashboard has a "How risk is scored" box that stays in sync), and `rss_feeds` (add customs / police / agency feeds you trust).
 
 ## What it flags
 High-risk events (0-100 score), insider signals, new and surging corridors, and statistical spikes (drug x country, drug x origin, drug x concealment). Trend alerts stay quiet until ~42 days of history exist.

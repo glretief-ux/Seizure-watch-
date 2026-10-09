@@ -5,7 +5,7 @@ import math
 import os
 import datetime as dt
 import pandas as pd
-from . import coverage, geo, lexicon
+from . import analyze, coverage, geo, lexicon
 
 
 def _clean(v):
@@ -33,7 +33,8 @@ def event_records(ev):
             "conceal": "; ".join(r.conceal_list) or None, "transport": _clean(r.transport),
             "infra": [x for x in str(_clean(getattr(r, "infrastructure", None)) or "").split("|") if x],
             "container": bool(r.in_container == 1), "insider": bool(r.insider == 1), "score": int(r.risk_score),
-            "band": r.risk_band, "flags": r.risk_flags, "mo": _clean(r.mo_summary), "n": int(r.n_sources),
+            "band": r.risk_band, "flags": r.risk_flags, "why": r.risk_why,
+            "parts": [int(r.risk_method), int(r.risk_network), int(r.risk_route), int(r.risk_scale), int(r.risk_commodity)], "mo": _clean(r.mo_summary), "n": int(r.n_sources),
             "url": r.urls[0] if r.urls else None, "title": r.title, "title_en": _clean(getattr(r, "title_en", None)), "outlets": ", ".join(r.outlets),
             "arrests": _clean(r.arrests), "mode": r.text_mode, "lang": _clean(r.lang),
             "origin_place": _clean(r.origin_place), "dest_place": _clean(r.destination_place),
@@ -64,6 +65,9 @@ def export_table(ev, verifications=None):
         "Arrests": ev["arrests"], "Transport type": ev["transport"],
         "Container": ev["in_container"].fillna(0).astype(int).map({1: "Yes", 0: "No"}),
         "Risk score": ev["risk_score"], "Risk band": ev["risk_band"], "Risk flags": ev["risk_flags"],
+        "Risk: concealment & method (max 30)": ev["risk_method"], "Risk: insiders & organised crime (max 30)": ev["risk_network"],
+        "Risk: route (max 20)": ev["risk_route"], "Risk: scale (max 10)": ev["risk_scale"], "Risk: commodity (max 10)": ev["risk_commodity"],
+        "Risk explanation": ev["risk_why"],
         "Reports (n)": ev["n_sources"], "Outlets": ev["outlets"].apply(", ".join),
         "Text used": ev["text_mode"], "Language": ev["lang"], "Headline": ev["title"],
         "Headline (English)": ev["title_en"] if "title_en" in ev.columns else ev["title"],
@@ -125,7 +129,7 @@ def write_all(res, out_dir, cfg, demo=False, verifications=None):
         "meta": {"asof": res["asof"].strftime("%Y-%m-%d"), "generated": dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
                  "demo": demo, "history_days": res["history_days"], "history_ok": res["history_ok"],
                  "min_history": cfg["analysis"]["min_history_days"], "total_events": res["kpis"]["events_total"]},
-        "coverage": coverage.payload(cfg),
+        "coverage": coverage.payload(cfg), "risk_model": analyze.risk_model_description(cfg),
         "kpis": res["kpis"], "events": event_records(ev_r), "alerts": res["alerts"],
         "corridors": res["corridors"].head(40).to_dict("records") if len(res["corridors"]) else [],
         "hotspots": res["hotspots"].head(25).to_dict("records") if len(res["hotspots"]) else [],

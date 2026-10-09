@@ -24,6 +24,27 @@ FLAG_LABELS = {
 }
 
 
+DIM_LABELS = {"method": "Concealment & method", "network": "Insiders & organised crime", "route": "Route",
+              "scale": "Scale", "commodity": "Commodity"}
+DIM_MAX = {"method": lambda P: sum(P["method"].values()), "network": lambda P: sum(P["network"].values()),
+           "route": lambda P: sum(P["route"].values()), "scale": lambda P: sum(P["scale"].values()),
+           "commodity": lambda P: max(P["commodity"].values())}
+
+
+def risk_model_description(cfg):
+    """How the score is built, for the dashboard's 'How risk is scored' box (always in sync with config.yaml)."""
+    R = cfg["risk"]; P = R["points"]
+    dims = []
+    for d in ("method", "network", "route", "scale"):
+        dims.append({"name": DIM_LABELS[d], "max": DIM_MAX[d](P),
+                     "items": [{"label": FLAG_LABELS[k], "points": v} for k, v in P[d].items()]})
+    dims.append({"name": DIM_LABELS["commodity"], "max": DIM_MAX["commodity"](P),
+                 "items": [{"label": "Tier %d goods: %s" % (t, ", ".join(names[:6]) + ("..." if len(names) > 6 else "")), "points": P["commodity"].get(int(t), 0)}
+                           for t, names in R["commodity_tiers"]["items"].items()]})
+    return {"dimensions": dims, "high": R["bands"]["high"], "medium": R["bands"]["medium"],
+            "min_high": R.get("min_dimensions_high", 2), "min_medium": R.get("min_dimensions_medium", 1)}
+
+
 # ------------------------------------------------------------------ 1. events
 def load_events(conn):
     df = pd.read_sql_query("SELECT * FROM articles WHERE relevant=1 AND event_id IS NOT NULL", conn)
@@ -79,7 +100,6 @@ def _qty_outlier(ev, R):
 
 def score_events(ev, cfg, asof):
     R, A = cfg["risk"], cfg["analysis"]
-    W = R["weights"]
     ev = ev.copy()
     ev["conceal_list"] = ev["concealment"].fillna("").apply(lambda s: [c for c in s.split("|") if c])
     ev["transit_list"] = ev["transit"].fillna("").apply(lambda s: [c for c in s.split("|") if c])
@@ -107,12 +127,37 @@ def score_events(ev, cfg, asof):
     f["insider_indicator"] = ev["insider"].fillna(0).astype(int) == 1
     f["polydrug"] = ev["drug_list"].apply(lambda d: len([x for x in d if x != "Unspecified"]) >= 2)
 
-    score = sum(f[k].astype(int) * W.get(k, 0) for k in FLAG_LABELS)
+    # ---- five dimensions, each with its own cap (see config.yaml -> risk -> points) ----
+    P = R["points"]
+    cat = ev["category"].fillna("Drug") if "category" in ev else pd.Series("Drug", index=ev.index)
+    tiers = R["commodity_tiers"]
+
+    def tier(r_item, r_cat):
+        for t, names in tiers["items"].items():
+            if r_item in names:
+                return int(t)
+        return int(tiers["categories"].get(r_cat, tiers["default"]))
+    ev["commodity_tier"] = [tier(i, c) for i, c in zip(ev["primary_drug"], cat)]
+    dims = {}
+    for d in ("method", "network", "route", "scale"):
+        dims[d] = sum(f[k].astype(int) * v for k, v in P[d].items())
+    dims["commodity"] = ev["commodity_tier"].map(lambda t: P["commodity"].get(t, 0))
+    for d, v in dims.items():
+        ev["risk_" + d] = v.astype(int)
+    score = sum(dims.values())
     ev["risk_score"] = score.clip(upper=100).astype(int)
+    # Weight (scale) and commodity type can never carry an event into a higher band on their own:
+    # High needs at least two of the operational dimensions (method, network, route) to show something,
+    # Medium needs at least one. Otherwise the event stays one band lower.
+    n_op = sum((dims[d] > 0).astype(int) for d in ("method", "network", "route"))
     b = R["bands"]
-    ev["risk_band"] = np.where(ev["risk_score"] >= b["high"], "High",
-                               np.where(ev["risk_score"] >= b["medium"], "Medium", "Low"))
+    band = np.where(ev["risk_score"] >= b["high"], "High", np.where(ev["risk_score"] >= b["medium"], "Medium", "Low"))
+    band = np.where((band == "High") & (n_op < R.get("min_dimensions_high", 2)), "Medium", band)
+    band = np.where((band == "Medium") & (n_op < R.get("min_dimensions_medium", 1)), "Low", band)
+    ev["risk_band"] = band
     ev["risk_flags"] = f.apply(lambda r: ", ".join(FLAG_LABELS[k] for k in FLAG_LABELS if r[k]), axis=1)
+    ev["risk_why"] = ev.apply(lambda r: " | ".join(
+        f"{DIM_LABELS[d]} {int(r['risk_' + d])}/{DIM_MAX[d](P)}" for d in DIM_LABELS if r["risk_" + d] > 0) or "No risk indicators found", axis=1)
     for k in FLAG_LABELS:
         ev["f_" + k] = f[k]
     return ev

@@ -259,3 +259,17 @@ def test_alligator_in_drug_raid_stays_drug():
     r = extract("Federal agents seize 110 lbs of drugs, baby alligator and a gun at stash house",
                 "Agents seized 110 lbs of drugs and an alligator at an apartment.")
     assert r["category"] == "Drug"
+
+
+def test_weight_alone_never_makes_an_event_high():
+    """A huge seizure with no other warning sign must not reach the High band."""
+    import yaml, pandas as pd
+    from swatch import analyze
+    cfg = yaml.safe_load(open("config.yaml"))
+    ev = pd.DataFrame([{"event_id": 1, "primary_drug": "Cocaine", "category": "Drug", "qty_kg": 50000.0, "qty_units": None,
+                        "unit_type": None, "in_container": 0, "concealment": None, "coverload": 0, "organized": 0,
+                        "insider": 0, "drugs": "Cocaine", "transit": None, "origin": None, "destination": None,
+                        "seizure_country": "Spain", "corridor": None, "date": pd.Timestamp("2026-10-01")}])
+    out = analyze.score_events(ev, cfg, pd.Timestamp("2026-10-09"))
+    assert out.loc[0, "risk_scale"] == 10
+    assert out.loc[0, "risk_score"] <= 20 and out.loc[0, "risk_band"] == "Low"
