@@ -137,7 +137,7 @@ ADVANCED_CATEGORIES = {"Container structure / false compartment", "Vehicle compa
 
 # --------------------------------------------------------------------------
 # OTHER CONTRABAND CATEGORIES (non-drug) - Stolen vehicles, precursor
-# chemicals, CITES-protected timber. Each follows the same shape as
+# chemicals, CITES-protected timber, elephant ivory and other protected fauna. Each follows the same shape as
 # DRUG_PATTERNS above: {item name shown in the dashboard: regex}, plus a
 # GENERIC_* catch-all for unnamed mentions, mirroring GENERIC_DRUG.
 # --------------------------------------------------------------------------
@@ -181,7 +181,7 @@ TIMBER_PATTERNS = {
     "Afrormosia": rx(r"afrormosia", r"assamela"),
     "Mahogany": rx(r"mahogany", r"\bcaoba\b", r"\bacajou\b"),
 }
-GENERIC_TIMBER = rx(r"cites[- ]protected", r"protected\s+(?:timber|wood|species)",
+GENERIC_TIMBER = rx(r"cites[- ]protected\s+(?:timber|wood|tree|rosewood)", r"protected\s+(?:timber|wood)",
                     r"illegal(?:ly)?\s+logg?ed", r"illegal\s+logging", r"tala\s+ilegal",
                     r"madera\s+ilegal", r"exploitation\s+forestiere\s+illegale",
                     r"endangered\s+(?:timber|wood|tree)s?",
@@ -203,6 +203,48 @@ GENERIC_ARMS = rx(r"illegal\s+(?:weapons?|arms)", r"illicit\s+(?:weapons?|arms)"
                   r"weapons?\s+cache", r"\barms\s+trafficking\b", r"\barms\s+smuggling\b",
                   r"armas\s+ilegales", r"trafico\s+de\s+armas", r"armes\s+illegales",
                   r"trafic\s+d.armes")
+# CITES wildlife (fauna). Two categories, shown together under "CITES" in the
+# dashboard: elephant ivory, and all other protected animals. Patterns are
+# deliberately specific - bare words such as "tiger", "shark", "tusk" or
+# "ivory" also mean sports teams, loan sharks, a politician's surname or the
+# country Ivory Coast / Cote d'Ivoire, so they only count in a wildlife context.
+IVORY_PATTERNS = {
+    "Elephant ivory": rx(r"\bivory\b(?!\s+coast)(?!\s+tower)", r"elephant\s+tusks?", r"\btusks\b",
+                         r"\bmarfil\b", r"(?<!d')(?<!d )\bivoire\b", r"\bmarfim\b", r"mammoth\s+ivory"),
+}
+FAUNA_PATTERNS = {
+    "Rhino horn": rx(r"rhino(?:ceros)?\s+horns?", r"cuerno\s+de\s+rinoceronte", r"corne\s+de\s+rhinoceros",
+                     r"chifre\s+de\s+rinoceronte"),
+    "Pangolin": rx(r"pangolins?", r"pangolines", r"pangolim", r"pangolins"),
+    "Big cat parts": rx(r"(?:tiger|leopard|lion|jaguar|snow\s+leopard|cheetah)\s+(?:skins?|pelts?|bones?|claws?|"
+                        r"teeth|fangs?|parts?|cubs?|paste|carcass\w*)", r"big\s+cat\s+(?:skins?|parts?|bones?)",
+                        r"piel(?:es)?\s+de\s+(?:tigre|leopardo|jaguar)", r"peau\s+de\s+(?:tigre|leopard)"),
+    "Reptiles and turtles": rx(r"tortoises?", r"\bturtles?\b", r"terrapins?", r"\bpythons?\b", r"reptiles?",
+                               r"\bsnakes?\b", r"\blizards?\b", r"\bgeckos?\b", r"chameleons?", r"crocodiles?",
+                               r"alligators?", r"caimans?", r"iguanas?", r"tortugas?", r"tartarugas?", r"tortues?",
+                               r"serpientes?", r"cobras?\b"),
+    "Birds": rx(r"parrots?", r"cockatoos?", r"macaws?", r"songbirds?", r"exotic\s+birds?", r"protected\s+birds?",
+                r"wild\s+birds?", r"birds?\s+of\s+prey", r"hornbills?", r"\bloros?\b", r"guacamayos?",
+                r"\bperroquets?\b", r"papagaios?"),
+    "Primates": rx(r"\bmonkeys?\b", r"orang-?utans?", r"chimpanzees?", r"gorillas?", r"lemurs?", r"gibbons?",
+                   r"slow\s+lorises?", r"\bprimates?\b", r"\bmonos?\b", r"macacos?", r"singes?"),
+    "Sharks, rays and marine species": rx(r"shark\s+(?:fins?|meat|carcass\w*|products?|parts?|cartilage)",
+                                          r"fins?\s+of\s+sharks?", r"\bsea\s*horses?", r"caballitos?\s+de\s+mar",
+                                          r"totoaba", r"swim\s*bladders?", r"manta\s+rays?", r"gill\s+plates?",
+                                          r"queen\s+conch", r"giant\s+clams?", r"aletas?\s+de\s+tiburon",
+                                          r"ailerons?\s+de\s+requin"),
+    "Glass eels": rx(r"glass\s+eels?", r"eel\s+(?:trafficking|smuggling|fry|larvae)", r"\bangulas\b",
+                     r"\bcivelles?\b", r"\benguias?\s+(?:vivas|juveniles)", r"\bmeixao\b"),
+    "Bear parts": rx(r"bear\s+(?:bile|paws?|gall\s*bladders?|claws?|parts?|skins?)", r"bile\s+bears?"),
+    "Bushmeat": rx(r"bush\s*meat", r"wild\s*meat", r"carne\s+de\s+monte", r"viande\s+de\s+brousse"),
+}
+GENERIC_FAUNA = rx(r"wildlife\s+(?:trafficking|traffickers?|smuggling|crime|trade|products?|parts?)",
+                   r"illegal\s+wildlife", r"endangered\s+(?:animals?|species|wildlife|fauna)",
+                   r"protected\s+(?:animals?|wildlife|species|fauna)", r"exotic\s+(?:animals?|pets?)",
+                   r"cites[- ](?:listed|protected|appendix)", r"\bpoach(?:ed|ing|ers?)\b",
+                   r"trafico\s+de\s+(?:fauna|especies|animales)", r"fauna\s+silvestre", r"especies\s+protegidas",
+                   r"especies\s+amenazadas", r"faune\s+sauvage", r"especes\s+protegees", r"trafic\s+d'animaux",
+                   r"animais\s+silvestres", r"trafico\s+de\s+animais", r"fauna\s+selvagem")
 
 ANY_PRECURSOR = re.compile("|".join(p.pattern for p in list(PRECURSOR_PATTERNS.values()) + [GENERIC_PRECURSOR]), re.I)
 ANY_TIMBER = re.compile("|".join(p.pattern for p in list(TIMBER_PATTERNS.values()) + [GENERIC_TIMBER]), re.I)
@@ -214,7 +256,10 @@ ANY_STOLEN_VEHICLE = re.compile(
 # extraction. Stolen vehicles are deliberately NOT included here: a vehicle
 # noun alone is far too common, so collect.py additionally requires
 # VEHICLE_THEFT_CUE to co-occur (see prefilter()).
-ANY_CONTRABAND = re.compile("|".join([ANY_DRUG.pattern, ANY_PRECURSOR.pattern, ANY_TIMBER.pattern, ANY_ARMS.pattern]), re.I)
+ANY_IVORY = re.compile("|".join(p.pattern for p in IVORY_PATTERNS.values()), re.I)
+ANY_FAUNA = re.compile("|".join(p.pattern for p in list(FAUNA_PATTERNS.values()) + [GENERIC_FAUNA]), re.I)
+ANY_CONTRABAND = re.compile("|".join([ANY_DRUG.pattern, ANY_PRECURSOR.pattern, ANY_TIMBER.pattern,
+                                      ANY_ARMS.pattern, ANY_IVORY.pattern, ANY_FAUNA.pattern]), re.I)
 
 # --------------------------------------------------------------------------
 # TRANSPORT

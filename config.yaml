@@ -46,18 +46,25 @@ sources:
            "precursor chemicals seized", "clandestine drug lab chemicals seized",
            "stolen vehicles recovered smuggling", "stolen cars seized border",
            "illegal logging timber seized", "CITES protected timber seized", "rosewood seized trafficking",
+           "elephant ivory seized", "ivory tusks seized customs", "rhino horn seized", "pangolin scales seized",
+           "wildlife trafficking seized", "CITES protected species seized", "live reptiles smuggling seized",
+           "protected birds smuggling seized", "shark fins seized", "glass eels trafficking seized",
+           "tiger skin bones seized", "exotic animals smuggling airport",
            "illegal firearms seized", "weapons cache seized", "ammunition seized smuggling",
            "arms trafficking seized"]
       es: ["incautan cocaína", "decomisan droga puerto contenedor", "incautan marihuana",
            "incautan metanfetamina", "incautan drogas sintéticas aeropuerto",
            "incautan químicos precursores", "decomisan vehículos robados", "madera ilegal incautada",
-           "incautan armas de fuego", "decomisan municiones", "incautan arsenal"]
+           "incautan marfil", "tráfico de fauna silvestre incautan", "decomisan animales exóticos aeropuerto",
+            "incautan armas de fuego", "decomisan municiones", "incautan arsenal"]
       fr: ["saisie cocaïne", "saisie drogue port conteneur", "saisie cannabis douane", "saisie captagon",
            "saisie précurseurs chimiques", "véhicules volés saisis", "bois illégal saisi",
-           "saisie armes a feu", "saisie munitions", "trafic d'armes saisi"]
+           "saisie ivoire", "trafic faune sauvage saisie", "saisie civelles",
+            "saisie armes a feu", "saisie munitions", "trafic d'armes saisi"]
       pt: ["apreensão cocaína porto", "apreensão droga contêiner", "apreendem maconha",
            "apreensão de químicos precursores", "veículos roubados apreendidos", "madeira ilegal apreendida",
-           "apreensão de armas de fogo", "apreendem munições"]
+           "apreensão marfim", "tráfico de animais silvestres apreensão",
+            "apreensão de armas de fogo", "apreendem munições"]
       ar: ["ضبط مخدرات", "ضبط كوكايين", "ضبط حشيش", "ضبط كبتاجون", "إحباط تهريب مخدرات", "ضبط هيروين", "ضبط ترامادول"]
       tr: ["uyuşturucu ele geçirildi", "kokain ele geçirildi", "esrar ele geçirildi", "uyuşturucu hap ele geçirildi", "liman konteyner kokain", "captagon ele geçirildi"]
       ru: ["изъяли наркотики", "изъяли кокаин", "изъяли героин", "изъяли метамфетамин", "контрабанда наркотиков порт", "изъяли синтетические наркотики"]
@@ -71,6 +78,8 @@ sources:
            '(precursor chemicals OR clandestine lab) (seized OR seizure)',
            '(stolen vehicles OR stolen cars) (seized OR recovered OR smuggling)',
            '(illegal logging OR protected timber OR rosewood) (seized OR seizure)',
+           '(ivory OR "rhino horn" OR pangolin OR "wildlife trafficking") (seized OR seizure OR smuggling)',
+           '("CITES" OR "protected species" OR "shark fins" OR "glass eels") (seized OR seizure)',
            '(illegal firearms OR weapons cache OR ammunition OR arms trafficking) (seized OR seizure)']
       es: ['(cocaína OR heroína OR metanfetamina OR marihuana) (incautan OR decomisan OR incautación)',
            '(químicos precursores OR laboratorio clandestino) (incautan OR decomisan)',
@@ -94,7 +103,7 @@ sources:
   # releases are picked up even when no newspaper reports them. Add or remove websites freely.
   official_sites:
     enabled: true
-    query: "site:{site} (seized OR seizure OR seizes OR intercepted OR incautan OR decomisan OR saisie OR apreensao) (cocaine OR heroin OR methamphetamine OR cannabis OR fentanyl OR captagon OR drugs OR cocaina OR droga OR cocaine OR drogue OR \"precursor chemicals\" OR \"stolen vehicles\" OR \"illegal logging\" OR \"protected timber\" OR rosewood OR \"illegal firearms\" OR \"weapons cache\" OR ammunition OR \"arms trafficking\")"
+    query: "site:{site} (seized OR seizure OR seizes OR intercepted OR incautan OR decomisan OR saisie OR apreensao) (cocaine OR heroin OR methamphetamine OR cannabis OR fentanyl OR captagon OR drugs OR cocaina OR droga OR cocaine OR drogue OR \"precursor chemicals\" OR \"stolen vehicles\" OR \"illegal logging\" OR \"protected timber\" OR rosewood OR \"illegal firearms\" OR \"weapons cache\" OR ammunition OR \"arms trafficking\" OR ivory OR \"rhino horn\" OR pangolin OR \"wildlife trafficking\" OR CITES)"
     sites:
       - cbp.gov               # US Customs and Border Protection
       - dea.gov               # US Drug Enforcement Administration
@@ -183,6 +192,16 @@ risk:
     Ramin: 5000
     Afrormosia: 5000
     Mahogany: 5000
+    # CITES elephant ivory and other protected fauna (kg). Ivory: 500 kg is the
+    # usual "large-scale seizure" cut-off; the rest are judgement values - edit freely.
+    Elephant ivory: 500
+    Rhino horn: 5
+    Pangolin: 100
+    Big cat parts: 5
+    Sharks, rays and marine species: 500
+    Glass eels: 50
+    Bear parts: 20
+    Bushmeat: 500
     # Explosives/grenades (kg) - weight-based reports (e.g. TNT, dynamite)
     Explosives/grenades: 50
     default: 200
@@ -191,6 +210,11 @@ risk:
     cigarettes: 2000000
     packs: 100000
     vehicles: 10                   # 10+ stolen vehicles in one report is a large outlier
+    tusks: 10                      # CITES ivory counted in tusks
+    horns: 5                       # rhino horns
+    skins: 20                      # big-cat or reptile skins
+    animals: 100                   # live or dead protected animals in one report
+    pieces: 100                    # worked ivory / wildlife pieces
     firearms: 20                   # 20+ firearms in one report is a large outlier
     rounds: 10000                  # 10,000+ rounds of ammunition in one report is a large outlier
   percentile_min_events: 30        # once a drug has this many events, also flag its own top 5%

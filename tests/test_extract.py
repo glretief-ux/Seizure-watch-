@@ -193,3 +193,69 @@ if __name__ == "__main__":
             except AssertionError:
                 import traceback; bad += 1; print("FAIL", k); traceback.print_exc()
     sys.exit(1 if bad else 0)
+
+
+# ---- CITES elephant ivory and other protected fauna -------------------------------------------
+def test_cites_elephant_ivory():
+    r = extract("Customs seize 2 tonnes of elephant ivory hidden in container bound for Vietnam",
+                "Officers seized 2 tonnes of raw ivory shipped from Kenya to Vietnam, concealed among general cargo.")
+    assert r["relevant"] == 1
+    assert r["category"] == "CITES elephant ivory"
+    assert r["primary_drug"] == "Elephant ivory"
+    assert abs(r["qty_kg"] - 2000) < 1
+
+
+def test_ivory_tusk_count_is_kept_as_units():
+    r = extract("Police seize 14 elephant tusks in raid", "Police seized 14 tusks and arrested two men.")
+    assert r["category"] == "CITES elephant ivory" and r["qty_units"] == 14 and r["unit_type"] == "tusks"
+
+
+def test_ivory_coast_is_not_ivory():
+    r = extract("Customs seize 500 kg of cocaine at Abidjan port in Ivory Coast",
+                "Cote d'Ivoire customs seized 500 kg of cocaine.")
+    assert r["category"] == "Drug"
+    r2 = extract("Ivory Coast police seize stolen vehicles", "Police in Cote d'Ivoire recovered 12 stolen cars.")
+    assert r2.get("category") != "CITES elephant ivory"
+
+
+def test_tusk_surname_is_not_ivory():
+    r = extract("Tusk says police seized documents in raid", "Prime Minister Tusk said police seized documents.")
+    assert r["relevant"] == 0
+
+
+def test_cites_fauna_named_species():
+    r = extract("Customs seize 300 kg of pangolin scales hidden in frozen fish",
+                "Customs officers seized 300 kg of pangolin scales at the port, shipped from Nigeria to Vietnam.")
+    assert r["category"] == "CITES protected fauna"
+    assert r["primary_drug"] == "Pangolin"
+    assert abs(r["qty_kg"] - 300) < 1
+
+
+def test_cites_fauna_live_animals_count():
+    r = extract("Airport officers seize 80 live tortoises in suitcases",
+                "Officers seized 80 tortoises hidden in luggage on a flight from Madagascar.")
+    assert r["category"] == "CITES protected fauna" and r["qty_units"] == 80 and r["unit_type"] == "animals"
+
+
+def test_cites_fauna_generic_and_protected_species():
+    r = extract("Police seize protected animals in wildlife trafficking raid",
+                "Police seized 40 kg of animal parts in a wildlife trafficking raid.")
+    assert r["category"] == "CITES protected fauna"
+
+
+def test_wildlife_units_do_not_leak_into_drug_events():
+    r = extract("Police seize 10 kg of cocaine hidden in 3 pieces of luggage",
+                "Officers seized 10 kg of cocaine in 3 pieces of luggage carried by two birds of passage travellers.")
+    assert r["category"] == "Drug" and r["qty_kg"] == 10 and r["unit_type"] is None
+
+
+def test_timber_still_timber_when_ivory_not_present():
+    r = extract("Rangers seize illegally logged rosewood timber bound for China",
+                "Wildlife officers seized 5 tonnes of rosewood, a CITES-protected timber species, hidden among general cargo.")
+    assert r["category"] == "CITES protected timber"
+
+
+def test_alligator_in_drug_raid_stays_drug():
+    r = extract("Federal agents seize 110 lbs of drugs, baby alligator and a gun at stash house",
+                "Agents seized 110 lbs of drugs and an alligator at an apartment.")
+    assert r["category"] == "Drug"

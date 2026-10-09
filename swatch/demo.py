@@ -170,9 +170,31 @@ def arms_ammo(rng):
 
 
 LANG = {es_container: "es", fr_container: "fr"}
+def cites_ivory(rng):
+    """Non-drug: elephant ivory seized in transit (invented sample)."""
+    o, d = rng.choice([("Kenya", "Vietnam"), ("Tanzania", "China"), ("Nigeria", "Thailand")])
+    kg = rng.choice([300, 800, 2500])
+    title = f"Customs seize {kg} kg of elephant ivory hidden in a container bound for {d}"
+    text = (f"Customs officers seized {kg} kg of raw elephant ivory, a CITES-listed product, hidden among general cargo "
+            f"in a sea container shipped from {o} to {d}. Two suspects were arrested.")
+    return title, text
+
+
+def cites_fauna(rng):
+    """Non-drug: other protected fauna seized (invented sample)."""
+    item, o, d = rng.choice([("pangolin scales", "Nigeria", "Vietnam"), ("live tortoises", "Madagascar", "Thailand"),
+                             ("shark fins", "Ecuador", "China")])
+    kg = rng.choice([120, 400, 900])
+    title = f"{kg} kg of {item} seized at port in wildlife trafficking case"
+    text = (f"Authorities seized {kg} kg of {item}, protected under CITES, in a wildlife trafficking case. The shipment "
+            f"travelled from {o} to {d}, declared as frozen food.")
+    return title, text
+
+
 BACKGROUND = [(coke_container, 36), (air_pax, 14), (road_cannabis, 12), (post_nsa, 8), (meth_sea, 5), (cigarettes, 8),
               (captagon, 5), (es_container, 7), (fr_container, 5),
-              (stolen_vehicle, 4), (precursor_chemical, 4), (cites_timber, 4), (arms_ammo, 4)]
+              (stolen_vehicle, 4), (precursor_chemical, 4), (cites_timber, 4), (arms_ammo, 4),
+              (cites_ivory, 3), (cites_fauna, 3)]
 
 
 def demo_articles(today=None, seed=7):

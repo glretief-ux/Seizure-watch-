@@ -28,7 +28,9 @@ UNIT_RX = re.compile(NUM + MULT + r"[\s-]*(?:[a-z]+\s+)?(pills|tablets|capsules|
                      r"motorcycles|motorbikes|"
                      r"rounds\s+of\s+ammunition|rounds|cartridges|cartuchos|cartouches|"
                      r"firearms|rifles|pistols|handguns|revolvers|shotguns|armas\s+de\s+fuego|fusiles|pistolas|"
-                     r"grenades|granadas)"
+                     r"grenades|granadas|"
+                     r"tusks?|horns|skins|pelts|fins|pieces|animals|specimens|turtles|tortoises|snakes|lizards|"
+                     r"reptiles|birds|parrots|monkeys|pangolins|primates)"
                      r"(?![a-z])")
 UNIT_KIND = {"pills": "pills", "tablets": "pills", "capsules": "pills", "comprimidos": "pills", "pastillas": "pills",
              "pilulas": "pills", "pilules": "pills", "comprimes": "pills", "doses": "doses",
@@ -42,7 +44,15 @@ UNIT_KIND = {"pills": "pills", "tablets": "pills", "capsules": "pills", "comprim
              "cartouches": "rounds",
              "firearms": "firearms", "rifles": "firearms", "pistols": "firearms", "handguns": "firearms",
              "revolvers": "firearms", "shotguns": "firearms", "armas de fuego": "firearms", "fusiles": "firearms",
-             "pistolas": "firearms", "grenades": "firearms", "granadas": "firearms"}
+             "pistolas": "firearms", "grenades": "firearms", "granadas": "firearms",
+             # wildlife counts - only used for the two CITES wildlife categories (see _quantities)
+             "tusk": "tusks", "tusks": "tusks", "horns": "horns", "skins": "skins", "pelts": "skins", "fins": "fins",
+             "pieces": "pieces", "animals": "animals", "specimens": "animals", "turtles": "animals",
+             "tortoises": "animals", "snakes": "animals", "lizards": "animals", "reptiles": "animals",
+             "birds": "animals", "parrots": "animals", "monkeys": "animals", "pangolins": "animals",
+             "primates": "animals"}
+WILDLIFE_KINDS = {"tusks", "horns", "skins", "fins", "pieces", "animals"}
+WILDLIFE_CATEGORIES = {"CITES elephant ivory", "CITES protected fauna"}
 ARREST_A = re.compile(NUMW + r"\s+(?:\w+\s+){0,3}?(?:were\s+|was\s+|have\s+been\s+|fueron\s+|han\s+sido\s+|ont\s+ete\s+)?"
                       r"(?:arrested|detained|charged|apprehended|captured|detenid\w+|arrestad\w+|capturad\w+|"
                       r"aprehendid\w+|interpelad\w+|arrete\w*|interpelle\w*|presos|detidos|presas)")
@@ -126,6 +136,8 @@ UNSPECIFIED_LABEL = {
     "Precursor chemical": "Unspecified precursor chemical",
     "CITES protected timber": "Unspecified protected timber",
     "Arms and ammunition": "Unspecified arms/ammunition",
+    "CITES elephant ivory": "Unspecified ivory",
+    "CITES protected fauna": "Unspecified protected fauna",
     "Stolen vehicle": "Unspecified stolen vehicle",
 }
 
@@ -144,12 +156,16 @@ def _classify(title_n, text_n):
     or (None, [], None) if nothing matches."""
     blob = title_n + " " + text_n
 
-    def _rank(patterns):
+    def _scores(patterns):
         counts = {}
         for name, pat in patterns.items():
             c = len(pat.findall(text_n)) + 3 * len(pat.findall(title_n))
             if c:
                 counts[name] = c
+        return counts
+
+    def _rank(patterns):
+        counts = _scores(patterns)
         return sorted(counts, key=counts.get, reverse=True)
 
     drug_ordered = _rank(L.DRUG_PATTERNS)
@@ -160,9 +176,25 @@ def _classify(title_n, text_n):
     if precursor_ordered:
         return precursor_ordered[0], precursor_ordered, "Precursor chemical"
 
-    timber_ordered = _rank(L.TIMBER_PATTERNS)
-    if timber_ordered:
-        return timber_ordered[0], timber_ordered, "CITES protected timber"
+    # The three CITES categories (elephant ivory, other protected fauna, protected
+    # timber) compete on how strongly their named items appear; on a tie the
+    # animal categories win over timber because they are the more specific signal.
+    cites = []
+    for prio, (cat, pats) in enumerate((("CITES elephant ivory", L.IVORY_PATTERNS),
+                                         ("CITES protected fauna", L.FAUNA_PATTERNS),
+                                         ("CITES protected timber", L.TIMBER_PATTERNS))):
+        sc = _scores(pats)
+        if sc:
+            ordered = sorted(sc, key=sc.get, reverse=True)
+            cites.append((-sc[ordered[0]], prio, cat, ordered))
+    if cites:
+        _, _, cat, ordered = min(cites)
+        # Reptiles, birds and primates turn up incidentally in drug raids ("drugs, firearms and an
+        # alligator seized at a stash house"): a plain "drugs" in the headline keeps those as drug
+        # stories. Strong wildlife signals (ivory, horn, scales, fins ...) are never overruled.
+        weak = {"Reptiles and turtles", "Birds", "Primates"}
+        if not (cat == "CITES protected fauna" and ordered[0] in weak and L.GENERIC_DRUG.search(title_n)):
+            return ordered[0], ordered, cat
 
     arms_ordered = _rank(L.ARMS_PATTERNS)
     if arms_ordered:
@@ -181,6 +213,8 @@ def _classify(title_n, text_n):
         return UNSPECIFIED_LABEL["Precursor chemical"], [], "Precursor chemical"
     if L.GENERIC_TIMBER.search(blob):
         return UNSPECIFIED_LABEL["CITES protected timber"], [], "CITES protected timber"
+    if L.GENERIC_FAUNA.search(blob):
+        return UNSPECIFIED_LABEL["CITES protected fauna"], [], "CITES protected fauna"
     if L.GENERIC_ARMS.search(blob):
         return UNSPECIFIED_LABEL["Arms and ammunition"], [], "Arms and ammunition"
     if has_theft_cue and L.GENERIC_STOLEN_VEHICLE.search(blob):
@@ -273,6 +307,11 @@ def _quantities(t, primary, title_len=0, en=True, category=None, skip_precursor_
         except ValueError:
             continue
     for m in UNIT_RX.finditer(t):
+        # wildlife counts (tusks, skins, live animals ...) only exist for the two CITES wildlife
+        # categories, and there nothing else counts; checked first so that these new unit words can
+        # never change how drug, chemical, timber or vehicle stories are read.
+        if (UNIT_KIND.get(re.sub(r"\s+", " ", m.group(3)), "packages") in WILDLIFE_KINDS) != (category in WILDLIFE_CATEGORIES):
+            continue
         if not _in_context(t, m.start(), m.end()):
             continue
         if CUMUL.search(_sentence(t, m.start(), m.end())):
@@ -586,7 +625,7 @@ def _details(title, text, t):
 def extract(title, text="", source_country=None):
     """Return a dict of facts. rec['relevant'] tells whether it is a real seizure story.
     Covers drug seizures and the non-drug contraband categories (precursor
-    chemicals, CITES-protected timber, stolen vehicles) via rec['category']."""
+    chemicals, CITES-protected timber / elephant ivory / other fauna, stolen vehicles) via rec['category']."""
     title_n, text_n = L.norm(title), L.norm(text)
     t = (title_n + ". " + text_n).strip()
     primary, drugs, category = _classify(title_n, text_n)
