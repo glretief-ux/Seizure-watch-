@@ -111,8 +111,15 @@ def build_dashboard(path, payload):
     geo_json = json.dumps(geo.payload(lexicon.PLACE_ALIAS), ensure_ascii=False, separators=(",", ":"))
     with open(os.path.join(os.path.dirname(__file__), "dashboard.html"), encoding="utf-8") as f:
         html = f.read()
+    logo = os.path.join(os.path.dirname(__file__), "..", "assets", "pccp", "aircop-ccp-logo.png")
+    try:
+        import base64
+        with open(logo, "rb") as lf:
+            logo_uri = "data:image/png;base64," + base64.b64encode(lf.read()).decode()
+    except OSError:
+        logo_uri = ""          # logo file missing: the page still builds, just without it
     with open(path, "w", encoding="utf-8") as f:
-        f.write(html.replace("__DATA__", data).replace("__GEO__", geo_json))
+        f.write(html.replace("__DATA__", data).replace("__GEO__", geo_json).replace("__LOGO__", logo_uri))
 
 
 def write_all(res, out_dir, cfg, demo=False, verifications=None):
