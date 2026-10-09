@@ -27,7 +27,8 @@ header .sub{opacity:.8;font-size:12px}
 .kpi .v{font-size:24px;font-weight:700;margin-top:2px}
 .kpi .d{font-size:12px;color:var(--mute)}
 .card{background:var(--card);border-radius:var(--r);padding:14px 16px;box-shadow:0 1px 2px rgba(0,0,0,.06);margin-bottom:12px;overflow:hidden}
-.card h2{font-size:14px;margin:0 0 10px}
+.card h2{font-size:14px;margin:-14px -16px 12px;padding:10px 16px;background:var(--brand);color:#fff;letter-spacing:.2px}
+.card h2 .small,.card h2 .cnt{color:#c9d9ee;font-weight:400}
 .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:12px}
 .chartbox{position:relative;height:260px}
 .alertbox{max-height:430px;overflow-y:auto;overscroll-behavior:contain;padding-right:4px;-webkit-overflow-scrolling:touch}
@@ -40,7 +41,9 @@ header .sub{opacity:.8;font-size:12px}
 table{border-collapse:collapse;width:100%;font-size:12.5px}
 th{position:sticky;top:0;background:#f0f3f7;text-align:left;padding:8px 8px;cursor:pointer;white-space:nowrap;font-size:11px;text-transform:uppercase;letter-spacing:.3px;color:var(--mute)}
 td{padding:7px 8px;border-top:1px solid var(--line);vertical-align:top}
+#evT tbody tr:nth-child(even) td{background:#e4edf8}
 tr:hover td{background:#f8fafc}
+#evT tbody tr:hover td{background:#d3e2f4}
 table.rm{border-collapse:collapse;margin:6px 0}table.rm th,table.rm td{border:1px solid var(--line);padding:5px 9px;text-align:left;vertical-align:top}table.rm th{background:#f1f3f7}
 .chip{display:inline-block;padding:1px 8px;border-radius:99px;font-size:11px;font-weight:700;color:#fff}
 .chip.High{background:var(--hi)}.chip.Medium{background:var(--med)}.chip.Low{background:var(--lo)}
