@@ -124,3 +124,33 @@ if __name__ == "__main__":
             except AssertionError:
                 import traceback; bad += 1; print("FAIL", k); traceback.print_exc()
     sys.exit(1 if bad else 0)
+
+
+# ---- Vietnamese (ivory searches) -------------------------------------------------------------
+VI_CASES = [
+    ("Hải quan Hải Phòng bắt giữ 2 tấn ngà voi nhập lậu từ Nigeria", 2000, "Vietnam", "Nigeria", None),
+    ("Phát hiện 1.200 kg ngà voi trong container từ Mozambique đến Hải Phòng", 1200, None, "Mozambique", "Vietnam"),
+    ("Thu giữ 1,5 tấn ngà voi tại cảng Cát Lái", 1500, "Vietnam", None, None),
+    ("Thu giữ 500 kg ngà voi vận chuyển sang Trung Quốc qua Campuchia", 500, None, None, "China"),
+]
+
+
+def test_vietnamese_ivory_is_read():
+    for title, kg, country, origin, dest in VI_CASES:
+        r = extract(title, "")
+        assert r["relevant"] == 1, title
+        assert r["category"] == "CITES elephant ivory" and r["primary_drug"] == "Elephant ivory", title
+        assert abs(r["qty_kg"] - kg) < 0.5, (title, r["qty_kg"])
+        if country:
+            assert r["seizure_country"] == country, (title, r["seizure_country"])
+        if origin:
+            assert r["origin"] == origin, (title, r["origin"])
+        if dest:
+            assert r["destination"] == dest, (title, r["destination"])
+
+
+def test_vietnamese_unrelated_and_ivory_coast_are_not_ivory():
+    assert extract("Giá vàng hôm nay tăng mạnh tại Hà Nội", "")["relevant"] == 0
+    assert extract("Đội tuyển Việt Nam thắng đậm, bắt giữ cơ hội vào chung kết", "")["relevant"] == 0
+    r = extract("Bắt giữ 3 kg cocaine tại Bờ Biển Ngà", "")      # Bờ Biển Ngà = Ivory Coast, not ivory
+    assert r["category"] == "Drug" and r["seizure_country"] == "Ivory Coast"

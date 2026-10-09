@@ -238,7 +238,7 @@ PRECURSOR = re.compile(r"precursor|chemical|quimic|chimique|\bacid|acido|acide|s
                        r"|anhidrido|\bp2p\b|\bbmk\b|\bpmk\b")
 MAX_SINGLE_KG = 40000.0          # more than 40 t in one seizure is almost always a running total or a parsing slip
 _EN = re.compile(r"\b(?:the|and|of|was|were|with|has|have|said|police|been|for|that|at|from|after|by)\b")
-_LAT = re.compile(r"\b(?:de|la|el|los|las|del|con|por|una|que|fue|se|en|le|les|des|du|et|dans|pour|est|um|uma|os|nao|com|para|foi|da|do|das|dos|y|o|e|au|aux)\b")
+_LAT = re.compile(r"\b(?:de|la|el|los|las|del|con|por|una|que|fue|se|en|le|les|des|du|et|dans|pour|est|um|uma|os|nao|com|para|foi|da|do|das|dos|y|o|e|au|aux|cua|duoc|cac|nhung|mot|voi|tai)\b")
 
 
 def _english(t):

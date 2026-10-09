@@ -210,7 +210,8 @@ GENERIC_ARMS = rx(r"illegal\s+(?:weapons?|arms)", r"illicit\s+(?:weapons?|arms)"
 # country Ivory Coast / Cote d'Ivoire, so they only count in a wildlife context.
 IVORY_PATTERNS = {
     "Elephant ivory": rx(r"\bivory\b(?!\s+coast)(?!\s+tower)", r"elephant\s+tusks?", r"\btusks\b",
-                         r"\bmarfil\b", r"(?<!d')(?<!d )\bivoire\b", r"\bmarfim\b", r"mammoth\s+ivory"),
+                         r"\bmarfil\b", r"(?<!d')(?<!d )\bivoire\b", r"\bmarfim\b", r"mammoth\s+ivory",
+                         r"\bnga\s+voi\b"),                       # Vietnamese (ngà voi = elephant tusk / ivory)
 }
 FAUNA_PATTERNS = {
     "Rhino horn": rx(r"rhino(?:ceros)?\s+horns?", r"cuerno\s+de\s+rinoceronte", r"corne\s+de\s+rhinoceros",
@@ -576,7 +577,7 @@ _PLACES = [
     ("Jakarta", "Indonesia", ["jakarta", "tanjung priok"]),
     ("Manila", "Philippines", ["manila"]),
     ("Laem Chabang", "Thailand", ["laem chabang", "bangkok"]),
-    ("Ho Chi Minh City", "Vietnam", ["ho chi minh"]),
+    ("Ho Chi Minh City", "Vietnam", ["ho chi minh", "sai gon", "saigon"]),
     ("Shanghai", "China", ["shanghai", "shenzhen", "ningbo", "guangzhou"]),
     ("Busan", "South Korea", ["busan"]),
     ("Kingston", "Jamaica", ["kingston"]),
@@ -676,7 +677,7 @@ _PLACES += [
     ('Kuala Lumpur', 'Malaysia', ['kuala lumpur', 'klia']),
     ('Yangon', 'Myanmar', ['yangon']),
     ('Shan State', 'Myanmar', ['shan state']),
-    ('Hanoi', 'Vietnam', ['hanoi']),
+    ('Hanoi', 'Vietnam', ['hanoi', 'ha noi']),
     ('Phnom Penh', 'Cambodia', ['phnom penh']),
     ('Vientiane', 'Laos', ['vientiane']),
     ('Cebu', 'Philippines', ['cebu']),
@@ -1019,6 +1020,9 @@ SEIZURE_EXTRA = [
     "изъял", "изъят", "конфиск", "задержа", "пресек", "контрабанд", "обнаружил",
     "缴获", "繳獲", "查获", "查獲", "截获", "截獲", "破获", "破獲", "缉获", "緝獲", "起获", "檢獲", "检获", "查扣", "扣押", "走私",
     "जब्त", "बरामद", "पकडा", "पकडे", "तस्करी", "भंडाफोड",
+    # Vietnamese (seized, confiscated, caught red-handed, smuggling, illegal transport, busted, found, exhibits)
+    r"\bbat\s+giu\b", r"\btich\s+thu\b", r"\bthu\s+giu\b", r"\bbat\s+qua\s+tang\b", r"\bbuon\s+lau\b",
+    r"\bvan\s+chuyen\s+trai\s+phep\b", r"\btriet\s+pha\b", r"\bphat\s+hien\b", r"\btang\s+vat\b",
 ]
 CONTAINER_EXTRA = ["حاوية", "حاويات", "konteyner", "контейнер", "集装箱", "集裝箱", "货柜", "貨櫃", "कंटेनर"]
 PORT_WORDS = [r"ميناء", r"(?<![a-z])liman", r"морск\w+\s+порт", r"(?<![а-я])порт", r"港口", r"(?<!香)港", r"बंदरगाह"]
@@ -1031,6 +1035,7 @@ UNITS_EXTRA = [
     (r"килограмм\w*", 1), ("кг", 1), (r"тонн\w*", 1000),
     ("公斤", 1), ("千克", 1), ("公吨", 1000), ("吨", 1000), ("噸", 1000),
     ("किलोग्राम", 1), ("किलो", 1), ("किग्रा", 1), ("टन", 1000), ("क्विंटल", 100),
+    ("kilogam", 1), ("ki-lo-gam", 1), ("ki lo gam", 1), ("tan", 1000),   # Vietnamese: ki-lô-gam, tấn (tonne)
 ]
 
 # ---- countries: English name | Arabic | Turkish | Russian stem | Chinese simplified | Chinese traditional | Hindi
@@ -1166,6 +1171,27 @@ Turkey|türkiye|turkey
 Guinea|غينيا كوناكري
 Guinea-Bissau|غينيا بيساو|gine bisau|гвине-бисау|几内亚比绍|幾內亞比索
 Equatorial Guinea|غينيا الاستوائية|ekvator ginesi|экваториальн\w+ гвине|赤道几内亚|赤道幾內亞
+China|Trung Quốc
+Hong Kong|Hồng Kông
+Taiwan|Đài Loan
+Thailand|Thái Lan
+Laos|Lào
+Cambodia|Campuchia
+Japan|Nhật Bản
+South Korea|Hàn Quốc
+India|Ấn Độ
+South Africa|Nam Phi
+United States|Hoa Kỳ
+United Kingdom|Vương quốc Anh
+France|Pháp
+Germany|Đức
+Netherlands|Hà Lan
+Spain|Tây Ban Nha
+Portugal|Bồ Đào Nha
+Poland|Ba Lan
+Turkey|Thổ Nhĩ Kỳ
+Egypt|Ai Cập
+Ivory Coast|Bờ Biển Ngà
 """
 
 # ---- places (ports, airports, hubs) in other scripts: (display name as used in the gazetteer, country, [aliases])
@@ -1206,6 +1232,12 @@ PLACES = [
     ("Domodedovo airport", "Russia", ["domodedovo", "домодедов"]),
     ("Almaty", "Kazakhstan", ["almaty", "алмат", "阿拉木图"]),
     ("Tashkent", "Uzbekistan", ["tashkent", "ташкент", "塔什干"]),
+    # Vietnamese ports and airports (written without accents, as the text is normalised)
+    ("Cat Lai", "Vietnam", ["cat lai"]),
+    ("Cai Mep", "Vietnam", ["cai mep"]),
+    ("Da Nang", "Vietnam", ["da nang", "danang"]),
+    ("Noi Bai airport", "Vietnam", ["noi bai"]),
+    ("Tan Son Nhat airport", "Vietnam", ["tan son nhat"]),
 ]
 
 
@@ -1247,6 +1279,11 @@ DEST_CUE = _cue_ext(DEST_CUE, r"متجه[ةا]?\s+(?:إلى|الى)|في\s+طر�
                               r"运往|運往|前往|发往|發往|运抵|運抵|销往|銷往")
 TRANSIT_CUE = _cue_ext(TRANSIT_CUE, r"(?<![\u0600-\u06ff])عبر|(?<![\u0430-\u044f])через|途经|途經|经由|經由|经过|經過|转运|轉運|取道")
 TO_CUE = _cue_ext(TO_CUE, r"(?<![\u0600-\u06ff])(?:إلى|الى)|(?<![\u0430-\u044f])в|到|至")
+# Vietnamese: "từ X" (from), "sang X" / "đến X" (to), "qua X" (via)
+ORIGIN_CUE = _cue_ext(ORIGIN_CUE, r"(?<![a-z])tu(?![a-z])|xuat\s+phat\s+tu|nhap\s+(?:lau\s+)?tu")
+DEST_CUE = _cue_ext(DEST_CUE, r"(?<![a-z])sang(?![a-z])|(?<![a-z])\u0111en(?![a-z])|xuat\s+sang|van\s+chuyen\s+sang")
+TRANSIT_CUE = _cue_ext(TRANSIT_CUE, r"(?<![a-z])qua(?![a-z])|thong\s+qua|trung\s+chuyen\s+(?:qua|tai)")
+TO_CUE = _cue_ext(TO_CUE, r"(?<![a-z])(?:sang|\u0111en)(?![a-z])")
 # suffixes that come AFTER the country: Turkish 'dan / 'e, Hindi "se" (from) / "tak" (to)
 POST_ORIGIN = re.compile(r"^(?:'(?:dan|den|tan|ten)(?![a-z])|\s*से(?![\u0900-\u097f]))")
 POST_DEST = re.compile(r"^(?:'(?:ya|ye|na|ne|a|e)(?![a-z])|\s*(?:तक|के\s+लिए)(?![\u0900-\u097f]))")

@@ -22,7 +22,7 @@ High-risk events (0-100 score), insider signals, new and surging corridors, and 
 
 ## Notes
 - Only extracted facts and the article link are stored, not article text.
-- Extraction is rule-based (English, Spanish, French, Portuguese, Arabic, Turkish, Russian, Chinese, Hindi); treat output as leads to verify, not confirmed intelligence.
+- Extraction is rule-based (English, Spanish, French, Portuguese, Arabic, Turkish, Russian, Chinese, Hindi; Vietnamese for elephant-ivory seizures only); treat output as leads to verify, not confirmed intelligence.
 - Live collection was not tested in the build sandbox (no internet access to news sites); run the backfill once and check the counts.
 
 ## Languages, coverage and detail

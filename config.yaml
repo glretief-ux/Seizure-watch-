@@ -39,6 +39,7 @@ sources:
       - {lang: zh, hl: zh-HK,  gl: HK, ceid: "HK:zh-Hant"}
       - {lang: zh, hl: zh-TW,  gl: TW, ceid: "TW:zh-Hant"}
       - {lang: hi, hl: hi,     gl: IN, ceid: "IN:hi"}
+      - {lang: vi, hl: vi,     gl: VN, ceid: "VN:vi"}   # Vietnam (ivory searches)
     queries:
       en: ["drug seizure", "cocaine seized", "heroin seized", "methamphetamine seized",
            "cannabis seized customs", "captagon seized", "fentanyl seized", "MDMA ecstasy seized",
@@ -69,6 +70,7 @@ sources:
       tr: ["uyuşturucu ele geçirildi", "kokain ele geçirildi", "esrar ele geçirildi", "uyuşturucu hap ele geçirildi", "liman konteyner kokain", "captagon ele geçirildi"]
       ru: ["изъяли наркотики", "изъяли кокаин", "изъяли героин", "изъяли метамфетамин", "контрабанда наркотиков порт", "изъяли синтетические наркотики"]
       zh: ["缴获毒品", "查获可卡因", "海关 查获 毒品", "檢獲 毒品", "檢獲 可卡因", "緝獲 冰毒"]
+      vi: ["thu giữ ngà voi", "bắt giữ buôn lậu ngà voi", "hải quan phát hiện ngà voi", "ngà voi nhập lậu"]
       hi: ["ड्रग्स जब्त", "कोकीन जब्त", "गांजा बरामद", "हेरोइन बरामद", "अफीम जब्त", "नशीली गोलियां बरामद"]
 
   gdelt:                       # global news index; free, no key. Set enabled: false to skip.
@@ -98,6 +100,7 @@ sources:
       ru: ['(кокаин OR героин OR метамфетамин OR наркотики) (изъяли OR изъято OR задержали)']
       zh: ['(可卡因 OR 海洛因 OR 冰毒 OR 毒品) (缴获 OR 查获 OR 檢獲)']
       hi: ['(कोकीन OR हेरोइन OR गांजा OR ड्रग्स) (जब्त OR बरामद)']
+      vi: ['("ngà voi") (thu giữ OR bắt giữ OR buôn lậu)']
 
   # Official newsrooms. Google News is searched once per website below (site:...), so official press
   # releases are picked up even when no newspaper reports them. Add or remove websites freely.

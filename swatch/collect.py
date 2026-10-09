@@ -142,7 +142,7 @@ def resolve_google_links(items, interval=0.3, chunk=25):
 
 # ---------------------------------------------------------------------- GDELT
 GDELT_LANGS = {"en": "english", "es": "spanish", "fr": "french", "pt": "portuguese", "ar": "arabic", "tr": "turkish",
-               "ru": "russian", "zh": "chinese", "hi": "hindi"}
+               "ru": "russian", "zh": "chinese", "hi": "hindi", "vi": "vietnamese"}
 
 
 def gdelt(query, lang, days, maxrec=100):
