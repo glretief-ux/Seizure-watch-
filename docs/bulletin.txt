@@ -1,33 +1,33 @@
-SEIZURE WATCH - weekly bulletin, 02 Oct - 08 Oct 2026
+SEIZURE WATCH - weekly bulletin, 03 Oct - 09 Oct 2026
 
-1523 seizure reports this week (previous week 2106); 9 high risk; 225.9 t reported.
-Main drugs: Cannabis (516), Cocaine (363), NSA (212)
-Main countries: India (83), Turkey (51), United States (34), Canada (26)
+1212 seizure reports this week (previous week 2110); 2 high risk; 168.5 t reported.
+Main drugs: Cannabis (408), Cocaine (277), NSA (159)
+Main countries: India (67), Turkey (30), United States (21), Mexico (16)
 
 NEW AND SURGING CORRIDORS
 - Mexico -> United States: NEW (16 this period, 0 before; mainly Methamphetamine)
 - Ghana -> South Africa: NEW (16 this period, 0 before; mainly Heroin/Opium)
 - Pakistan -> India: SURGING (16 this period, 1 before; mainly Heroin/Opium)
 - Thailand -> Hong Kong: SURGING (15 this period, 7 before; mainly Cannabis)
-- Nepal -> India: NEW (10 this period, 0 before; mainly Cannabis)
 - Ghana -> France: NEW (9 this period, 0 before; mainly Cocaine)
+- Thailand -> India: NEW (9 this period, 0 before; mainly Cannabis)
 
 UNUSUAL EVENTS (highest risk first)
-- [High 75] 02 Oct | Cocaine | 8.7 t | Amsterdam | Ghana -> Netherlands | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods) | cargo: timber; charcoal
-  https://3news.com/news/leave-baffour-awuah-alone-and-pursue-the-kingpins-behind-drug-trade-afenyo-tells-eoco
-- [High 65] 02 Oct | Cocaine | 1.5 t | Spain | Colombia -> Spain | Legitimate cargo (industrial/goods) | cargo: الات
-  https://maghrebtimes.ma/2026/10/02/%D8%A7%D8%B9%D8%AA%D9%82%D8%A7%D9%84-27-%D8%B4%D8%AE%D8%B5%D8%A7-%D9%88%D8%AD%D8%AC%D8%B2-16-%D9%81%D9%8A%D9%84%D8%A7-%D9%81%D8%A7%D8%AE%D8%B1%D8%A9%D8%AA%D9%81%D9%83%D9%8A%D9%83-%D8%B4%D8%A8/
 - [High 60] 07 Oct | Cigarettes | 88 cigarettes | Hong Kong | Philippines -> Hong Kong | Legitimate cargo (industrial/goods); Luggage / passenger goods | cargo: cement
   https://www.info.gov.hk/gia/general/202610/07/P2026100700698.htm
-- [High 55] 02 Oct | Cocaine | 180 kg | Zeebrugge | Lithuania -> Belgium | Legitimate cargo (industrial/goods); Luggage / passenger goods; Vehicle compartment
-  https://www.brusselstimes.com/belgium/2343795/over-180-kilograms-of-cocaine-found-in-lorry-at-zeebrugge-port
-- [High 55] 02 Oct | Cocaine | Bocas del Toro | Costa Rica -> Panama | Legitimate cargo (industrial/goods); Luggage / passenger goods
-  https://www.infobae.com/panama/2026/10/02/detienen-a-instructor-de-banda-musical-con-nueve-paquetes-de-supuesta-droga-en-panama-y-decomisan-otro-cargamento-que-tenia-como-destino-italia/
-- [High 50] 02 Oct | Heroin/Opium | 11.0 t | Madhya Pradesh | India -> Canada | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Postal / parcel
-  https://www.pib.gov.in/PressReleaseDetail.aspx?PRID=2318182&reg=6&lang=1
+- [High 50] 07 Oct | Cigarettes | Hong Kong | Hong Kong -> Australia | Legitimate cargo (industrial/goods) | cargo: carrying auto parts; cement | vessel: Examination Compound
+  https://www.info.gov.hk/gia/general/202610/07/P2026100700288.htm
+- [Medium 45] 05 Oct | Cannabis | Hong Kong airport | Thailand -> Hong Kong | Legitimate cargo (industrial/goods); Luggage / passenger goods | cargo: cement
+  https://www.info.gov.hk/gia/general/202610/05/P2026100500343.htm
+- [Medium 40] 03 Oct | Heroin/Opium | 1.0 t | Izmir | Legitimate cargo (food/produce) | cargo: balik
+  https://www.egeyonhaber.com/gundem/75-ilde-dev-uyusturucu-operasyonu-1-ton-uyusturucu-ele-gecirildi/
+- [Medium 40] 06 Oct | Methamphetamine | 521 kg | Laos | Malaysia -> Laos | Postal / parcel
+  https://news.google.com/rss/articles/CBMiywFBVV95cUxNQ2c1M0VWTHFJRzB4YWd2OGJUR01aaHRjX2JqeFZlbWY4d21OOXFieWdpVTRBWV9IS1dzNmc5NU5tejZGZWRvN0dtNW5vbUFWWFUtYUoteWR1MmF5bi1jUjN0bWtTSUduU0VDbEt3aXFTZTBEaDJqazRXTjNqLVNENF9QU050anRja09Oc0NnbWxFNzRnVXNTZzhWd1VTTnpKTmF4WUhXdzRldGpzQjhtWTBTQTJNVXVMUThoRE1CV0RSSGFsNGkxLThYWdIB0AFBVV95cUxQWEZOSC1xOGpYMTY4R0ZOUWxvY3dKblpPWW4xamxnbVRKZ3BpYWFGbEdqUk1VX25rVEJmWlRLQ0Y4bHNfY0xtUTlWcUN1cm85VjVHVEd6b1NjLURDS0ZCNEZYdnMxeFF5V1BZSUd5Q19ic1NlaG94SDRZREQ3MlFmOUFGclhWX3E0b3ZZZGtMQnF3dGxOMkZ2LXN0b1k0T3p6N1pQbzVCTFJXSXNEZXFMVFRtQlBSX24xRUo0ak8wWWtsSkhDUG5SUnp1MUN5R0gw?oc=5
+- [Medium 40] 06 Oct | Methamphetamine | 521 kg | Malaysia | Laos -> Malaysia
+  https://news.google.com/rss/articles/CBMiuAFBVV95cUxOdXdMZHFCS2JzekpZNDFuQmQ5SGlYZmFJRWliekdpVTVYNlphbkNiM1VEZG1MYWpXWl81Q0xweXZXd0RvT012a2FraWM2b2pJUDByTnJTeUlnTUxrRVpWSjNneXFRNmFHeXo3UV91ZlVjN1dYd1pxc0d4MFVRc3BQaHMzX0VNME5MTkxWNzVDLVF5LVF3Y3ZVMEJGVGNFNmEzMWN5bWVNTFJwM09EaW14dFktX1BTMDIt0gG4AUFVX3lxTE51d0xkcUJLYnN6Slk0MW5CZDlIaVhmYUlFaWJ6R2lVNVg2WmFuQ2IzVURkbUxhaldaXzVDTHB5dld3RG9PTXZrYWtpYzZvaklQMHJOclN5SWdNTGtFWlZKM2d5cVE2YUd5ejdRX3VmVWM3V1h3WnFzR3gwVVFzcFBoczNfRU0wTkxOTFY3NUMtUXktUXdjdlUwQkZUY0U2YTMxY3ltZU1MUnAzT0RpbXh0WS1fUFMwMi0?oc=5
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (100), Postal / parcel (40), Legitimate cargo (food/produce) (38)
-Cover cargo named: cement (26), الات (18), फल (10), plastic (4), मशीन (4)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (38), Postal / parcel (18), Legitimate cargo (food/produce) (14)
+Cover cargo named: cement (10), الات (8), मशीन (4), फल (4), balik (2)
 
 Coverage: searching 9 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Chinese). 49 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
 Leads from open sources, not confirmed facts. Verify before acting.
