@@ -41,6 +41,10 @@ def connect(path):
         if col not in COLS:
             conn.execute(f"ALTER TABLE articles ADD COLUMN {col} TEXT")
     COLS = {r["name"] for r in conn.execute("PRAGMA table_info(articles)")}
+    # renamed labels (old name -> new name)
+    for old, new in (("Unspecified protected timber", "Other CITES-protected wood"),):
+        conn.execute("UPDATE articles SET primary_drug=? WHERE primary_drug=?", (new, old))
+    conn.commit()
     conn.execute("CREATE TABLE IF NOT EXISTS meta(k TEXT PRIMARY KEY, v TEXT)")
     return conn
 

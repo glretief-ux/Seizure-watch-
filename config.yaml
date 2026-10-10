@@ -51,6 +51,7 @@ sources:
            "ammonium nitrate seized", "hazardous waste shipment seized",
            "stolen vehicles recovered smuggling", "stolen cars seized border",
            "illegal logging timber seized", "CITES protected timber seized", "rosewood seized trafficking",
+           "red sanders seized smuggling", "kosso timber seized", "mukula logs seized", "CITES timber seized port",
            "elephant ivory seized", "ivory tusks seized customs", "rhino horn seized", "pangolin scales seized",
            "wildlife trafficking seized", "CITES protected species seized", "live reptiles smuggling seized",
            "protected birds smuggling seized", "shark fins seized", "glass eels trafficking seized",
@@ -60,12 +61,12 @@ sources:
       es: ["incautan cocaína", "decomisan droga puerto contenedor", "incautan marihuana",
            "incautan metanfetamina", "incautan drogas sintéticas aeropuerto",
            "incautan químicos precursores", "incautan productos químicos", "decomisan plaguicidas ilegales",
-           "incautan mercurio", "decomisan gas refrigerante contrabando", "decomisan vehículos robados", "madera ilegal incautada",
+           "incautan mercurio", "decomisan gas refrigerante contrabando", "decomisan vehículos robados", "madera ilegal incautada", "incautan madera de cedro caoba",
            "incautan marfil", "tráfico de fauna silvestre incautan", "decomisan animales exóticos aeropuerto",
             "incautan armas de fuego", "decomisan municiones", "incautan arsenal"]
       fr: ["saisie cocaïne", "saisie drogue port conteneur", "saisie cannabis douane", "saisie captagon",
            "saisie précurseurs chimiques", "saisie produits chimiques dangereux", "saisie pesticides illégaux",
-           "saisie gaz réfrigérants", "véhicules volés saisis", "bois illégal saisi",
+           "saisie gaz réfrigérants", "véhicules volés saisis", "bois illégal saisi", "saisie bois de rose", "saisie bois de vène kosso",
            "saisie ivoire", "trafic faune sauvage saisie", "saisie civelles",
             "saisie armes a feu", "saisie munitions", "trafic d'armes saisi"]
       pt: ["apreensão cocaína porto", "apreensão droga contêiner", "apreendem maconha",
@@ -76,9 +77,9 @@ sources:
       ar: ["ضبط مخدرات", "ضبط كوكايين", "ضبط حشيش", "ضبط كبتاجون", "إحباط تهريب مخدرات", "ضبط هيروين", "ضبط ترامادول", "ضبط مواد كيميائية", "ضبط مبيدات مهربة", "ضبط غاز التبريد مهرب", "ضبط نترات الأمونيوم", "ضبط زئبق"]
       tr: ["uyuşturucu ele geçirildi", "kokain ele geçirildi", "esrar ele geçirildi", "uyuşturucu hap ele geçirildi", "liman konteyner kokain", "captagon ele geçirildi", "kaçak kimyasal madde ele geçirildi", "kaçak tarım ilacı ele geçirildi", "kaçak soğutucu gaz ele geçirildi", "amonyum nitrat ele geçirildi"]
       ru: ["изъяли наркотики", "изъяли кокаин", "изъяли героин", "изъяли метамфетамин", "контрабанда наркотиков порт", "изъяли синтетические наркотики", "изъяли химикаты", "контрабанда фреона", "изъяли пестициды", "изъяли ртуть", "контрабанда прекурсоров"]
-      zh: ["缴获毒品", "查获可卡因", "海关 查获 毒品", "檢獲 毒品", "檢獲 可卡因", "緝獲 冰毒", "查获 危险化学品", "走私 制冷剂", "查获 走私农药", "查获 易制毒化学品", "洋垃圾 走私 查获"]
-      vi: ["thu giữ ngà voi", "bắt giữ buôn lậu ngà voi", "hải quan phát hiện ngà voi", "ngà voi nhập lậu", "thu giữ hóa chất", "buôn lậu thuốc bảo vệ thực vật", "buôn lậu gas lạnh", "thu giữ thủy ngân", "tiền chất ma túy thu giữ"]
-      hi: ["ड्रग्स जब्त", "कोकीन जब्त", "गांजा बरामद", "हेरोइन बरामद", "अफीम जब्त", "नशीली गोलियां बरामद", "रसायन जब्त", "कीटनाशक जब्त", "अमोनियम नाइट्रेट बरामद"]
+      zh: ["缴获毒品", "查获可卡因", "海关 查获 毒品", "檢獲 毒品", "檢獲 可卡因", "緝獲 冰毒", "查获 危险化学品", "走私 制冷剂", "查获 走私农药", "查获 易制毒化学品", "洋垃圾 走私 查获", "查获 走私 红木", "查获 紫檀 走私"]
+      vi: ["thu giữ ngà voi", "bắt giữ buôn lậu ngà voi", "hải quan phát hiện ngà voi", "ngà voi nhập lậu", "thu giữ hóa chất", "buôn lậu thuốc bảo vệ thực vật", "buôn lậu gas lạnh", "thu giữ thủy ngân", "tiền chất ma túy thu giữ", "thu giữ gỗ trắc", "buôn lậu gỗ quý hiếm"]
+      hi: ["ड्रग्स जब्त", "कोकीन जब्त", "गांजा बरामद", "हेरोइन बरामद", "अफीम जब्त", "नशीली गोलियां बरामद", "रसायन जब्त", "कीटनाशक जब्त", "अमोनियम नाइट्रेट बरामद", "लाल चंदन जब्त", "लाल चंदन तस्करी"]
 
   gdelt:                       # global news index; free, no key. Set enabled: false to skip.
     enabled: true
@@ -88,7 +89,7 @@ sources:
            '("hazardous chemicals" OR "toxic chemicals" OR "illegal pesticides" OR refrigerants OR "ozone-depleting" OR "ammonium nitrate" OR "hazardous waste") (seized OR seizure OR smuggling)',
            '(mercury) (smuggling OR seized) (mining OR customs)',
            '(stolen vehicles OR stolen cars) (seized OR recovered OR smuggling)',
-           '(illegal logging OR protected timber OR rosewood) (seized OR seizure)',
+           '(illegal logging OR protected timber OR rosewood OR "red sanders" OR kosso OR mukula) (seized OR seizure)',
            '(ivory OR "rhino horn" OR pangolin OR "wildlife trafficking") (seized OR seizure OR smuggling)',
            '("CITES" OR "protected species" OR "shark fins" OR "glass eels") (seized OR seizure)',
            '(illegal firearms OR weapons cache OR ammunition OR arms trafficking) (seized OR seizure)']
@@ -238,6 +239,11 @@ risk:
     Ramin: 5000
     Afrormosia: 5000
     Mahogany: 5000
+    Kosso (Pterocarpus erinaceus): 5000
+    Red sandalwood (Pterocarpus santalinus): 1000
+    Spanish cedar (Cedrela): 5000
+    Afzelia (doussie): 5000
+    Lignum vitae (Guaiacum): 2000
     # CITES elephant ivory and other protected fauna (kg). Ivory: 500 kg is the
     # usual "large-scale seizure" cut-off; the rest are judgement values - edit freely.
     Elephant ivory: 500

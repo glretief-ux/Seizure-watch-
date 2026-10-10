@@ -323,3 +323,10 @@ def test_chemicals_other_languages():
     assert extract("На таможне изъяли 2 тонны контрабандного фреона", "")["primary_drug"] == "Ozone-depleting refrigerants"
     assert extract("海关查获易制毒化学品5吨", "")["category"] == "Precursor chemical"
     assert extract("Bắt giữ 200 kg thủy ngân buôn lậu", "")["primary_drug"] == "Mercury"
+
+
+def test_cites_wood_species():
+    assert extract("Police seize 3 tonnes of red sanders logs worth Rs 2 crore in Chittoor", "")["primary_drug"].startswith("Red sandalwood")
+    assert extract("Customs seize 40 containers of kosso timber bound for China at Tema port", "")["primary_drug"].startswith("Kosso")
+    r = extract("Authorities seize 12 tonnes of illegally logged CITES-protected wood at Douala port", "")
+    assert r["category"] == "CITES protected timber" and r["primary_drug"] == "Other CITES-protected wood"

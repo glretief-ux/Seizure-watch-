@@ -213,14 +213,25 @@ GENERIC_CHEMICAL = rx(r"hazardous\s+chemicals?", r"toxic\s+chemicals?", r"danger
                       r"substances?\s+chimiques?\s+(?:dangereuses|illegales|toxiques)", r"saisie\s+de\s+(?:produits\s+)?chimiques",
                       r"produtos?\s+quimicos?\s+(?:perigosos|ilegais|toxicos)", r"apreensao\s+de\s+produtos\s+quimicos")
 
+# CITES-listed tree species traded as timber (Appendix I/II). Rosewoods and Pterocarpus
+# dominate seizures; edit freely as listings change at each CITES CoP.
 TIMBER_PATTERNS = {
-    "Rosewood (Dalbergia)": rx(r"rosewood", r"dalbergia", r"palisandro", r"palissandre", r"bois\s+de\s+rose"),
+    "Rosewood (Dalbergia)": rx(r"rosewood", r"dalbergia", r"palisandro", r"palissandre", r"bois\s+de\s+rose",
+                               r"pau-?rosa", r"红木", r"紅木", r"酸枝", r"黄花梨", r"黃花梨", r"\bgo\s+trac\b", r"\bgo\s+cam\s+lai\b"),
+    "Kosso (Pterocarpus erinaceus)": rx(r"\bkosso\b", r"pterocarpus\s+erinaceus", r"african\s+rosewood",
+                                        r"\bvene\b", r"bois\s+de\s+vene", r"\bbarwood\b"),
+    "Red sandalwood (Pterocarpus santalinus)": rx(r"red\s+sanders?", r"red\s+sandal(?:wood)?", r"pterocarpus\s+santalinus",
+                                                  r"\blal\s+chandan\b", r"\brakta\s+chandan\b", r"लाल\s+चंदन",
+                                                  r"रक्त\s+चंदन", r"小叶紫檀", r"小葉紫檀"),
     "Mukula": rx(r"\bmukula\b"),
     "Ebony": rx(r"\bebony\b", r"\bebano\b", r"\bebene\b"),
     "Agarwood": rx(r"agarwood", r"\boud\b", r"aquilaria"),
     "Ramin": rx(r"\bramin\b"),
     "Afrormosia": rx(r"afrormosia", r"assamela"),
-    "Mahogany": rx(r"mahogany", r"\bcaoba\b", r"\bacajou\b"),
+    "Mahogany": rx(r"mahogany", r"\bcaoba\b", r"\bacajou\b", r"\bkhaya\b", r"swietenia"),
+    "Spanish cedar (Cedrela)": rx(r"\bcedrela\b", r"spanish\s+cedar", r"cedro\s+(?:rosado|amargo|espanol|vermelho)"),
+    "Afzelia (doussie)": rx(r"\bafzelia\b", r"\bdoussie\b", r"pod\s+mahogany", r"\blingue\b"),
+    "Lignum vitae (Guaiacum)": rx(r"lignum\s+vitae", r"\bguaiacum\b", r"\bguayacan\b"),
 }
 GENERIC_TIMBER = rx(r"cites[- ]protected\s+(?:timber|wood|tree|rosewood)", r"protected\s+(?:timber|wood)",
                     r"illegal(?:ly)?\s+logg?ed", r"illegal\s+logging", r"tala\s+ilegal",

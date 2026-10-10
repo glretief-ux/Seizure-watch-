@@ -156,6 +156,11 @@ def write_all(res, out_dir, cfg, demo=False, verifications=None):
         "coverage": coverage.payload(cfg), "risk_model": analyze.risk_model_description(cfg),
         "kpis": res["kpis"], "events": event_records(ev_r), "alerts": res["alerts"],
         "monthly": monthly_counts(ev),
+        "cites_types": {
+            "CITES elephant ivory": list(lexicon.IVORY_PATTERNS) + ["Unspecified ivory"],
+            "CITES protected fauna": list(lexicon.FAUNA_PATTERNS) + ["Unspecified protected fauna"],
+            "CITES protected timber": list(lexicon.TIMBER_PATTERNS) + ["Other CITES-protected wood"],
+        },
         "corridors": res["corridors"].head(40).to_dict("records") if len(res["corridors"]) else [],
         "hotspots": res["hotspots"].head(25).to_dict("records") if len(res["hotspots"]) else [],
     }

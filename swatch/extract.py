@@ -135,7 +135,7 @@ UNSPECIFIED_LABEL = {
     "Drug": "Unspecified",
     "Precursor chemical": "Unspecified precursor chemical",
     "Hazardous chemical": "Unspecified chemical",
-    "CITES protected timber": "Unspecified protected timber",
+    "CITES protected timber": "Other CITES-protected wood",
     "Arms and ammunition": "Unspecified arms/ammunition",
     "CITES elephant ivory": "Unspecified ivory",
     "CITES protected fauna": "Unspecified protected fauna",
