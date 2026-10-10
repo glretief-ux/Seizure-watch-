@@ -240,8 +240,11 @@ if (!D.meta.history_ok) bn.push('<div class="banner hist">Building history: tren
 $('banners').innerHTML = bn.join('');
 // CITES elephant ivory / protected fauna / protected timber share one "CITES" entry in the filter
 const catGroup = c => (c && c.startsWith('CITES')) ? 'CITES' : (c || 'Drug');
-const CITES_SUB = {'CITES elephant ivory': 'Elephant ivory', 'CITES protected fauna': 'Protected fauna', 'CITES protected timber': 'CITES-protected wood'};
-D.events.forEach(e => { if (e.drug === 'Unspecified protected timber') e.drug = 'Other CITES-protected wood'; });
+const CITES_SUB = {'CITES elephant ivory': 'Elephant ivory', 'CITES protected fauna': 'Protected fauna', 'CITES protected timber': 'Wood'};
+// all CITES wood is one type on the dashboard; the species stays in the article and the CSV / Excel
+const WOOD = 'CITES-protected wood';
+D.events.forEach(e => { if (e.category === 'CITES protected timber') e.drug = WOOD; });
+(D.monthly || []).forEach(r => { if (r[1] === 'CITES protected timber') r[2] = WOOD; });
 [...new Set(D.events.map(e => catGroup(e.category)))].sort().forEach(d => $('fCategory').insertAdjacentHTML('beforeend', '<option>' + esc(d) + '</option>'));
 // the Types list only offers items of the chosen category
 function fillTypes() {
@@ -250,13 +253,10 @@ function fillTypes() {
   const items = [...new Set(evs.map(e => e.drug).filter(Boolean))].sort();
   const label = cg === 'CITES' ? 'All CITES types' : cg ? 'All ' + esc(cg.toLowerCase()) + ' types' : 'All types';
   let opts = items.map(d => '<option>' + esc(d) + '</option>').join('');
-  if (cg === 'CITES') {          // grouped, listing every CITES type even before its first seizure
-    const n = {}; evs.forEach(e => n[e.drug] = (n[e.drug] || 0) + 1);
+  if (cg === 'CITES') {          // grouped: Elephant ivory / Protected fauna / CITES-protected wood (one type)
     opts = Object.entries(CITES_SUB).map(([c, lab]) => {
-      const known = (D.cites_types || {})[c] || [];
-      const its = [...new Set([...known, ...evs.filter(e => e.category === c).map(e => e.drug).filter(Boolean)])];
-      const named = its.filter(d => !/^(Unspecified|Other) /.test(d)).sort(), rest = its.filter(d => /^(Unspecified|Other) /.test(d));
-      return '<optgroup label="' + lab + '">' + [...named, ...rest].map(d => '<option value="' + esc(d) + '">' + esc(d) + ' (' + (n[d] || 0) + ')</option>').join('') + '</optgroup>';
+      const its = c === 'CITES protected timber' ? [WOOD] : [...new Set(evs.filter(e => e.category === c).map(e => e.drug).filter(Boolean))].sort();
+      return '<optgroup label="' + lab + '">' + its.map(d => '<option>' + esc(d) + '</option>').join('') + '</optgroup>';
     }).join('');
   }
   $('fDrug').innerHTML = '<option value="">' + label + '</option>' + opts;
