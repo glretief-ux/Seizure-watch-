@@ -238,13 +238,24 @@ const bn = [];
 if (D.meta.demo) bn.push('<div class="banner demo"><b>SAMPLE DATA.</b> These are made-up articles used to demonstrate the platform. Run the real collector to replace them.</div>');
 if (!D.meta.history_ok) bn.push('<div class="banner hist">Building history: trend, spike and new-corridor alerts switch on after ' + D.meta.min_history + ' days of data (currently ' + D.meta.history_days + ').</div>');
 $('banners').innerHTML = bn.join('');
-[...new Set(D.events.map(e => e.category).filter(Boolean))].sort().forEach(d => $('fCategory').insertAdjacentHTML('beforeend', '<option>' + esc(d) + '</option>'));
+// CITES elephant ivory / protected fauna / protected timber share one "CITES" entry in the filter
+const catGroup = c => (c && c.startsWith('CITES')) ? 'CITES' : (c || 'Drug');
+const CITES_SUB = {'CITES elephant ivory': 'Elephant ivory', 'CITES protected fauna': 'Protected fauna', 'CITES protected timber': 'Protected timber'};
+[...new Set(D.events.map(e => catGroup(e.category)))].sort().forEach(d => $('fCategory').insertAdjacentHTML('beforeend', '<option>' + esc(d) + '</option>'));
 // the Types list only offers items of the chosen category
 function fillTypes() {
   const cg = $('fCategory').value, cur = $('fDrug').value;
-  const items = [...new Set(D.events.filter(e => !cg || e.category === cg).map(e => e.drug).filter(Boolean))].sort();
-  $('fDrug').innerHTML = '<option value="">' + (cg ? 'All ' + esc(cg.toLowerCase()) + ' types' : 'All types') + '</option>' +
-    items.map(d => '<option>' + esc(d) + '</option>').join('');
+  const evs = D.events.filter(e => !cg || catGroup(e.category) === cg);
+  const items = [...new Set(evs.map(e => e.drug).filter(Boolean))].sort();
+  const label = cg === 'CITES' ? 'All CITES types' : cg ? 'All ' + esc(cg.toLowerCase()) + ' types' : 'All types';
+  let opts = items.map(d => '<option>' + esc(d) + '</option>').join('');
+  if (cg === 'CITES') {          // grouped: Elephant ivory / Protected fauna / Protected timber
+    opts = Object.entries(CITES_SUB).map(([c, lab]) => {
+      const its = [...new Set(evs.filter(e => e.category === c).map(e => e.drug).filter(Boolean))].sort();
+      return its.length ? '<optgroup label="' + lab + '">' + its.map(d => '<option>' + esc(d) + '</option>').join('') + '</optgroup>' : '';
+    }).join('');
+  }
+  $('fDrug').innerHTML = '<option value="">' + label + '</option>' + opts;
   $('fDrug').value = items.includes(cur) ? cur : '';
 }
 fillTypes();
@@ -288,7 +299,7 @@ $('fInfraClearBtn').addEventListener('click', () => { infraSelected.clear(); ren
 
 function matcher() {
   const q = $('fQ').value.trim().toLowerCase(), toks = q.split(/[\s>\u2192,;]+/).filter(t => t && !['to','from','via','-','->'].includes(t)), dr = $('fDrug').value, bd = $('fBand').value, md = $('fMode').value, cg = $('fCategory').value;
-  return e => (!cg || e.category === cg) && (!dr || e.drug === dr) && (!bd || e.band === bd) && (!md || e.transport === md) &&
+  return e => (!cg || catGroup(e.category) === cg) && (!dr || e.drug === dr) && (!bd || e.band === bd) && (!md || e.transport === md) &&
     (!infraSelected.size || (e.infra || []).some(x => infraSelected.has(x))) && (!cardFilter || cardFilter(e)) &&
     (!toks.length || toks.every(t => [e.country,e.place,e.origin,e.dest,e.transit,e.conceal,e.title,e.title_en,e.corridor,e.route,e.drug,e.category,e.vessel,e.line,e.cover,e.containers,e.origin_place,e.dest_place].join(' ').toLowerCase().includes(t)));
 }
@@ -333,7 +344,7 @@ function periodList() {
 function countRange(a, b) {
   if (a >= winStart) { const ok = matcher(); return {n: D.events.filter(e => e.date >= a && e.date <= b && ok(e)).length, partial: false}; }
   const cg = $('fCategory').value, dr = $('fDrug').value, bd = $('fBand').value, ma = a.slice(0,7), mb = b.slice(0,7);
-  const n = MONTHLY.filter(r => r[0] >= ma && r[0] <= mb && (!cg || (r[1] || 'Drug') === cg) && (!dr || r[2] === dr) && (!bd || r[3] === bd)).reduce((s,r) => s + r[4], 0);
+  const n = MONTHLY.filter(r => r[0] >= ma && r[0] <= mb && (!cg || catGroup(r[1]) === cg) && (!dr || r[2] === dr) && (!bd || r[3] === bd)).reduce((s,r) => s + r[4], 0);
   const other = $('fMode').value || infraSelected.size || $('fQ').value.trim() || cardFilter;
   return {n, partial: !!other};
 }
