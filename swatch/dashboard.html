@@ -596,7 +596,9 @@ function drawMap(v) {
       (n > 12 ? '<div class="small">+ ' + (n - 12) + ' more, see the events table</div>' : '') + '</div>';
     L.marker(g.c, {icon, riseOnHover: true}).bindPopup(html, {maxWidth: 320}).addTo(mapLayer);
   });
-  $('mapNote').textContent = '(' + routes + ' routes, ' + Object.keys(groups).length + ' places with seizures' + (v.length > 500 ? '; top 500 by risk shown' : '') + ')';
+  const noPlace = v.filter(e => !eventPoints(e).length).length;   // nothing named that the map can place
+  $('mapNote').textContent = '(' + routes + ' routes, ' + Object.keys(groups).length + ' places with seizures' + (v.length > 500 ? '; top 500 by risk shown' : '') +
+    (noPlace ? '; ' + noPlace + (noPlace === 1 ? ' seizure has' : ' seizures have') + ' no place named and ' + (noPlace === 1 ? 'is' : 'are') + ' listed in the table only' : '') + ')';
   setTimeout(() => { map.invalidateSize(); if (bounds.length) map.fitBounds(bounds, {padding: [30, 30], maxZoom: 5}); else map.setView([20, 10], 2); }, 50);
 }
 // ---- coverage map: where the tool can and cannot see

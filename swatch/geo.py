@@ -2039,5 +2039,7 @@ def payload(place_alias):
             "p": {d: [*PLACE[d], disp2c[d]] for d in sorted(disp2c) if d in PLACE and disp2c[d] in COUNTRY}}
 
 # Vietnamese ports and airports (approximate positions for the map markers)
+PLACE.update({"Western Visayas": [10.72, 122.56], "Central Visayas": [10.0, 124.0], "Eastern Visayas": [11.25, 125.0],
+              "Luzon": [16.5, 121.0], "Palawan": [9.75, 118.74]})
 PLACE.update({"Cat Lai": [10.76, 106.79], "Cai Mep": [10.53, 107.02], "Da Nang": [16.05, 108.21],
               "Noi Bai airport": [21.22, 105.81], "Tan Son Nhat airport": [10.82, 106.65]})
