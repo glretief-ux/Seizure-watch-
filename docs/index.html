@@ -124,6 +124,7 @@ table.mini{border-collapse:collapse;font-size:13px;margin-top:6px}table.mini td{
   <h1>Seizure Watch</h1>
   <div class="sub" id="sub"></div>
   <div class="sub hl"><a href="bulletin.html">Weekly bulletin</a> &nbsp;|&nbsp; <a href="events.csv">Events (CSV)</a> &nbsp;|&nbsp; <a href="seizure_watch.xlsx">Excel</a></div>
+  <div class="sub" id="views" hidden></div>
 </header>
 <div id="banners"></div>
 
@@ -659,6 +660,19 @@ renderWatch();
 alerts(); staticTables(); render();
 riskBox();
 $('foot').innerHTML = 'Open-source news only. Facts are extracted automatically from headlines and articles and can be wrong - always verify through the link. Risk scores rank reports for analyst attention; they are indicators, not findings. Only extracted facts and links are stored, not article text.';
+</script>
+<!-- GoatCounter: privacy-friendly view counter (no cookies, no personal data) -->
+<script data-goatcounter="https://gertberi.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<script>
+fetch('https://gertberi.goatcounter.com/counter/TOTAL.json')
+  .then(function(r){ return r.ok ? r.json() : null; })
+  .then(function(d){
+    var el = document.getElementById('views');
+    if (!el || !d || !d.count) return;
+    el.textContent = 'Dashboard views: ' + String(d.count).trim();
+    el.hidden = false;
+  })
+  .catch(function(){});
 </script>
 </body>
 </html>
