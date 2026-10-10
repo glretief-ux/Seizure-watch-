@@ -45,6 +45,10 @@ sources:
            "cannabis seized customs", "captagon seized", "fentanyl seized", "MDMA ecstasy seized",
            "cigarettes seized customs", "drugs seized container port", "drugs seized airport",
            "precursor chemicals seized", "clandestine drug lab chemicals seized",
+           "hazardous chemicals seized customs", "toxic chemicals smuggling seized",
+           "ozone-depleting refrigerant gas smuggling seized", "HFC refrigerants seized customs",
+           "illegal pesticides seized", "counterfeit pesticides seized", "mercury smuggling seized",
+           "ammonium nitrate seized", "hazardous waste shipment seized",
            "stolen vehicles recovered smuggling", "stolen cars seized border",
            "illegal logging timber seized", "CITES protected timber seized", "rosewood seized trafficking",
            "elephant ivory seized", "ivory tusks seized customs", "rhino horn seized", "pangolin scales seized",
@@ -55,15 +59,18 @@ sources:
            "arms trafficking seized"]
       es: ["incautan cocaína", "decomisan droga puerto contenedor", "incautan marihuana",
            "incautan metanfetamina", "incautan drogas sintéticas aeropuerto",
-           "incautan químicos precursores", "decomisan vehículos robados", "madera ilegal incautada",
+           "incautan químicos precursores", "incautan productos químicos", "decomisan plaguicidas ilegales",
+           "incautan mercurio", "decomisan gas refrigerante contrabando", "decomisan vehículos robados", "madera ilegal incautada",
            "incautan marfil", "tráfico de fauna silvestre incautan", "decomisan animales exóticos aeropuerto",
             "incautan armas de fuego", "decomisan municiones", "incautan arsenal"]
       fr: ["saisie cocaïne", "saisie drogue port conteneur", "saisie cannabis douane", "saisie captagon",
-           "saisie précurseurs chimiques", "véhicules volés saisis", "bois illégal saisi",
+           "saisie précurseurs chimiques", "saisie produits chimiques dangereux", "saisie pesticides illégaux",
+           "saisie gaz réfrigérants", "véhicules volés saisis", "bois illégal saisi",
            "saisie ivoire", "trafic faune sauvage saisie", "saisie civelles",
             "saisie armes a feu", "saisie munitions", "trafic d'armes saisi"]
       pt: ["apreensão cocaína porto", "apreensão droga contêiner", "apreendem maconha",
-           "apreensão de químicos precursores", "veículos roubados apreendidos", "madeira ilegal apreendida",
+           "apreensão de químicos precursores", "apreensão de produtos químicos", "apreensão de agrotóxicos ilegais",
+           "apreensão de mercúrio", "veículos roubados apreendidos", "madeira ilegal apreendida",
            "apreensão marfim", "tráfico de animais silvestres apreensão",
             "apreensão de armas de fogo", "apreendem munições"]
       ar: ["ضبط مخدرات", "ضبط كوكايين", "ضبط حشيش", "ضبط كبتاجون", "إحباط تهريب مخدرات", "ضبط هيروين", "ضبط ترامادول"]
@@ -78,6 +85,8 @@ sources:
     queries:
       en: ['(cocaine OR heroin OR methamphetamine OR cannabis OR captagon OR fentanyl) (seized OR seizure OR intercepted)',
            '(precursor chemicals OR clandestine lab) (seized OR seizure)',
+           '("hazardous chemicals" OR "toxic chemicals" OR "illegal pesticides" OR refrigerants OR "ozone-depleting" OR "ammonium nitrate" OR "hazardous waste") (seized OR seizure OR smuggling)',
+           '(mercury) (smuggling OR seized) (mining OR customs)',
            '(stolen vehicles OR stolen cars) (seized OR recovered OR smuggling)',
            '(illegal logging OR protected timber OR rosewood) (seized OR seizure)',
            '(ivory OR "rhino horn" OR pangolin OR "wildlife trafficking") (seized OR seizure OR smuggling)',
@@ -85,6 +94,7 @@ sources:
            '(illegal firearms OR weapons cache OR ammunition OR arms trafficking) (seized OR seizure)']
       es: ['(cocaína OR heroína OR metanfetamina OR marihuana) (incautan OR decomisan OR incautación)',
            '(químicos precursores OR laboratorio clandestino) (incautan OR decomisan)',
+           '(productos químicos OR plaguicidas OR mercurio OR refrigerantes) (incautan OR decomisan)',
            '(vehículos robados) (decomisan OR recuperan)',
            '(armas de fuego OR municiones OR arsenal) (incautan OR decomisan)']
       fr: ['(cocaïne OR héroïne OR cannabis OR captagon) (saisie OR saisi OR saisis)',
@@ -106,7 +116,7 @@ sources:
   # releases are picked up even when no newspaper reports them. Add or remove websites freely.
   official_sites:
     enabled: true
-    query: "site:{site} (seized OR seizure OR seizes OR intercepted OR incautan OR decomisan OR saisie OR apreensao) (cocaine OR heroin OR methamphetamine OR cannabis OR fentanyl OR captagon OR drugs OR cocaina OR droga OR cocaine OR drogue OR \"precursor chemicals\" OR \"stolen vehicles\" OR \"illegal logging\" OR \"protected timber\" OR rosewood OR \"illegal firearms\" OR \"weapons cache\" OR ammunition OR \"arms trafficking\" OR ivory OR \"rhino horn\" OR pangolin OR \"wildlife trafficking\" OR CITES)"
+    query: "site:{site} (seized OR seizure OR seizes OR intercepted OR incautan OR decomisan OR saisie OR apreensao) (cocaine OR heroin OR methamphetamine OR cannabis OR fentanyl OR captagon OR drugs OR cocaina OR droga OR cocaine OR drogue OR \"precursor chemicals\" OR \"hazardous chemicals\" OR \"toxic chemicals\" OR pesticides OR refrigerants OR mercury OR \"ammonium nitrate\" OR \"hazardous waste\" OR \"stolen vehicles\" OR \"illegal logging\" OR \"protected timber\" OR rosewood OR \"illegal firearms\" OR \"weapons cache\" OR ammunition OR \"arms trafficking\" OR ivory OR \"rhino horn\" OR pangolin OR \"wildlife trafficking\" OR CITES)"
     sites:
       - cbp.gov               # US Customs and Border Protection
       - dea.gov               # US Drug Enforcement Administration
@@ -182,9 +192,9 @@ risk:
       3: 0
   commodity_tiers:
     default: 2                       # anything not listed below
-    categories: {Precursor chemical: 2, Stolen vehicle: 2, CITES protected timber: 2}
+    categories: {Precursor chemical: 2, Hazardous chemical: 2, Stolen vehicle: 2, CITES protected timber: 2}
     items:                           # tier 1 = highest harm, tier 3 = lowest
-      1: [Cocaine, Heroin/Opium, Methamphetamine, NSA, Explosives/grenades, Firearms, Elephant ivory, Rhino horn, Pangolin, Big cat parts]
+      1: [Cocaine, Heroin/Opium, Methamphetamine, NSA, Explosives/grenades, Explosive precursors, Firearms, Elephant ivory, Rhino horn, Pangolin, Big cat parts]
       3: [Cigarettes]
   # An event is only High if it scores >= high AND at least this many of method / network / route
   # show something (Medium: at least 1). Scale and commodity alone can never lift an event.
@@ -207,6 +217,13 @@ risk:
     Sodium cyanide: 500
     Red phosphorus: 200
     Acetone/solvents: 2000
+    # Hazardous chemicals (kg) - judgement values, edit freely
+    Ozone-depleting refrigerants: 1000
+    Pesticides/agrochemicals: 5000
+    Mercury: 100
+    Explosive precursors: 500
+    Hazardous/toxic waste: 20000
+    Industrial/toxic chemicals: 5000
     # CITES-protected timber (kg)
     Rosewood (Dalbergia): 5000
     Mukula: 5000

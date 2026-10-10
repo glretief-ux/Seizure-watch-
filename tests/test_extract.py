@@ -273,3 +273,36 @@ def test_weight_alone_never_makes_an_event_high():
     out = analyze.score_events(ev, cfg, pd.Timestamp("2026-10-09"))
     assert out.loc[0, "risk_scale"] == 10
     assert out.loc[0, "risk_score"] <= 20 and out.loc[0, "risk_band"] == "Low"
+
+
+# ---- Hazardous chemicals (non-precursor chemicals)
+def test_refrigerant_gas_is_hazardous_chemical():
+    r = extract("Customs seize 12 tonnes of HFC refrigerant gas smuggled in containers at Rotterdam", "")
+    assert r["category"] == "Hazardous chemical"
+    assert r["primary_drug"] == "Ozone-depleting refrigerants"
+
+
+def test_spanish_pesticides():
+    r = extract("Incautan 8 toneladas de plaguicidas ilegales en aduana de Manzanillo", "")
+    assert r["category"] == "Hazardous chemical"
+    assert r["primary_drug"] == "Pesticides/agrochemicals"
+
+
+def test_mercury_needs_context():
+    r = extract("Peru: 400 kg of liquid mercury used in illegal gold mining seized", "")
+    assert r["primary_drug"] == "Mercury"
+    assert extract("Ford Mercury Cougar stolen car recovered", "").get("category") != "Hazardous chemical"
+
+
+def test_ammonium_nitrate_vs_explosives():
+    assert extract("Police intercept truck with 5 tonnes of ammonium nitrate near border", "")["category"] == "Hazardous chemical"
+    assert extract("Army seizes ammunition and explosives, detonators and ammonium nitrate", "")["category"] == "Arms and ammunition"
+
+
+def test_generic_chemicals_with_weight():
+    r = extract("Customs seized 2 tonnes of hazardous chemicals at border post", "")
+    assert r["category"] == "Hazardous chemical" and r["primary_drug"] == "Unspecified chemical"
+
+
+def test_precursor_still_wins_for_drug_chemicals():
+    assert extract("Police seize 50 kg of precursor chemicals in raid on clandestine laboratory", "")["category"] == "Precursor chemical"

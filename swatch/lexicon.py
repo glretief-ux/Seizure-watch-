@@ -137,7 +137,7 @@ ADVANCED_CATEGORIES = {"Container structure / false compartment", "Vehicle compa
 
 # --------------------------------------------------------------------------
 # OTHER CONTRABAND CATEGORIES (non-drug) - Stolen vehicles, precursor
-# chemicals, CITES-protected timber, elephant ivory and other protected fauna. Each follows the same shape as
+# chemicals, hazardous chemicals, CITES-protected timber, elephant ivory and other protected fauna. Each follows the same shape as
 # DRUG_PATTERNS above: {item name shown in the dashboard: regex}, plus a
 # GENERIC_* catch-all for unnamed mentions, mirroring GENERIC_DRUG.
 # --------------------------------------------------------------------------
@@ -171,6 +171,47 @@ PRECURSOR_PATTERNS = {
 GENERIC_PRECURSOR = rx(r"precursor\s+chemicals?", r"quimicos?\s+precursores?", r"precurseurs?\s+chimiques?",
                        r"drug[- ]making\s+chemicals?", r"clandestine\s+lab(?:oratory)?",
                        r"laboratorio\s+clandestino", r"laboratoire\s+clandestin")
+
+# Hazardous chemicals: chemicals seized for reasons OTHER than drug-making (an
+# extension of the precursor category) - ozone-depleting refrigerants smuggled
+# against the Montreal Protocol, banned or counterfeit pesticides, mercury
+# (illegal gold mining, Minamata Convention), explosive precursors, and
+# hazardous / toxic waste (Basel Convention). "Mercury" is also a planet, a car
+# brand and a surname, so it only counts next to a quantity or smuggling word.
+CHEMICAL_PATTERNS = {
+    "Ozone-depleting refrigerants": rx(r"\bhfcs?\b", r"\bcfcs?\b", r"\bhcfcs?\b", r"hydrofluorocarbons?",
+                                       r"chlorofluorocarbons?", r"ozone[- ]depleting", r"refrigerant\s+gas(?:es)?",
+                                       r"refrigerants?", r"\bfreon\b", r"\br-?22\b", r"\br-?134a\b", r"\br-?404a\b",
+                                       r"gases?\s+refrigerantes?", r"gaz\s+refrigerants?", r"gases?\s+refrigerantes?"),
+    "Pesticides/agrochemicals": rx(r"pesticides?", r"insecticides?", r"herbicides?", r"fungicides?",
+                                   r"agrochemicals?", r"agro-?chemicals?", r"plaguicidas?", r"agroquimicos?",
+                                   r"agrotoxicos?", r"pesticidas?", r"produits?\s+phytosanitaires?",
+                                   r"\bparaquat\b", r"\bglyphosate\b", r"chlorpyrifos"),
+    "Mercury": rx(r"(?:liquid|elemental|illegal|smuggled|contraband)\s+mercury",
+                  r"mercury\s+(?:smuggl\w*|seiz\w*|traffick\w*|shipment|consignment|flasks?|bottles?|used\s+in\s+(?:gold|mining))",
+                  r"(?:kg|kilos?|kilograms?|kilogrammes?|tonnes?|tons?|litres?|liters?|flasks?|bottles?)\s+of\s+mercury",
+                  r"mercurio\s+(?:ilegal|de\s+contrabando|liquido)", r"(?:kg|kilos?|toneladas?|litros?)\s+de\s+mercurio",
+                  r"\bazogue\b", r"(?:kg|kilos?|tonnes?|litres?)\s+de\s+mercure", r"mercure\s+(?:illegal|de\s+contrebande)"),
+    "Explosive precursors": rx(r"ammonium\s+nitrate", r"nitrato\s+de\s+amonio", r"nitrate\s+d.ammonium",
+                               r"nitrato\s+de\s+amonio", r"potassium\s+chlorate", r"clorato\s+de\s+potasio",
+                               r"chlorate\s+de\s+potassium", r"explosive\s+precursors?", r"precursores?\s+de\s+explosivos",
+                               r"precurseurs?\s+d.explosifs?", r"hydrogen\s+peroxide", r"\burea\s+nitrate"),
+    "Hazardous/toxic waste": rx(r"hazardous\s+waste", r"toxic\s+waste", r"chemical\s+waste", r"e-?waste",
+                                r"electronic\s+waste", r"residuos\s+(?:peligrosos|toxicos)", r"desechos\s+toxicos",
+                                r"dechets\s+(?:dangereux|toxiques)", r"residuos\s+perigosos", r"lixo\s+toxico",
+                                r"basel\s+convention"),
+    "Industrial/toxic chemicals": rx(r"sulph?uric\s+acid", r"hydrochloric\s+acid", r"\bcyanide\b(?!\s+de\s+sodium)",
+                                     r"\bchlorine\s+gas", r"\bphosgene\b", r"caustic\s+soda", r"sodium\s+hydroxide",
+                                     r"acido\s+sulfurico", r"acido\s+clorhidrico", r"acide\s+sulfurique"),
+}
+GENERIC_CHEMICAL = rx(r"hazardous\s+chemicals?", r"toxic\s+chemicals?", r"dangerous\s+chemicals?",
+                      r"illegal\s+chemicals?", r"illicit\s+chemicals?", r"banned\s+chemicals?",
+                      r"smuggled\s+chemicals?", r"chemicals?\s+(?:seized|smuggling|smuggled|intercepted|confiscated)",
+                      r"(?:seized|seize|seizes|seizure\s+of|intercepted|confiscated)\s+(?:\S+\s+){0,4}chemicals?",
+                      r"chemical\s+(?:smuggling|substances?\s+seized)", r"productos?\s+quimicos?\s+(?:peligrosos|ilegales|toxicos)",
+                      r"(?:incautan|decomisan|aseguran)\s+(?:\S+\s+){0,4}(?:productos\s+)?quimicos",
+                      r"substances?\s+chimiques?\s+(?:dangereuses|illegales|toxiques)", r"saisie\s+de\s+(?:produits\s+)?chimiques",
+                      r"produtos?\s+quimicos?\s+(?:perigosos|ilegais|toxicos)", r"apreensao\s+de\s+produtos\s+quimicos")
 
 TIMBER_PATTERNS = {
     "Rosewood (Dalbergia)": rx(r"rosewood", r"dalbergia", r"palisandro", r"palissandre", r"bois\s+de\s+rose"),
@@ -248,6 +289,7 @@ GENERIC_FAUNA = rx(r"wildlife\s+(?:trafficking|traffickers?|smuggling|crime|trad
                    r"animais\s+silvestres", r"trafico\s+de\s+animais", r"fauna\s+selvagem")
 
 ANY_PRECURSOR = re.compile("|".join(p.pattern for p in list(PRECURSOR_PATTERNS.values()) + [GENERIC_PRECURSOR]), re.I)
+ANY_CHEMICAL = re.compile("|".join(p.pattern for p in list(CHEMICAL_PATTERNS.values()) + [GENERIC_CHEMICAL]), re.I)
 ANY_TIMBER = re.compile("|".join(p.pattern for p in list(TIMBER_PATTERNS.values()) + [GENERIC_TIMBER]), re.I)
 ANY_ARMS = re.compile("|".join(p.pattern for p in list(ARMS_PATTERNS.values()) + [GENERIC_ARMS]), re.I)
 ANY_STOLEN_VEHICLE = re.compile(
@@ -259,7 +301,7 @@ ANY_STOLEN_VEHICLE = re.compile(
 # VEHICLE_THEFT_CUE to co-occur (see prefilter()).
 ANY_IVORY = re.compile("|".join(p.pattern for p in IVORY_PATTERNS.values()), re.I)
 ANY_FAUNA = re.compile("|".join(p.pattern for p in list(FAUNA_PATTERNS.values()) + [GENERIC_FAUNA]), re.I)
-ANY_CONTRABAND = re.compile("|".join([ANY_DRUG.pattern, ANY_PRECURSOR.pattern, ANY_TIMBER.pattern,
+ANY_CONTRABAND = re.compile("|".join([ANY_DRUG.pattern, ANY_PRECURSOR.pattern, ANY_CHEMICAL.pattern, ANY_TIMBER.pattern,
                                       ANY_ARMS.pattern, ANY_IVORY.pattern, ANY_FAUNA.pattern]), re.I)
 
 # --------------------------------------------------------------------------

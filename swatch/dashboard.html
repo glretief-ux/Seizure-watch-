@@ -222,7 +222,7 @@ const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const safe = u => /^https?:\/\//i.test(u || '') ? u : '#';
 const COL = {'Cocaine':'#1f77b4','Cannabis':'#2ca02c','Heroin/Opium':'#8c564b','Methamphetamine':'#ff7f0e','NSA':'#9467bd','Cigarettes':'#7f7f7f','Unspecified':'#bcbd22'};
-const CATCOL = {'Precursor chemical':'#17becf','Stolen vehicle':'#d62728','CITES protected timber':'#8c6d31','Arms and ammunition':'#e377c2','CITES elephant ivory':'#9467bd','CITES protected fauna':'#2ca02c'};
+const CATCOL = {'Precursor chemical':'#17becf','Hazardous chemical':'#bcbd22','Stolen vehicle':'#d62728','CITES protected timber':'#8c6d31','Arms and ammunition':'#e377c2','CITES elephant ivory':'#9467bd','CITES protected fauna':'#2ca02c'};
 const ITEMCAT = {};
 D.events.forEach(e => { if (e.drug && e.category) ITEMCAT[e.drug] = e.category; });
 const col = d => COL[d] || CATCOL[ITEMCAT[d]] || '#999';
@@ -383,7 +383,7 @@ function kpis(v) {
     ['Container cases', cont, v.length ? Math.round(100*cont/v.length) + '% of events' : ''],
     ['Insider signals', ins, 'port / airport / customs staff'],
     ['Total weight', kg >= 1000 ? (kg/1000).toFixed(1) + ' t' : Math.round(kg) + ' kg', 'excl. pills / sticks'],
-    ['Other contraband', nd.length, catSummary || 'stolen vehicles, precursor chemicals, CITES timber, ivory and fauna, arms']];
+    ['Other contraband', nd.length, catSummary || 'stolen vehicles, precursor and hazardous chemicals, CITES timber, ivory and fauna, arms']];
   $('kpis').innerHTML = evCard(v) + K.map(k => '<div class="kpi"><div class="l">' + k[0] + '</div><div class="v">' + k[1] + '</div><div class="d">' + esc(k[2]) + '</div></div>').join('');
 }
 

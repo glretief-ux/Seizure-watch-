@@ -134,6 +134,7 @@ def _drugs(title_n, text_n):
 UNSPECIFIED_LABEL = {
     "Drug": "Unspecified",
     "Precursor chemical": "Unspecified precursor chemical",
+    "Hazardous chemical": "Unspecified chemical",
     "CITES protected timber": "Unspecified protected timber",
     "Arms and ammunition": "Unspecified arms/ammunition",
     "CITES elephant ivory": "Unspecified ivory",
@@ -196,8 +197,15 @@ def _classify(title_n, text_n):
         if not (cat == "CITES protected fauna" and ordered[0] in weak and L.GENERIC_DRUG.search(title_n)):
             return ordered[0], ordered, cat
 
-    arms_ordered = _rank(L.ARMS_PATTERNS)
-    if arms_ordered:
+    # Hazardous chemicals and arms compete: "ammonium nitrate seized" is a chemical
+    # story, "explosives, detonators and ammonium nitrate seized" is an arms story.
+    # Arms win a tie.
+    chem_sc, arms_sc = _scores(L.CHEMICAL_PATTERNS), _scores(L.ARMS_PATTERNS)
+    if chem_sc and (not arms_sc or max(chem_sc.values()) > max(arms_sc.values())):
+        ordered = sorted(chem_sc, key=chem_sc.get, reverse=True)
+        return ordered[0], ordered, "Hazardous chemical"
+    if arms_sc:
+        arms_ordered = sorted(arms_sc, key=arms_sc.get, reverse=True)
         return arms_ordered[0], arms_ordered, "Arms and ammunition"
 
     # Stolen vehicles: a vehicle noun alone is far too common in news text,
@@ -211,6 +219,8 @@ def _classify(title_n, text_n):
 
     if L.GENERIC_PRECURSOR.search(blob):
         return UNSPECIFIED_LABEL["Precursor chemical"], [], "Precursor chemical"
+    if L.GENERIC_CHEMICAL.search(blob):
+        return UNSPECIFIED_LABEL["Hazardous chemical"], [], "Hazardous chemical"
     if L.GENERIC_TIMBER.search(blob):
         return UNSPECIFIED_LABEL["CITES protected timber"], [], "CITES protected timber"
     if L.GENERIC_FAUNA.search(blob):
