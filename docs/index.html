@@ -135,7 +135,7 @@ table.mini{border-collapse:collapse;font-size:13px;margin-top:6px}table.mini td{
   <select id="fCategory"><option value="">All categories</option></select>
   <select id="fDrug"><option value="">All types</option></select>
   <select id="fBand"><option value="">All risk bands</option><option>High</option><option>Medium</option><option>Low</option></select>
-  <select id="fDays"><option value="7">Last 7 days</option><option value="30">Last 30 days</option><option value="90" selected>Last 90 days</option><option value="9999">All loaded</option></select>
+  <select id="fDays"><option value="7">Last 7 days</option><option value="30">Last 30 days</option><option value="90" selected>Last 90 days</option><option value="9999">All time</option></select>
   <select id="fMode"><option value="">All transport</option></select>
   <div class="msel" id="fInfraWrap">
     <button type="button" class="mselBtn" id="fInfraBtn">Infrastructure<span class="mselCount" id="fInfraCount" style="display:none"></span></button>
@@ -284,8 +284,8 @@ function matcher() {
     (!toks.length || toks.every(t => [e.country,e.place,e.origin,e.dest,e.transit,e.conceal,e.title,e.title_en,e.corridor,e.route,e.drug,e.category,e.vessel,e.line,e.cover,e.containers,e.origin_place,e.dest_place].join(' ').toLowerCase().includes(t)));
 }
 function view() {
-  const days = +$('fDays').value, cut = fmt(new Date(asof.getTime() - (days - 1) * 864e5)), ok = matcher();
-  return D.events.filter(e => e.date >= cut && ok(e));
+  const [a, b] = periodRange($('fDays').value), ok = matcher();
+  return D.events.filter(e => e.date >= a && e.date <= b && ok(e));
 }
 
 // ---- Seizure events card: period picker (months and years use full history)
@@ -295,13 +295,25 @@ const MONTHLY = D.monthly || [];
 const winStart = D.meta.window_start || (D.events.length ? D.events.reduce((a,e) => e.date < a ? e.date : a, D.events[0].date) : D.meta.asof);
 const asofS = D.meta.asof;
 const firstDate = D.meta.first_date || D.events.reduce((a,e) => e.date < a ? e.date : a, asofS);
-let evPeriod = 'view';
-try { evPeriod = JSON.parse(localStorage.getItem('sw_ev_period')) || 'view'; } catch (e) {}
 const addDays = (s, n) => fmt(new Date(new Date(s + 'T00:00:00Z').getTime() + n * 864e5));
 const monthEnd = ym => { const [y,m] = ym.split('-').map(Number); return fmt(new Date(Date.UTC(y, m, 0))); };
 const prevMonth = ym => { const [y,m] = ym.split('-').map(Number); return m === 1 ? (y-1) + '-12' : y + '-' + String(m-1).padStart(2,'0'); };
 const monthName = ym => MONTHS[+ym.slice(5,7) - 1] + ' ' + ym.slice(0,4);
 const dShort = s => (+s.slice(8,10)) + ' ' + MSHORT[+s.slice(5,7) - 1];
+// the page-wide period: '7' / '30' / '90' days, '9999' = all time, 'm:YYYY-MM', 'y:YYYY'
+function periodRange(val) {
+  if (val.startsWith('m:')) { const m = val.slice(2); return [m + '-01', m === asofS.slice(0,7) ? asofS : monthEnd(m)]; }
+  if (val.startsWith('y:')) { const y = val.slice(2); return [y + '-01-01', y === asofS.slice(0,4) ? asofS : y + '-12-31']; }
+  if (val === '9999') return ['0000-01-01', asofS];
+  return [addDays(asofS, -(+val - 1)), asofS];
+}
+function periodOptions(cur) {
+  const {months, years} = periodList();
+  const opt = (val, txt) => '<option value="' + val + '"' + (val === cur ? ' selected' : '') + '>' + txt + '</option>';
+  return opt('7','Last 7 days') + opt('30','Last 30 days') + opt('90','Last 90 days') + opt('9999','All time') +
+    '<optgroup label="By month">' + months.map(m => opt('m:' + m, monthName(m) + (m === asofS.slice(0,7) ? ' (to date)' : ''))).join('') + '</optgroup>' +
+    '<optgroup label="By year">' + years.map(y => opt('y:' + y, y + (y === asofS.slice(0,4) ? ' (to date)' : ''))).join('') + '</optgroup>';
+}
 function periodList() {
   const ms = new Set(MONTHLY.map(r => r[0])); D.events.forEach(e => ms.add(e.date.slice(0,7)));
   const months = [...ms].sort().reverse(), years = [...new Set(months.map(m => m.slice(0,4)))];
@@ -328,19 +340,14 @@ function change(n, p) {
   return ' <span class="' + (pc > 0 ? 'up' : pc < 0 ? 'dn' : '') + '">(' + (pc > 0 ? '+' : '') + pc + '%)</span>';
 }
 function evCard(v) {
-  const {months, years} = periodList();
-  if (!['view','7','30','all'].includes(evPeriod) && !months.includes(evPeriod.slice(2)) && !years.includes(evPeriod.slice(2))) evPeriod = 'view';
-  const opt = (val, txt) => '<option value="' + val + '"' + (val === evPeriod ? ' selected' : '') + '>' + txt + '</option>';
-  const sel = '<select class="per" id="evPer" aria-label="Period for seizure events">' + opt('view','As filtered') + opt('7','Last 7 days') + opt('30','Last 30 days') + opt('all','All time') +
-    '<optgroup label="By month">' + months.map(m => opt('m:' + m, monthName(m) + (m === asofS.slice(0,7) ? ' (to date)' : ''))).join('') + '</optgroup>' +
-    '<optgroup label="By year">' + years.map(y => opt('y:' + y, y + (y === asofS.slice(0,4) ? ' (to date)' : ''))).join('') + '</optgroup></select>';
+  const evPeriod = $('fDays').value;
+  const sel = '<select class="per" id="evPer" aria-label="Period for the whole dashboard">' + periodOptions(evPeriod) + '</select>';
   let n, d, part = false;
-  if (evPeriod === 'view') { n = v.length; d = esc(D.kpis.events_7d + ' in last 7 days (prev ' + D.kpis.events_prev_7d + ')'); }
-  else if (evPeriod === '7' || evPeriod === '30') {
+  if (/^\d+$/.test(evPeriod) && evPeriod !== '9999') {
     const k = +evPeriod, a = addDays(asofS, -(k - 1)), pa = addDays(a, -k), pb = addDays(a, -1);
     const c = countRange(a, asofS); n = c.n; part = c.partial;
     d = cmp('previous ' + k + ' days', pa, pb, n);
-  } else if (evPeriod === 'all') {
+  } else if (evPeriod === '9999') {
     const c = countRange(firstDate < winStart ? firstDate.slice(0,7) + '-01' : firstDate, asofS); n = c.n; part = c.partial;
     d = 'since ' + dShort(firstDate) + ' ' + firstDate.slice(0,4);
   } else if (evPeriod.startsWith('m:')) {
@@ -356,12 +363,12 @@ function evCard(v) {
     d = cmp((cur ? 'same period ' : '') + py, py + '-01-01', pb, n);
   }
   if (part) d += '<br>older months: category, type and risk filters only';
+  if (periodRange(evPeriod)[0] < winStart && firstDate < winStart) d += '<br>map and tables hold the last ' + Math.round((new Date(asofS) - new Date(winStart)) / 864e5 + 1) + ' days';
   return '<div class="kpi"><div class="lr"><div class="l">Seizure events</div>' + sel + '</div><div class="v">' + n.toLocaleString('en-GB') + '</div><div class="d">' + d + '</div></div>';
 }
 $('kpis').addEventListener('change', ev => {
   if (ev.target.id !== 'evPer') return;
-  evPeriod = ev.target.value; try { localStorage.setItem('sw_ev_period', JSON.stringify(evPeriod)); } catch (e) {}
-  kpis(view());
+  $('fDays').value = ev.target.value; render();
 });
 const by = (arr, f) => { const m = {}; arr.forEach(x => { const k = f(x); if (k != null && k !== '') m[k] = (m[k] || 0) + 1; }); return m; };
 const topN = (m, n) => Object.entries(m).sort((a,b) => b[1]-a[1]).slice(0, n);
@@ -407,7 +414,7 @@ function chart(id, cfg) {
 }
 
 function timeChart(v) {
-  const days = +$('fDays').value, weekly = days > 31;
+  const [pa, pb] = periodRange($('fDays').value), weekly = (new Date(pb) - new Date(pa < firstDate ? firstDate : pa)) / 864e5 > 31;
   const key = d => { if (!weekly) return d; const t = new Date(d + 'T00:00:00Z'), dow = (t.getUTCDay() + 6) % 7; return fmt(new Date(t.getTime() - dow * 864e5)); };
   const labels = [...new Set(v.map(e => key(e.date)))].sort();
   const drugs = [...new Set(v.map(e => e.drug))].sort();
@@ -738,6 +745,7 @@ $('watchList').addEventListener('click', ev => {
 });
 renderWatch();
 
+$('fDays').innerHTML = periodOptions('90');   // months and years added to the period filter
 alerts(); staticTables(); render();
 riskBox();
 $('foot').innerHTML = 'Open-source news only. Facts are extracted automatically from headlines and articles and can be wrong - always verify through the link. Risk scores rank reports for analyst attention; they are indicators, not findings. Only extracted facts and links are stored, not article text.';
