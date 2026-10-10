@@ -1073,7 +1073,7 @@ ROAD_WORDS = ["شاحنة", "شاحنات", r"tir\b", "kamyon", "грузови�
 
 # ---- weight units: (regex part, kg factor)
 UNITS_EXTRA = [
-    ("كيلوغرام", 1), ("كيلوجرام", 1), ("كغ", 1), ("كجم", 1), ("طن", 1000),
+    ("كيلوغرام", 1), ("كيلوجرام", 1), ("كغ", 1), ("كجم", 1), ("أطنان", 1000), ("اطنان", 1000), ("طن", 1000),
     (r"килограмм\w*", 1), ("кг", 1), (r"тонн\w*", 1000),
     ("公斤", 1), ("千克", 1), ("公吨", 1000), ("吨", 1000), ("噸", 1000),
     ("किलोग्राम", 1), ("किलो", 1), ("किग्रा", 1), ("टन", 1000), ("क्विंटल", 100),
@@ -1307,6 +1307,59 @@ TRANSPORT["Sea - container/cargo"] = _ext(TRANSPORT["Sea - container/cargo"], *P
 TRANSPORT["Air"] = _ext(TRANSPORT["Air"], *AIR_WORDS)
 TRANSPORT["Road"] = _ext(TRANSPORT["Road"], *ROAD_WORDS)
 ANY_DRUG = re.compile("|".join(p.pattern for p in list(DRUG_PATTERNS.values()) + [GENERIC_DRUG]), re.I)
+
+# ---- chemicals in Arabic, Turkish, Russian, Chinese, Hindi and Vietnamese
+CHEMICAL_EXTRA = {
+    "Ozone-depleting refrigerants": [
+        "غاز التبريد", "غازات التبريد", "فريون", "مستنفدة للأوزون", "مستنفدة لطبقة الأوزون",
+        "soğutucu gaz", "freon", "ozon tabakasını incelten",
+        "хладагент", "фреон", "озоноразрушающ",
+        "制冷剂", "製冷劑", "冷媒", "氟利昂", "氟氯烃", "氟氯烴", "氢氟碳化物", "氫氟碳化物", "消耗臭氧层", "消耗臭氧層",
+        "रेफ्रिजरेंट", "फ्रीऑन", "ओजोन क्षयकारी",
+        r"\bgas\s+lạnh\b", "môi chất lạnh", "chất làm lạnh", "suy giảm tầng ô-dôn", "suy giảm tầng ozon"],
+    "Pesticides/agrochemicals": [
+        "مبيدات", "مبيد حشري", "مبيدات حشرية", "مبيدات زراعية",
+        "tarım ilacı", "tarım ilaçları", "pestisit", "böcek ilacı",
+        "пестицид", "ядохимикат", "гербицид",
+        "农药", "農藥", "杀虫剂", "殺蟲劑", "除草剂", "除草劑",
+        "कीटनाशक", "खरपतवारनाशी",
+        "thuốc bảo vệ thực vật", "thuốc trừ sâu", "thuốc diệt cỏ"],
+    # Hindi पारा also means "temperature" in weather news, so Hindi mercury is left out
+    "Mercury": [
+        "زئبق", "الزئبق", "cıva", "ртут", "水银", "水銀", "金属汞", "汞", "thủy ngân", "thuỷ ngân"],
+    "Explosive precursors": [
+        "نترات الأمونيوم", "نترات الامونيوم", "amonyum nitrat", r"аммиачн\w*\s+селитр", "нитрат аммония",
+        "硝酸铵", "硝酸銨", "अमोनियम नाइट्रेट", "amoni nitrat", "nitrat amoni"],
+    "Hazardous/toxic waste": [
+        "نفايات خطرة", "نفايات سامة", "tehlikeli atık", "zehirli atık", r"опасн\w+\s+отход", r"токсичн\w+\s+отход",
+        "危险废物", "危險廢物", "洋垃圾", "固体废物", "固體廢物", "खतरनाक कचरा", "ई-कचरा", "chất thải nguy hại"],
+    "Industrial/toxic chemicals": [
+        "حمض الكبريتيك", "sülfürik asit", r"серн\w+\s+кислот", "硫酸(?![铵銨])", "氰化物",
+        "सल्फ्यूरिक एसिड", "axit sunfuric"],
+}
+GENERIC_CHEMICAL_EXTRA = [
+    "مواد كيميائية", "مواد كيماوية", "كيماويات", "كيميائيات",
+    "kimyasal madde", "kimyasal",
+    r"химическ\w+\s+веществ", "химикат",
+    "化学品", "化學品", "化工原料",
+    "रसायन", "केमिकल",
+    "hóa chất", "hoá chất"]
+# drug-making chemicals stay "Precursor chemical" in every language
+GENERIC_PRECURSOR_EXTRA = [
+    "سلائف كيميائية", "السلائف", "مواد أولية لتصنيع المخدرات", "uyuşturucu öncül", "öncül kimyasal",
+    "прекурсор", "易制毒化学品", "易制毒化學品", "制毒原料", "製毒原料", "प्रीकर्सर", "tiền chất"]
+for _k, _parts in CHEMICAL_EXTRA.items():
+    CHEMICAL_PATTERNS[_k] = _ext(CHEMICAL_PATTERNS[_k], *_parts)
+GENERIC_CHEMICAL = _ext(GENERIC_CHEMICAL, *GENERIC_CHEMICAL_EXTRA)
+GENERIC_PRECURSOR = _ext(GENERIC_PRECURSOR, *GENERIC_PRECURSOR_EXTRA)
+
+# Rebuild the combined headline gate AFTER every language has been added. It is first built near the top of
+# this file from the English-only lists, which silently dropped Arabic, Russian and Chinese headlines (and
+# most Hindi and Turkish ones) before download.
+ANY_PRECURSOR = re.compile("|".join(p.pattern for p in list(PRECURSOR_PATTERNS.values()) + [GENERIC_PRECURSOR]), re.I)
+ANY_CHEMICAL = re.compile("|".join(p.pattern for p in list(CHEMICAL_PATTERNS.values()) + [GENERIC_CHEMICAL]), re.I)
+ANY_CONTRABAND = re.compile("|".join([ANY_DRUG.pattern, ANY_PRECURSOR.pattern, ANY_CHEMICAL.pattern, ANY_TIMBER.pattern,
+                                      ANY_ARMS.pattern, ANY_IVORY.pattern, ANY_FAUNA.pattern]), re.I)
 
 
 # "from X", "to X", "via X" in the new languages

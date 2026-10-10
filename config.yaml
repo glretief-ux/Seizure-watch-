@@ -73,12 +73,12 @@ sources:
            "apreensão de mercúrio", "veículos roubados apreendidos", "madeira ilegal apreendida",
            "apreensão marfim", "tráfico de animais silvestres apreensão",
             "apreensão de armas de fogo", "apreendem munições"]
-      ar: ["ضبط مخدرات", "ضبط كوكايين", "ضبط حشيش", "ضبط كبتاجون", "إحباط تهريب مخدرات", "ضبط هيروين", "ضبط ترامادول"]
-      tr: ["uyuşturucu ele geçirildi", "kokain ele geçirildi", "esrar ele geçirildi", "uyuşturucu hap ele geçirildi", "liman konteyner kokain", "captagon ele geçirildi"]
-      ru: ["изъяли наркотики", "изъяли кокаин", "изъяли героин", "изъяли метамфетамин", "контрабанда наркотиков порт", "изъяли синтетические наркотики"]
-      zh: ["缴获毒品", "查获可卡因", "海关 查获 毒品", "檢獲 毒品", "檢獲 可卡因", "緝獲 冰毒"]
-      vi: ["thu giữ ngà voi", "bắt giữ buôn lậu ngà voi", "hải quan phát hiện ngà voi", "ngà voi nhập lậu"]
-      hi: ["ड्रग्स जब्त", "कोकीन जब्त", "गांजा बरामद", "हेरोइन बरामद", "अफीम जब्त", "नशीली गोलियां बरामद"]
+      ar: ["ضبط مخدرات", "ضبط كوكايين", "ضبط حشيش", "ضبط كبتاجون", "إحباط تهريب مخدرات", "ضبط هيروين", "ضبط ترامادول", "ضبط مواد كيميائية", "ضبط مبيدات مهربة", "ضبط غاز التبريد مهرب", "ضبط نترات الأمونيوم", "ضبط زئبق"]
+      tr: ["uyuşturucu ele geçirildi", "kokain ele geçirildi", "esrar ele geçirildi", "uyuşturucu hap ele geçirildi", "liman konteyner kokain", "captagon ele geçirildi", "kaçak kimyasal madde ele geçirildi", "kaçak tarım ilacı ele geçirildi", "kaçak soğutucu gaz ele geçirildi", "amonyum nitrat ele geçirildi"]
+      ru: ["изъяли наркотики", "изъяли кокаин", "изъяли героин", "изъяли метамфетамин", "контрабанда наркотиков порт", "изъяли синтетические наркотики", "изъяли химикаты", "контрабанда фреона", "изъяли пестициды", "изъяли ртуть", "контрабанда прекурсоров"]
+      zh: ["缴获毒品", "查获可卡因", "海关 查获 毒品", "檢獲 毒品", "檢獲 可卡因", "緝獲 冰毒", "查获 危险化学品", "走私 制冷剂", "查获 走私农药", "查获 易制毒化学品", "洋垃圾 走私 查获"]
+      vi: ["thu giữ ngà voi", "bắt giữ buôn lậu ngà voi", "hải quan phát hiện ngà voi", "ngà voi nhập lậu", "thu giữ hóa chất", "buôn lậu thuốc bảo vệ thực vật", "buôn lậu gas lạnh", "thu giữ thủy ngân", "tiền chất ma túy thu giữ"]
+      hi: ["ड्रग्स जब्त", "कोकीन जब्त", "गांजा बरामद", "हेरोइन बरामद", "अफीम जब्त", "नशीली गोलियां बरामद", "रसायन जब्त", "कीटनाशक जब्त", "अमोनियम नाइट्रेट बरामद"]
 
   gdelt:                       # global news index; free, no key. Set enabled: false to skip.
     enabled: true
@@ -105,12 +105,18 @@ sources:
            '(químicos precursores) (apreensão OR apreendem)',
            '(veículos roubados) (apreensão OR recuperados)',
            '(armas de fogo OR munições) (apreensão OR apreendem)']
-      ar: ['(كوكايين OR هيروين OR حشيش OR كبتاجون) (ضبط OR إحباط)']
-      tr: ['(kokain OR eroin OR esrar OR uyuşturucu) ("ele geçirildi" OR yakalandı)']
-      ru: ['(кокаин OR героин OR метамфетамин OR наркотики) (изъяли OR изъято OR задержали)']
-      zh: ['(可卡因 OR 海洛因 OR 冰毒 OR 毒品) (缴获 OR 查获 OR 檢獲)']
-      hi: ['(कोकीन OR हेरोइन OR गांजा OR ड्रग्स) (जब्त OR बरामद)']
-      vi: ['("ngà voi") (thu giữ OR bắt giữ OR buôn lậu)']
+      ar: ['(كوكايين OR هيروين OR حشيش OR كبتاجون) (ضبط OR إحباط)',
+           '(مواد كيميائية OR مبيدات OR زئبق OR "نترات الأمونيوم" OR "غاز التبريد") (ضبط OR تهريب)']
+      tr: ['(kokain OR eroin OR esrar OR uyuşturucu) ("ele geçirildi" OR yakalandı)',
+           '(kimyasal OR "tarım ilacı" OR "amonyum nitrat" OR "soğutucu gaz") ("ele geçirildi" OR kaçak)']
+      ru: ['(кокаин OR героин OR метамфетамин OR наркотики) (изъяли OR изъято OR задержали)',
+           '(химикаты OR фреон OR пестициды OR ртуть OR прекурсоры) (изъяли OR контрабанда)']
+      zh: ['(可卡因 OR 海洛因 OR 冰毒 OR 毒品) (缴获 OR 查获 OR 檢獲)',
+           '(危险化学品 OR 制冷剂 OR 农药 OR 易制毒化学品 OR 洋垃圾) (查获 OR 走私 OR 缴获)']
+      hi: ['(कोकीन OR हेरोइन OR गांजा OR ड्रग्स) (जब्त OR बरामद)',
+           '(रसायन OR कीटनाशक OR "अमोनियम नाइट्रेट") (जब्त OR बरामद)']
+      vi: ['("ngà voi") (thu giữ OR bắt giữ OR buôn lậu)',
+           '("hóa chất" OR "thuốc bảo vệ thực vật" OR "gas lạnh" OR "thủy ngân") (thu giữ OR buôn lậu)']
 
   # Official newsrooms. Google News is searched once per website below (site:...), so official press
   # releases are picked up even when no newspaper reports them. Add or remove websites freely.

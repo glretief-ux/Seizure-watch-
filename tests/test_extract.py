@@ -306,3 +306,20 @@ def test_generic_chemicals_with_weight():
 
 def test_precursor_still_wins_for_drug_chemicals():
     assert extract("Police seize 50 kg of precursor chemicals in raid on clandestine laboratory", "")["category"] == "Precursor chemical"
+
+
+def test_headline_gate_covers_all_languages():
+    """Regression: the combined headline gate was built before the extra languages were added,
+    so Arabic, Russian and Chinese headlines were dropped before download (9 Oct 2026)."""
+    from swatch import lexicon as L
+    for t in ["ضبط 2.5 طن من الكوكايين في ميناء جدة", "В порту изъяли 1,5 тонны кокаина",
+              "海关在深圳港查获3.2吨可卡因", "मुंबई एयरपोर्ट पर 5 किलो कोकीन जब्त",
+              "Mersin Limanı'nda konteynerde 1,2 ton kokain ele geçirildi", "海关查获走私制冷剂12吨"]:
+        assert L.ANY_CONTRABAND.search(L.norm(t)), t
+
+
+def test_chemicals_other_languages():
+    assert extract("ضبط 5 أطنان من المبيدات الزراعية المهربة في ميناء جدة", "")["qty_kg"] == 5000
+    assert extract("На таможне изъяли 2 тонны контрабандного фреона", "")["primary_drug"] == "Ozone-depleting refrigerants"
+    assert extract("海关查获易制毒化学品5吨", "")["category"] == "Precursor chemical"
+    assert extract("Bắt giữ 200 kg thủy ngân buôn lậu", "")["primary_drug"] == "Mercury"
