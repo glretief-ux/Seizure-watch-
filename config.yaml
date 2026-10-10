@@ -50,7 +50,7 @@ sources:
            "illegal pesticides seized", "counterfeit pesticides seized", "mercury smuggling seized",
            "ammonium nitrate seized", "hazardous waste shipment seized",
            "stolen vehicles recovered smuggling", "stolen cars seized border",
-           "illegal logging timber seized", "CITES protected timber seized", "rosewood seized trafficking",
+           "CITES protected timber seized", "rosewood seized trafficking",
            "red sanders seized smuggling", "kosso timber seized", "mukula logs seized", "CITES timber seized port",
            "elephant ivory seized", "ivory tusks seized customs", "rhino horn seized", "pangolin scales seized",
            "wildlife trafficking seized", "CITES protected species seized", "live reptiles smuggling seized",
@@ -61,17 +61,17 @@ sources:
       es: ["incautan cocaína", "decomisan droga puerto contenedor", "incautan marihuana",
            "incautan metanfetamina", "incautan drogas sintéticas aeropuerto",
            "incautan químicos precursores", "incautan productos químicos", "decomisan plaguicidas ilegales",
-           "incautan mercurio", "decomisan gas refrigerante contrabando", "decomisan vehículos robados", "madera ilegal incautada", "incautan madera de cedro caoba",
+           "incautan mercurio", "decomisan gas refrigerante contrabando", "decomisan vehículos robados", "madera protegida CITES incautada", "incautan madera de cedro caoba",
            "incautan marfil", "tráfico de fauna silvestre incautan", "decomisan animales exóticos aeropuerto",
             "incautan armas de fuego", "decomisan municiones", "incautan arsenal"]
       fr: ["saisie cocaïne", "saisie drogue port conteneur", "saisie cannabis douane", "saisie captagon",
            "saisie précurseurs chimiques", "saisie produits chimiques dangereux", "saisie pesticides illégaux",
-           "saisie gaz réfrigérants", "véhicules volés saisis", "bois illégal saisi", "saisie bois de rose", "saisie bois de vène kosso",
+           "saisie gaz réfrigérants", "véhicules volés saisis", "saisie bois protégé CITES", "saisie bois de rose", "saisie bois de vène kosso",
            "saisie ivoire", "trafic faune sauvage saisie", "saisie civelles",
             "saisie armes a feu", "saisie munitions", "trafic d'armes saisi"]
       pt: ["apreensão cocaína porto", "apreensão droga contêiner", "apreendem maconha",
            "apreensão de químicos precursores", "apreensão de produtos químicos", "apreensão de agrotóxicos ilegais",
-           "apreensão de mercúrio", "veículos roubados apreendidos", "madeira ilegal apreendida",
+           "apreensão de mercúrio", "veículos roubados apreendidos", "apreensão madeira protegida CITES",
            "apreensão marfim", "tráfico de animais silvestres apreensão",
             "apreensão de armas de fogo", "apreendem munições"]
       ar: ["ضبط مخدرات", "ضبط كوكايين", "ضبط حشيش", "ضبط كبتاجون", "إحباط تهريب مخدرات", "ضبط هيروين", "ضبط ترامادول", "ضبط مواد كيميائية", "ضبط مبيدات مهربة", "ضبط غاز التبريد مهرب", "ضبط نترات الأمونيوم", "ضبط زئبق"]
@@ -89,7 +89,7 @@ sources:
            '("hazardous chemicals" OR "toxic chemicals" OR "illegal pesticides" OR refrigerants OR "ozone-depleting" OR "ammonium nitrate" OR "hazardous waste") (seized OR seizure OR smuggling)',
            '(mercury) (smuggling OR seized) (mining OR customs)',
            '(stolen vehicles OR stolen cars) (seized OR recovered OR smuggling)',
-           '(illegal logging OR protected timber OR rosewood OR "red sanders" OR kosso OR mukula) (seized OR seizure)',
+           '("CITES timber" OR "protected timber" OR rosewood OR "red sanders" OR kosso OR mukula) (seized OR seizure)',
            '(ivory OR "rhino horn" OR pangolin OR "wildlife trafficking") (seized OR seizure OR smuggling)',
            '("CITES" OR "protected species" OR "shark fins" OR "glass eels") (seized OR seizure)',
            '(illegal firearms OR weapons cache OR ammunition OR arms trafficking) (seized OR seizure)']
@@ -123,7 +123,7 @@ sources:
   # releases are picked up even when no newspaper reports them. Add or remove websites freely.
   official_sites:
     enabled: true
-    query: "site:{site} (seized OR seizure OR seizes OR intercepted OR incautan OR decomisan OR saisie OR apreensao) (cocaine OR heroin OR methamphetamine OR cannabis OR fentanyl OR captagon OR drugs OR cocaina OR droga OR cocaine OR drogue OR \"precursor chemicals\" OR \"hazardous chemicals\" OR \"toxic chemicals\" OR pesticides OR refrigerants OR mercury OR \"ammonium nitrate\" OR \"hazardous waste\" OR \"stolen vehicles\" OR \"illegal logging\" OR \"protected timber\" OR rosewood OR \"illegal firearms\" OR \"weapons cache\" OR ammunition OR \"arms trafficking\" OR ivory OR \"rhino horn\" OR pangolin OR \"wildlife trafficking\" OR CITES)"
+    query: "site:{site} (seized OR seizure OR seizes OR intercepted OR incautan OR decomisan OR saisie OR apreensao) (cocaine OR heroin OR methamphetamine OR cannabis OR fentanyl OR captagon OR drugs OR cocaina OR droga OR cocaine OR drogue OR \"precursor chemicals\" OR \"hazardous chemicals\" OR \"toxic chemicals\" OR pesticides OR refrigerants OR mercury OR \"ammonium nitrate\" OR \"hazardous waste\" OR \"stolen vehicles\" OR \"protected timber\" OR rosewood OR \"illegal firearms\" OR \"weapons cache\" OR ammunition OR \"arms trafficking\" OR ivory OR \"rhino horn\" OR pangolin OR \"wildlife trafficking\" OR CITES)"
     sites:
       - cbp.gov               # US Customs and Border Protection
       - dea.gov               # US Drug Enforcement Administration

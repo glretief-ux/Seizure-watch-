@@ -20,7 +20,41 @@ def _clean(v):
     return v
 
 
-def event_records(ev):
+# languages spoken almost only in one country: a local story in them is very likely from there
+LANG_HOME = {"hi": "India", "tr": "Turkey", "vi": "Vietnam"}
+
+
+def outlet_homes(ev, min_stories=3, share=0.6):
+    """Learn each news outlet's home country from its stories that DO name a place:
+    an outlet whose placed stories are mostly (>= share) in one country is taken to be based there."""
+    seen = {}
+    for r in ev.itertuples():
+        c = _clean(r.seizure_country)
+        if not c:
+            continue
+        for o in (r.outlets or []):
+            seen.setdefault(o, {}).setdefault(c, 0)
+            seen[o][c] += 1
+    homes = {}
+    for o, cnt in seen.items():
+        tot = sum(cnt.values()); top = max(cnt, key=cnt.get)
+        if tot >= min_stories and cnt[top] / tot >= share:
+            homes[o] = top
+    return homes
+
+
+def approx_country(r, homes):
+    """Best guess for a story that names no place at all: the outlet's home country, else the language's."""
+    if _clean(r.seizure_country) or _clean(r.origin) or _clean(r.destination) or list(r.transit_list or []):
+        return None
+    for o in (r.outlets or []):
+        if o in homes:
+            return homes[o]
+    return LANG_HOME.get(_clean(r.lang))
+
+
+def event_records(ev, homes=None):
+    homes = homes or {}
     out = []
     for r in ev.itertuples():
         out.append({
@@ -40,6 +74,7 @@ def event_records(ev):
             "origin_place": _clean(r.origin_place), "dest_place": _clean(r.destination_place),
             "vessel": _clean(r.vessel), "line": _clean(r.shipping_line), "containers": _clean(r.container_numbers),
             "cover": _clean(r.cover_cargo),
+            "approx": approx_country(r, homes),      # map only: country of the outlet when no place is named
         })
     return out
 
@@ -154,7 +189,7 @@ def write_all(res, out_dir, cfg, demo=False, verifications=None):
                  "first_date": ev["date"].min().strftime("%Y-%m-%d") if len(ev) else None,
                  "window_start": (res["asof"] - pd.Timedelta(days=days - 1)).strftime("%Y-%m-%d")},
         "coverage": coverage.payload(cfg), "risk_model": analyze.risk_model_description(cfg),
-        "kpis": res["kpis"], "events": event_records(ev_r), "alerts": res["alerts"],
+        "kpis": res["kpis"], "events": event_records(ev_r, outlet_homes(ev)), "alerts": res["alerts"],
         "monthly": monthly_counts(ev),
         "corridors": res["corridors"].head(40).to_dict("records") if len(res["corridors"]) else [],
         "hotspots": res["hotspots"].head(25).to_dict("records") if len(res["hotspots"]) else [],

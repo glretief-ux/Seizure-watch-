@@ -330,3 +330,15 @@ def test_cites_wood_species():
     assert extract("Customs seize 40 containers of kosso timber bound for China at Tema port", "")["primary_drug"].startswith("Kosso")
     r = extract("Authorities seize 12 tonnes of illegally logged CITES-protected wood at Douala port", "")
     assert r["category"] == "CITES protected timber" and r["primary_drug"] == "Other CITES-protected wood"
+
+
+def test_regional_place_names():
+    assert extract("Kocaeli'de 2 kg esrar ele geçirildi", "")["seizure_country"] == "Turkey"
+    assert extract("320 kg de maconha apreendidos na Bahia", "")["seizure_country"] == "Brazil"
+    assert extract("मध्य प्रदेश में 5 किलो गांजा जब्त", "")["seizure_country"] == "India"
+    assert extract("مكافحة المخدرات بسوهاج تضبط 2 كيلو حشيش", "")["seizure_country"] == "Egypt"
+
+
+def test_plain_illegal_logging_is_not_cites():
+    assert not extract("Forest officers seize 20 tonnes of illegally logged timber in Kalimantan", "").get("relevant")
+    assert extract("Customs seize 3 containers of rosewood logs at Mombasa", "")["category"] == "CITES protected timber"

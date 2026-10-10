@@ -233,9 +233,12 @@ TIMBER_PATTERNS = {
     "Afzelia (doussie)": rx(r"\bafzelia\b", r"\bdoussie\b", r"pod\s+mahogany", r"\blingue\b"),
     "Lignum vitae (Guaiacum)": rx(r"lignum\s+vitae", r"\bguaiacum\b", r"\bguayacan\b"),
 }
-GENERIC_TIMBER = rx(r"cites[- ]protected\s+(?:timber|wood|tree|rosewood)", r"protected\s+(?:timber|wood)",
-                    r"illegal(?:ly)?\s+logg?ed", r"illegal\s+logging", r"tala\s+ilegal",
-                    r"madera\s+ilegal", r"exploitation\s+forestiere\s+illegale",
+# Only CITES / protected wording counts: ordinary illegal logging or lumber is not CITES wood.
+GENERIC_TIMBER = rx(r"cites[- ](?:protected|listed)\s+(?:timber|wood|trees?|logs?|species\s+of\s+(?:wood|timber))",
+                    r"protected\s+(?:timber|wood|tree\s+species|hardwood)", r"cites\s+(?:timber|wood|logs?)",
+                    r"(?:timber|wood|logs?)\s+(?:protected|listed)\s+(?:under|by)\s+cites",
+                    r"madera\s+protegida", r"especies?\s+maderables?\s+protegidas?", r"bois\s+protege",
+                    r"essences?\s+protegees?", r"madeira\s+protegida",
                     r"endangered\s+(?:timber|wood|tree)s?",
                     r"wildlife\s+trafficking.{0,30}(?:timber|wood|log)")
 
@@ -1421,6 +1424,84 @@ for _line in COUNTRY_MORE.strip().splitlines():
     _f = [x.strip() for x in _line.split("|")]
     for _a in _f[1:]:
         _add_country(_f[0], _a)
+# ---- states, provinces and big cities that local news names instead of the country (country-level pin).
+# Ambiguous names are left out on purpose: Para / Natal / Salvador (common words or another country),
+# Van / Batman / Ordu, Punjab and Hyderabad in English (India or Pakistan), Georgia.
+REGIONS = [
+    # Brazil
+    ("Alagoas", "Brazil", ["alagoas"]), ("Manaus", "Brazil", ["manaus"]),
+    ("Bahia", "Brazil", ["bahia"]), ("Ceara", "Brazil", ["ceara", "fortaleza"]),
+    ("Espirito Santo", "Brazil", ["espirito santo", "vila velha"]), ("Goias", "Brazil", ["goias", "goiania"]),
+    ("Maranhao", "Brazil", ["maranhao", "sao luis"]), ("Mato Grosso", "Brazil", ["mato grosso", "cuiaba"]),
+    ("Mato Grosso do Sul", "Brazil", ["mato grosso do sul", "campo grande", "ponta pora", "corumba", "dourados"]),
+    ("Minas Gerais", "Brazil", ["minas gerais", "belo horizonte", "uberlandia", "juiz de fora"]),
+    ("Paraiba", "Brazil", ["paraiba", "joao pessoa"]), ("Parana", "Brazil", ["parana", "curitiba", "foz do iguacu", "londrina", "maringa"]),
+    ("Pernambuco", "Brazil", ["pernambuco", "recife"]), ("Piaui", "Brazil", ["piaui", "teresina"]),
+    ("Rio Grande do Norte", "Brazil", ["rio grande do norte"]), ("Rio Grande do Sul", "Brazil", ["rio grande do sul", "porto alegre", "caxias do sul"]),
+    ("Rondonia", "Brazil", ["rondonia", "porto velho"]), ("Roraima", "Brazil", ["roraima"]),
+    ("Santa Catarina", "Brazil", ["santa catarina", "florianopolis", "itajai", "joinville", "navegantes"]),
+    ("Sergipe", "Brazil", ["sergipe", "aracaju"]), ("Tocantins", "Brazil", ["tocantins"]),
+    ("Sao Paulo state", "Brazil", ["campinas", "guarulhos", "ribeirao preto", "sorocaba", "sao jose dos campos"]),
+    # India (English and Hindi)
+    ("Madhya Pradesh", "India", ["madhya pradesh", "bhopal", "indore", "jabalpur", "gwalior", "मध्य प्रदेश", "मध्यप्रदेश", "भोपाल", "इंदौर", "जबलपुर", "ग्वालियर"]),
+    ("Uttar Pradesh", "India", ["lucknow", "kanpur", "varanasi", "agra", "meerut", "gorakhpur", "prayagraj", "ghaziabad", "noida",
+                                "उत्तर प्रदेश", "यूपी", "लखनऊ", "कानपुर", "वाराणसी", "आगरा", "मेरठ", "गोरखपुर", "प्रयागराज", "गाजियाबाद", "नोएडा"]),
+    ("Rajasthan", "India", ["rajasthan", "jaipur", "jodhpur", "udaipur", "bikaner", "barmer", "राजस्थान", "जयपुर", "जोधपुर", "उदयपुर", "बीकानेर", "बाड़मेर"]),
+    ("Bihar", "India", ["bihar", "patna", "बिहार", "पटना"]),
+    ("Jharkhand", "India", ["jharkhand", "ranchi", "dhanbad", "झारखंड", "रांची", "धनबाद"]),
+    ("Chhattisgarh", "India", ["chhattisgarh", "raipur", "छत्तीसगढ़", "रायपुर"]),
+    ("Odisha", "India", ["odisha", "bhubaneswar", "ओडिशा", "भुवनेश्वर"]),
+    ("West Bengal", "India", ["west bengal", "siliguri", "पश्चिम बंगाल", "सिलीगुड़ी"]),
+    ("Assam", "India", ["assam", "guwahati", "असम", "गुवाहाटी"]), ("Manipur", "India", ["manipur", "imphal", "मणिपुर"]),
+    ("Mizoram", "India", ["mizoram", "aizawl", "मिजोरम"]), ("Tripura", "India", ["tripura", "agartala", "त्रिपुरा"]),
+    ("Gujarat", "India", ["gujarat", "ahmedabad", "surat", "vadodara", "kutch", "गुजरात", "अहमदाबाद", "कच्छ"]),
+    ("Maharashtra", "India", ["maharashtra", "pune", "nagpur", "thane", "nashik", "महाराष्ट्र", "पुणे", "नागपुर", "ठाणे"]),
+    ("Karnataka", "India", ["karnataka", "bengaluru", "bangalore", "mangaluru", "कर्नाटक", "बेंगलुरु"]),
+    ("Kerala", "India", ["kerala", "kochi", "thiruvananthapuram", "kozhikode", "केरल"]),
+    ("Tamil Nadu", "India", ["tamil nadu", "coimbatore", "madurai", "तमिलनाडु"]),
+    ("Andhra Pradesh", "India", ["andhra pradesh", "tirupati", "chittoor", "आंध्र प्रदेश"]), ("Telangana", "India", ["telangana", "तेलंगाना"]),
+    ("Haryana", "India", ["gurugram", "gurgaon", "faridabad", "kaithal", "sirsa", "panipat", "हरियाणा", "गुरुग्राम", "फरीदाबाद", "कैथल", "सिरसा", "पानीपत"]),
+    ("Punjab (India)", "India", ["ludhiana", "amritsar", "jalandhar", "bathinda", "ferozepur", "पंजाब", "लुधियाना", "अमृतसर", "जालंधर", "बठिंडा", "फिरोजपुर"]),
+    ("Himachal Pradesh", "India", ["himachal", "shimla", "solan", "baddi", "kullu", "हिमाचल", "शिमला", "सोलन", "बद्दी", "कुल्लू"]),
+    ("Uttarakhand", "India", ["uttarakhand", "dehradun", "haridwar", "उत्तराखंड", "देहरादून", "हरिद्वार"]),
+    ("Chandigarh", "India", ["chandigarh", "चंडीगढ़"]), ("Jammu and Kashmir", "India", ["jammu", "srinagar", "जम्मू", "श्रीनगर"]),
+    ("Delhi", "India", ["दिल्ली"]),
+    # Turkey (provinces; Turkish suffixes after an apostrophe are fine)
+    ("Kocaeli", "Turkey", ["kocaeli", "gebze"]), ("Antalya", "Turkey", ["antalya", "alanya"]), ("Adana", "Turkey", ["adana"]),
+    ("Gaziantep", "Turkey", ["gaziantep"]), ("Sanliurfa", "Turkey", ["şanlıurfa", "sanliurfa", "urfa"]), ("Hatay", "Turkey", ["hatay", "iskenderun"]),
+    ("Mardin", "Turkey", ["mardin"]), ("Diyarbakir", "Turkey", ["diyarbakır", "diyarbakir"]), ("Hakkari", "Turkey", ["hakkari", "yüksekova"]),
+    ("Sirnak", "Turkey", ["şırnak", "sirnak", "habur"]), ("Konya", "Turkey", ["konya"]), ("Bursa", "Turkey", ["bursa"]), ("Ankara", "Turkey", ["ankara"]),
+    ("Edirne", "Turkey", ["edirne", "ipsala", "kapıkule", "kapikule"]), ("Tekirdag", "Turkey", ["tekirdağ", "tekirdag"]),
+    ("Kirklareli", "Turkey", ["kırklareli", "kirklareli"]), ("Samsun", "Turkey", ["samsun"]), ("Trabzon", "Turkey", ["trabzon"]),
+    ("Erzurum", "Turkey", ["erzurum"]), ("Agri", "Turkey", ["doğubayazıt", "dogubayazit"]), ("Kayseri", "Turkey", ["kayseri"]),
+    ("Eskisehir", "Turkey", ["eskişehir", "eskisehir"]), ("Manisa", "Turkey", ["manisa"]), 
+    ("Mugla", "Turkey", ["muğla", "bodrum", "marmaris"]), ("Denizli", "Turkey", ["denizli"]), ("Malatya", "Turkey", ["malatya"]),
+    ("Elazig", "Turkey", ["elazığ", "elazig"]), ("Sakarya", "Turkey", ["sakarya"]), ("Balikesir", "Turkey", ["balıkesir", "balikesir"]),
+    ("Canakkale", "Turkey", ["çanakkale", "canakkale"]), ("Kahramanmaras", "Turkey", ["kahramanmaraş", "kahramanmaras"]),
+    ("Osmaniye", "Turkey", ["osmaniye"]), ("Adiyaman", "Turkey", ["adıyaman", "adiyaman"]), ("Izmir", "Turkey", ["izmir", "i̇zmir"]),
+    # Egypt and Saudi Arabia (Arabic; a leading preposition such as ب / و / ل is fine)
+    ("Sohag", "Egypt", ["سوهاج"]), ("Assiut", "Egypt", ["أسيوط", "اسيوط"]), ("Minya", "Egypt", ["المنيا"]), ("Qena", "Egypt", ["قنا"]),
+    ("Luxor", "Egypt", ["الأقصر", "الاقصر"]), ("Aswan", "Egypt", ["أسوان", "اسوان"]), ("Giza", "Egypt", ["الجيزة"]),
+    ("Qalyubia", "Egypt", ["القليوبية"]),  ("Dakahlia", "Egypt", ["الدقهلية"]), ("Tanta", "Egypt", ["طنطا"]),
+    ("Monufia", "Egypt", ["المنوفية"]),  ("Kafr El Sheikh", "Egypt", ["كفر الشيخ"]), ("Damietta", "Egypt", ["دمياط"]),
+    ("Port Said", "Egypt", ["بورسعيد", "بور سعيد"]), ("Ismailia", "Egypt", ["الإسماعيلية", "الاسماعيلية"]), ("Suez", "Egypt", ["السويس"]),
+    ("Faiyum", "Egypt", ["الفيوم"]), ("Beni Suef", "Egypt", ["بني سويف"]), ("Matrouh", "Egypt", ["مرسى مطروح"]), ("Sinai", "Egypt", ["سيناء"]),
+    ("Alexandria", "Egypt", ["الإسكندرية", "الاسكندرية"]),
+    ("Jazan", "Saudi Arabia", ["جازان", "جيزان"]), ("Najran", "Saudi Arabia", ["نجران"]), ("Asir", "Saudi Arabia", ["أبها", "منطقة عسير"]),
+    ("Tabuk", "Saudi Arabia", ["تبوك"]), ("Qassim", "Saudi Arabia", ["القصيم"]), ("Al Jawf", "Saudi Arabia", ["الجوف"]),
+     ("Mecca", "Saudi Arabia", ["مكة المكرمة"]), ("Dammam", "Saudi Arabia", ["الدمام"]),
+    # Russia (Cyrillic stems get case endings automatically)
+    ("Krasnoyarsk", "Russia", ["краснояр"]), ("Novosibirsk", "Russia", ["новосибирск"]), ("Yekaterinburg", "Russia", ["екатеринбург"]),
+    ("Samara", "Russia", ["самарск", "самар"]), ("Rostov", "Russia", ["ростов"]), ("Krasnodar", "Russia", ["краснодар", "кубан"]),
+    ("Nizhny Novgorod", "Russia", ["нижегород"]), ("Kazan", "Russia", ["казан", "татарстан"]), ("Ufa", "Russia", ["башкир"]),
+    ("Chelyabinsk", "Russia", ["челябинск"]), ("Omsk", "Russia", ["омск"]), ("Perm", "Russia", ["пермск"]), ("Volgograd", "Russia", ["волгоград"]),
+    ("Voronezh", "Russia", ["воронеж"]), ("Irkutsk", "Russia", ["иркутск"]), ("Khabarovsk", "Russia", ["хабаровск"]), ("Primorye", "Russia", ["примор"]),
+    ("Kaliningrad", "Russia", ["калининград"]), ("Kursk", "Russia", ["курск"]), ("Belgorod", "Russia", ["белгород"]), ("Bryansk", "Russia", ["брянск"]),
+    ("Dagestan", "Russia", ["дагестан", "махачкал"]), ("Tyumen", "Russia", ["тюмен"]), ("Saratov", "Russia", ["саратов"]), ("Stavropol", "Russia", ["ставропол"]),
+    ("Kemerovo", "Russia", ["кемеров", "кузбасс"]), ("Altai", "Russia", ["барнаул", "алтайск"]), ("Tomsk", "Russia", ["томск"]),
+    ("Moscow region", "Russia", ["подмосков"]), ("Orenburg", "Russia", ["оренбург"]), ("Astrakhan", "Russia", ["астрахан"]),
+]
+PLACES += REGIONS
 for _disp, _ctry, _als in PLACES:
     for _a in _als:
         PLACE_ALIAS[norm(_a)] = (_disp, _ctry)

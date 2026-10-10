@@ -2043,3 +2043,41 @@ PLACE.update({"Western Visayas": [10.72, 122.56], "Central Visayas": [10.0, 124.
               "Luzon": [16.5, 121.0], "Palawan": [9.75, 118.74]})
 PLACE.update({"Cat Lai": [10.76, 106.79], "Cai Mep": [10.53, 107.02], "Da Nang": [16.05, 108.21],
               "Noi Bai airport": [21.22, 105.81], "Tan Son Nhat airport": [10.82, 106.65]})
+
+# States, provinces and regional cities (approximate centres; added with lexicon.REGIONS)
+PLACE.update({
+    # Brazil
+    "Alagoas": [-9.67, -35.74], "Bahia": [-12.97, -38.50], "Ceara": [-3.73, -38.52], "Espirito Santo": [-20.32, -40.34],
+    "Goias": [-16.68, -49.26], "Manaus": [-3.12, -60.02], "Maranhao": [-2.53, -44.30], "Mato Grosso": [-15.60, -56.10],
+    "Mato Grosso do Sul": [-20.47, -54.62], "Minas Gerais": [-19.92, -43.94], "Paraiba": [-7.12, -34.86], "Parana": [-25.43, -49.27],
+    "Pernambuco": [-8.05, -34.88], "Piaui": [-5.09, -42.80], "Rio Grande do Norte": [-5.79, -35.21], "Rio Grande do Sul": [-30.03, -51.23],
+    "Rondonia": [-8.76, -63.90], "Roraima": [2.82, -60.67], "Santa Catarina": [-27.60, -48.55], "Sao Paulo state": [-22.91, -47.06],
+    "Sergipe": [-10.91, -37.07], "Tocantins": [-10.18, -48.33],
+    # India
+    "Andhra Pradesh": [16.51, 80.52], "Chandigarh": [30.73, 76.78], "Chhattisgarh": [21.25, 81.63], "Jharkhand": [23.34, 85.31],
+    "Punjab (India)": [30.90, 75.85], "Telangana": [17.39, 78.49],
+    # Turkey
+    "Adana": [37.00, 35.32], "Adiyaman": [37.76, 38.28], "Agri": [39.55, 44.08], "Antalya": [36.90, 30.70], "Balikesir": [39.65, 27.88],
+    "Bursa": [40.19, 29.06], "Canakkale": [40.15, 26.41], "Denizli": [37.78, 29.09], "Diyarbakir": [37.91, 40.24], "Edirne": [41.68, 26.56],
+    "Elazig": [38.67, 39.22], "Erzurum": [39.90, 41.27], "Eskisehir": [39.78, 30.52], "Gaziantep": [37.07, 37.38], "Hakkari": [37.57, 43.74],
+    "Hatay": [36.20, 36.16], "Kahramanmaras": [37.58, 36.93], "Kayseri": [38.73, 35.48], "Kirklareli": [41.73, 27.22], "Kocaeli": [40.77, 29.92],
+    "Konya": [37.87, 32.48], "Malatya": [38.35, 38.31], "Manisa": [38.61, 27.43], "Mardin": [37.31, 40.74], "Mugla": [37.22, 28.36],
+    "Osmaniye": [37.07, 36.25], "Sakarya": [40.78, 30.40], "Samsun": [41.29, 36.33], "Sanliurfa": [37.16, 38.79], "Sirnak": [37.52, 42.46],
+    "Tekirdag": [40.98, 27.51], "Trabzon": [41.00, 39.72],
+    # Egypt
+    "Alexandria": [31.20, 29.92], "Assiut": [27.18, 31.18], "Aswan": [24.09, 32.90], "Beni Suef": [29.07, 31.10], "Dakahlia": [31.04, 31.38],
+    "Damietta": [31.42, 31.81], "Faiyum": [29.31, 30.84], "Giza": [30.01, 31.21], "Ismailia": [30.60, 32.27], "Kafr El Sheikh": [31.11, 30.94],
+    "Luxor": [25.69, 32.64], "Matrouh": [31.35, 27.24], "Minya": [28.11, 30.75], "Monufia": [30.55, 31.01], "Qalyubia": [30.18, 31.21],
+    "Qena": [26.16, 32.72], "Sinai": [29.50, 33.80], "Sohag": [26.56, 31.69], "Suez": [29.97, 32.53], "Tanta": [30.79, 31.00],
+    # Saudi Arabia
+    "Al Jawf": [29.97, 40.21], "Asir": [18.22, 42.51], "Jazan": [16.89, 42.55], "Mecca": [21.39, 39.86], "Najran": [17.49, 44.13],
+    "Qassim": [26.33, 43.97], "Tabuk": [28.38, 36.57],
+    # Russia
+    "Altai": [53.35, 83.78], "Astrakhan": [46.35, 48.04], "Belgorod": [50.60, 36.59], "Bryansk": [53.24, 34.37], "Chelyabinsk": [55.16, 61.40],
+    "Dagestan": [42.98, 47.50], "Irkutsk": [52.29, 104.28], "Kaliningrad": [54.71, 20.51], "Kazan": [55.80, 49.11], "Kemerovo": [55.35, 86.09],
+    "Khabarovsk": [48.48, 135.08], "Krasnodar": [45.04, 38.98], "Krasnoyarsk": [56.01, 92.85], "Kursk": [51.73, 36.19],
+    "Moscow region": [55.75, 37.30], "Nizhny Novgorod": [56.33, 44.00], "Novosibirsk": [55.03, 82.92], "Omsk": [54.99, 73.37],
+    "Orenburg": [51.77, 55.10], "Perm": [58.01, 56.25], "Primorye": [43.12, 131.89], "Rostov": [47.24, 39.71], "Samara": [53.20, 50.15],
+    "Saratov": [51.53, 46.03], "Stavropol": [45.04, 41.97], "Tomsk": [56.48, 84.95], "Tyumen": [57.15, 65.53], "Ufa": [54.74, 55.97],
+    "Volgograd": [48.71, 44.51], "Voronezh": [51.67, 39.18], "Yekaterinburg": [56.84, 60.61],
+})

@@ -154,7 +154,7 @@ table.mini{border-collapse:collapse;font-size:13px;margin-top:6px}table.mini td{
   <div id="map"></div>
   <div class="legend">
     <span><i style="border-color:#c0392b"></i>High risk</span><span><i style="border-color:#e08a00"></i>Medium</span><span><i style="border-color:#2e8b57"></i>Low</span>
-    <span><b style="border:2px solid #555;background:#fff"></b>origin</span><span><b style="background:#c0392b"></b>seizure place (number = reports; tap to list them)</span><span><b style="background:#12355b;border:1px solid #fff"></b>destination</span>
+    <span><b style="border:2px solid #555;background:#fff"></b>origin</span><span><b style="background:#c0392b"></b>seizure place (number = reports; tap to list them)</span><span><b style="border:2px dashed #c0392b;background:#fff"></b>approximate (no place named; outlet's country)</span><span><b style="background:#12355b;border:1px solid #fff"></b>destination</span>
     <span>Arrows show direction. Lines join country centres or ports, so they show the reported route, not the actual path. Tap a line for the report. The map follows the filters and search above.</span>
   </div>
 </div>
@@ -530,6 +530,10 @@ function eventPoints(e) {
   (e.transit || '').split(';').map(x => x.trim()).filter(Boolean).forEach(t => add(pt(t, 'transit')));
   add((e.place && pt(e.place, 'seizure', true)) || pt(e.country, 'seizure'));
   add(pt(e.dest, 'dest'));
+  if (!out.length && e.approx) {          // no place named: put it at the news outlet's country, marked approximate
+    const q = pt(e.approx, 'seizure');
+    if (q) out.push(Object.assign(q, {approx: true, name: e.approx}));
+  }
   return out;
 }
 function arc(a, b) {
@@ -560,7 +564,8 @@ function drawMap(v) {
     if (!pts.length) return;
     pts.forEach(q => bounds.push(q.c));
     const s = pts.find(q => q.role === 'seizure');
-    if (s) { const k = s.c[0] + ',' + s.c[1]; (groups[k] = groups[k] || {c: s.c, name: s.name, evs: []}).evs.push(e); }
+    if (s) { const k = (s.approx ? 'a' : '') + s.c[0] + ',' + s.c[1];
+             (groups[k] = groups[k] || {c: s.approx ? [s.c[0] - 1.2, s.c[1] + 1.2] : s.c, name: s.name, approx: !!s.approx, evs: []}).evs.push(e); }
     if (pts.length > 1) {
       routes++;
       const w = 1.5 + Math.min(3.5, Math.log10((e.kg || 0) + 1));
@@ -587,9 +592,13 @@ function drawMap(v) {
     const rank = list.reduce((m, e) => Math.max(m, e.band === 'High' ? 3 : e.band === 'Medium' ? 2 : 1), 1);
     const col = rank === 3 ? BC.High : rank === 2 ? BC.Medium : BC.Low, size = Math.round(22 + Math.min(16, 4 * Math.sqrt(n)));
     const icon = L.divIcon({className: 'seizdot', iconSize: [size, size], iconAnchor: [size / 2, size / 2],
-      html: '<div style="width:' + size + 'px;height:' + size + 'px;border-radius:50%;background:' + col + ';border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.3);' +
-        'color:#fff;font:700 11px/' + (size - 4) + 'px sans-serif;text-align:center">' + (n > 1 ? n : '') + '</div>'});
-    const html = '<b>' + esc(g.name) + '</b> - ' + n + ' report' + (n > 1 ? 's' : '') + '<div class="plist">' +
+      html: g.approx
+        ? '<div style="width:' + size + 'px;height:' + size + 'px;border-radius:50%;background:#fff;border:2px dashed ' + col + ';box-shadow:0 0 0 1px rgba(0,0,0,.15);' +
+          'color:' + col + ';font:700 11px/' + (size - 4) + 'px sans-serif;text-align:center">' + (n > 1 ? n : '') + '</div>'
+        : '<div style="width:' + size + 'px;height:' + size + 'px;border-radius:50%;background:' + col + ';border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.3);' +
+          'color:#fff;font:700 11px/' + (size - 4) + 'px sans-serif;text-align:center">' + (n > 1 ? n : '') + '</div>'});
+    const html = '<b>' + esc(g.name) + '</b> - ' + n + ' report' + (n > 1 ? 's' : '') +
+      (g.approx ? '<div class="small">Approximate: the report names no place, so it is shown in the country of the news outlet.</div>' : '') + '<div class="plist">' +
       list.slice(0, 12).map(e => '<div class="pi"><span class="chip ' + esc(e.band) + '">' + e.score + '</span> ' + esc(e.date) + ' | ' + esc(e.drug) + (qty(e) ? ' (' + esc(qty(e)) + ')' : '') +
         (e.route || e.corridor ? '<br><span class="small">' + esc(e.route || e.corridor) + '</span>' : '') +
         '<br>' + esc((e.title_en || e.title || '').slice(0, 110)) + ' <a class="pop-open" href="' + esc(safe(e.url)) + '" target="_blank" rel="noopener noreferrer">open</a></div>').join('') +
@@ -597,7 +606,9 @@ function drawMap(v) {
     L.marker(g.c, {icon, riseOnHover: true}).bindPopup(html, {maxWidth: 320}).addTo(mapLayer);
   });
   const noPlace = v.filter(e => !eventPoints(e).length).length;   // nothing named that the map can place
+  const approxN = v.filter(e => { const p = eventPoints(e); return p.length && p[0].approx; }).length;
   $('mapNote').textContent = '(' + routes + ' routes, ' + Object.keys(groups).length + ' places with seizures' + (v.length > 500 ? '; top 500 by risk shown' : '') +
+    (approxN ? '; ' + approxN + ' placed approximately (dashed)' : '') +
     (noPlace ? '; ' + noPlace + (noPlace === 1 ? ' seizure has' : ' seizures have') + ' no place named and ' + (noPlace === 1 ? 'is' : 'are') + ' listed in the table only' : '') + ')';
   setTimeout(() => { map.invalidateSize(); if (bounds.length) map.fitBounds(bounds, {padding: [30, 30], maxZoom: 5}); else map.setView([20, 10], 2); }, 50);
 }
