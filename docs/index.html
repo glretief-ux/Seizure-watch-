@@ -239,7 +239,16 @@ if (D.meta.demo) bn.push('<div class="banner demo"><b>SAMPLE DATA.</b> These are
 if (!D.meta.history_ok) bn.push('<div class="banner hist">Building history: trend, spike and new-corridor alerts switch on after ' + D.meta.min_history + ' days of data (currently ' + D.meta.history_days + ').</div>');
 $('banners').innerHTML = bn.join('');
 [...new Set(D.events.map(e => e.category).filter(Boolean))].sort().forEach(d => $('fCategory').insertAdjacentHTML('beforeend', '<option>' + esc(d) + '</option>'));
-[...new Set(D.events.map(e => e.drug))].sort().forEach(d => $('fDrug').insertAdjacentHTML('beforeend', '<option>' + esc(d) + '</option>'));
+// the Types list only offers items of the chosen category
+function fillTypes() {
+  const cg = $('fCategory').value, cur = $('fDrug').value;
+  const items = [...new Set(D.events.filter(e => !cg || e.category === cg).map(e => e.drug).filter(Boolean))].sort();
+  $('fDrug').innerHTML = '<option value="">' + (cg ? 'All ' + esc(cg.toLowerCase()) + ' types' : 'All types') + '</option>' +
+    items.map(d => '<option>' + esc(d) + '</option>').join('');
+  $('fDrug').value = items.includes(cur) ? cur : '';
+}
+fillTypes();
+$('fCategory').addEventListener('change', fillTypes);   // runs before render, so a stale type is cleared first
 [...new Set(D.events.map(e => e.transport).filter(Boolean))].sort().forEach(d => $('fMode').insertAdjacentHTML('beforeend', '<option>' + esc(d) + '</option>'));
 ['fCategory','fDrug','fBand','fDays','fMode'].forEach(i => $(i).addEventListener('change', render));
 $('fQ').addEventListener('input', render);
@@ -675,7 +684,7 @@ $('lookList').addEventListener('click', ev => {
   } else if (show) {
     const list = lookTab === 'c' ? CONCEAL_CARDS : ROUTE_CARDS, c = list.find(x => x.id === show.dataset.show);
     cardFilter = lookTab === 'c' ? CONCEAL_PRED(c) : ROUTE_PRED[c.id]; cardName = c.t;
-    ['fQ', 'fCategory', 'fDrug', 'fBand', 'fMode'].forEach(id => $(id).value = ''); $('fDays').value = '9999';
+    ['fQ', 'fCategory', 'fDrug', 'fBand', 'fMode'].forEach(id => $(id).value = ''); fillTypes(); $('fDays').value = '9999';
     infraSelected.clear(); renderInfraList(''); updateInfraBtn();
     showCardBar(); render(); $('evT').scrollIntoView({behavior: 'smooth', block: 'start'});
   } else if (copy) {
