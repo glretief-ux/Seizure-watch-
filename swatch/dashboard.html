@@ -27,6 +27,9 @@ header .sub{opacity:.8;font-size:12px}
 .kpi .l{font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--mute)}
 .kpi .v{font-size:24px;font-weight:700;margin-top:2px}
 .kpi .d{font-size:12px;color:var(--mute)}
+.kpi .lr{display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap}
+.kpi select.per{font-size:12px;padding:3px 6px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink);max-width:100%}
+.kpi .up{color:#b3261e}.kpi .dn{color:#2e7d32}
 .card{background:var(--card);border-radius:var(--r);padding:14px 16px;box-shadow:0 1px 2px rgba(0,0,0,.06);margin-bottom:12px;overflow:hidden}
 .card h2{font-size:14px;margin:-14px -16px 12px;padding:10px 16px;background:var(--brand);color:#fff;letter-spacing:.2px}
 .card h2 .small,.card h2 .cnt{color:#c9d9ee;font-weight:400}
@@ -274,13 +277,92 @@ $('fInfraList').addEventListener('change', ev => {
 $('fInfraAllBtn').addEventListener('click', () => { infraOptions.forEach(v => infraSelected.add(v)); renderInfraList($('fInfraSearch').value); updateInfraBtn(); render(); });
 $('fInfraClearBtn').addEventListener('click', () => { infraSelected.clear(); renderInfraList($('fInfraSearch').value); updateInfraBtn(); render(); });
 
-function view() {
-  const days = +$('fDays').value, cut = fmt(new Date(asof.getTime() - (days - 1) * 864e5));
+function matcher() {
   const q = $('fQ').value.trim().toLowerCase(), toks = q.split(/[\s>\u2192,;]+/).filter(t => t && !['to','from','via','-','->'].includes(t)), dr = $('fDrug').value, bd = $('fBand').value, md = $('fMode').value, cg = $('fCategory').value;
-  return D.events.filter(e => e.date >= cut && (!cg || e.category === cg) && (!dr || e.drug === dr) && (!bd || e.band === bd) && (!md || e.transport === md) &&
+  return e => (!cg || e.category === cg) && (!dr || e.drug === dr) && (!bd || e.band === bd) && (!md || e.transport === md) &&
     (!infraSelected.size || (e.infra || []).some(x => infraSelected.has(x))) && (!cardFilter || cardFilter(e)) &&
-    (!toks.length || toks.every(t => [e.country,e.place,e.origin,e.dest,e.transit,e.conceal,e.title,e.title_en,e.corridor,e.route,e.drug,e.category,e.vessel,e.line,e.cover,e.containers,e.origin_place,e.dest_place].join(' ').toLowerCase().includes(t))));
+    (!toks.length || toks.every(t => [e.country,e.place,e.origin,e.dest,e.transit,e.conceal,e.title,e.title_en,e.corridor,e.route,e.drug,e.category,e.vessel,e.line,e.cover,e.containers,e.origin_place,e.dest_place].join(' ').toLowerCase().includes(t)));
 }
+function view() {
+  const days = +$('fDays').value, cut = fmt(new Date(asof.getTime() - (days - 1) * 864e5)), ok = matcher();
+  return D.events.filter(e => e.date >= cut && ok(e));
+}
+
+// ---- Seizure events card: period picker (months and years use full history)
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const MSHORT = MONTHS.map(m => m.slice(0,3));
+const MONTHLY = D.monthly || [];
+const winStart = D.meta.window_start || (D.events.length ? D.events.reduce((a,e) => e.date < a ? e.date : a, D.events[0].date) : D.meta.asof);
+const asofS = D.meta.asof;
+const firstDate = D.meta.first_date || D.events.reduce((a,e) => e.date < a ? e.date : a, asofS);
+let evPeriod = 'view';
+try { evPeriod = JSON.parse(localStorage.getItem('sw_ev_period')) || 'view'; } catch (e) {}
+const addDays = (s, n) => fmt(new Date(new Date(s + 'T00:00:00Z').getTime() + n * 864e5));
+const monthEnd = ym => { const [y,m] = ym.split('-').map(Number); return fmt(new Date(Date.UTC(y, m, 0))); };
+const prevMonth = ym => { const [y,m] = ym.split('-').map(Number); return m === 1 ? (y-1) + '-12' : y + '-' + String(m-1).padStart(2,'0'); };
+const monthName = ym => MONTHS[+ym.slice(5,7) - 1] + ' ' + ym.slice(0,4);
+const dShort = s => (+s.slice(8,10)) + ' ' + MSHORT[+s.slice(5,7) - 1];
+function periodList() {
+  const ms = new Set(MONTHLY.map(r => r[0])); D.events.forEach(e => ms.add(e.date.slice(0,7)));
+  const months = [...ms].sort().reverse(), years = [...new Set(months.map(m => m.slice(0,4)))];
+  return {months, years};
+}
+// count events between two dates (inclusive). Inside the loaded window every filter applies;
+// further back the monthly summary is used, which knows category, type and risk band only.
+function countRange(a, b) {
+  if (a >= winStart) { const ok = matcher(); return {n: D.events.filter(e => e.date >= a && e.date <= b && ok(e)).length, partial: false}; }
+  const cg = $('fCategory').value, dr = $('fDrug').value, bd = $('fBand').value, ma = a.slice(0,7), mb = b.slice(0,7);
+  const n = MONTHLY.filter(r => r[0] >= ma && r[0] <= mb && (!cg || (r[1] || 'Drug') === cg) && (!dr || r[2] === dr) && (!bd || r[3] === bd)).reduce((s,r) => s + r[4], 0);
+  const other = $('fMode').value || infraSelected.size || $('fQ').value.trim() || cardFilter;
+  return {n, partial: !!other};
+}
+function cmp(label, a, b, n) {   // "label: count (+x%)", or a note if the period predates collection
+  if (b < firstDate) return label + ': no data yet';
+  const p = countRange(a, b);
+  if (a < firstDate) return label + ': ' + p.n.toLocaleString('en-GB') + ' (collection began ' + dShort(firstDate) + ')';
+  return label + ': ' + p.n.toLocaleString('en-GB') + change(n, p.n);
+}
+function change(n, p) {
+  if (!p) return '';
+  const pc = Math.round(100 * (n - p) / p);
+  return ' <span class="' + (pc > 0 ? 'up' : pc < 0 ? 'dn' : '') + '">(' + (pc > 0 ? '+' : '') + pc + '%)</span>';
+}
+function evCard(v) {
+  const {months, years} = periodList();
+  if (!['view','7','30','all'].includes(evPeriod) && !months.includes(evPeriod.slice(2)) && !years.includes(evPeriod.slice(2))) evPeriod = 'view';
+  const opt = (val, txt) => '<option value="' + val + '"' + (val === evPeriod ? ' selected' : '') + '>' + txt + '</option>';
+  const sel = '<select class="per" id="evPer" aria-label="Period for seizure events">' + opt('view','As filtered') + opt('7','Last 7 days') + opt('30','Last 30 days') + opt('all','All time') +
+    '<optgroup label="By month">' + months.map(m => opt('m:' + m, monthName(m) + (m === asofS.slice(0,7) ? ' (to date)' : ''))).join('') + '</optgroup>' +
+    '<optgroup label="By year">' + years.map(y => opt('y:' + y, y + (y === asofS.slice(0,4) ? ' (to date)' : ''))).join('') + '</optgroup></select>';
+  let n, d, part = false;
+  if (evPeriod === 'view') { n = v.length; d = esc(D.kpis.events_7d + ' in last 7 days (prev ' + D.kpis.events_prev_7d + ')'); }
+  else if (evPeriod === '7' || evPeriod === '30') {
+    const k = +evPeriod, a = addDays(asofS, -(k - 1)), pa = addDays(a, -k), pb = addDays(a, -1);
+    const c = countRange(a, asofS); n = c.n; part = c.partial;
+    d = cmp('previous ' + k + ' days', pa, pb, n);
+  } else if (evPeriod === 'all') {
+    const c = countRange(firstDate < winStart ? firstDate.slice(0,7) + '-01' : firstDate, asofS); n = c.n; part = c.partial;
+    d = 'since ' + dShort(firstDate) + ' ' + firstDate.slice(0,4);
+  } else if (evPeriod.startsWith('m:')) {
+    const m = evPeriod.slice(2), a = m + '-01', cur = m === asofS.slice(0,7), b = cur ? asofS : monthEnd(m), pm = prevMonth(m);
+    const c = countRange(a, b); n = c.n; part = c.partial;
+    if (cur) {   // month to date: compare with the same days of the previous month
+      const day = Math.min(+asofS.slice(8,10), +monthEnd(pm).slice(8,10));
+      d = '1\u2013' + dShort(asofS) + ' \u00b7 ' + cmp('same days in ' + MONTHS[+pm.slice(5,7)-1], pm + '-01', pm + '-' + String(day).padStart(2,'0'), n);
+    } else d = cmp(MONTHS[+pm.slice(5,7)-1], pm + '-01', monthEnd(pm), n);
+  } else {
+    const y = evPeriod.slice(2), cur = y === asofS.slice(0,4), c = countRange(y + '-01-01', cur ? asofS : y + '-12-31'); n = c.n; part = c.partial;
+    const py = String(+y - 1), pb = cur ? (py + asofS.slice(4)) : py + '-12-31';
+    d = cmp((cur ? 'same period ' : '') + py, py + '-01-01', pb, n);
+  }
+  if (part) d += '<br>older months: category, type and risk filters only';
+  return '<div class="kpi"><div class="lr"><div class="l">Seizure events</div>' + sel + '</div><div class="v">' + n.toLocaleString('en-GB') + '</div><div class="d">' + d + '</div></div>';
+}
+$('kpis').addEventListener('change', ev => {
+  if (ev.target.id !== 'evPer') return;
+  evPeriod = ev.target.value; try { localStorage.setItem('sw_ev_period', JSON.stringify(evPeriod)); } catch (e) {}
+  kpis(view());
+});
 const by = (arr, f) => { const m = {}; arr.forEach(x => { const k = f(x); if (k != null && k !== '') m[k] = (m[k] || 0) + 1; }); return m; };
 const topN = (m, n) => Object.entries(m).sort((a,b) => b[1]-a[1]).slice(0, n);
 
@@ -290,13 +372,12 @@ function kpis(v) {
   const nd = v.filter(e => e.category && e.category !== 'Drug');
   const byCat = {}; nd.forEach(e => byCat[e.category] = (byCat[e.category]||0)+1);
   const catSummary = Object.entries(byCat).sort((a,b) => b[1]-a[1]).map(([c,n]) => n + ' ' + c).join(', ');
-  const K = [['Seizure events', v.length, D.kpis.events_7d + ' in last 7 days (prev ' + D.kpis.events_prev_7d + ')'],
-    ['High risk', hi, v.length ? Math.round(100*hi/v.length) + '% of events' : ''],
+  const K = [['High risk', hi, v.length ? Math.round(100*hi/v.length) + '% of events' : ''],
     ['Container cases', cont, v.length ? Math.round(100*cont/v.length) + '% of events' : ''],
     ['Insider signals', ins, 'port / airport / customs staff'],
     ['Total weight', kg >= 1000 ? (kg/1000).toFixed(1) + ' t' : Math.round(kg) + ' kg', 'excl. pills / sticks'],
     ['Other contraband', nd.length, catSummary || 'stolen vehicles, precursor chemicals, CITES timber, ivory and fauna, arms']];
-  $('kpis').innerHTML = K.map(k => '<div class="kpi"><div class="l">' + k[0] + '</div><div class="v">' + k[1] + '</div><div class="d">' + esc(k[2]) + '</div></div>').join('');
+  $('kpis').innerHTML = evCard(v) + K.map(k => '<div class="kpi"><div class="l">' + k[0] + '</div><div class="v">' + k[1] + '</div><div class="d">' + esc(k[2]) + '</div></div>').join('');
 }
 
 function alerts() {

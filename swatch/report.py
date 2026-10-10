@@ -106,6 +106,21 @@ METHOD_NOTES = [
 ]
 
 
+def monthly_counts(ev):
+    """Event counts per month x category x item x risk band over the FULL history.
+    Lets the dashboard show whole months and years even after they drop out of the
+    report_days window that is loaded event by event. Rows: [month, category, item, band, n]."""
+    if not len(ev):
+        return []
+    g = pd.DataFrame({
+        "m": ev["date"].dt.strftime("%Y-%m"),
+        "c": ev["category"].fillna("Drug") if "category" in ev else "Drug",
+        "d": ev["primary_drug"].fillna(""),
+        "b": ev["risk_band"].fillna(""),
+    }).groupby(["m", "c", "d", "b"]).size().reset_index(name="n")
+    return [[r.m, r.c, r.d, r.b, int(r.n)] for r in g.itertuples()]
+
+
 def build_dashboard(path, payload):
     data = json.dumps(payload, ensure_ascii=False, default=_clean).replace("</", "<\\/")
     geo_json = json.dumps(geo.payload(lexicon.PLACE_ALIAS), ensure_ascii=False, separators=(",", ":"))
@@ -135,9 +150,12 @@ def write_all(res, out_dir, cfg, demo=False, verifications=None):
     payload = {
         "meta": {"asof": res["asof"].strftime("%Y-%m-%d"), "generated": dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
                  "demo": demo, "history_days": res["history_days"], "history_ok": res["history_ok"],
-                 "min_history": cfg["analysis"]["min_history_days"], "total_events": res["kpis"]["events_total"]},
+                 "min_history": cfg["analysis"]["min_history_days"], "total_events": res["kpis"]["events_total"],
+                 "first_date": ev["date"].min().strftime("%Y-%m-%d") if len(ev) else None,
+                 "window_start": (res["asof"] - pd.Timedelta(days=days - 1)).strftime("%Y-%m-%d")},
         "coverage": coverage.payload(cfg), "risk_model": analyze.risk_model_description(cfg),
         "kpis": res["kpis"], "events": event_records(ev_r), "alerts": res["alerts"],
+        "monthly": monthly_counts(ev),
         "corridors": res["corridors"].head(40).to_dict("records") if len(res["corridors"]) else [],
         "hotspots": res["hotspots"].head(25).to_dict("records") if len(res["hotspots"]) else [],
     }
