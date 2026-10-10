@@ -72,7 +72,51 @@ def content(res, cfg):
     c["blind"] = len(blind)
     c["blind_examples"] = blind[:6]
     c["url"] = (cfg.get("bulletin", {}) or {}).get("dashboard_url", "")
+    _chart_data(c, week, prev, wk_start, res)
     return c
+
+
+def _chart_data(c, week, prev, wk_start, res):
+    """Numbers behind the charts in the HTML bulletin."""
+    def vc(df, col, n):
+        return list(df[col].dropna().astype(str).value_counts().head(n).items()) if len(df) and col in df else []
+    days = []
+    for i in range(7):
+        d = wk_start + pd.Timedelta(days=i)
+        sub = week[week["date"] == d]
+        days.append({"label": d.strftime("%a"), "date": d.strftime("%d %b"), "High": int((sub["risk_band"] == "High").sum()),
+                     "Medium": int((sub["risk_band"] == "Medium").sum()), "Low": int((sub["risk_band"] == "Low").sum())})
+    c["daily"] = days
+    c["bands"] = {b: int((week["risk_band"] == b).sum()) if len(week) else 0 for b in ("High", "Medium", "Low")}
+    c["drug_bars"] = vc(week, "primary_drug", 8)
+    c["country_bars"] = vc(week, "seizure_country", 8)
+    conc = week.explode("conceal_list") if len(week) else week
+    conc = conc[conc["conceal_list"].notna() & (conc["conceal_list"] != "")] if len(conc) else conc
+    c["hidden_bars"] = vc(conc, "conceal_list", 6)
+    cats = week["category"].fillna("Drug") if len(week) and "category" in week else pd.Series(dtype=str)
+    c["cat_bars"] = list(cats.value_counts().items()) if len(cats) else []
+    trend = {}
+    if len(res["corridors"]) and c["history_ok"]:
+        trend = dict(zip(res["corridors"]["corridor"], res["corridors"]["trend"]))
+    corr = week[week["corridor"].notna()] if len(week) else week
+    c["corr_bars"] = [(k, int(v), trend.get(k, "")) for k, v in corr["corridor"].value_counts().head(7).items()] if len(corr) else []
+
+    def cnt(df, col):
+        return int((df[col].fillna(0).astype(int) == 1).sum()) if len(df) and col in df else 0
+    ok = c["n_prev"] is not None
+    c["kpi"] = {"n": c["n"], "n_prev": c["n_prev"],
+                "high": c["high"], "high_prev": int((prev["risk_band"] == "High").sum()) if ok and len(prev) else None,
+                "tonnes": c["tonnes"], "tonnes_prev": round(float(prev["qty_kg"].sum()) / 1000, 1) if ok and len(prev) else None,
+                "container": cnt(week, "in_container"), "container_prev": cnt(prev, "in_container") if ok else None,
+                "insider": cnt(week, "insider"), "insider_prev": cnt(prev, "insider") if ok else None,
+                "avg": round(float(week["risk_score"].mean()), 1) if len(week) else 0}
+    c["countries_n"] = int(week["seizure_country"].nunique()) if len(week) else 0
+    hi = week[week["risk_band"].isin(["High", "Medium"])] if len(week) else week
+    c["dim_n"] = len(hi)
+    c["dim_bars"] = [(lab, round(float(hi[col].mean()), 1)) for lab, col in
+                     (("Method (max 30)", "risk_method"), ("Insiders & network (max 30)", "risk_network"),
+                      ("Route (max 20)", "risk_route"), ("Scale (max 10)", "risk_scale"), ("Commodity (max 10)", "risk_commodity"))
+                     if col in hi] if len(hi) else []
 
 
 def render_text(c):
@@ -117,44 +161,209 @@ def _logo_uri():
         return ""
 
 
+NAVY, BLUE, TEAL, AMBER, RED, GREEN, PURPLE, GREY = "#12355b", "#2f6db5", "#1a9aa0", "#e08a00", "#c0392b", "#2e8b57", "#6a3fb5", "#8894a5"
+BAND_COL = {"High": RED, "Medium": AMBER, "Low": GREEN}
+SERIES = [BLUE, TEAL, AMBER, PURPLE, GREEN, RED, "#8c6d31", GREY]
+TREND_COL = {"NEW": PURPLE, "SURGING": RED, "STABLE": BLUE, "DECLINING": TEAL}
+FONT = "Verdana,'DejaVu Sans',Arial,sans-serif"
+
+
+def _short(t, n):
+    t = str(t)
+    return t if len(t) <= n else t[:n - 1].rstrip() + "..."
+
+
+def _hbar(items, colors=None, w=380, label_w=150, row=24, empty="No data this week"):
+    """Horizontal bar chart as inline SVG. items = [(label, value), ...]"""
+    if not items:
+        return f'<div class="empty">{empty}</div>'
+    mx = max(v for _, v in items) or 1
+    bar_w = w - label_w - 36
+    h = row * len(items) + 4
+    out = [f'<svg viewBox="0 0 {w} {h}" width="100%" role="img" style="display:block;font-family:{FONT}">']
+    for i, (lab, v) in enumerate(items):
+        y = i * row + 2
+        col = (colors[i] if colors else SERIES[i % len(SERIES)])
+        bw = max(3, bar_w * v / mx)
+        out.append(f'<text x="{label_w - 8}" y="{y + row / 2 + 4}" text-anchor="end" font-size="10.5" fill="#33445a">{esc(_short(lab, 26))}</text>')
+        out.append(f'<rect x="{label_w}" y="{y + 3}" width="{bw:.1f}" height="{row - 8}" rx="3" fill="{col}"/>')
+        out.append(f'<text x="{label_w + bw + 6:.1f}" y="{y + row / 2 + 4}" font-size="10.5" font-weight="700" fill="#1c2b3a">{v}</text>')
+    out.append("</svg>")
+    return "".join(out)
+
+
+def _columns(days, w=380, h=190):
+    """Reports per day, stacked by risk band."""
+    mx = max([d["High"] + d["Medium"] + d["Low"] for d in days] + [1])
+    top, bottom, left = 18, 34, 28
+    ph = h - top - bottom
+    bw = (w - left - 8) / len(days)
+    out = [f'<svg viewBox="0 0 {w} {h}" width="100%" role="img" style="display:block;font-family:{FONT}">']
+    for frac in (0, .5, 1):
+        y = top + ph - ph * frac
+        out.append(f'<line x1="{left}" y1="{y:.1f}" x2="{w - 6}" y2="{y:.1f}" stroke="#e3e8ef"/>'
+                   f'<text x="{left - 5}" y="{y + 3:.1f}" text-anchor="end" font-size="9" fill="#66758a">{round(mx * frac)}</text>')
+    for i, d in enumerate(days):
+        x = left + i * bw + bw * .18
+        y = top + ph
+        for band in ("Low", "Medium", "High"):
+            v = d[band]
+            if not v:
+                continue
+            hh = ph * v / mx
+            y -= hh
+            out.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw * .64:.1f}" height="{hh:.1f}" fill="{BAND_COL[band]}"/>')
+        tot = d["High"] + d["Medium"] + d["Low"]
+        out.append(f'<text x="{x + bw * .32:.1f}" y="{y - 4:.1f}" text-anchor="middle" font-size="10" font-weight="700" fill="#1c2b3a">{tot}</text>')
+        out.append(f'<text x="{x + bw * .32:.1f}" y="{h - 18}" text-anchor="middle" font-size="10" fill="#33445a">{d["label"]}</text>'
+                   f'<text x="{x + bw * .32:.1f}" y="{h - 7}" text-anchor="middle" font-size="8.5" fill="#66758a">{d["date"][:2]}</text>')
+    out.append("</svg>")
+    return "".join(out)
+
+
+def _donut(parts, size=150, centre=""):
+    tot = sum(v for _, v, _ in parts) or 1
+    r, circ, off = 52, 2 * 3.14159265 * 52, 0.0
+    out = [f'<svg viewBox="0 0 130 130" width="{size}" height="{size}" role="img" style="font-family:{FONT}">',
+           '<circle cx="65" cy="65" r="52" fill="none" stroke="#eef2f7" stroke-width="20"/>']
+    for lab, v, col in parts:
+        if not v:
+            continue
+        ln = circ * v / tot
+        out.append(f'<circle cx="65" cy="65" r="{r}" fill="none" stroke="{col}" stroke-width="20" stroke-dasharray="{ln:.2f} {circ - ln:.2f}" '
+                   f'stroke-dashoffset="{-off:.2f}" transform="rotate(-90 65 65)"/>')
+        off += ln
+    out.append(f'<text x="65" y="63" text-anchor="middle" font-size="22" font-weight="700" fill="#12355b">{tot}</text>'
+               f'<text x="65" y="78" text-anchor="middle" font-size="9" fill="#66758a">{esc(centre)}</text></svg>')
+    return "".join(out)
+
+
+def _delta(now, before, unit="", good_down=False):
+    if before is None:
+        return '<span class="dl nd">no earlier week yet</span>'
+    d = round(now - before, 1)
+    if d == 0:
+        return '<span class="dl nd">same as last week</span>'
+    up = d > 0
+    bad = up if good_down else not up
+    cls = "dn" if (up and not good_down) or (not up and good_down) else "up"
+    cls = "bad" if (up and good_down) else cls
+    arrow = "&#9650;" if up else "&#9660;"
+    pct = f" ({abs(d) / before * 100:.0f}%)" if before else ""
+    return f'<span class="dl {"hi" if up else "lo"}">{arrow} {abs(d):g}{unit}{pct} vs last week</span>'
+
+
+def _panel(title, body, cls=""):
+    return f'<section class="panel {cls}"><h2>{title}</h2><div class="pb">{body}</div></section>'
+
+
 def render_html(c):
-    def li(items):
-        return "".join(f"<li>{x}</li>" for x in items) or "<li>none</li>"
-    corr = [f"<b>{esc(r['corridor'])}</b> - {esc(r['trend'])} ({r['events_recent']} vs {r['events_prior']} before; {esc(r['top_drug'])})" for r in c["corridors"]]
-    if not corr:
-        if not c["history_ok"]:
-            corr = [f"Trend detection starts after {c['min_history']} days of data (now {c['history_days']}). Busiest so far: " +
-                    (", ".join(f"{esc(r['corridor'])} ({r['events_recent']})" for r in c["busiest"]) or "none yet")]
+    k = c["kpi"]
+    cards = [("Seizure reports", k["n"], "", k["n_prev"], NAVY), ("High risk", k["high"], "", k["high_prev"], RED),
+             ("Reported weight", f"{k['tonnes']} t", "", None, TEAL), ("Container cases", k["container"], "", k["container_prev"], BLUE),
+             ("Insider signals", k["insider"], "", k["insider_prev"], PURPLE)]
+    prev_by = {"Seizure reports": k["n_prev"], "High risk": k["high_prev"], "Container cases": k["container_prev"], "Insider signals": k["insider_prev"]}
+    kp = []
+    for lab, val, _, prv, col in cards:
+        if lab == "Reported weight":
+            dl = _delta(k["tonnes"], k["tonnes_prev"], " t") if k["tonnes_prev"] is not None else '<span class="dl nd">&nbsp;</span>'
         else:
-            corr = ["No new or surging corridors this week."]
-    unusual = []
+            dl = _delta(val, prv)
+        kp.append(f'<div class="kc" style="border-top-color:{col}"><span class="kl">{lab}</span><b style="color:{col}">{val}</b>{dl}</div>')
+
+    # headline sentence
+    lead = f"{c['n']} seizure reports from {c['countries_n']} countries"
+    if c["n_prev"]:
+        ch = (c["n"] - c["n_prev"]) / c["n_prev"] * 100
+        lead += f", {abs(ch):.0f}% {'more' if ch >= 0 else 'fewer'} than the week before"
+    lead += f". {c['high']} rated High risk; average risk score {k['avg']}."
+    if c["drug_bars"]:
+        lead += f" Most reported: {esc(c['drug_bars'][0][0])} ({c['drug_bars'][0][1]})."
+
+    daily = _columns(c["daily"]) + ('<div class="lg"><i style="background:%s"></i>High <i style="background:%s"></i>Medium <i style="background:%s"></i>Low &nbsp;&middot;&nbsp; the latest day may be incomplete</div>' % (RED, AMBER, GREEN))
+    bands = [(b, c["bands"][b], BAND_COL[b]) for b in ("High", "Medium", "Low")]
+    donut = '<div class="dn">' + _donut(bands, 130, "reports") + '<div class="lgv">' + "".join(
+        f'<div><i style="background:{col}"></i><b>{v}</b> {lab}</div>' for lab, v, col in bands) + "</div></div>"
+    drug_cols = [SERIES[i % len(SERIES)] for i in range(len(c["drug_bars"]))]
+    if c["corr_bars"]:
+        corr_html = _hbar([(a, b) for a, b, _ in c["corr_bars"]], [TREND_COL.get(t, BLUE) for _, _, t in c["corr_bars"]], label_w=170) + \
+            '<div class="lg"><i style="background:%s"></i>New <i style="background:%s"></i>Surging <i style="background:%s"></i>Other</div>' % (PURPLE, RED, BLUE)
+        if not c["history_ok"]:
+            corr_html += f'<div class="note">New / surging labels start after {c["min_history"]} days of data (now {c["history_days"]}).</div>'
+    else:
+        corr_html = '<div class="empty">No routes with a known origin and destination this week</div>'
+    hidden = _hbar(c["hidden_bars"], [TEAL] * len(c["hidden_bars"]), label_w=190)
+    countries = _hbar(c["country_bars"], [BLUE] * len(c["country_bars"]), label_w=120)
+    cats = ""
+    if len(c["cat_bars"]) > 1:
+        cats = _panel("What was seized", _hbar(c["cat_bars"], [NAVY, PURPLE, TEAL, AMBER, GREEN, RED, GREY][:len(c["cat_bars"])], label_w=150))
+    drivers = _panel("What drives the higher-risk reports",
+                     _hbar(c["dim_bars"], [BLUE, PURPLE, TEAL, AMBER, GREY], label_w=200) +
+                     f'<div class="note">Average points per report, {c["dim_n"]} Medium and High reports. Size alone never makes a report High.</div>') if c["dim_bars"] else ""
+
+    rows = []
     for u in c["unusual"]:
-        bits = [u["date"], f"<b>{esc(u['drug'])}</b> {esc(u['qty'])}", esc(u["where"]), esc(u["route"]), esc(u["how"]),
-                ("cargo: " + esc(u["cargo"])) if u["cargo"] else "", ("vessel: " + esc(u["vessel"])) if u["vessel"] else ""]
-        link = f" <a href='{esc(u['url'])}'>source</a>" if u["url"] else ""
-        col = {"High": "#c0392b", "Medium": "#e08a00"}.get(u["band"], "#2e8b57")
-        unusual.append(f"<span style='background:{col};color:#fff;border-radius:9px;padding:0 6px;font-size:10px'>{u['score']}</span> " +
-                       " | ".join(b for b in bits if b) + link)
-    top = lambda d: ", ".join(f"{esc(k)} ({v})" for k, v in d.items()) or "none"
+        bits = [x for x in (esc(u["where"]), esc(u["route"]), esc(u["how"]), ("cargo: " + esc(u["cargo"])) if u["cargo"] else "",
+                            ("vessel: " + esc(u["vessel"])) if u["vessel"] else "") if x]
+        link = f' <a href="{esc(u["url"])}">source</a>' if u["url"] else ""
+        rows.append(f'<tr><td class="c"><span class="chip" style="background:{BAND_COL.get(u["band"], GREEN)}">{u["score"]}</span></td>'
+                    f'<td class="nw">{esc(u["date"])}</td><td><b>{esc(u["drug"])}</b><br><span class="s">{esc(u["qty"])}</span></td>'
+                    f'<td class="s2">{" | ".join(bits)}{link}</td></tr>')
+    table = ('<table class="tb"><tr><th>Risk</th><th>Date</th><th>Item</th><th>Where, route and method</th></tr>' + "".join(rows) + "</table>") if rows else '<div class="empty">No events this week</div>'
+
+    web = ""
+    if c.get("url"):
+        web = f'<div class="web">Charts show best in a browser: <a href="{esc(c["url"])}bulletin.html">open the online version</a>.</div>'
+    logo = _logo_uri()
+    logo_html = f'<div class="lg0"><img src="{logo}" alt="AIRCOP - Container Control Programme"></div>' if logo else ""
     return f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Seizure Watch weekly bulletin {esc(c['period'])}</title>
-<style>@page{{size:A4;margin:12mm}}body{{font:12px/1.4 -apple-system,Segoe UI,Arial,sans-serif;color:#1c2b3a;max-width:780px;margin:0 auto;padding:14px}}
-h1{{font-size:18px;margin:0;background:#12355b;color:#fff;padding:12px 14px;border-radius:8px}}h1 small{{display:block;font-weight:400;font-size:12px;opacity:.85;margin-top:2px}}
-h2{{font-size:13px;margin:14px 0 4px;color:#12355b;border-bottom:1px solid #d9e1ea;padding-bottom:2px}}ul{{margin:4px 0;padding-left:18px}}li{{margin:3px 0}}
-.k{{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}}.k div{{flex:1;min-width:110px;background:#f3f6fa;border-radius:8px;padding:8px 10px}}.k b{{display:block;font-size:20px}}
-.s{{font-size:11px;color:#5b6b7f}}a{{color:#12355b}}</style></head><body>
-<div style="text-align:center;margin:0 0 10px">{("<img src=" + chr(34) + _logo_uri() + chr(34) + " alt=" + chr(34) + "AIRCOP - Container Control Programme" + chr(34) + " style=" + chr(34) + "height:64px;max-width:90%" + chr(34) + ">") if _logo_uri() else ""}</div>
-<h1>Seizure Watch - weekly bulletin<small>{esc(c['period'])}</small></h1>
-<div class="k"><div><b>{c['n']}</b>seizure reports<br><span class="s">{('previous week ' + str(c['n_prev'])) if c['n_prev'] is not None else 'no earlier week yet'}</span></div><div><b>{c['high']}</b>high risk</div>
-<div><b>{c['tonnes']} t</b>reported weight</div></div>
-<p class="s">Main drugs: {top(c['top_drugs'])}. Main countries: {top(c['top_countries'])}.</p>
-<h2>New and surging corridors</h2><ul>{li(corr)}</ul>
-<h2>Unusual events (highest risk first)</h2><ul>{li(unusual)}</ul>
-<h2>How it was hidden</h2><p>{top(c['hidden']) if c['hidden'] else 'No method reported.'}{('<br>Cover cargo named: ' + top(c['goods'])) if c['goods'] else ''}</p>
-<h2>Coverage and blind spots</h2><p class="s">Searching {len(c['languages'])} languages ({esc(', '.join(c['languages']))}). {c['blind']} countries have no main language searched
-(for example {esc(', '.join(c['blind_examples']))}); a quiet country may mean no news, or no coverage.</p>
-<p class="s">These are leads from open sources, not confirmed facts. Verify before acting. Full dashboard: <a href="{esc(c['url'])}">{esc(c['url'])}</a></p>
-</body></html>"""
+<style>
+@page{{size:A4;margin:9mm}}
+*{{box-sizing:border-box}}
+body{{margin:0;background:#eef2f7;color:#1c2b3a;font:12px/1.45 {FONT};-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+.wrap{{max-width:860px;margin:0 auto;padding:12px}}
+.lg0{{text-align:center;margin:0 0 10px}}.lg0 img{{height:60px;max-width:90%}}
+.hero{{background:linear-gradient(135deg,#0d2a4a,#1d4f86);color:#fff;border-radius:12px;padding:18px 20px}}
+.hero h1{{margin:0;font-size:21px;letter-spacing:.3px}}.hero .sub{{opacity:.85;margin-top:3px;font-size:12px}}
+.hero .lead{{margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.25);font-size:12.5px;line-height:1.5}}
+.kpis{{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:10px 0}}
+.kc{{background:#fff;border-radius:10px;border-top:4px solid #12355b;padding:9px 10px;box-shadow:0 1px 2px rgba(0,0,0,.07)}}
+.kc .kl{{display:block;font-size:9.5px;text-transform:uppercase;letter-spacing:.5px;color:#66758a}}.kc b{{display:block;font-size:24px;line-height:1.15;margin:2px 0}}
+.dl{{font-size:9.5px;color:#66758a}}.dl.hi{{color:#b03a2e}}.dl.lo{{color:#1e7d4f}}.dl.nd{{color:#99a5b5}}
+.grid{{display:grid;grid-template-columns:1fr 1fr;gap:10px}}.full{{grid-column:1/-1}}
+.panel{{background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.07);break-inside:avoid;page-break-inside:avoid}}
+.panel h2{{margin:0;padding:8px 12px;background:#12355b;color:#fff;font-size:12px;letter-spacing:.2px}}.pb{{padding:10px 12px 12px}}
+.dn{{display:flex;align-items:center;gap:14px;justify-content:center}}.lgv div{{margin:5px 0;font-size:12px}}
+i{{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}}.lg{{font-size:10px;color:#44546a;margin-top:4px}}.lg i{{margin-left:8px}}.lg i:first-child{{margin-left:0}}
+.empty,.note{{color:#66758a;font-size:11px;padding:8px 0}}.note{{padding:4px 0 0}}
+table.tb{{width:100%;border-collapse:collapse}}.tb th{{background:#f0f3f7;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.4px;color:#66758a;padding:6px 8px}}
+.tb td{{padding:7px 8px;vertical-align:top;border-top:1px solid #e6ebf2}}.tb tr:nth-child(even) td{{background:#eaf1fa}}.tb td.c{{width:44px}}.nw{{white-space:nowrap}}
+.chip{{display:inline-block;min-width:26px;text-align:center;color:#fff;font-weight:700;font-size:11px;border-radius:99px;padding:1px 7px}}
+.s,.s2{{color:#5b6b7f;font-size:11px}}a{{color:#12355b}}
+.how{{font-size:10.5px;color:#44546a;line-height:1.5}}.how b{{color:#12355b}}
+.foot{{margin:10px 2px 0;font-size:10px;color:#66758a;line-height:1.5}}.web{{text-align:center;font-size:11px;margin:6px 0}}
+@media(max-width:640px){{.kpis{{grid-template-columns:repeat(2,1fr)}}.grid{{grid-template-columns:1fr}}}}
+@media print{{body{{background:#fff}}.wrap{{padding:0;max-width:none}}.web{{display:none}}}}
+</style></head><body><div class="wrap">
+{web}{logo_html}
+<div class="hero"><h1>SEIZURE WATCH &mdash; Weekly Bulletin</h1><div class="sub">{esc(c['period'])}</div><div class="lead">{lead}</div></div>
+<div class="kpis">{''.join(kp)}</div>
+<div class="grid">
+{_panel('Reports per day, by risk band', daily)}
+{_panel('Risk bands', donut)}
+{_panel('Most reported drugs and goods', _hbar(c['drug_bars'], drug_cols, label_w=130))}
+{cats}
+{_panel('Busiest routes (origin &rarr; destination)', corr_html)}
+{_panel('Where seizures were made', countries)}
+{_panel('How it was hidden', hidden)}
+{drivers}
+{_panel('Highest-risk events this week', table, 'full')}
+</div>
+<div class="foot"><b>How the risk score works.</b> Each report scores up to 100 from five separate areas: how it was smuggled (30), who was behind it (30), the route (20), the size (10) and the harm of the goods (10). Size alone can never make an event High.<br>
+<b>Coverage.</b> Searching {len(c['languages'])} languages ({esc(', '.join(c['languages']))}). {c['blind']} countries have no main language searched (for example {esc(', '.join(c['blind_examples']))}); a quiet country may mean no news, or no coverage.<br>
+These are leads from open sources, not confirmed facts. Verify before acting.{(' Full dashboard: <a href="' + esc(c['url']) + '">' + esc(c['url']) + '</a>') if c.get('url') else ''}</div>
+</div></body></html>"""
 
 
 def build(res, cfg, out_dir):
