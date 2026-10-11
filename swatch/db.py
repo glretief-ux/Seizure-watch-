@@ -73,6 +73,26 @@ def insert_article(conn, rec):
     return cur.lastrowid if cur.rowcount else None
 
 
+def fix_official_site_langs(conn, site_langs):
+    """One-time correction for articles from an official-site search (config.yaml's
+    official_sites) that were stored with lang='en' before each site's real
+    language was tracked - so their headline never got translated. Resets lang
+    to the site's real language and clears title_en so backfill_title_en()
+    translates them properly on this run."""
+    n = 0
+    for site, lang in (site_langs or {}).items():
+        if lang == "en":
+            continue
+        cur = conn.execute(
+            "UPDATE articles SET lang=?, title_en=NULL WHERE url LIKE ? "
+            "AND lang='en' AND (title_en IS NULL OR title_en=title)",
+            (lang, f"%{site}%"))
+        n += cur.rowcount
+    if n:
+        conn.commit()
+    return n
+
+
 def backfill_title_en(conn, translate_fn, limit=2000):
     """One-time catch-up for articles stored before English titles existed
     (or where a translation call failed at the time). Translates up to

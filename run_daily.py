@@ -115,6 +115,11 @@ def main():
         log(f"      stored {stored}, of which {rel} are seizure reports")
 
     log("[4/4] Analysing and building report...")
+    site_langs = {e["site"]: e.get("lang", "en") for e in cfg["sources"].get("official_sites", {}).get("sites", [])
+                  if isinstance(e, dict)}
+    n_fx = db.fix_official_site_langs(conn, site_langs)
+    if n_fx:
+        log(f"      corrected language tag on {n_fx} older official-site headline(s)")
     n_bf = db.backfill_title_en(conn, translate.to_english)
     if n_bf:
         log(f"      translated {n_bf} older headline(s) that predate this feature")

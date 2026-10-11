@@ -124,35 +124,38 @@ sources:
   official_sites:
     enabled: true
     query: "site:{site} (seized OR seizure OR seizes OR intercepted OR incautan OR decomisan OR saisie OR apreensao) (cocaine OR heroin OR methamphetamine OR cannabis OR fentanyl OR captagon OR drugs OR cocaina OR droga OR cocaine OR drogue OR \"precursor chemicals\" OR \"hazardous chemicals\" OR \"toxic chemicals\" OR pesticides OR refrigerants OR mercury OR \"ammonium nitrate\" OR \"hazardous waste\" OR \"stolen vehicles\" OR \"protected timber\" OR rosewood OR \"illegal firearms\" OR \"weapons cache\" OR ammunition OR \"arms trafficking\" OR ivory OR \"rhino horn\" OR pangolin OR \"wildlife trafficking\" OR CITES)"
+    # `lang` is the language that site actually publishes in - it decides whether the
+    # headline gets auto-translated to English, so it must be the SITE's language, not English,
+    # even though the search itself always goes through the English Google News edition.
     sites:
-      - cbp.gov               # US Customs and Border Protection
-      - dea.gov               # US Drug Enforcement Administration
-      - justice.gov           # US Department of Justice / US attorneys
-      - ice.gov               # US Homeland Security Investigations
-      - uscg.mil              # US Coast Guard
-      - gov.uk                # UK National Crime Agency, Border Force, HMRC
-      - afp.gov.au            # Australian Federal Police
-      - abf.gov.au            # Australian Border Force
-      - europol.europa.eu     # Europol
-      - unodc.org             # UN Office on Drugs and Crime
-      - wcoomd.org            # World Customs Organization
-      - interpol.int          # Interpol
-      - sars.gov.za           # South African Revenue Service (customs)
-      - saps.gov.za           # South African Police Service
-      - ndlea.gov.ng          # Nigeria drug law enforcement agency
-      - nacoc.gov.gh          # Ghana Narcotics Control Commission
-      - pib.gov.in            # India government press releases (customs, DRI, NCB)
-      - pdea.gov.ph           # Philippine Drug Enforcement Agency
-      - cnb.gov.sg            # Singapore Central Narcotics Bureau
-      - douane.gouv.fr        # French customs
-      - zoll.de               # German customs
-      - guardiacivil.es       # Spanish Guardia Civil
-      - agenciatributaria.es  # Spanish tax and customs agency
-      - policia.gov.co        # Colombian national police
-      - aduana.gob.ec         # Ecuador customs
-      - gob.pe                # Peru government (police, customs)
-      - gob.mx                # Mexican government (navy, army, customs)
-      - gov.br                # Brazil government (federal police, Receita Federal)
+      - {site: cbp.gov,               lang: en}  # US Customs and Border Protection
+      - {site: dea.gov,               lang: en}  # US Drug Enforcement Administration
+      - {site: justice.gov,           lang: en}  # US Department of Justice / US attorneys
+      - {site: ice.gov,                lang: en}  # US Homeland Security Investigations
+      - {site: uscg.mil,              lang: en}  # US Coast Guard
+      - {site: gov.uk,                lang: en}  # UK National Crime Agency, Border Force, HMRC
+      - {site: afp.gov.au,            lang: en}  # Australian Federal Police
+      - {site: abf.gov.au,            lang: en}  # Australian Border Force
+      - {site: europol.europa.eu,     lang: en}  # Europol
+      - {site: unodc.org,             lang: en}  # UN Office on Drugs and Crime
+      - {site: wcoomd.org,            lang: en}  # World Customs Organization
+      - {site: interpol.int,          lang: en}  # Interpol
+      - {site: sars.gov.za,           lang: en}  # South African Revenue Service (customs)
+      - {site: saps.gov.za,           lang: en}  # South African Police Service
+      - {site: ndlea.gov.ng,          lang: en}  # Nigeria drug law enforcement agency
+      - {site: nacoc.gov.gh,          lang: en}  # Ghana Narcotics Control Commission
+      - {site: pib.gov.in,            lang: en}  # India government press releases (customs, DRI, NCB)
+      - {site: pdea.gov.ph,           lang: en}  # Philippine Drug Enforcement Agency
+      - {site: cnb.gov.sg,            lang: en}  # Singapore Central Narcotics Bureau
+      - {site: douane.gouv.fr,        lang: fr}  # French customs
+      - {site: zoll.de,               lang: de}  # German customs
+      - {site: guardiacivil.es,       lang: es}  # Spanish Guardia Civil
+      - {site: agenciatributaria.es,  lang: es}  # Spanish tax and customs agency
+      - {site: policia.gov.co,        lang: es}  # Colombian national police
+      - {site: aduana.gob.ec,         lang: es}  # Ecuador customs
+      - {site: gob.pe,                lang: es}  # Peru government (police, customs)
+      - {site: gob.mx,                lang: es}  # Mexican government (navy, army, customs)
+      - {site: gov.br,                lang: pt}  # Brazil government (federal police, Receita Federal)
 
   # Extra RSS feeds. Each shows up in the run log as "RSS <name>: N items"; N = 0 means the address is wrong or blocked.
   rss_feeds:

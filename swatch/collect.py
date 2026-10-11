@@ -221,12 +221,17 @@ def collect(cfg, days):
         log(f"   RSS {feed.get('name')}: {len(got)} items")
     o = s.get("official_sites", {}) or {}
     if o.get("enabled", False) and o.get("sites"):
+        # The search itself always runs through the English Google News edition (that's just
+        # the query locale) - but each site publishes in its own language, which is what decides
+        # whether the headline gets auto-translated later, so that's tagged per site below.
         ed = (s.get("google_news", {}).get("editions") or [{"lang": "en", "hl": "en-US", "gl": "US", "ceid": "US:en"}])[0]
         n0 = len(official)
-        for site in o["sites"]:
+        for entry in o["sites"]:
+            site, site_lang = (entry["site"], entry.get("lang", "en")) if isinstance(entry, dict) else (entry, "en")
             got = google_news(o.get("query", "site:{site} (seized OR seizure)").format(site=site), ed, days)
             for g_ in got:
                 g_["official"] = True
+                g_["lang"] = site_lang
             official += got
             time.sleep(s.get("google_news", {}).get("delay_seconds", 1.0))
         log(f"   Official websites ({len(o['sites'])} searched): {len(official) - n0} headlines")
