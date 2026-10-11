@@ -58,7 +58,8 @@ def payload(cfg):
     """What the dashboard needs to draw the coverage map."""
     src = cfg.get("sources", {})
     searched = sorted({e["lang"] for e in src.get("google_news", {}).get("editions", [])} or {"en"})
-    official = {SITE_COUNTRY[s] for s in (src.get("official_sites", {}) or {}).get("sites", []) if s in SITE_COUNTRY}
+    site_names = [e["site"] if isinstance(e, dict) else e for e in (src.get("official_sites", {}) or {}).get("sites", [])]
+    official = {SITE_COUNTRY[s] for s in site_names if s in SITE_COUNTRY}
     official |= {f["country"] for f in (src.get("rss_feeds") or []) if f.get("country")}
     return {"searched": searched, "names": {k: v for k, v in LANG_NAMES.items()},
             "countries": {c: {"langs": l, "official": c in official} for c, l in COUNTRY_LANGS.items()}}
