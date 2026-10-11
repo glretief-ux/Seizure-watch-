@@ -122,7 +122,9 @@ def main():
         log(f"      corrected language tag on {n_fx} older official-site headline(s)")
     n_bf = db.backfill_title_en(conn, translate.to_english)
     if n_bf:
-        log(f"      translated {n_bf} older headline(s) that predate this feature")
+        log(f"      attempted {n_bf} older headline(s) that predate this feature "
+            f"({translate.stats['ok']} translated, {translate.stats['fail']} failed and kept as-is"
+            + (f"; last error: {translate.stats['last_error']}" if translate.stats["fail"] else "") + ")")
     res = analyze.run(conn, cfg)
     if res is None:
         log("No seizure events stored yet - nothing to analyse. Try again after the first successful collection.")
