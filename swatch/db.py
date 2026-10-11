@@ -94,13 +94,17 @@ def fix_official_site_langs(conn, site_langs):
 
 
 def backfill_title_en(conn, translate_fn, limit=2000):
-    """One-time catch-up for articles stored before English titles existed
-    (or where a translation call failed at the time). Translates up to
-    `limit` per call, oldest first, so a large backlog clears itself over
-    a few runs instead of one slow run."""
+    """One-time catch-up for articles stored before English titles existed,
+    or where a translation call failed at the time. A failed/skipped call
+    falls back to storing the original text as title_en unchanged (see
+    translate.py), so "title_en still equals title" is included here as a
+    sign the translation never actually happened, not just an empty value -
+    otherwise those rows would stay untranslated forever with no retry.
+    Translates up to `limit` per call, oldest first, so a large backlog
+    clears itself over a few runs instead of one slow run."""
     rows = conn.execute(
         "SELECT id, title, lang FROM articles WHERE relevant=1 AND lang IS NOT NULL "
-        "AND lang != 'en' AND (title_en IS NULL OR title_en = '') "
+        "AND lang != 'en' AND (title_en IS NULL OR title_en = '' OR title_en = title) "
         "ORDER BY id LIMIT ?", (limit,)
     ).fetchall()
     n = 0
