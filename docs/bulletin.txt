@@ -1,8 +1,8 @@
 SEIZURE WATCH - weekly bulletin, 05 Oct - 11 Oct 2026
 
-1628 seizure reports this week (previous week 2081); 4 high risk; 310.3 t reported.
-Main drugs: Cannabis (484), Cocaine (320), NSA (194)
-Main countries: India (152), Turkey (102), Brazil (45), Egypt (42)
+1684 seizure reports this week (previous week 2081); 5 high risk; 316.8 t reported.
+Main drugs: Cannabis (506), Cocaine (326), NSA (196)
+Main countries: India (155), Turkey (104), Brazil (47), Egypt (43)
 
 NEW AND SURGING CORRIDORS
 - Ghana -> South Africa: NEW (16 this period, 0 before; mainly Heroin/Opium)
@@ -15,6 +15,8 @@ NEW AND SURGING CORRIDORS
 UNUSUAL EVENTS (highest risk first)
 - [High 60] 07 Oct | Cigarettes | 88 cigarettes | Hong Kong | Philippines -> Hong Kong | Legitimate cargo (industrial/goods); Luggage / passenger goods | cargo: cement
   https://www.info.gov.hk/gia/general/202610/07/P2026100700698.htm
+- [High 60] 11 Oct | Cannabis | Hong Kong | Philippines -> Hong Kong | Legitimate cargo (industrial/goods); Luggage / passenger goods | cargo: cement
+  https://www.info.gov.hk/gia/general/202610/11/P2026101100219.htm
 - [High 50] 09 Oct | Cocaine | 1.6 t | Ecuador | Legitimate cargo (industrial/goods) | cargo: maquinaria
   https://news.google.com/rss/articles/CBMi1gFBVV95cUxOYUdxSUZJclVqX3NjZ0pwb0ZJX0VJdjV5dndYbUVwbmVMUWljRlhTQXpwWXhVRzlPeUgwUTZoSkZEbjdLOVYxSXl2ZGR2cnMydVlZdnI3X19nOXdiS0lqdzI5aXdFRmNsZWE1ZmpfVDdpVGdKeHEtbXdVQ2J3bWt0WDh2d1lRTlVfMWNQN05xa1BzRnM5cUF2TUZ5MGx2SndsT3dEbjI4aTNjQWk4azJGTGVfVk9NWGl2SV9wbmJraXpEanRGbTg0RGdLMVBEcldjQmE0VUFR?oc=5
 - [High 50] 06 Oct | Methamphetamine | 521 kg | Laos | Malaysia -> Laos | Legitimate cargo (industrial/goods); Postal / parcel | cargo: vape products
@@ -23,11 +25,9 @@ UNUSUAL EVENTS (highest risk first)
   https://www.info.gov.hk/gia/general/202610/05/P2026100500343.htm
 - [Medium 45] 11 Oct | Cocaine | 52 kg | Costa Rica
   https://news.google.com/rss/articles/CBMi5gFBVV95cUxNaFlITElwMnVnc2dxSnNyMHJONlFUdklpaWJKcy1CMkQ3Y0lySGlxQlpvM2ZpbTdRRjJKcjJObkdTYVdxWEVCdG1nQ2F1MEhCeXF1dWFwTzNuZlkyZHo4R0dhREp5RHJOVkZrZmxHX0RBTGw4RU15UWVud1lMbmlRUFFDS0ZTTnZsS1ROY2h0a1BWZGFqWE1INTJLZUROQmN6RHJpNFBIR003a1Q1NEYzd2ZNR0loaWg5XzVuZ0FKTC1yUzVuUy1NM3pFUGZnQUtmQXVWdmU5T0xXTHNNV2U2UkEyWEpwUQ?oc=5
-- [Medium 40] 06 Oct | Methamphetamine | 521 kg | Malaysia | Laos -> Malaysia
-  https://news.google.com/rss/articles/CBMiuAFBVV95cUxOdXdMZHFCS2JzekpZNDFuQmQ5SGlYZmFJRWliekdpVTVYNlphbkNiM1VEZG1MYWpXWl81Q0xweXZXd0RvT012a2FraWM2b2pJUDByTnJTeUlnTUxrRVpWSjNneXFRNmFHeXo3UV91ZlVjN1dYd1pxc0d4MFVRc3BQaHMzX0VNME5MTkxWNzVDLVF5LVF3Y3ZVMEJGVGNFNmEzMWN5bWVNTFJwM09EaW14dFktX1BTMDIt0gG4AUFVX3lxTE51d0xkcUJLYnN6Slk0MW5CZDlIaVhmYUlFaWJ6R2lVNVg2WmFuQ2IzVURkbUxhaldaXzVDTHB5dld3RG9PTXZrYWtpYzZvaklQMHJOclN5SWdNTGtFWlZKM2d5cVE2YUd5ejdRX3VmVWM3V1h3WnFzR3gwVVFzcFBoczNfRU0wTkxOTFY3NUMtUXktUXdjdlUwQkZUY0U2YTMxY3ltZU1MUnAzT0RpbXh0WS1fUFMwMi0?oc=5
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (39), Postal / parcel (28), Legitimate cargo (food/produce) (10)
-Cover cargo named: cement (9), الات (6), फल (5), मशीन (3), spare parts (3)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (44), Postal / parcel (30), Legitimate cargo (food/produce) (10)
+Cover cargo named: cement (10), الات (9), फल (5), मशीन (3), spare parts (3)
 
 Coverage: searching 10 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Vietnamese, Chinese). 48 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
 Leads from open sources, not confirmed facts. Verify before acting.
