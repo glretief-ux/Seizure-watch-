@@ -2,13 +2,19 @@
 """
 Free, no-API-key translation of article headlines to English.
 
-Tries deep-translator's GoogleTranslator first (Google's public translation
-endpoint), falling back to MyMemory (also free, no key) if that fails -
-useful because Google's free endpoint is sometimes rate-limited or blocked
-on shared CI IP ranges like GitHub Actions runners. On total failure
-(network hiccup, both endpoints rate-limited, unsupported language code,
-empty text) this falls back to returning the original text unchanged, so a
-translation problem never breaks a collection run.
+Tries MyMemory's free translation API first, falling back to deep-translator's
+GoogleTranslator if that fails. MyMemory goes first because Google's free
+endpoint has, in practice, never once succeeded from this project's run
+environment (every historical headline was left untranslated with no error
+ever surfaced - translate.py used to swallow every exception silently).
+Neither library call takes an explicit network timeout, and a request that
+hangs instead of cleanly failing can silently eat the whole run (this is
+what caused a 45-minute workflow timeout the first time this was tried with
+no cap) - _with_timeout() below bounds every single call.
+
+On total failure (network hiccup, both endpoints down, unsupported language
+code, empty text) this falls back to returning the original text unchanged,
+so a translation problem never breaks a collection run.
 
 `stats` tracks how many calls succeeded/failed and the last error seen, so
 run_daily.py can report it in the run log instead of failures being
@@ -17,8 +23,40 @@ completely invisible, as they were before.
 Results are cached in memory for the life of one run, since the same
 headline often comes from several outlets on the same day.
 """
+import threading
+
 _cache = {}
 stats = {"ok": 0, "fail": 0, "last_error": None}
+CALL_TIMEOUT = 5  # seconds - deliberately short; there are a lot of headlines to get through,
+# and the GitHub Actions job as a whole is only given 45 minutes (see .github/workflows/daily.yaml)
+
+
+def _with_timeout(fn, timeout):
+    """Run `fn` in a background thread and give up after `timeout` seconds.
+    Needed because neither translation backend accepts a timeout of its own,
+    and a hung connection otherwise blocks forever."""
+    box = {}
+
+    def worker():
+        try:
+            box["value"] = fn()
+        except Exception as e:
+            box["error"] = e
+
+    t = threading.Thread(target=worker, daemon=True)
+    t.start()
+    t.join(timeout)
+    if t.is_alive():
+        raise TimeoutError(f"no response within {timeout}s")
+    if "error" in box:
+        raise box["error"]
+    return box.get("value")
+
+
+def _via_mymemory(text, lang):
+    from deep_translator import MyMemoryTranslator
+    source = _MYMEMORY_LOCALE.get(str(lang).lower(), lang)
+    return MyMemoryTranslator(source=source, target="en-GB").translate(text)
 
 
 def _via_google(text):
@@ -34,12 +72,6 @@ _MYMEMORY_LOCALE = {
 }
 
 
-def _via_mymemory(text, lang):
-    from deep_translator import MyMemoryTranslator
-    source = _MYMEMORY_LOCALE.get(str(lang).lower(), lang)
-    return MyMemoryTranslator(source=source, target="en-GB").translate(text)
-
-
 def to_english(text, lang):
     """Translate `text` (in `lang`) to English. Returns the original text
     unchanged if `lang` is already English/unknown, or if translation fails."""
@@ -53,9 +85,9 @@ def to_english(text, lang):
         return _cache[key]
 
     result = None
-    for backend, args in ((_via_google, (text,)), (_via_mymemory, (text, lang))):
+    for backend, args in ((_via_mymemory, (text, lang)), (_via_google, (text,))):
         try:
-            out = backend(*args)
+            out = _with_timeout(lambda: backend(*args), CALL_TIMEOUT)
             if out and out.strip():
                 result = out.strip()
                 break

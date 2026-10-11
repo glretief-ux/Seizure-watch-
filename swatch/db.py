@@ -93,7 +93,7 @@ def fix_official_site_langs(conn, site_langs):
     return n
 
 
-def backfill_title_en(conn, translate_fn, limit=2000):
+def backfill_title_en(conn, translate_fn, limit=150):
     """One-time catch-up for articles stored before English titles existed,
     or where a translation call failed at the time. A failed/skipped call
     falls back to storing the original text as title_en unchanged (see
@@ -101,7 +101,11 @@ def backfill_title_en(conn, translate_fn, limit=2000):
     sign the translation never actually happened, not just an empty value -
     otherwise those rows would stay untranslated forever with no retry.
     Translates up to `limit` per call, oldest first, so a large backlog
-    clears itself over a few runs instead of one slow run."""
+    clears itself over many runs instead of one slow run. Kept deliberately
+    small: translate.py's per-call timeout still adds up across `limit` rows,
+    and the whole GitHub Actions job only gets 45 minutes (see
+    .github/workflows/daily.yaml) - a run of this ran long and got killed by
+    that timeout once already with limit=2000 and no per-call cap."""
     rows = conn.execute(
         "SELECT id, title, lang FROM articles WHERE relevant=1 AND lang IS NOT NULL "
         "AND lang != 'en' AND (title_en IS NULL OR title_en = '' OR title_en = title) "
