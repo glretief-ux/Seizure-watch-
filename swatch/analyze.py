@@ -348,9 +348,13 @@ def run(conn, cfg, asof=None):
     corr = corridor_table(ev, asof, cfg, history_ok)
     alerts = build_alerts(ev, corr, asof, cfg, history_ok)
     from . import links as _links
-    repeat = _links.repeat_links(ev, asof, cfg)
-    chain = _links.production_chain(ev, asof, cfg)
-    extra = _links.link_alerts(repeat) + _links.chain_alerts(chain, asof)
+    try:
+        repeat = _links.repeat_links(ev, asof, cfg)
+        chain = _links.production_chain(ev, asof, cfg)
+        extra = _links.link_alerts(repeat) + _links.chain_alerts(chain, asof)
+    except Exception as exc:  # the link views are extras: never let them stop the daily run
+        print(f"      link analysis skipped ({type(exc).__name__}: {exc})", flush=True)
+        repeat, chain, extra = [], [], []
     have = {a["title"] for a in alerts}
     alerts = sorted(alerts + [a for a in extra if a["title"] not in have],
                     key=lambda a: {"High": 0, "Medium": 1, "Low": 2}[a["severity"]])

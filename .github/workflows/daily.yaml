@@ -34,7 +34,7 @@ jobs:
       - run: pip install -r requirements.txt
       - run: python -m spacy download en_core_web_sm
       - name: Collect, analyse, build the dashboard and bulletin
-        run: python run_daily.py --days "${{ github.event.inputs.days || '2' }}" ${{ github.event.inputs.send_bulletin == 'true' && '--send-bulletin' || '' }}
+        run: python -u run_daily.py --days "${{ github.event.inputs.days || '2' }}" ${{ github.event.inputs.send_bulletin == 'true' && '--send-bulletin' || '' }} 2>&1 | tee run.log
         env:
           # optional: only needed to e-mail the weekly bulletin (add them under Settings > Secrets and variables > Actions)
           SMTP_HOST: ${{ secrets.SMTP_HOST }}
@@ -43,6 +43,16 @@ jobs:
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
           BULLETIN_TO: ${{ secrets.BULLETIN_TO }}
           BULLETIN_FROM: ${{ secrets.BULLETIN_FROM }}
+      - name: Keep the run log (so a failure can be read)
+        if: always()
+        run: |
+          mkdir -p data
+          tail -n 200 run.log > data/last_run.log || true
+          git config user.name  "seizure-watch-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/last_run.log
+          git diff --cached --quiet || git commit -m "Run log $(date -u +%FT%TZ)"
+          git push || (git pull --rebase -X theirs origin main && git push) || true
       - name: Save results
         run: |
           git config user.name  "seizure-watch-bot"

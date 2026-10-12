@@ -30,7 +30,11 @@ def ingest(conn, items, is_demo=False):
     ner_hits = 0  # how many articles NER supplemented something the lexicon missed
     now = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
     for it in items:
-        rec = extract.extract(it["title"], it.get("text", ""), it.get("source_country"))
+        try:
+            rec = extract.extract(it["title"], it.get("text", ""), it.get("source_country"))
+        except Exception as exc:  # one bad article must never stop the whole run
+            log(f"      skipped one article ({type(exc).__name__}: {exc}): {str(it.get('title'))[:80]}")
+            continue
         rec.update({
             "url": it["url"], "title": it["title"], "title_key": db.title_key(it["title"], it.get("source")),
             "source": it.get("source"), "published": it.get("published"), "fetched": now,
