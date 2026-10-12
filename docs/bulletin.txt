@@ -1,14 +1,14 @@
 SEIZURE WATCH - weekly bulletin, 06 Oct - 12 Oct 2026
 
-1661 seizure reports this week (previous week 2035); 6 high risk; 299.2 t reported.
-Main drugs: Cannabis (477), Cocaine (296), NSA (217)
-Main countries: India (143), Turkey (102), Brazil (51), Egypt (47)
+1811 seizure reports this week (previous week 2035); 6 high risk; 318.6 t reported.
+Main drugs: Cannabis (521), Cocaine (318), NSA (228)
+Main countries: India (158), Turkey (112), Brazil (57), Egypt (50)
 
 NEW AND SURGING CORRIDORS
 - Ghana -> South Africa: NEW (16 this period, 0 before; mainly Heroin/Opium)
 - Mexico -> United States: SURGING (15 this period, 1 before; mainly Methamphetamine)
 - Pakistan -> India: SURGING (15 this period, 2 before; mainly Heroin/Opium)
-- Thailand -> India: NEW (10 this period, 0 before; mainly Cannabis)
+- Thailand -> India: NEW (11 this period, 0 before; mainly Cannabis)
 - Lebanon -> Syria: NEW (10 this period, 0 before; mainly NSA)
 - Nepal -> India: SURGING (9 this period, 1 before; mainly Cannabis)
 
@@ -26,8 +26,8 @@ UNUSUAL EVENTS (highest risk first)
 - [High 50] 11 Oct | NSA | 15 kg | Hong Kong | France -> Taiwan -> Hong Kong | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Luggage / passenger goods | cargo: coffee; cement
   https://www.info.gov.hk/gia/general/202610/11/P2026101100655.htm
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (48), Postal / parcel (28), Legitimate cargo (food/produce) (14)
-Cover cargo named: الات (11), cement (10), फल (5), spare parts (3), timber (2)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (49), Postal / parcel (30), Legitimate cargo (food/produce) (15)
+Cover cargo named: cement (11), الات (11), फल (5), cacao (3), spare parts (3)
 
 Coverage: searching 10 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Vietnamese, Chinese). 48 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
 Leads from open sources, not confirmed facts. Verify before acting.
