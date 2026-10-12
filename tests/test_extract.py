@@ -342,3 +342,17 @@ def test_regional_place_names():
 def test_plain_illegal_logging_is_not_cites():
     assert not extract("Forest officers seize 20 tonnes of illegally logged timber in Kalimantan", "").get("relevant")
     assert extract("Customs seize 3 containers of rosewood logs at Mombasa", "")["category"] == "CITES protected timber"
+
+
+def test_cultural_heritage():
+    assert extract("Customs seize 120 ancient artefacts smuggled from Iraq at Istanbul airport", "")["category"] == "Cultural heritage"
+    assert extract("Police recover stolen panchaloha idols worth Rs 5 crore in Tamil Nadu", "")["primary_drug"] == "Religious idols and icons"
+    assert extract("ضبط 12 قطعة أثرية فرعونية بحوزة متهم في سوهاج", "")["category"] == "Cultural heritage"
+    assert extract("Antalya'da tarihi eser kaçakçılığı operasyonu: 250 sikke ele geçirildi", "")["category"] == "Cultural heritage"
+    # Arabic آثار alone means "effects"; a drug story stays a drug story
+    assert extract("آثار المخدرات على الشباب: ضبط 2 كيلو حشيش", "")["category"] == "Drug"
+
+
+def test_hindi_ancient_is_not_china():
+    # प्राचीन (ancient) contains चीन (China)
+    assert extract("प्राचीन मूर्ति बरामद, दो तस्कर गिरफ्तार", "").get("seizure_country") != "China"

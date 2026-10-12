@@ -135,6 +135,7 @@ UNSPECIFIED_LABEL = {
     "Drug": "Unspecified",
     "Precursor chemical": "Unspecified precursor chemical",
     "Hazardous chemical": "Unspecified chemical",
+    "Cultural heritage": "Unspecified cultural object",
     "CITES protected timber": "Other CITES-protected wood",
     "Arms and ammunition": "Unspecified arms/ammunition",
     "CITES elephant ivory": "Unspecified ivory",
@@ -197,6 +198,11 @@ def _classify(title_n, text_n):
         if not (cat == "CITES protected fauna" and ordered[0] in weak and L.GENERIC_DRUG.search(title_n)):
             return ordered[0], ordered, cat
 
+    # Cultural heritage: antiquities, coins, manuscripts, idols and icons, artworks, fossils
+    heritage_ordered = _rank(L.HERITAGE_PATTERNS)
+    if heritage_ordered:
+        return heritage_ordered[0], heritage_ordered, "Cultural heritage"
+
     # Hazardous chemicals and arms compete: "ammonium nitrate seized" is a chemical
     # story, "explosives, detonators and ammonium nitrate seized" is an arms story.
     # Arms win a tie.
@@ -219,6 +225,8 @@ def _classify(title_n, text_n):
 
     if L.GENERIC_PRECURSOR.search(blob):
         return UNSPECIFIED_LABEL["Precursor chemical"], [], "Precursor chemical"
+    if L.GENERIC_HERITAGE.search(blob):
+        return UNSPECIFIED_LABEL["Cultural heritage"], [], "Cultural heritage"
     if L.GENERIC_CHEMICAL.search(blob):
         return UNSPECIFIED_LABEL["Hazardous chemical"], [], "Hazardous chemical"
     if L.GENERIC_TIMBER.search(blob):

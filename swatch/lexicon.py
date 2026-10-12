@@ -64,7 +64,7 @@ GENERIC_DRUG = rx(r"narcotics?", r"(?:illegal|illicit)\s+drugs?", r"\bdrugs?\b",
 ANY_DRUG = re.compile("|".join(p.pattern for p in list(DRUG_PATTERNS.values()) + [GENERIC_DRUG]), re.I)
 
 SEIZURE = rx(r"seiz", r"confiscat", r"intercept", r"\bbust(?:ed)?\b", r"\bhaul\b", r"impound",
-             r"recovered", r"uncover", r"foil", r"thwart", r"smuggl", r"\bnetted\b", r"\bstash\b",
+             r"recover(?:s|ed|y)?\b", r"uncover", r"foil", r"thwart", r"smuggl", r"\bnetted\b", r"\bstash\b",
              r"discovered", r"found\s+(?:hidden|concealed)", r"incaut", r"decomis", r"aprehen",
              r"asegur", r"desarticul", r"frustr", r"saisi", r"demantel", r"apreen", r"detect",
              r"trafficking", r"trafico\s+de\s+drogas", r"tentative\s+de\s+trafic")
@@ -303,7 +303,58 @@ GENERIC_FAUNA = rx(r"wildlife\s+(?:trafficking|traffickers?|smuggling|crime|trad
                    r"animais\s+silvestres", r"trafico\s+de\s+animais", r"fauna\s+selvagem")
 
 ANY_PRECURSOR = re.compile("|".join(p.pattern for p in list(PRECURSOR_PATTERNS.values()) + [GENERIC_PRECURSOR]), re.I)
+# Cultural heritage (UNESCO 1970 / UNIDROIT cultural property): antiquities and archaeological objects,
+# ancient coins, manuscripts, religious idols and icons, artworks, fossils. Words that also have an everyday
+# meaning are only used in a heritage phrase: Arabic آثار also means "effects", Hindi मूर्ति is any statue,
+# English "idol" is also a pop star.
+HERITAGE_PATTERNS = {
+    "Antiquities/archaeological objects": rx(
+        r"antiquit(?:y|ies)", r"archa?eological\s+(?:artefacts?|artifacts?|objects?|items?|pieces?|finds?|relics?)",
+        r"ancient\s+(?:artefacts?|artifacts?|relics?|statues?|statuettes?|pottery|sculptures?|figurines?|tablets?)",
+        r"looted\s+(?:artefacts?|artifacts?|antiquities|relics?)", r"\bmumm(?:y|ies|ified)\b", r"sarcophag",
+        r"pre-?columbian", r"pre-?hispanic", r"cuneiform", r"\bhuacos?\b",
+        r"antig[uü]edades", r"piezas?\s+arqueologicas?", r"bienes\s+arqueologicos", r"objetos?\s+arqueologicos?",
+        r"antiquites", r"objets?\s+archeologiques?", r"pecas?\s+arqueologicas?", r"artefatos?\s+arqueologicos?",
+        r"قطع(?:ة)?\s+أثرية", r"قطع(?:ة)?\s+اثرية", r"تمثال\s+أثري", r"تماثيل\s+أثرية", r"تماثيل\s+اثرية",
+        r"تهريب\s+(?:ال)?آثار", r"تهريب\s+(?:ال)?اثار", r"الاتجار\s+(?:في|ب)\s*(?:ال)?آثار", r"التنقيب\s+عن\s+(?:ال)?آثار",
+        r"التنقيب\s+عن\s+(?:ال)?اثار", r"آثار\s+فرعونية", r"اثار\s+فرعونية", r"مقتنيات\s+أثرية",
+        r"tarihi\s+eser", r"arkeolojik\s+eser", r"\bobje\s+tarihi",
+        r"археологическ\w+\s+(?:предмет|находк|ценност|артефакт)", r"предмет\w*\s+старины", r"антиквариат",
+        r"文物", r"古董", r"出土文物", r"पुरावशेष", r"पुरातात्विक", r"प्राचीन\s+मूर्ति", r"\bco\s+vat\b"),
+    "Ancient coins": rx(
+        r"(?:ancient|antique|historic(?:al)?|roman|byzantine|ottoman|old)\s+coins?", r"monedas?\s+antiguas?",
+        r"monedas?\s+(?:romanas|coloniales)", r"monnaies?\s+anciennes?", r"moedas?\s+antigas?",
+        r"عملات?\s+أثرية", r"عملات?\s+اثرية", r"عملات?\s+قديمة", r"tarihi\s+sikke", r"sikke\s+(?:ele\s+gecir|kacak)",
+        r"старинн\w+\s+монет", r"древн\w+\s+монет", r"古钱币", r"古錢幣", r"प्राचीन\s+सिक्क"),
+    "Manuscripts/rare books": rx(
+        r"(?:ancient|historic(?:al)?|old|rare|antique)\s+(?:manuscripts?|books?|scrolls?|torah)", r"manuscritos?\s+antiguos?",
+        r"manuscrits?\s+anciens?", r"manuscritos?\s+antigos?", r"مخطوط(?:ة|ات)\s+(?:أثرية|اثرية|نادرة|قديمة)",
+        r"el\s+yazmasi", r"tarihi\s+kitap", r"старинн\w+\s+(?:рукопис|книг)", r"древн\w+\s+рукопис", r"古籍"),
+    "Religious idols and icons": rx(
+        r"(?:ancient|antique|stolen|temple|panchaloha|bronze|ashtadhatu)\s+idols?", r"\bpanchaloha\b",
+        r"(?:ancient|antique|stolen|orthodox|byzantine|religious)\s+icons?", r"church\s+(?:relics?|treasures?)",
+        r"imagen(?:es)?\s+religios", r"icones?\s+religieuses?", r"अष्टधातु", r"मूर्ति\s+चोरी", r"चोरी\s+की\s+(?:गई\s+)?मूर्ति",
+        r"старинн\w+\s+икон", r"церковн\w+\s+(?:утвар|ценност)", r"tarihi\s+ikon"),
+    "Artworks": rx(
+        r"stolen\s+(?:paintings?|artworks?|art\s*works?|sculptures?|masterpieces?)", r"(?:paintings?|artworks?)\s+(?:seized|recovered|stolen)",
+        r"art\s+(?:theft|trafficking|smuggling)", r"obras?\s+de\s+arte\s+(?:robadas?|incautadas?|recuperadas?)",
+        r"(?:oeuvres?|tableaux?)\s+(?:d.art\s+)?(?:voles?|saisis?|derobes?)", r"obras?\s+de\s+arte\s+(?:roubadas?|apreendidas?)",
+        r"لوحات?\s+فنية\s+(?:مسروقة|مهربة)", r"похищенн\w+\s+(?:картин|произведени)", r"被盗\s*(?:名画|画作)"),
+    "Fossils": rx(
+        r"dinosaur\s+(?:fossils?|bones?|eggs?|skeletons?)", r"fossils?\s+(?:smuggl\w*|seiz\w*|traffick\w*|trade)",
+        r"(?:smuggled|illegal|stolen)\s+fossils?", r"fosiles?\s+(?:incautad|de\s+contrabando|robad)", r"fossiles?\s+(?:saisis?|de\s+contrebande)",
+        r"fosseis\s+(?:apreendid|contrabande)", r"恐龙蛋", r"恐龍蛋", r"化石\s*走私", r"走私\s*化石"),
+}
+GENERIC_HERITAGE = rx(
+    r"cultural\s+(?:property|heritage|goods|objects?|artefacts?|artifacts?)", r"heritage\s+(?:items?|objects?|artefacts?|artifacts?)",
+    r"illicit\s+traffic(?:king)?\s+(?:in|of)\s+cultural", r"looted\s+(?:objects?|items?)",
+    r"bienes\s+culturales", r"patrimonio\s+(?:cultural|historico|arqueologico)", r"biens\s+culturels", r"patrimoine\s+(?:culturel|archeologique)",
+    r"bens\s+culturais", r"patrimonio\s+cultural", r"ممتلكات\s+ثقافية", r"التراث\s+الثقافي", r"kultur\s+varlig", r"kültür\s+varlığ",
+    r"культурн\w+\s+ценност", r"культурн\w+\s+наслед", r"走私\s*文物", r"सांस्कृतिक\s+धरोहर", r"सांस्कृतिक\s+विरासत",
+    r"\bdi\s+san\s+van\s+hoa\b")
+
 ANY_CHEMICAL = re.compile("|".join(p.pattern for p in list(CHEMICAL_PATTERNS.values()) + [GENERIC_CHEMICAL]), re.I)
+ANY_HERITAGE = re.compile("|".join(p.pattern for p in list(HERITAGE_PATTERNS.values()) + [GENERIC_HERITAGE]), re.I)
 ANY_TIMBER = re.compile("|".join(p.pattern for p in list(TIMBER_PATTERNS.values()) + [GENERIC_TIMBER]), re.I)
 ANY_ARMS = re.compile("|".join(p.pattern for p in list(ARMS_PATTERNS.values()) + [GENERIC_ARMS]), re.I)
 ANY_STOLEN_VEHICLE = re.compile(
@@ -315,7 +366,7 @@ ANY_STOLEN_VEHICLE = re.compile(
 # VEHICLE_THEFT_CUE to co-occur (see prefilter()).
 ANY_IVORY = re.compile("|".join(p.pattern for p in IVORY_PATTERNS.values()), re.I)
 ANY_FAUNA = re.compile("|".join(p.pattern for p in list(FAUNA_PATTERNS.values()) + [GENERIC_FAUNA]), re.I)
-ANY_CONTRABAND = re.compile("|".join([ANY_DRUG.pattern, ANY_PRECURSOR.pattern, ANY_CHEMICAL.pattern, ANY_TIMBER.pattern,
+ANY_CONTRABAND = re.compile("|".join([ANY_DRUG.pattern, ANY_PRECURSOR.pattern, ANY_CHEMICAL.pattern, ANY_HERITAGE.pattern, ANY_TIMBER.pattern,
                                       ANY_ARMS.pattern, ANY_IVORY.pattern, ANY_FAUNA.pattern]), re.I)
 
 # --------------------------------------------------------------------------
@@ -1377,7 +1428,7 @@ GENERIC_PRECURSOR = _ext(GENERIC_PRECURSOR, *GENERIC_PRECURSOR_EXTRA)
 # most Hindi and Turkish ones) before download.
 ANY_PRECURSOR = re.compile("|".join(p.pattern for p in list(PRECURSOR_PATTERNS.values()) + [GENERIC_PRECURSOR]), re.I)
 ANY_CHEMICAL = re.compile("|".join(p.pattern for p in list(CHEMICAL_PATTERNS.values()) + [GENERIC_CHEMICAL]), re.I)
-ANY_CONTRABAND = re.compile("|".join([ANY_DRUG.pattern, ANY_PRECURSOR.pattern, ANY_CHEMICAL.pattern, ANY_TIMBER.pattern,
+ANY_CONTRABAND = re.compile("|".join([ANY_DRUG.pattern, ANY_PRECURSOR.pattern, ANY_CHEMICAL.pattern, ANY_HERITAGE.pattern, ANY_TIMBER.pattern,
                                       ANY_ARMS.pattern, ANY_IVORY.pattern, ANY_FAUNA.pattern]), re.I)
 
 
@@ -1534,5 +1585,5 @@ def _alt(keys):
     return "|".join(re.escape(k) for k in sorted(keys, key=len, reverse=True))
 
 
-COUNTRY_RX = re.compile(r"(?<![a-z])(" + _alt(COUNTRY_ALIAS) + r")(?![a-z\u0600-\u06ff\u0900-\u097f])")
-PLACE_RX = re.compile(r"(?<![a-z])(" + _alt(PLACE_ALIAS) + r")(?![a-z\u0600-\u06ff\u0900-\u097f])")
+COUNTRY_RX = re.compile(r"(?<![a-z\u0900-\u097f])(" + _alt(COUNTRY_ALIAS) + r")(?![a-z\u0600-\u06ff\u0900-\u097f])")
+PLACE_RX = re.compile(r"(?<![a-z\u0900-\u097f])(" + _alt(PLACE_ALIAS) + r")(?![a-z\u0600-\u06ff\u0900-\u097f])")

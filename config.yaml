@@ -57,29 +57,29 @@ sources:
            "protected birds smuggling seized", "shark fins seized", "glass eels trafficking seized",
            "tiger skin bones seized", "exotic animals smuggling airport",
            "illegal firearms seized", "weapons cache seized", "ammunition seized smuggling",
-           "arms trafficking seized"]
+           "arms trafficking seized", "antiquities seized customs", "looted artefacts seized", "cultural property trafficking seized", "stolen idols recovered", "ancient coins seized smuggling", "archaeological artifacts smuggling seized", "stolen paintings recovered police", "dinosaur fossils smuggling seized"]
       es: ["incautan cocaína", "decomisan droga puerto contenedor", "incautan marihuana",
            "incautan metanfetamina", "incautan drogas sintéticas aeropuerto",
            "incautan químicos precursores", "incautan productos químicos", "decomisan plaguicidas ilegales",
            "incautan mercurio", "decomisan gas refrigerante contrabando", "decomisan vehículos robados", "madera protegida CITES incautada", "incautan madera de cedro caoba",
            "incautan marfil", "tráfico de fauna silvestre incautan", "decomisan animales exóticos aeropuerto",
-            "incautan armas de fuego", "decomisan municiones", "incautan arsenal"]
+            "incautan armas de fuego", "decomisan municiones", "incautan arsenal", "incautan piezas arqueológicas", "tráfico de bienes culturales incautan", "recuperan obras de arte robadas"]
       fr: ["saisie cocaïne", "saisie drogue port conteneur", "saisie cannabis douane", "saisie captagon",
            "saisie précurseurs chimiques", "saisie produits chimiques dangereux", "saisie pesticides illégaux",
            "saisie gaz réfrigérants", "véhicules volés saisis", "saisie bois protégé CITES", "saisie bois de rose", "saisie bois de vène kosso",
            "saisie ivoire", "trafic faune sauvage saisie", "saisie civelles",
-            "saisie armes a feu", "saisie munitions", "trafic d'armes saisi"]
+            "saisie armes a feu", "saisie munitions", "trafic d'armes saisi", "saisie biens culturels", "saisie antiquités trafic", "objets archéologiques saisis"]
       pt: ["apreensão cocaína porto", "apreensão droga contêiner", "apreendem maconha",
            "apreensão de químicos precursores", "apreensão de produtos químicos", "apreensão de agrotóxicos ilegais",
            "apreensão de mercúrio", "veículos roubados apreendidos", "apreensão madeira protegida CITES",
            "apreensão marfim", "tráfico de animais silvestres apreensão",
-            "apreensão de armas de fogo", "apreendem munições"]
-      ar: ["ضبط مخدرات", "ضبط كوكايين", "ضبط حشيش", "ضبط كبتاجون", "إحباط تهريب مخدرات", "ضبط هيروين", "ضبط ترامادول", "ضبط مواد كيميائية", "ضبط مبيدات مهربة", "ضبط غاز التبريد مهرب", "ضبط نترات الأمونيوم", "ضبط زئبق"]
-      tr: ["uyuşturucu ele geçirildi", "kokain ele geçirildi", "esrar ele geçirildi", "uyuşturucu hap ele geçirildi", "liman konteyner kokain", "captagon ele geçirildi", "kaçak kimyasal madde ele geçirildi", "kaçak tarım ilacı ele geçirildi", "kaçak soğutucu gaz ele geçirildi", "amonyum nitrat ele geçirildi"]
-      ru: ["изъяли наркотики", "изъяли кокаин", "изъяли героин", "изъяли метамфетамин", "контрабанда наркотиков порт", "изъяли синтетические наркотики", "изъяли химикаты", "контрабанда фреона", "изъяли пестициды", "изъяли ртуть", "контрабанда прекурсоров"]
-      zh: ["缴获毒品", "查获可卡因", "海关 查获 毒品", "檢獲 毒品", "檢獲 可卡因", "緝獲 冰毒", "查获 危险化学品", "走私 制冷剂", "查获 走私农药", "查获 易制毒化学品", "洋垃圾 走私 查获", "查获 走私 红木", "查获 紫檀 走私"]
-      vi: ["thu giữ ngà voi", "bắt giữ buôn lậu ngà voi", "hải quan phát hiện ngà voi", "ngà voi nhập lậu", "thu giữ hóa chất", "buôn lậu thuốc bảo vệ thực vật", "buôn lậu gas lạnh", "thu giữ thủy ngân", "tiền chất ma túy thu giữ", "thu giữ gỗ trắc", "buôn lậu gỗ quý hiếm"]
-      hi: ["ड्रग्स जब्त", "कोकीन जब्त", "गांजा बरामद", "हेरोइन बरामद", "अफीम जब्त", "नशीली गोलियां बरामद", "रसायन जब्त", "कीटनाशक जब्त", "अमोनियम नाइट्रेट बरामद", "लाल चंदन जब्त", "लाल चंदन तस्करी"]
+            "apreensão de armas de fogo", "apreendem munições", "apreensão peças arqueológicas", "tráfico de bens culturais apreensão"]
+      ar: ["ضبط مخدرات", "ضبط كوكايين", "ضبط حشيش", "ضبط كبتاجون", "إحباط تهريب مخدرات", "ضبط هيروين", "ضبط ترامادول", "ضبط مواد كيميائية", "ضبط مبيدات مهربة", "ضبط غاز التبريد مهرب", "ضبط نترات الأمونيوم", "ضبط زئبق", "ضبط قطع أثرية", "تهريب الآثار", "ضبط تماثيل أثرية", "ضبط عملات أثرية"]
+      tr: ["uyuşturucu ele geçirildi", "kokain ele geçirildi", "esrar ele geçirildi", "uyuşturucu hap ele geçirildi", "liman konteyner kokain", "captagon ele geçirildi", "kaçak kimyasal madde ele geçirildi", "kaçak tarım ilacı ele geçirildi", "kaçak soğutucu gaz ele geçirildi", "amonyum nitrat ele geçirildi", "tarihi eser ele geçirildi", "tarihi eser kaçakçılığı operasyonu", "tarihi sikke ele geçirildi"]
+      ru: ["изъяли наркотики", "изъяли кокаин", "изъяли героин", "изъяли метамфетамин", "контрабанда наркотиков порт", "изъяли синтетические наркотики", "изъяли химикаты", "контрабанда фреона", "изъяли пестициды", "изъяли ртуть", "контрабанда прекурсоров", "изъяли культурные ценности", "контрабанда культурных ценностей", "изъяли археологические предметы"]
+      zh: ["缴获毒品", "查获可卡因", "海关 查获 毒品", "檢獲 毒品", "檢獲 可卡因", "緝獲 冰毒", "查获 危险化学品", "走私 制冷剂", "查获 走私农药", "查获 易制毒化学品", "洋垃圾 走私 查获", "查获 走私 红木", "查获 紫檀 走私", "海关 查获 走私文物", "查获 文物 走私"]
+      vi: ["thu giữ ngà voi", "bắt giữ buôn lậu ngà voi", "hải quan phát hiện ngà voi", "ngà voi nhập lậu", "thu giữ hóa chất", "buôn lậu thuốc bảo vệ thực vật", "buôn lậu gas lạnh", "thu giữ thủy ngân", "tiền chất ma túy thu giữ", "thu giữ gỗ trắc", "buôn lậu gỗ quý hiếm", "thu giữ cổ vật", "buôn lậu cổ vật"]
+      hi: ["ड्रग्स जब्त", "कोकीन जब्त", "गांजा बरामद", "हेरोइन बरामद", "अफीम जब्त", "नशीली गोलियां बरामद", "रसायन जब्त", "कीटनाशक जब्त", "अमोनियम नाइट्रेट बरामद", "लाल चंदन जब्त", "लाल चंदन तस्करी", "प्राचीन मूर्ति बरामद", "अष्टधातु मूर्ति बरामद"]
 
   gdelt:                       # global news index; free, no key. Set enabled: false to skip.
     enabled: true
@@ -92,28 +92,35 @@ sources:
            '("CITES timber" OR "protected timber" OR rosewood OR "red sanders" OR kosso OR mukula) (seized OR seizure)',
            '(ivory OR "rhino horn" OR pangolin OR "wildlife trafficking") (seized OR seizure OR smuggling)',
            '("CITES" OR "protected species" OR "shark fins" OR "glass eels") (seized OR seizure)',
-           '(illegal firearms OR weapons cache OR ammunition OR arms trafficking) (seized OR seizure)']
+           '(illegal firearms OR weapons cache OR ammunition OR arms trafficking) (seized OR seizure)',
+           '(antiquities OR "cultural property" OR "looted artefacts" OR "archaeological artifacts" OR "ancient coins" OR "stolen idols") (seized OR recovered OR smuggling)']
       es: ['(cocaína OR heroína OR metanfetamina OR marihuana) (incautan OR decomisan OR incautación)',
            '(químicos precursores OR laboratorio clandestino) (incautan OR decomisan)',
            '(productos químicos OR plaguicidas OR mercurio OR refrigerantes) (incautan OR decomisan)',
            '(vehículos robados) (decomisan OR recuperan)',
-           '(armas de fuego OR municiones OR arsenal) (incautan OR decomisan)']
+           '(armas de fuego OR municiones OR arsenal) (incautan OR decomisan)',
+           '("piezas arqueológicas" OR "bienes culturales" OR antigüedades) (incautan OR recuperan OR tráfico)']
       fr: ['(cocaïne OR héroïne OR cannabis OR captagon) (saisie OR saisi OR saisis)',
            '(précurseurs chimiques) (saisie OR saisis)',
            '(véhicules volés) (saisie OR récupérés)',
-           '(armes a feu OR munitions) (saisie OR saisis)']
+           '(armes a feu OR munitions) (saisie OR saisis)',
+           '("biens culturels" OR antiquités OR "objets archéologiques") (saisie OR trafic)']
       pt: ['(cocaína OR heroína OR maconha) (apreensão OR apreendem OR apreendida)',
            '(químicos precursores) (apreensão OR apreendem)',
            '(veículos roubados) (apreensão OR recuperados)',
            '(armas de fogo OR munições) (apreensão OR apreendem)']
       ar: ['(كوكايين OR هيروين OR حشيش OR كبتاجون) (ضبط OR إحباط)',
-           '(مواد كيميائية OR مبيدات OR زئبق OR "نترات الأمونيوم" OR "غاز التبريد") (ضبط OR تهريب)']
+           '(مواد كيميائية OR مبيدات OR زئبق OR "نترات الأمونيوم" OR "غاز التبريد") (ضبط OR تهريب)',
+           '("قطع أثرية" OR "تهريب الآثار" OR "تماثيل أثرية") (ضبط OR تهريب)']
       tr: ['(kokain OR eroin OR esrar OR uyuşturucu) ("ele geçirildi" OR yakalandı)',
-           '(kimyasal OR "tarım ilacı" OR "amonyum nitrat" OR "soğutucu gaz") ("ele geçirildi" OR kaçak)']
+           '(kimyasal OR "tarım ilacı" OR "amonyum nitrat" OR "soğutucu gaz") ("ele geçirildi" OR kaçak)',
+           '("tarihi eser") ("ele geçirildi" OR kaçakçılığı)']
       ru: ['(кокаин OR героин OR метамфетамин OR наркотики) (изъяли OR изъято OR задержали)',
-           '(химикаты OR фреон OR пестициды OR ртуть OR прекурсоры) (изъяли OR контрабанда)']
+           '(химикаты OR фреон OR пестициды OR ртуть OR прекурсоры) (изъяли OR контрабанда)',
+           '("культурные ценности" OR "археологические предметы") (изъяли OR контрабанда)']
       zh: ['(可卡因 OR 海洛因 OR 冰毒 OR 毒品) (缴获 OR 查获 OR 檢獲)',
-           '(危险化学品 OR 制冷剂 OR 农药 OR 易制毒化学品 OR 洋垃圾) (查获 OR 走私 OR 缴获)']
+           '(危险化学品 OR 制冷剂 OR 农药 OR 易制毒化学品 OR 洋垃圾) (查获 OR 走私 OR 缴获)',
+           '(文物) (走私 OR 查获)']
       hi: ['(कोकीन OR हेरोइन OR गांजा OR ड्रग्स) (जब्त OR बरामद)',
            '(रसायन OR कीटनाशक OR "अमोनियम नाइट्रेट") (जब्त OR बरामद)']
       vi: ['("ngà voi") (thu giữ OR bắt giữ OR buôn lậu)',
@@ -123,7 +130,7 @@ sources:
   # releases are picked up even when no newspaper reports them. Add or remove websites freely.
   official_sites:
     enabled: true
-    query: "site:{site} (seized OR seizure OR seizes OR intercepted OR incautan OR decomisan OR saisie OR apreensao) (cocaine OR heroin OR methamphetamine OR cannabis OR fentanyl OR captagon OR drugs OR cocaina OR droga OR cocaine OR drogue OR \"precursor chemicals\" OR \"hazardous chemicals\" OR \"toxic chemicals\" OR pesticides OR refrigerants OR mercury OR \"ammonium nitrate\" OR \"hazardous waste\" OR \"stolen vehicles\" OR \"protected timber\" OR rosewood OR \"illegal firearms\" OR \"weapons cache\" OR ammunition OR \"arms trafficking\" OR ivory OR \"rhino horn\" OR pangolin OR \"wildlife trafficking\" OR CITES)"
+    query: "site:{site} (seized OR seizure OR seizes OR intercepted OR incautan OR decomisan OR saisie OR apreensao) (cocaine OR heroin OR methamphetamine OR cannabis OR fentanyl OR captagon OR drugs OR cocaina OR droga OR cocaine OR drogue OR \"precursor chemicals\" OR \"hazardous chemicals\" OR \"toxic chemicals\" OR pesticides OR refrigerants OR mercury OR \"ammonium nitrate\" OR \"hazardous waste\" OR \"stolen vehicles\" OR \"protected timber\" OR antiquities OR \"cultural property\" OR \"archaeological artefacts\" OR rosewood OR \"illegal firearms\" OR \"weapons cache\" OR ammunition OR \"arms trafficking\" OR ivory OR \"rhino horn\" OR pangolin OR \"wildlife trafficking\" OR CITES)"
     # `lang` is the language that site actually publishes in - it decides whether the
     # headline gets auto-translated to English, so it must be the SITE's language, not English,
     # even though the search itself always goes through the English Google News edition.
@@ -202,7 +209,7 @@ risk:
       3: 0
   commodity_tiers:
     default: 2                       # anything not listed below
-    categories: {Precursor chemical: 2, Hazardous chemical: 2, Stolen vehicle: 2, CITES protected timber: 2}
+    categories: {Precursor chemical: 2, Hazardous chemical: 2, Cultural heritage: 2, Stolen vehicle: 2, CITES protected timber: 2}
     items:                           # tier 1 = highest harm, tier 3 = lowest
       1: [Cocaine, Heroin/Opium, Methamphetamine, NSA, Explosives/grenades, Explosive precursors, Firearms, Elephant ivory, Rhino horn, Pangolin, Big cat parts]
       3: [Cigarettes]
