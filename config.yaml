@@ -287,3 +287,17 @@ analysis:
   emerging_days: 60                # a corridor first seen within this many days counts as emerging
   spike_min_events: 3              # minimum events in the last 7 days to raise a spike alert
   spike_z: 2.0                     # how far above the 8-week average counts as a spike
+
+# ---------------------------------------------------------------------
+#  LINKS BETWEEN SEPARATE SEIZURES (repeat vessels / containers / cargo, precursor-to-drug chain)
+# ---------------------------------------------------------------------
+links:
+  recent_days: 30                 # a repeat link is only shown while one of its seizures is this recent
+  min_events:                     # separate seizures needed before a repeat is shown
+    Vessel: 2
+    Container number: 2
+    Shipping line: 4              # big carriers are in many seizures by chance: shown in the table, never alerted
+    Loading place: 4
+    Cover cargo on corridor: 3
+  chain_days: 90                  # look back this far for precursor seizures and clandestine labs
+  chain_gap_days: 60              # a synthetic-drug seizure in the same country this close in time counts as linked

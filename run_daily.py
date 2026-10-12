@@ -46,8 +46,8 @@ def ingest(conn, items, is_demo=False):
             # for all 9 source languages) and only fills in what extract.py's
             # rule-based pass left empty - it never overrules a lexicon match.
             ents = ner.extract_entities(rec["title_en"])
-            if not rec.get("shipping_line") and ents["orgs"]:
-                rec["shipping_line"] = "; ".join(ents["orgs"][:3])
+            # Organisations found by NER are mostly police forces and agencies, not shipping lines, so they are
+            # no longer stored as the shipping line (that polluted the repeat-link analysis).
             if not rec.get("seizure_country") and not rec.get("origin") and not rec.get("destination"):
                 for cand in ents["places"]:
                     ctry = ner.resolve_country(cand)
@@ -56,7 +56,7 @@ def ingest(conn, items, is_demo=False):
                         break
             unresolved = [p for p in ents["places"] if not ner.resolve_country(p)]
             rec["ner_places"] = "; ".join(unresolved[:5]) or None
-            if rec.get("ner_places") or (ents["orgs"] and not rec.get("shipping_line")):
+            if rec.get("ner_places"):
                 ner_hits += 1
         art_id = db.insert_article(conn, rec)
         if art_id is None:

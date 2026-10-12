@@ -5,7 +5,7 @@ import math
 import os
 import datetime as dt
 import pandas as pd
-from . import analyze, coverage, geo, lexicon
+from . import analyze, checklists, coverage, geo, lexicon
 
 
 def _clean(v):
@@ -188,7 +188,8 @@ def write_all(res, out_dir, cfg, demo=False, verifications=None):
                  "min_history": cfg["analysis"]["min_history_days"], "total_events": res["kpis"]["events_total"],
                  "first_date": ev["date"].min().strftime("%Y-%m-%d") if len(ev) else None,
                  "window_start": (res["asof"] - pd.Timedelta(days=days - 1)).strftime("%Y-%m-%d")},
-        "coverage": coverage.payload(cfg), "risk_model": analyze.risk_model_description(cfg),
+        "coverage": coverage.payload(cfg), "risk_model": analyze.risk_model_description(cfg), "links": res.get("links", []), "chain": res.get("chain", {}),
+        "checklists": checklists.model(),
         "kpis": res["kpis"], "events": event_records(ev_r, outlet_homes(ev)), "alerts": res["alerts"],
         "monthly": monthly_counts(ev),
         "corridors": res["corridors"].head(40).to_dict("records") if len(res["corridors"]) else [],

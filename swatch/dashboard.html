@@ -49,6 +49,17 @@ td{padding:7px 8px;border-top:1px solid var(--line);vertical-align:top}
 tr:hover td{background:#f8fafc}
 #evT tbody tr:hover td{background:#d3e2f4}
 table.rm{border-collapse:collapse;margin:6px 0}table.rm th,table.rm td{border:1px solid var(--line);padding:5px 9px;text-align:left;vertical-align:top}table.rm th{background:#f1f3f7}
+.chip[data-id]{cursor:pointer}.chip[data-id]:hover{filter:brightness(1.12);outline:2px solid #12355b33}
+#evModal{position:fixed;inset:0;background:rgba(10,25,45,.55);display:none;align-items:flex-start;justify-content:center;overflow:auto;padding:24px 12px;z-index:50}
+#evModal.on{display:flex}#evModal .box{background:#fff;border-radius:12px;max-width:760px;width:100%;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,.35)}
+#evModal .hd{background:var(--brand);color:#fff;padding:12px 16px;display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
+#evModal .hd b{font-size:14px;line-height:1.35}#evModal .x{background:none;border:0;color:#fff;font-size:22px;line-height:1;cursor:pointer;padding:0 4px}
+#evModal .bd{padding:14px 16px}#evModal h4{margin:14px 0 6px;font-size:12.5px;color:var(--brand)}#evModal h4:first-child{margin-top:0}
+#evModal ul{margin:4px 0 4px 18px;padding:0}#evModal li{margin:5px 0;line-height:1.45}
+.ptag{display:inline-block;background:#e4edf8;color:#12355b;border-radius:99px;padding:0 8px;font-size:10.5px;margin-right:4px}
+.pbar{display:grid;grid-template-columns:170px 1fr 44px;gap:8px;align-items:center;margin:3px 0;font-size:11.5px}.pbar i{display:block;height:9px;border-radius:5px;background:#e4eaf2;position:relative;overflow:hidden}.pbar i u{position:absolute;left:0;top:0;bottom:0;background:#2f6db5;border-radius:5px}
+.lkrow td{vertical-align:top}.lkrow .nt{display:block;color:#8a5a00;font-size:11px;margin-top:2px}
+.stg{font-size:10.5px;font-weight:700;border-radius:99px;padding:0 8px;color:#fff}.stg.High{background:var(--hi)}.stg.Medium{background:var(--med)}.stg.Low{background:#8894a5}
 .chip{display:inline-block;padding:1px 8px;border-radius:99px;font-size:11px;font-weight:700;color:#fff}
 .chip.High{background:var(--hi)}.chip.Medium{background:var(--med)}.chip.Low{background:var(--lo)}
 .chip.NEW{background:#6a3fb5}.chip.SURGING{background:var(--hi)}.chip.STABLE{background:#8894a5}.chip.DECLINING{background:#3d7ea6}.chip.INACTIVE{background:#b5bcc7}
@@ -177,6 +188,14 @@ table.mini{border-collapse:collapse;font-size:13px;margin-top:6px}table.mini td{
 
 <div class="card"><h2>Alerts <span class="small" id="alertNote"></span></h2><div id="alerts" class="alertbox"></div></div>
 
+<div class="card" id="linkCard"><h2>Repeat links <span class="small" id="linkNote"></span></h2>
+  <div class="small" style="line-height:1.45;margin-bottom:8px">The same vessel, container, loading place or cover cargo appearing in more than one separate seizure. These are leads to check, not proof of a link. A vessel or container number recurring is the strongest sign; a big shipping line or a busy port appears in many seizures by chance.</div>
+  <div class="tw" style="max-height:420px"><table id="linkT"></table></div></div>
+
+<div class="card" id="chainCard"><h2>Production chain watch <span class="small" id="chainNote"></span></h2>
+  <div class="small" style="line-height:1.45;margin-bottom:8px">Precursor chemical seizures and clandestine-laboratory reports, followed by synthetic-drug seizures in the same country. A match on place and timing is a possible link only. Precursor seizures are rarely reported in the news, so labs are included too.</div>
+  <div class="tw" style="max-height:380px"><table id="chainT"></table></div></div>
+
 <div class="card"><h2>My watchlist <span class="small" id="watchNote"></span></h2>
   <div id="watchNew"></div>
   <div class="wrow"><input id="wQ" type="search" placeholder="Watch for... e.g. Antwerp cocaine, Ecuador Belgium, food cargo, OR Tambo">
@@ -216,6 +235,7 @@ table.mini{border-collapse:collapse;font-size:13px;margin-top:6px}table.mini td{
 </div>
 
 <script type="application/json" id="data">__DATA__</script>
+<div id="evModal" role="dialog" aria-modal="true"><div class="box"><div class="hd"><b id="evTitle"></b><button class="x" id="evClose" aria-label="Close">&times;</button></div><div class="bd" id="evBody"></div></div></div>
 <script>
 const D = JSON.parse(document.getElementById('data').textContent);
 const $ = id => document.getElementById(id);
@@ -481,7 +501,7 @@ function evTable(v) {
   const s = v.slice().sort((a,b) => { const x = val(a, sortKey), y = val(b, sortKey); return (x > y ? 1 : x < y ? -1 : 0) * sortDir || (b.score - a.score); });
   $('evCount').textContent = '(' + v.length + ' in view' + (v.length > 300 ? ', first 300 shown' : '') + ')';
   $('evT').innerHTML = '<tr>' + COLS.map(c => '<th data-k="' + c[0] + '">' + c[1] + (sortKey === c[0] ? (sortDir > 0 ? ' &#9650;' : ' &#9660;') : '') + '</th>').join('') + '</tr>' +
-    s.slice(0, 300).map(e => '<tr' + (isWatched(e) ? ' class="watched"' : '') + '><td>' + esc(e.date) + '</td><td><span class="chip ' + esc(e.band) + '" title="' + esc(e.why || '') + '">' + e.score + '</span></td><td>' + esc(e.drug) + '</td><td>' + esc(qty(e)) + '</td><td class="w2">' + esc(e.route || e.corridor || '') + '</td><td class="w2">' + esc([e.place, e.country].filter(Boolean).join(', ')) + '</td><td class="w2">' + esc(e.conceal || '') + '</td><td class="small w2">' + esc(detailText(e)) + '</td><td>' + esc(e.transport || '') + '</td><td class="small w3">' + esc(e.flags) + '</td><td>' + e.n + '</td><td><a href="' + esc(safe(e.url)) + '" target="_blank" rel="noopener noreferrer" title="' + esc(e.title_en || e.title) + '">open</a></td></tr>').join('');
+    s.slice(0, 300).map(e => '<tr' + (isWatched(e) ? ' class="watched"' : '') + '><td>' + esc(e.date) + '</td><td><span class="chip ' + esc(e.band) + '" data-id="' + e.id + '" title="' + esc((e.why || '') + ' (click for details and checklist)') + '">' + e.score + '</span></td><td>' + esc(e.drug) + '</td><td>' + esc(qty(e)) + '</td><td class="w2">' + esc(e.route || e.corridor || '') + '</td><td class="w2">' + esc([e.place, e.country].filter(Boolean).join(', ')) + '</td><td class="w2">' + esc(e.conceal || '') + '</td><td class="small w2">' + esc(detailText(e)) + '</td><td>' + esc(e.transport || '') + '</td><td class="small w3">' + esc(e.flags) + '</td><td>' + e.n + '</td><td><a href="' + esc(safe(e.url)) + '" target="_blank" rel="noopener noreferrer" title="' + esc(e.title_en || e.title) + '">open</a></td></tr>').join('');
   $('evT').querySelectorAll('th').forEach(th => th.onclick = () => { const k = th.dataset.k; if (k === 'url' || k === 'flags') return; sortDir = (sortKey === k) ? -sortDir : -1; sortKey = k; render(); });
 }
 
@@ -493,7 +513,7 @@ function riskBox() {
   h += '</table><p><b>Bands.</b> High = ' + M.high + ' or more, Medium = ' + M.medium + ' to ' + (M.high - 1) + ', Low = below ' + M.medium +
     '. To be High an event must also show indicators in at least ' + M.min_high + ' of the three operational dimensions (concealment &amp; method, insiders &amp; organised crime, route); to be Medium, in at least ' + M.min_medium +
     '. Scale and commodity alone can never raise an event, so a large seizure with no other warning signs stays low.</p>' +
-    '<p><b>Reading a score.</b> Hover over (or long-press) a risk number in the table to see its breakdown, e.g. "Route 15/20". The Excel and CSV downloads carry the same breakdown per event.</p>' +
+    '<p><b>Reading a score.</b> Tap a risk number in the table to open the event detail, with its score breakdown and an officer checklist, e.g. "Route 15/20". The Excel and CSV downloads carry the same breakdown per event.</p>' +
     '<p><b>Limits.</b> Indicators come from automated reading of news text. A thorough article shows more indicators than a short one, so well-reported cases can score higher. Treat the score as a prompt to look, not a finding.</p>';
   $('riskHow').innerHTML = h;
 }
@@ -784,6 +804,62 @@ renderWatch();
 
 $('fDays').innerHTML = periodOptions('90');   // months and years added to the period filter
 alerts(); staticTables(); render();
+
+// ---- Repeat links, production chain, event detail with officer checklist
+function linksPanel() {
+  const L = D.links || [];
+  $('linkNote').textContent = L.length ? '(' + L.length + ' leads still active in the last 30 days)' : '';
+  if (!L.length) { $('linkT').innerHTML = '<tr><td class="small">No repeat links found right now.</td></tr>'; return; }
+  $('linkT').innerHTML = '<tr><th>Strength</th><th>What repeats</th><th>Reports</th><th>Last 30 d</th><th>Seen in</th><th>Items</th><th>Latest</th><th>Sources</th></tr>' +
+    L.slice(0, 60).map(r => '<tr class="lkrow"><td><span class="stg ' + esc(r.strength) + '">' + esc(r.strength) + '</span></td><td><b>' + esc(r.name) + '</b><span class="small"> ' + esc(r.type) + '</span>' +
+      (r.note ? '<span class="nt">' + esc(r.note) + '</span>' : '') + '</td><td>' + r.n + '</td><td>' + r.recent + '</td><td class="small">' + esc((r.countries || []).join(', ')) +
+      '</td><td class="small">' + esc((r.items || []).join(', ')) + '</td><td>' + esc(r.last) + '</td><td class="small">' +
+      (r.urls || []).map((u, i) => '<a href="' + esc(safe(u)) + '" target="_blank" rel="noopener noreferrer">' + (i + 1) + '</a>').join(' ') + '</td></tr>').join('');
+}
+function chainPanel() {
+  const C = D.chain || {countries: []};
+  const lk = C.countries.filter(r => r.linked);
+  $('chainNote').textContent = '(last ' + (C.days || 90) + ' days: ' + C.n_precursor + ' precursor seizures, ' + C.n_lab + ' laboratory reports; ' + lk.length + ' countries with a possible link)';
+  if (!C.countries.length) { $('chainT').innerHTML = '<tr><td class="small">No precursor seizures or laboratory reports found.</td></tr>'; return; }
+  $('chainT').innerHTML = '<tr><th>Country</th><th>Possible link</th><th>Precursor seizures</th><th>Lab reports</th><th>Synthetic-drug seizures nearby (same place)</th><th>Latest lab / precursor</th><th>Sources</th></tr>' +
+    C.countries.slice(0, 40).map(r => '<tr class="lkrow"><td><b>' + esc(r.country) + '</b></td><td>' + (r.linked ? '<span class="stg Medium">possible</span>' : '<span class="stg Low">no match</span>') +
+      '</td><td>' + r.n_precursor + (r.precursors.length ? '<span class="small"> ' + esc(r.precursors.join(', ')) + (r.kg_precursor ? ', ' + r.kg_precursor + ' kg' : '') + '</span>' : '') +
+      '</td><td>' + r.n_lab + '</td><td>' + r.n_synth + ' <span class="small">(' + r.n_local + ')</span></td><td>' + esc(r.last_anchor) + '</td><td class="small">' +
+      (r.urls || []).map((u, i) => '<a href="' + esc(safe(u)) + '" target="_blank" rel="noopener noreferrer">' + (i + 1) + '</a>').join(' ') + '</td></tr>').join('');
+}
+function checklistFor(e) {
+  const K = D.checklists; if (!K) return [];
+  const out = [], seen = new Set();
+  const add = (tag, arr) => (arr || []).forEach(t => { if (!seen.has(t)) { seen.add(t); out.push([tag, t]); } });
+  String(e.flags || '').split(', ').filter(Boolean).forEach(f => add(f, K.flags[f]));
+  String(e.conceal || '').split('; ').filter(Boolean).forEach(c => add(c, K.conceal[c]));
+  if (e.transport) add(e.transport, K.transport[e.transport]);
+  if (e.category) add(e.category, K.category[e.category]);
+  return out;
+}
+function openEvent(id) {
+  const e = D.events.find(x => x.id === id); if (!e) return;
+  const M = D.risk_model, names = M ? M.dimensions.map(d => [d.name, d.max]) : [];
+  $('evTitle').textContent = e.title_en || e.title || (e.drug + ' seizure');
+  let h = '<p class="small" style="margin:0 0 10px">' + [e.date, e.drug, qty(e), e.route || e.corridor, [e.place, e.country].filter(Boolean).join(', ')].filter(Boolean).map(esc).join(' | ') +
+    ' &nbsp;<span class="chip ' + esc(e.band) + '">' + e.score + ' ' + esc(e.band) + '</span></p>';
+  if (e.parts && names.length) {
+    h += '<h4>Why this score</h4>' + e.parts.map((v, i) => names[i] ? '<div class="pbar"><span>' + esc(names[i][0]) + '</span><i><u style="width:' + Math.round(100 * v / names[i][1]) + '%"></u></i><span>' + v + '/' + names[i][1] + '</span></div>' : '').join('');
+  }
+  const cl = checklistFor(e);
+  h += '<h4>What to check</h4>' + (cl.length ? '<ul>' + cl.map(c => '<li><span class="ptag">' + esc(c[0]) + '</span>' + esc(c[1]) + '</li>').join('') + '</ul>' :
+    '<div class="small">No specific indicators were found in this report, so there is no specific checklist.</div>');
+  const lk = (D.links || []).filter(r => (r.ids || []).includes(e.id));
+  if (lk.length) h += '<h4>Linked reports</h4><ul>' + lk.map(r => '<li><b>' + esc(r.name) + '</b> <span class="small">(' + esc(r.type) + ') appears in ' + r.n + ' separate reports, latest ' + esc(r.last) + '</span>' + (r.note ? '<div class="small">' + esc(r.note) + '</div>' : '') + '</li>').join('') + '</ul>';
+  if (e.url) h += '<p style="margin:12px 0 0"><a href="' + esc(safe(e.url)) + '" target="_blank" rel="noopener noreferrer">Open the source report</a></p>';
+  h += '<p class="small" style="margin:12px 0 0;color:#66758a">' + esc((D.checklists || {}).note || '') + ' The facts come from automatic reading of a news report and can be wrong: verify before acting.</p>';
+  $('evBody').innerHTML = h; $('evModal').classList.add('on');
+}
+$('evT').addEventListener('click', ev => { const c = ev.target.closest('.chip[data-id]'); if (c) openEvent(+c.dataset.id); });
+$('evClose').onclick = () => $('evModal').classList.remove('on');
+$('evModal').addEventListener('click', ev => { if (ev.target.id === 'evModal') $('evModal').classList.remove('on'); });
+document.addEventListener('keydown', ev => { if (ev.key === 'Escape') $('evModal').classList.remove('on'); });
+linksPanel(); chainPanel();
 riskBox();
 $('foot').innerHTML = 'Open-source news only. Facts are extracted automatically from headlines and articles and can be wrong - always verify through the link. Risk scores rank reports for analyst attention; they are indicators, not findings. Only extracted facts and links are stored, not article text.';
 </script>

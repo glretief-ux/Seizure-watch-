@@ -73,6 +73,10 @@ def load_events(conn):
     for a, b in [("in_container", "in_container_any"), ("insider", "insider_any"), ("organized", "organized_any"),
                  ("coverload", "coverload_any"), ("controlled_delivery", "controlled_any"), ("arrests", "arrests_any")]:
         ev[a] = ev[b]
+    # entity recognition also stores police forces and stray words as "shipping line" / "vessel": keep only plausible ones
+    from . import links as _links
+    ev["shipping_line"] = ev["shipping_line"].apply(_links.clean_lines)
+    ev["vessel"] = ev["vessel"].apply(_links.clean_vessel)
     ev["concealment"] = ev["conceal_any"].replace("", None)
     ev = ev.drop(columns=[c for c in ev.columns if c.endswith("_any")])
     ev["date"] = ev["first_seen"]
@@ -279,34 +283,6 @@ def _new_combo(ev, field, asof, cfg, label_fn):
     return out
 
 
-def _recurring_links(ev, asof, cfg):
-    """Flag a vessel or shipping line that appears in two or more distinct
-    events (an organised-network signal, not just a repeated article about
-    one seizure - `ev` is already one row per event). Only surfaced while
-    at least one of the linked events is still inside the recent trend
-    window, so the alert naturally ages out like the others.
-
-    Note: shipping_line can hold several names joined with "; " when an
-    article/NER mentions more than one - this only links on an exact
-    string match, so "Maersk" and "Maersk; MSC" won't be connected. A
-    proper fix would split and match on each name individually; left as a
-    known limitation for now rather than a silent bug."""
-    A = cfg["analysis"]
-    window_start = asof - pd.Timedelta(days=A["trend_window_days"] - 1)
-    out = []
-    for field, label in [("vessel", "Vessel"), ("shipping_line", "Shipping line")]:
-        e = ev[ev[field].notna() & (ev[field] != "")]
-        for name, g in e.groupby(field):
-            if len(g) < 2 or not (g["date"] >= window_start).any():
-                continue
-            out.append({"severity": "High", "type": "RECURRING LINK",
-                        "title": f"{label} linked to {len(g)} separate seizures: {name}",
-                        "detail": f"First seen {g['date'].min().date()}, most recent {g['date'].max().date()}. "
-                                  f"Drug(s): {', '.join(sorted(set(g['primary_drug'])))}.",
-                        "urls": _urls(g)})
-    return out
-
-
 def build_alerts(ev, corridors, asof, cfg, history_ok):
     A = cfg["analysis"]
     alerts = []
@@ -350,7 +326,6 @@ def build_alerts(ev, corridors, asof, cfg, history_ok):
         et = ev[ev["transport"].notna() & (ev["transport"] != "")]
         alerts += _new_combo(et, "transport", asof, cfg,
                              lambda drug, val: f"New transport mode for {drug}: {val}")
-        alerts += _recurring_links(ev, asof, cfg)
     order = {"High": 0, "Medium": 1, "Low": 2}
     seen, out = set(), []
     for a in sorted(alerts, key=lambda a: order[a["severity"]]):
@@ -372,6 +347,13 @@ def run(conn, cfg, asof=None):
     history_ok = history_days >= cfg["analysis"]["min_history_days"]
     corr = corridor_table(ev, asof, cfg, history_ok)
     alerts = build_alerts(ev, corr, asof, cfg, history_ok)
+    from . import links as _links
+    repeat = _links.repeat_links(ev, asof, cfg)
+    chain = _links.production_chain(ev, asof, cfg)
+    extra = _links.link_alerts(repeat) + _links.chain_alerts(chain, asof)
+    have = {a["title"] for a in alerts}
+    alerts = sorted(alerts + [a for a in extra if a["title"] not in have],
+                    key=lambda a: {"High": 0, "Medium": 1, "Low": 2}[a["severity"]])
     w = asof - pd.Timedelta(days=6)
     pw = w - pd.Timedelta(days=7)
     cur, prev = ev[ev["date"] >= w], ev[(ev["date"] >= pw) & (ev["date"] < w)]
@@ -384,4 +366,5 @@ def run(conn, cfg, asof=None):
     }
     return {"events": ev, "corridors": corr, "conceal": concealment_matrix(ev, asof),
             "hotspots": hotspot_table(ev, asof, cfg), "alerts": alerts, "kpis": kpis,
-            "asof": asof, "history_days": history_days, "history_ok": history_ok}
+            "asof": asof, "history_days": history_days, "history_ok": history_ok,
+            "links": repeat, "chain": chain}
