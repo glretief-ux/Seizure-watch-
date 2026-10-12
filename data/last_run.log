@@ -1,0 +1,65 @@
+[1/4] Searching the web (last 2 day(s))...
+   RSS Hong Kong government press releases (includes Customs): 100 items
+   RSS UK National Crime Agency: 20 items
+   RSS UK Border Force: 20 items
+   ! https://ndlea.gov.ng/feed/... HTTPError
+   RSS NDLEA Nigeria: 0 items
+   Official websites (28 searched): 1898 headlines
+   Google News: 5464 headlines
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28cocaine%20OR%20heroin%20OR%20metha... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28precursor%20chemicals%20OR%20cland... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28stolen%20vehicles%20OR%20stolen%20... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22CITES%20timber%22%20OR%20%22pro... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28ivory%20OR%20%22rhino%20horn%22%20... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22CITES%22%20OR%20%22protected%20... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28illegal%20firearms%20OR%20weapons%... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28coca%C3%ADna%20OR%20hero%C3%ADna%2... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28productos%20qu%C3%ADmicos%20OR%20p... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28veh%C3%ADculos%20robados%29%20%28d... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22piezas%20arqueol%C3%B3gicas%22%... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28coca%C3%AFne%20OR%20h%C3%A9ro%C3%A... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28v%C3%A9hicules%20vol%C3%A9s%29%20%... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28armes%20a%20feu%20OR%20munitions%2... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22biens%20culturels%22%20OR%20ant... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28ve%C3%ADculos%20roubados%29%20%28a... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28armas%20de%20fogo%20OR%20muni%C3%A... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%D9%83%D9%88%D9%83%D8%A7%D9%8A%D9%... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%D9%85%D9%88%D8%A7%D8%AF%20%D9%83%... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22%D9%82%D8%B7%D8%B9%20%D8%A3%D8%... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28kokain%20OR%20eroin%20OR%20esrar%2... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28kimyasal%20OR%20%22tar%C4%B1m%20il... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22tarihi%20eser%22%29%20%28%22ele... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%D0%BA%D0%BE%D0%BA%D0%B0%D0%B8%D0%... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%D1%85%D0%B8%D0%BC%D0%B8%D0%BA%D0%... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22%D0%BA%D1%83%D0%BB%D1%8C%D1%82%... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%E5%8D%B1%E9%99%A9%E5%8C%96%E5%AD%... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%E0%A4%95%E0%A5%8B%E0%A4%95%E0%A5%... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%E0%A4%B0%E0%A4%B8%E0%A4%BE%E0%A4%... HTTPError
+   GDELT: 0 headlines
+      1144 candidate headlines, 213 new
+[2/4] Reading articles...
+   ! googlenewsdecoder is not available (ImportError: Modest backend is deprecated since selectolax 1.0. It's outdated, not maintained, contains bugs and does not follow modern HTML5 standards. Please use lexbor backend instead: `from selectolax.lexbor import LexborHTMLParser`.); reading headlines and snippets only
+      read in full: 0; headline + snippet only: 213
+[3/4] Extracting facts and storing...
+      NER supplemented 28 article(s) (unrecognised place names logged to ner_places for review)
+      stored 213, of which 133 are seizure reports
+[4/4] Analysing and building report...
+      attempted 150 older headline(s) that predate this feature (211 translated, 55 failed and kept as-is; last error: _via_google: TooManyRequests: Server Error: You made too many requests to the server.According to google, you are allowed to make 5 requests per secondand up to 200k requests per day. You can wait and try again later oryou can try the translate_batch function)
+Done. 7517 events in report, 313 alerts.
+Traceback (most recent call last):
+  File "/home/runner/work/Seizure-watch-/Seizure-watch-/run_daily.py", line 159, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/home/runner/work/Seizure-watch-/Seizure-watch-/run_daily.py", line 143, in main
+    b = bulletin.build(res, cfg, args.out)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/Seizure-watch-/Seizure-watch-/swatch/bulletin.py", line 371, in build
+    html, text = render_html(c), render_text(c)
+                 ^^^^^^^^^^^^^^
+  File "/home/runner/work/Seizure-watch-/Seizure-watch-/swatch/bulletin.py", line 299, in render_html
+    cats = _panel("What was seized", _hbar(c["cat_bars"], [NAVY, PURPLE, TEAL, AMBER, GREEN, RED, GREY][:len(c["cat_bars"])], label_w=150))
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/Seizure-watch-/Seizure-watch-/swatch/bulletin.py", line 186, in _hbar
+    col = (colors[i] if colors else SERIES[i % len(SERIES)])
+           ~~~~~~^^^
+IndexError: list index out of range
