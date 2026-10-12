@@ -1,8 +1,8 @@
 SEIZURE WATCH - weekly bulletin, 05 Oct - 11 Oct 2026
 
-1857 seizure reports this week (previous week 2081); 6 high risk; 348.4 t reported.
-Main drugs: Cannabis (546), Cocaine (346), NSA (223)
-Main countries: India (177), Turkey (112), Brazil (53), Egypt (51)
+1886 seizure reports this week (previous week 2081); 7 high risk; 350.3 t reported.
+Main drugs: Cannabis (552), Cocaine (354), NSA (226)
+Main countries: India (178), Turkey (112), Brazil (55), Egypt (52)
 
 NEW AND SURGING CORRIDORS
 - Ghana -> South Africa: NEW (16 this period, 0 before; mainly Heroin/Opium)
@@ -17,16 +17,16 @@ UNUSUAL EVENTS (highest risk first)
   https://www.info.gov.hk/gia/general/202610/07/P2026100700698.htm
 - [High 60] 11 Oct | Cannabis | Hong Kong | Philippines -> Hong Kong | Legitimate cargo (industrial/goods); Luggage / passenger goods | cargo: cement
   https://www.info.gov.hk/gia/general/202610/11/P2026101100219.htm
+- [High 55] 11 Oct | Cocaine | 52 kg | Costa Rica | Legitimate cargo (food/produce) | cargo: fruta
+  https://news.google.com/rss/articles/CBMi5gFBVV95cUxNaFlITElwMnVnc2dxSnNyMHJONlFUdklpaWJKcy1CMkQ3Y0lySGlxQlpvM2ZpbTdRRjJKcjJObkdTYVdxWEVCdG1nQ2F1MEhCeXF1dWFwTzNuZlkyZHo4R0dhREp5RHJOVkZrZmxHX0RBTGw4RU15UWVud1lMbmlRUFFDS0ZTTnZsS1ROY2h0a1BWZGFqWE1INTJLZUROQmN6RHJpNFBIR003a1Q1NEYzd2ZNR0loaWg5XzVuZ0FKTC1yUzVuUy1NM3pFUGZnQUtmQXVWdmU5T0xXTHNNV2U2UkEyWEpwUQ?oc=5
 - [High 50] 09 Oct | Cocaine | 1.6 t | Ecuador | Legitimate cargo (industrial/goods) | cargo: maquinaria
   https://news.google.com/rss/articles/CBMi1gFBVV95cUxOYUdxSUZJclVqX3NjZ0pwb0ZJX0VJdjV5dndYbUVwbmVMUWljRlhTQXpwWXhVRzlPeUgwUTZoSkZEbjdLOVYxSXl2ZGR2cnMydVlZdnI3X19nOXdiS0lqdzI5aXdFRmNsZWE1ZmpfVDdpVGdKeHEtbXdVQ2J3bWt0WDh2d1lRTlVfMWNQN05xa1BzRnM5cUF2TUZ5MGx2SndsT3dEbjI4aTNjQWk4azJGTGVfVk9NWGl2SV9wbmJraXpEanRGbTg0RGdLMVBEcldjQmE0VUFR?oc=5
 - [High 50] 06 Oct | Methamphetamine | 521 kg | Laos | Malaysia -> Laos | Legitimate cargo (industrial/goods); Postal / parcel | cargo: vape products
   https://news.google.com/rss/articles/CBMiywFBVV95cUxNQ2c1M0VWTHFJRzB4YWd2OGJUR01aaHRjX2JqeFZlbWY4d21OOXFieWdpVTRBWV9IS1dzNmc5NU5tejZGZWRvN0dtNW5vbUFWWFUtYUoteWR1MmF5bi1jUjN0bWtTSUduU0VDbEt3aXFTZTBEaDJqazRXTjNqLVNENF9QU050anRja09Oc0NnbWxFNzRnVXNTZzhWd1VTTnpKTmF4WUhXdzRldGpzQjhtWTBTQTJNVXVMUThoRE1CV0RSSGFsNGkxLThYWdIB0AFBVV95cUxQWEZOSC1xOGpYMTY4R0ZOUWxvY3dKblpPWW4xamxnbVRKZ3BpYWFGbEdqUk1VX25rVEJmWlRLQ0Y4bHNfY0xtUTlWcUN1cm85VjVHVEd6b1NjLURDS0ZCNEZYdnMxeFF5V1BZSUd5Q19ic1NlaG94SDRZREQ3MlFmOUFGclhWX3E0b3ZZZGtMQnF3dGxOMkZ2LXN0b1k0T3p6N1pQbzVCTFJXSXNEZXFMVFRtQlBSX24xRUo0ak8wWWtsSkhDUG5SUnp1MUN5R0gw?oc=5
 - [High 50] 11 Oct | NSA | 15 kg | Hong Kong | France -> Taiwan -> Hong Kong | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Luggage / passenger goods | cargo: coffee; cement
   https://www.info.gov.hk/gia/general/202610/11/P2026101100655.htm
-- [High 50] 05 Oct | Cannabis | Hong Kong airport | Thailand -> Hong Kong | Legitimate cargo (industrial/goods); Luggage / passenger goods | cargo: cement
-  https://www.info.gov.hk/gia/general/202610/05/P2026100500343.htm
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (48), Postal / parcel (33), Legitimate cargo (food/produce) (12)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (48), Postal / parcel (33), Legitimate cargo (food/produce) (14)
 Cover cargo named: cement (11), الات (11), फल (5), मशीन (3), spare parts (3)
 
 Coverage: searching 10 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Vietnamese, Chinese). 48 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
