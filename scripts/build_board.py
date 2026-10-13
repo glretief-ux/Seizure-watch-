@@ -20,3 +20,10 @@ out = {"asof": D["meta"]["asof"], "generated": D["meta"]["generated"], "first": 
 path = os.path.join(ROOT, "board", "data.js")
 open(path, "w", encoding="utf-8").write("window.OSD=" + json.dumps(out, ensure_ascii=False, separators=(",", ":"), default=lambda x: None) + ";")
 print(len(ev), "events,", round(os.path.getsize(path) / 1e6, 2), "MB")
+
+# also publish a copy on the GitHub Pages site (docs/board/), so the board has a normal web link
+import shutil
+dst = os.path.join(ROOT, "docs", "board"); os.makedirs(dst, exist_ok=True)
+for f in ("index.html", "data.js", "world.js", "pccp-logo-banner.jpg"):
+    shutil.copy2(os.path.join(ROOT, "board", f), os.path.join(dst, f))
+print("copied to docs/board/")

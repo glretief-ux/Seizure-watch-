@@ -43,6 +43,8 @@ jobs:
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
           BULLETIN_TO: ${{ secrets.BULLETIN_TO }}
           BULLETIN_FROM: ${{ secrets.BULLETIN_FROM }}
+      - name: Build the seizure board for the web
+        run: python scripts/build_board.py
       - name: Keep the run log (so a failure can be read)
         if: always()
         run: |
