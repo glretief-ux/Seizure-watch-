@@ -231,6 +231,10 @@ table.mini{border-collapse:collapse;font-size:13px;margin-top:6px}table.mini td{
 
 <div class="card"><h2>Events <span class="small" id="evCount"></span></h2><div id="cardBar" class="small"></div><div class="tw2" id="evTop"><div></div></div><div class="tw" id="evWrap" style="max-height:640px"><table id="evT"></table></div></div>
 
+<div class="card" id="libCard"><h2>News article library <span class="small" id="libCount"></span></h2>
+  <div class="small" style="margin-bottom:8px">Every news article behind the events above, newest first. Type to search by headline, drug, country, place, route or news outlet.</div>
+  <input id="libQ" type="search" placeholder="Search articles, e.g. cocaine Antwerp, cannabis India, container..." style="width:100%;padding:9px 12px;border:1px solid #9fb4cf;border-radius:8px;font:inherit;margin-bottom:10px">
+  <div id="libList"></div><div style="text-align:center;margin-top:10px"><button id="libMore" style="display:none;padding:8px 18px;border:0;border-radius:8px;background:var(--brand);color:#fff;font:inherit;cursor:pointer">Show more</button></div></div>
 <footer id="foot"></footer>
 </div>
 
@@ -863,6 +867,29 @@ $('evT').addEventListener('click', ev => { const c = ev.target.closest('.chip[da
   top.addEventListener('scroll', () => { if (!lock) { lock = true; wrap.scrollLeft = top.scrollLeft; } lock = false; });
   wrap.addEventListener('scroll', () => { if (!lock) { lock = true; top.scrollLeft = wrap.scrollLeft; } lock = false; });
   size(); window.addEventListener('resize', size); new MutationObserver(size).observe($('evT'), {childList: true});
+})();
+
+(function () {
+  const all = (D.events || []).filter(e => e.url).slice().sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+  const hay = all.map(e => [e.title_en, e.title, e.drug, e.country, e.place, e.route, e.corridor, e.outlets, e.conceal, e.date].filter(Boolean).join(' ').toLowerCase());
+  let hits = all.map((_, i) => i), shown = 0; const PAGE = 100;
+  const row = e => '<div class="wi" style="padding:7px 0;border-bottom:1px solid #e1e8f2"><span class="chip ' + esc(e.band) + '">' + e.score + '</span> <b>' + esc(e.date) + '</b> | ' + esc(e.drug) +
+    (e.country ? ' | ' + esc([e.place, e.country].filter(Boolean).join(', ')) : '') + '<br><a href="' + esc(safe(e.url)) + '" target="_blank" rel="noopener noreferrer">' + esc(e.title_en || e.title || e.url) + '</a>' +
+    (e.outlets ? ' <span class="small">(' + esc(e.outlets) + ')</span>' : '') + '</div>';
+  function draw(reset) {
+    if (reset) { shown = 0; $('libList').innerHTML = ''; }
+    const next = hits.slice(shown, shown + PAGE);
+    $('libList').insertAdjacentHTML('beforeend', next.map(i => row(all[i])).join(''));
+    shown += next.length;
+    $('libCount').textContent = '(' + hits.length + ' of ' + all.length + ' articles)';
+    $('libMore').style.display = shown < hits.length ? '' : 'none';
+    if (!hits.length) $('libList').innerHTML = '<div class="small">No articles match your search.</div>';
+  }
+  let t; $('libQ').addEventListener('input', () => { clearTimeout(t); t = setTimeout(() => {
+    const w = $('libQ').value.toLowerCase().split(/\s+/).filter(Boolean);
+    hits = []; hay.forEach((h, i) => { if (w.every(x => h.includes(x))) hits.push(i); }); draw(true); }, 150); });
+  $('libMore').onclick = () => draw(false);
+  draw(true);
 })();
 $('evClose').onclick = () => $('evModal').classList.remove('on');
 $('evModal').addEventListener('click', ev => { if (ev.target.id === 'evModal') $('evModal').classList.remove('on'); });
