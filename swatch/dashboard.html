@@ -41,7 +41,7 @@ header .sub{opacity:.8;font-size:12px}
 .alert .t{font-weight:600}
 .alert .d{color:var(--mute);font-size:12.5px;margin-top:2px}
 .alert .k{font-size:10.5px;font-weight:700;letter-spacing:.4px;color:var(--mute);text-transform:uppercase}
-.tw{overflow-x:auto}
+.tw{overflow-x:auto}.tw2{overflow-x:scroll;overflow-y:hidden;height:18px;margin-bottom:2px}.tw2>div{height:1px}.tw::-webkit-scrollbar,.tw2::-webkit-scrollbar{height:14px}.tw::-webkit-scrollbar-thumb,.tw2::-webkit-scrollbar-thumb{background:#9fb4cf;border-radius:7px}.tw::-webkit-scrollbar-track,.tw2::-webkit-scrollbar-track{background:#e4edf8}
 table{border-collapse:collapse;width:100%;font-size:12.5px}
 th{position:sticky;top:0;background:#f0f3f7;text-align:left;padding:8px 8px;cursor:pointer;white-space:nowrap;font-size:11px;text-transform:uppercase;letter-spacing:.3px;color:var(--mute)}
 td{padding:7px 8px;border-top:1px solid var(--line);vertical-align:top}
@@ -229,7 +229,7 @@ table.mini{border-collapse:collapse;font-size:13px;margin-top:6px}table.mini td{
   <details class="lk"><summary><b>Open the explanation</b><span class="lks">The score (0-100) ranks reports for analyst attention. It is built from five separate dimensions, so no single factor decides it. Seizure weight is capped at 10 points.</span></summary><div class="lkb small" id="riskHow"></div></details>
 </div>
 
-<div class="card"><h2>Events <span class="small" id="evCount"></span></h2><div id="cardBar" class="small"></div><div class="tw" style="max-height:640px"><table id="evT"></table></div></div>
+<div class="card"><h2>Events <span class="small" id="evCount"></span></h2><div id="cardBar" class="small"></div><div class="tw2" id="evTop"><div></div></div><div class="tw" id="evWrap" style="max-height:640px"><table id="evT"></table></div></div>
 
 <footer id="foot"></footer>
 </div>
@@ -856,6 +856,14 @@ function openEvent(id) {
   $('evBody').innerHTML = h; $('evModal').classList.add('on');
 }
 $('evT').addEventListener('click', ev => { const c = ev.target.closest('.chip[data-id], a.dtl[data-id]'); if (c) { ev.preventDefault(); openEvent(+c.dataset.id); } });
+
+(function () {
+  const top = $('evTop'), wrap = $('evWrap'); let lock = false;
+  const size = () => { top.firstChild.style.width = $('evT').scrollWidth + 'px'; };
+  top.addEventListener('scroll', () => { if (!lock) { lock = true; wrap.scrollLeft = top.scrollLeft; } lock = false; });
+  wrap.addEventListener('scroll', () => { if (!lock) { lock = true; top.scrollLeft = wrap.scrollLeft; } lock = false; });
+  size(); window.addEventListener('resize', size); new MutationObserver(size).observe($('evT'), {childList: true});
+})();
 $('evClose').onclick = () => $('evModal').classList.remove('on');
 $('evModal').addEventListener('click', ev => { if (ev.target.id === 'evModal') $('evModal').classList.remove('on'); });
 document.addEventListener('keydown', ev => { if (ev.key === 'Escape') $('evModal').classList.remove('on'); });
