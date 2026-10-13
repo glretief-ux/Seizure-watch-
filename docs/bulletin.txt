@@ -1,11 +1,11 @@
 SEIZURE WATCH - weekly bulletin, 07 Oct - 13 Oct 2026
 
-1923 seizure reports this week (previous week 1986); 10 high risk; 366.6 t reported.
-Main drugs: Cannabis (532), Cocaine (310), NSA (234)
-Main countries: India (345), Turkey (269), Brazil (99), United States (63)
+1932 seizure reports this week (previous week 1986); 10 high risk; 368.9 t reported.
+Main drugs: Cannabis (534), Cocaine (308), NSA (236)
+Main countries: India (347), Turkey (272), Brazil (100), United States (65)
 
 NEW AND SURGING CORRIDORS
-- Pakistan -> India: SURGING (21 this period, 3 before; mainly Heroin/Opium)
+- Pakistan -> India: SURGING (22 this period, 3 before; mainly Heroin/Opium)
 - Ghana -> South Africa: NEW (16 this period, 0 before; mainly Heroin/Opium)
 - Mexico -> United States: SURGING (15 this period, 1 before; mainly Methamphetamine)
 - Thailand -> India: NEW (14 this period, 0 before; mainly Cannabis)
@@ -26,8 +26,8 @@ UNUSUAL EVENTS (highest risk first)
 - [High 55] 11 Oct | Cocaine | 52 kg | Costa Rica | Legitimate cargo (food/produce) | cargo: fruta
   https://news.google.com/rss/articles/CBMi5gFBVV95cUxNaFlITElwMnVnc2dxSnNyMHJONlFUdklpaWJKcy1CMkQ3Y0lySGlxQlpvM2ZpbTdRRjJKcjJObkdTYVdxWEVCdG1nQ2F1MEhCeXF1dWFwTzNuZlkyZHo4R0dhREp5RHJOVkZrZmxHX0RBTGw4RU15UWVud1lMbmlRUFFDS0ZTTnZsS1ROY2h0a1BWZGFqWE1INTJLZUROQmN6RHJpNFBIR003a1Q1NEYzd2ZNR0loaWg5XzVuZ0FKTC1yUzVuUy1NM3pFUGZnQUtmQXVWdmU5T0xXTHNNV2U2UkEyWEpwUQ?oc=5
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (108), Postal / parcel (45), Legitimate cargo (food/produce) (37)
-Cover cargo named: cement (30), الات (21), plastic (8), chemicals (8), फल (6)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (114), Postal / parcel (46), Legitimate cargo (food/produce) (43)
+Cover cargo named: cement (32), الات (21), plastic (10), chemicals (9), फल (8)
 
 Coverage: searching 10 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Vietnamese, Chinese). 48 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
 Leads from open sources, not confirmed facts. Verify before acting.
