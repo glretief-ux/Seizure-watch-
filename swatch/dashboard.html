@@ -234,7 +234,7 @@ table.mini{border-collapse:collapse;font-size:13px;margin-top:6px}table.mini td{
 <div class="card" id="libCard"><h2>News article library <span class="small" id="libCount"></span></h2>
   <div class="small" style="margin-bottom:8px">Every news article behind the events above, newest first. Type to search by headline, drug, country, place, route or news outlet.</div>
   <input id="libQ" type="search" placeholder="Search articles, e.g. cocaine Antwerp, cannabis India, container..." style="width:100%;padding:9px 12px;border:1px solid #9fb4cf;border-radius:8px;font:inherit;margin-bottom:10px">
-  <div id="libList"></div><div style="text-align:center;margin-top:10px"><button id="libMore" style="display:none;padding:8px 18px;border:0;border-radius:8px;background:var(--brand);color:#fff;font:inherit;cursor:pointer">Show more</button></div></div>
+  <div id="libList" style="overflow-y:auto;border:1px solid #c9d6e8;border-radius:8px;padding:0 12px"></div><div class="small" id="libHint" style="margin-top:6px;text-align:center"></div></div>
 <footer id="foot"></footer>
 </div>
 
@@ -869,23 +869,30 @@ $('evT').addEventListener('click', ev => { const c = ev.target.closest('.chip[da
 (function () {
   const all = (D.events || []).filter(e => e.url).slice().sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
   const hay = all.map(e => [e.title_en, e.title, e.drug, e.country, e.place, e.route, e.corridor, e.outlets, e.conceal, e.date].filter(Boolean).join(' ').toLowerCase());
-  let hits = all.map((_, i) => i), shown = 0; const PAGE = 100;
-  const row = e => '<div class="wi" style="padding:7px 0;border-bottom:1px solid #e1e8f2"><span class="chip ' + esc(e.band) + '">' + e.score + '</span> <b>' + esc(e.date) + '</b> | ' + esc(e.drug_label || e.drug) +
+  let hits = all.map((_, i) => i), shown = 0; const PAGE = 30, VISIBLE = 10;
+  const row = e => '<div class="wi" style="padding:7px 0;border-bottom:1px solid #e1e8f2"><b>' + esc(e.date) + '</b> | ' + esc(e.drug_label || e.drug) +
     (e.country ? ' | ' + esc([e.place, e.country].filter(Boolean).join(', ')) : '') + '<br><a href="' + esc(safe(e.url)) + '" target="_blank" rel="noopener noreferrer">' + esc(e.title_en || e.title || e.url) + '</a>' +
     (e.outlets ? ' <span class="small">(' + esc(e.outlets) + ')</span>' : '') + '</div>';
+  function sizeBox() {   // the box is as tall as 10 articles; scroll inside it for the rest
+    const rows = $('libList').querySelectorAll('.wi'); let h = 0;
+    for (let i = 0; i < Math.min(VISIBLE, rows.length); i++) h += rows[i].offsetHeight;
+    $('libList').style.maxHeight = (h || 520) + 'px';
+    $('libHint').textContent = hits.length > VISIBLE ? 'Showing 10 at a time - scroll inside the box for more (' + shown + ' of ' + hits.length + ' loaded).' : '';
+  }
   function draw(reset) {
     if (reset) { shown = 0; $('libList').innerHTML = ''; }
     const next = hits.slice(shown, shown + PAGE);
     $('libList').insertAdjacentHTML('beforeend', next.map(i => row(all[i])).join(''));
     shown += next.length;
     $('libCount').textContent = '(' + hits.length + ' of ' + all.length + ' articles)';
-    $('libMore').style.display = shown < hits.length ? '' : 'none';
+    sizeBox();
     if (!hits.length) $('libList').innerHTML = '<div class="small">No articles match your search.</div>';
   }
   let t; $('libQ').addEventListener('input', () => { clearTimeout(t); t = setTimeout(() => {
     const w = $('libQ').value.toLowerCase().split(/\s+/).filter(Boolean);
     hits = []; hay.forEach((h, i) => { if (w.every(x => h.includes(x))) hits.push(i); }); draw(true); }, 150); });
-  $('libMore').onclick = () => draw(false);
+  $('libList').addEventListener('scroll', () => { const b = $('libList'); if (shown < hits.length && b.scrollTop + b.clientHeight >= b.scrollHeight - 80) draw(false); });
+  window.addEventListener('resize', sizeBox);
   draw(true);
 })();
 $('evClose').onclick = () => $('evModal').classList.remove('on');
