@@ -1,18 +1,22 @@
 SEIZURE WATCH - weekly bulletin, 07 Oct - 13 Oct 2026
 
-1932 seizure reports this week (previous week 1986); 10 high risk; 368.9 t reported.
-Main drugs: Cannabis (534), Cocaine (308), NSA (236)
-Main countries: India (347), Turkey (272), Brazil (100), United States (65)
+2082 seizure reports this week (previous week 1986); 15 high risk; 409.0 t reported.
+Main drugs: Cannabis (583), Cocaine (337), NSA (256)
+Main countries: India (364), Turkey (288), Brazil (132), United States (88)
 
 NEW AND SURGING CORRIDORS
 - Pakistan -> India: SURGING (22 this period, 3 before; mainly Heroin/Opium)
 - Ghana -> South Africa: NEW (16 this period, 0 before; mainly Heroin/Opium)
 - Mexico -> United States: SURGING (15 this period, 1 before; mainly Methamphetamine)
-- Thailand -> India: NEW (14 this period, 0 before; mainly Cannabis)
+- Thailand -> India: NEW (15 this period, 0 before; mainly Cannabis)
 - Nepal -> India: SURGING (10 this period, 1 before; mainly Cannabis)
 - Lebanon -> Syria: NEW (10 this period, 0 before; mainly NSA)
 
 UNUSUAL EVENTS (highest risk first)
+- [High 80] 13 Oct | Cocaine | 2.6 t | Australia | Fiji -> Australia | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Vessel hull / underwater | cargo: seafood; fish; cement; canned
+  https://pmn.co.nz/read/law-and-order/cocaine-traffickers-exploit-pacific-tuna-routes-as-drug-seizures-mount-new-report-reveals
+- [High 80] 13 Oct | Cocaine | 150 kg | Rio de Janeiro | Legitimate cargo (food/produce); Vessel hull / underwater | cargo: cacao
+  https://www.diariodoamapa.com.br/cadernos/policia/nova-rota-do-pcc-e-cv-usa-amapa-para-mandar-cocaina-para-a-europa/
 - [High 65] 13 Oct | Cannabis | 3.8 t | Karachi | Afghanistan -> Pakistan | Hidden compartment (unspecified)
   https://arynews.tv/two-suspects-arrested-for-smuggling-drugs-hidden-in-slippers-in-karachi
 - [High 65] 11 Oct | Methamphetamine | 54 kg | Assam | Myanmar -> India | Legitimate cargo (industrial/goods); Vehicle compartment | cargo: cement
@@ -21,13 +25,9 @@ UNUSUAL EVENTS (highest risk first)
   https://www.info.gov.hk/gia/general/202610/07/P2026100700698.htm
 - [High 60] 11 Oct | Cannabis | Hong Kong | Philippines -> Hong Kong | Legitimate cargo (industrial/goods); Luggage / passenger goods | cargo: cement
   https://www.info.gov.hk/gia/general/202610/11/P2026101100219.htm
-- [High 55] 13 Oct | Methamphetamine | 454 kg | Riverside | Legitimate cargo (industrial/goods); Vehicle compartment
-  https://news.google.com/rss/articles/CBMiwAFBVV95cUxPNDhGcTg2dVlKSTNDMHNWX1RXOUxVbGhncnRIWERWZFZpRzNmSG5NOERJQUN0bG1jczNON1pnOEk5cWtZQTdhVkxaSE9qY2dwS1M4LUhZd1E3NU9LRGMwTTNQUlp0M21zVUE0M2htRElWa0JIdFhZYkpBV0pMbzdreDNzamxURTJhVDJ4MWc5MG9JQUxEUG1QNm1wZzd1Tk8ydlN0S0VVVGhHUHdRYjl5RzZmYTdpdUwycUZOMEduUE8?oc=5
-- [High 55] 11 Oct | Cocaine | 52 kg | Costa Rica | Legitimate cargo (food/produce) | cargo: fruta
-  https://news.google.com/rss/articles/CBMi5gFBVV95cUxNaFlITElwMnVnc2dxSnNyMHJONlFUdklpaWJKcy1CMkQ3Y0lySGlxQlpvM2ZpbTdRRjJKcjJObkdTYVdxWEVCdG1nQ2F1MEhCeXF1dWFwTzNuZlkyZHo4R0dhREp5RHJOVkZrZmxHX0RBTGw4RU15UWVud1lMbmlRUFFDS0ZTTnZsS1ROY2h0a1BWZGFqWE1INTJLZUROQmN6RHJpNFBIR003a1Q1NEYzd2ZNR0loaWg5XzVuZ0FKTC1yUzVuUy1NM3pFUGZnQUtmQXVWdmU5T0xXTHNNV2U2UkEyWEpwUQ?oc=5
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (114), Postal / parcel (46), Legitimate cargo (food/produce) (43)
-Cover cargo named: cement (32), الات (21), plastic (10), chemicals (9), फल (8)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (156), Legitimate cargo (food/produce) (67), Postal / parcel (55)
+Cover cargo named: cement (45), الات (31), plastic (14), फल (9), chemicals (9)
 
 Coverage: searching 10 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Vietnamese, Chinese). 48 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
 Leads from open sources, not confirmed facts. Verify before acting.
