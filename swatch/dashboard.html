@@ -225,6 +225,16 @@ table.mini{border-collapse:collapse;font-size:13px;margin-top:6px}table.mini td{
   <div id="lookList"></div>
 </div>
 
+<div class="card" id="infCard"><h2>What this data suggests <span class="small">(law enforcement view of the events in view)</span></h2>
+  <div class="small" style="line-height:1.45;margin-bottom:10px">A short reading of the reports in the current filter. It follows the filters above, so change the period, drug or country to see it change. These are patterns in <b>news reports</b>, not in all seizures: they show where to look, not proof.</div>
+  <div class="grid2" style="margin:0">
+    <div><h4 style="margin:0 0 6px;font-size:12.5px;color:var(--brand)">What was seized (share of reports)</h4><div class="chartbox"><canvas id="cInfPie"></canvas></div></div>
+    <div><h4 style="margin:0 0 6px;font-size:12.5px;color:var(--brand)">How it was hidden (number of reports)</h4><div class="chartbox"><canvas id="cInfCol"></canvas></div></div>
+  </div>
+  <h4 style="margin:14px 0 4px;font-size:12.5px;color:var(--brand)">What this suggests</h4>
+  <ul id="infList" style="margin:4px 0 0 18px;padding:0;line-height:1.5"></ul>
+</div>
+
 <div class="card"><h2>How risk is scored</h2>
   <details class="lk"><summary><b>Open the explanation</b><span class="lks">The score (0-100) ranks reports for analyst attention. It is built from five separate dimensions, so no single factor decides it. Seizure weight is capped at 10 points.</span></summary><div class="lkb small" id="riskHow"></div></details>
 </div>
@@ -526,7 +536,51 @@ function render() {
   kpis(v); timeChart(v);
   hbar('cConc', topN(by(v.flatMap(e => e.conceal ? e.conceal.split('; ') : []), x => x), 10), '#2a6f97');
   hbar('cCorr', topN(by(v, e => e.corridor), 10), '#12355b');
-  mode(v); matrix(v); evTable(v); drawMap(v);
+  mode(v); matrix(v); evTable(v); drawMap(v); inferences(v);
+}
+
+// ---- "What this data suggests": a plain-language reading of the events in view, with a pie and a column chart
+function inferences(v) {
+  const n = v.length, pct = (a, b) => b ? Math.round(100 * a / b) : 0, L = [];
+  const share = (arr, f) => topN(by(arr, f), 99);
+  // charts
+  const items = share(v, e => e.drug_label && e.drug === 'NSA' ? 'NSA' : e.drug);
+  const top = items.slice(0, 6), rest = items.slice(6).reduce((s, x) => s + x[1], 0);
+  if (rest) top.push(['Other', rest]);
+  chart('cInfPie', {type: 'pie', data: {labels: top.map(x => x[0] + ' (' + pct(x[1], n) + '%)'), datasets: [{data: top.map(x => x[1]),
+    backgroundColor: top.map(x => x[0] === 'Other' ? '#b8c4d6' : col(x[0]))}]}, options: {plugins: {legend: {position: 'right', labels: {boxWidth: 12, font: {size: 11}}}}}});
+  const conc = topN(by(v.flatMap(e => e.conceal ? e.conceal.split('; ') : []), x => x), 7);
+  chart('cInfCol', {type: 'bar', data: {labels: conc.map(x => x[0].length > 22 ? x[0].replace(' (', '\n(').split('\n') : x[0]), datasets: [{label: 'Reports', data: conc.map(x => x[1]), backgroundColor: '#12355b'}]},
+    options: {plugins: {legend: {display: false}}, scales: {x: {ticks: {font: {size: 10}, maxRotation: 40, minRotation: 20}}, y: {beginAtZero: true}}}});
+  if (n < 5) { $('infList').innerHTML = '<li>Too few reports in this view to draw a pattern. Widen the period or clear a filter.</li>'; return; }
+  // 1 what
+  if (items[0]) L.push('<b>' + esc(items[0][0]) + '</b> makes up ' + pct(items[0][1], n) + '% of the reports' + (items[1] ? ', followed by ' + esc(items[1][0]) + ' (' + pct(items[1][1], n) + '%)' : '') +
+    '. Resource and intelligence priorities can follow this mix, but remember that news coverage favours large and unusual seizures.');
+  // 2 concealment
+  const withC = v.filter(e => e.conceal).length;
+  if (conc[0]) L.push('Concealment is stated in ' + pct(withC, n) + '% of reports. The most common method is <b>' + esc(conc[0][0]) + '</b>' + (conc[1] ? ', then ' + esc(conc[1][0]) : '') +
+    '. Examination training, scanner-image review and risk targeting are best focused on these methods first.');
+  const cover = v.filter(e => /legitimate cargo/i.test(e.conceal || '')).length;
+  if (pct(cover, n) >= 10) L.push(pct(cover, n) + '% of reports describe drugs hidden inside legitimate cargo (food, goods or a cover load). The shipper and consignee, and whether the goods fit the declared trade, deserve as much attention as the container itself.');
+  // 3 geography
+  const ctry = share(v, e => e.country), known = ctry.reduce((s, x) => s + x[1], 0);
+  if (ctry.length > 2) { const t3 = ctry.slice(0, 3); L.push('Seizures cluster in <b>' + t3.map(x => esc(x[0])).join(', ') + '</b> (' + pct(t3.reduce((s, x) => s + x[1], 0), known) + '% of reports with a known country). Strong partner-agency contacts and information exchange with these countries give the best return.'); }
+  const cor = share(v, e => e.corridor).filter(x => x[0]);
+  if (cor.length) L.push('The most repeated route is <b>' + esc(cor[0][0]) + '</b> (' + cor[0][1] + ' reports). Repeated routes are the best candidates for joint operations, controlled deliveries and pre-arrival risk rules.');
+  // 4 transport
+  const tr = share(v.filter(e => e.transport && e.transport !== 'Unknown'), e => e.transport);
+  if (tr.length) { const trn = tr.reduce((s, x) => s + x[1], 0); L.push('Where the transport mode is known, <b>' + esc(tr[0][0]) + '</b> is the most common (' + pct(tr[0][1], trn) + '%). Match inspection capacity, such as scanners, detector dogs and post and passenger screening, to that mode.'); }
+  // 5 networks and insiders
+  const org = v.filter(e => /Organised network/.test(e.flags || '')).length, ins = v.filter(e => e.insider).length;
+  if (org || ins) L.push((org ? pct(org, n) + '% of reports point to an organised network' : '') + (org && ins ? ' and ' : '') + (ins ? pct(ins, n) + '% to an insider (port, airport or customs staff)' : '') +
+    '. A seizure is often the start of an investigation: follow the consignee, forwarder and any access irregularities, and use the integrity channel where staff may be involved.');
+  // 6 trend, whole data (not the filter)
+  const today = new Date(D.meta.asof || fmt(new Date())), d30 = fmt(new Date(today.getTime() - 30 * 864e5)), d60 = fmt(new Date(today.getTime() - 60 * 864e5));
+  const a = D.events.filter(e => e.date > d30).length, b = D.events.filter(e => e.date > d60 && e.date <= d30).length;
+  if (b >= 30 && a / b > 3) L.push('The number of reports collected has grown a lot over recent weeks as more sources were added, so a 30-day trend would be misleading and is not shown. Use the alerts for real spikes.');
+  else if (b >= 30 && a / b >= 0.33) L.push('Across all data, reports in the last 30 days are ' + (a >= b ? 'up ' : 'down ') + Math.abs(pct(a - b, b)) + '% on the 30 days before (' + a + ' against ' + b + '). A rise can mean more trafficking, more enforcement or more coverage, so check the alerts before drawing a conclusion.');
+  L.push('Read these as leads, not findings: facts are read automatically from news reports and can be wrong, and every item needs verification through the source link and your own channels.');
+  $('infList').innerHTML = L.map(x => '<li style="margin:6px 0">' + x + '</li>').join('');
 }
 // ---- route map (Leaflet; needs internet for the map tiles)
 const GEO = __GEO__;
