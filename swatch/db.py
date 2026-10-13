@@ -132,11 +132,12 @@ LOCATION_COLS = ["seizure_country", "seizure_place", "location_conf", "origin", 
                  "destination_place", "transit", "route", "corridor"]
 
 
-def backfill_locations(conn, locate_fn):
+def backfill_locations(conn, locate_fn, days=7):
     """Re-read the headline of every seizure report that has no country yet, now that the place list, agency and
     currency cues have grown. Only fills what is empty; never changes a country that was found before.
     Returns how many reports gained a country."""
-    rows = conn.execute("SELECT id, title, COALESCE(source_country, ''), lang FROM articles WHERE relevant=1 AND seizure_country IS NULL").fetchall()
+    rows = conn.execute("SELECT id, title, COALESCE(source_country, ''), lang FROM articles WHERE relevant=1 AND seizure_country IS NULL "
+                        "AND COALESCE(published, fetched) >= date('now', ?)", (f"-{int(days)} day",)).fetchall()
     gained = 0
     for r in rows:
         try:

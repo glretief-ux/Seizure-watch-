@@ -81,7 +81,7 @@ REREAD_SKIP = {"id", "url", "title", "title_key", "source", "published", "fetche
                "title_en", "ner_places", "relevant"}
 
 
-def reread_snippets(conn, cfg, limit=60, days=14):
+def reread_snippets(conn, cfg, limit=60, days=3):
     """Reports stored from a headline and snippet only (the full-text reader was not working) get one more try:
     read the whole article now and fill in whatever the headline did not say (country, place, route, concealment...).
     Only empty fields are filled; nothing found earlier is overwritten. Each report is retried once."""
