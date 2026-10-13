@@ -1,8 +1,8 @@
 SEIZURE WATCH - weekly bulletin, 07 Oct - 13 Oct 2026
 
-1879 seizure reports this week (previous week 1986); 9 high risk; 358.2 t reported.
-Main drugs: Cannabis (524), Cocaine (302), NSA (222)
-Main countries: India (338), Turkey (259), Brazil (91), United States (59)
+1909 seizure reports this week (previous week 1986); 10 high risk; 363.0 t reported.
+Main drugs: Cannabis (531), Cocaine (306), NSA (230)
+Main countries: India (345), Turkey (264), Brazil (98), United States (62)
 
 NEW AND SURGING CORRIDORS
 - Pakistan -> India: SURGING (21 this period, 3 before; mainly Heroin/Opium)
@@ -15,6 +15,8 @@ NEW AND SURGING CORRIDORS
 UNUSUAL EVENTS (highest risk first)
 - [High 65] 13 Oct | Cannabis | 3.8 t | Karachi | Afghanistan -> Pakistan | Hidden compartment (unspecified)
   https://arynews.tv/two-suspects-arrested-for-smuggling-drugs-hidden-in-slippers-in-karachi
+- [High 65] 11 Oct | Methamphetamine | 54 kg | Assam | Myanmar -> India | Legitimate cargo (industrial/goods); Vehicle compartment | cargo: cement
+  https://www.millenniumpost.in/nation/guwahati-ncb-seizes-meth-worth-rs-43-cr-arrests-two-679461
 - [High 60] 07 Oct | Cigarettes | 88 cigarettes | Hong Kong | Philippines -> Hong Kong | Legitimate cargo (industrial/goods); Luggage / passenger goods | cargo: cement
   https://www.info.gov.hk/gia/general/202610/07/P2026100700698.htm
 - [High 60] 11 Oct | Cannabis | Hong Kong | Philippines -> Hong Kong | Legitimate cargo (industrial/goods); Luggage / passenger goods | cargo: cement
@@ -23,11 +25,9 @@ UNUSUAL EVENTS (highest risk first)
   https://news.google.com/rss/articles/CBMiwAFBVV95cUxPNDhGcTg2dVlKSTNDMHNWX1RXOUxVbGhncnRIWERWZFZpRzNmSG5NOERJQUN0bG1jczNON1pnOEk5cWtZQTdhVkxaSE9qY2dwS1M4LUhZd1E3NU9LRGMwTTNQUlp0M21zVUE0M2htRElWa0JIdFhZYkpBV0pMbzdreDNzamxURTJhVDJ4MWc5MG9JQUxEUG1QNm1wZzd1Tk8ydlN0S0VVVGhHUHdRYjl5RzZmYTdpdUwycUZOMEduUE8?oc=5
 - [High 55] 11 Oct | Cocaine | 52 kg | Costa Rica | Legitimate cargo (food/produce) | cargo: fruta
   https://news.google.com/rss/articles/CBMi5gFBVV95cUxNaFlITElwMnVnc2dxSnNyMHJONlFUdklpaWJKcy1CMkQ3Y0lySGlxQlpvM2ZpbTdRRjJKcjJObkdTYVdxWEVCdG1nQ2F1MEhCeXF1dWFwTzNuZlkyZHo4R0dhREp5RHJOVkZrZmxHX0RBTGw4RU15UWVud1lMbmlRUFFDS0ZTTnZsS1ROY2h0a1BWZGFqWE1INTJLZUROQmN6RHJpNFBIR003a1Q1NEYzd2ZNR0loaWg5XzVuZ0FKTC1yUzVuUy1NM3pFUGZnQUtmQXVWdmU5T0xXTHNNV2U2UkEyWEpwUQ?oc=5
-- [High 55] 12 Oct | Cocaine | Paraguay | Bolivia -> Paraguay | Vehicle compartment
-  https://eju.tv/2026/10/incautan-100-paquetes-de-droga-ocultos-en-un-camion-con-fertilizantes-que-ingreso-al-paraguay-desde-bolivia/
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (99), Postal / parcel (41), Legitimate cargo (food/produce) (30)
-Cover cargo named: cement (30), الات (18), plastic (7), chemicals (7), फल (6)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (107), Postal / parcel (45), Legitimate cargo (food/produce) (36)
+Cover cargo named: cement (30), الات (21), plastic (8), chemicals (7), फल (6)
 
 Coverage: searching 10 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Vietnamese, Chinese). 48 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
 Leads from open sources, not confirmed facts. Verify before acting.
