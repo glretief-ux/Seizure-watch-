@@ -1606,3 +1606,23 @@ def _alt(keys):
 
 COUNTRY_RX = re.compile(r"(?<![a-z\u0900-\u097f])(" + _alt(COUNTRY_ALIAS) + r")(?![a-z\u0600-\u06ff\u0900-\u097f])")
 PLACE_RX = re.compile(r"(?<![a-z\u0900-\u097f])(" + _alt(PLACE_ALIAS) + r")(?![a-z\u0600-\u06ff\u0900-\u097f])")
+
+
+# ---- which kind of "NSA" (synthetic / new-substance) a report is about; shown as NSA/<type>. Order = tie-break priority.
+NSA_TYPES = [
+    ("Captagon", rx(r"captagon", r"fenetylline", "كبتاجون", "كابتاجون", "كبتاغون", "كابتاغون", "kaptagon", "каптагон", "कैप्टागन")),
+    ("Fentanyl", rx(r"fentanyl", r"fentanil", "فنتانيل", "фентанил", "芬太尼", "फेंटेनिल")),
+    ("Nitazenes", rx(r"nitazene", r"isotonitazene", r"metonitazene")),
+    ("N-methylephedrone (mephedrone)", rx(r"n-?methylephedrone", r"mephedrone", r"\b4-?mmc\b", r"\bmcat\b", r"meow\s+meow", r"drone\b(?=.*cathinone)",
+                                          "мефедрон", "मेफेड्रोन", "bonzai")),
+    ("Cathinones", rx(r"cathinone", r"methylone", r"\bmdpv\b", r"alpha-?pvp", r"flakka", r"bath\s+salts", r"\b3-?mmc\b", "卡西酮")),
+    ("Synthetic cannabinoids", rx(r"synthetic\s+cannabinoid", r"\bspice\b", r"\bk2\b", r"mdmb", r"\bcumyl", r"cannabinoides?\s+sinteticos?", "спайс", r"sentetik\s+kannabinoid")),
+    ("MDMA/ecstasy", rx(r"\bmdma\b", r"ecstasy", r"extasis", r"ekstazi", "اكستاسي", "экстази", "摇头丸", "搖頭丸", "एक्स्टसी", r"\bmolly\b")),
+    ("Amphetamine", rx(r"(?<!meth)amphetamine", r"anfetamina", r"amfetamin", "امفيتامين", "أمفيتامين", "(?<!мет)амфетамин", r"(?<!methyl)\bspeed\b")),
+    ("Ketamine", rx(r"ketamine", r"ketamin", "кетамин", "كيتامين", "氯胺酮", r"\bk powder\b", "केटामाइन")),
+    ("Tramadol", rx(r"tramadol", "ترامادول", "трамадол", "曲马多", "曲馬多", "ट्रामाडोल")),
+    ("Pregabalin", rx(r"pregabalin", r"lyrica")),
+    ("Oxycodone", rx(r"oxycodone", r"oxycontin")),
+    ("LSD", rx(r"\blsd\b", r"\bacid tabs?\b")),
+    ("Synthetic opioids", rx(r"synthetic\s+opioid", r"\bnps\b", r"psychoactive", r"new psychoactive")),
+]

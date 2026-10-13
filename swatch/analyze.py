@@ -66,8 +66,10 @@ def load_events(conn):
                 vessel_any=("vessel", lambda s: next((x for x in s.dropna() if x), None)),
                 line_any=("shipping_line", lambda s: "; ".join(sorted({c.strip() for x in s.dropna() for c in x.split(";") if c.strip()})) or None),
                 cont_any=("container_numbers", lambda s: "; ".join(sorted({c.strip() for x in s.dropna() for c in x.split(";") if c.strip()})[:5]) or None),
+                type_any=("drug_type", lambda s: s.dropna().mode().iat[0] if s.notna().any() else None),
                 cover_any=("cover_cargo", lambda s: "; ".join(list(dict.fromkeys(c.strip() for x in s.dropna() for c in x.split(";") if c.strip()))[:4]) or None))
     ev = best.join(agg).reset_index()
+    ev["drug_type"] = ev["type_any"]
     for a, b in [("vessel", "vessel_any"), ("shipping_line", "line_any"), ("container_numbers", "cont_any"), ("cover_cargo", "cover_any")]:
         ev[a] = ev[b]
     for a, b in [("in_container", "in_container_any"), ("insider", "insider_any"), ("organized", "organized_any"),

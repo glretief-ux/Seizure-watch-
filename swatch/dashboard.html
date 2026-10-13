@@ -505,7 +505,7 @@ function evTable(v) {
   const s = v.slice().sort((a,b) => { const x = val(a, sortKey), y = val(b, sortKey); return (x > y ? 1 : x < y ? -1 : 0) * sortDir || (b.score - a.score); });
   $('evCount').textContent = '(' + v.length + ' in view' + (v.length > 300 ? ', first 300 shown' : '') + ')';
   $('evT').innerHTML = '<tr>' + COLS.map(c => '<th data-k="' + c[0] + '">' + c[1] + (sortKey === c[0] ? (sortDir > 0 ? ' &#9650;' : ' &#9660;') : '') + '</th>').join('') + '</tr>' +
-    s.slice(0, 300).map(e => '<tr' + (isWatched(e) ? ' class="watched"' : '') + '><td>' + esc(e.date) + '</td><td><a href="' + esc(safe(e.url)) + '" target="_blank" rel="noopener noreferrer" title="' + esc(e.title_en || e.title) + '">news article</a><br><a href="#" class="dtl" data-id="' + e.id + '">checklist</a></td><td>' + esc(e.drug) + '</td><td>' + esc(qty(e)) + '</td><td class="w2">' + esc(e.route || e.corridor || '') + '</td><td class="w2">' + esc([e.place, e.country].filter(Boolean).join(', ')) + '</td><td class="w2">' + esc(e.conceal || '') + '</td><td class="small w2">' + esc(detailText(e)) + '</td><td>' + esc(e.transport || '') + '</td><td class="small w3">' + esc(e.flags) + '</td><td>' + e.n + '</td></tr>').join('');
+    s.slice(0, 300).map(e => '<tr' + (isWatched(e) ? ' class="watched"' : '') + '><td>' + esc(e.date) + '</td><td><a href="' + esc(safe(e.url)) + '" target="_blank" rel="noopener noreferrer" title="' + esc(e.title_en || e.title) + '">news article</a><br><a href="#" class="dtl" data-id="' + e.id + '">checklist</a></td><td>' + esc(e.drug_label || e.drug) + '</td><td>' + esc(qty(e)) + '</td><td class="w2">' + esc(e.route || e.corridor || '') + '</td><td class="w2">' + esc([e.place, e.country].filter(Boolean).join(', ')) + '</td><td class="w2">' + esc(e.conceal || '') + '</td><td class="small w2">' + esc(detailText(e)) + '</td><td>' + esc(e.transport || '') + '</td><td class="small w3">' + esc(e.flags) + '</td><td>' + e.n + '</td></tr>').join('');
   $('evT').querySelectorAll('th').forEach(th => th.onclick = () => { const k = th.dataset.k; if (k === 'url' || k === 'flags') return; sortDir = (sortKey === k) ? -sortDir : -1; sortKey = k; render(); });
 }
 
@@ -845,7 +845,7 @@ function openEvent(id) {
   const e = D.events.find(x => x.id === id); if (!e) return;
   const M = D.risk_model, names = M ? M.dimensions.map(d => [d.name, d.max]) : [];
   $('evTitle').textContent = e.title_en || e.title || (e.drug + ' seizure');
-  let h = '<p class="small" style="margin:0 0 10px">' + [e.date, e.drug, qty(e), e.route || e.corridor, [e.place, e.country].filter(Boolean).join(', ')].filter(Boolean).map(esc).join(' | ') +
+  let h = '<p class="small" style="margin:0 0 10px">' + [e.date, e.drug_label || e.drug, qty(e), e.route || e.corridor, [e.place, e.country].filter(Boolean).join(', ')].filter(Boolean).map(esc).join(' | ') +
     '</p>';
   const cl = checklistFor(e);
   h += '<h4>What to check</h4>' + (cl.length ? '<ul>' + cl.map(c => '<li><span class="ptag">' + esc(c[0]) + '</span>' + esc(c[1]) + '</li>').join('') + '</ul>' :
@@ -870,7 +870,7 @@ $('evT').addEventListener('click', ev => { const c = ev.target.closest('.chip[da
   const all = (D.events || []).filter(e => e.url).slice().sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
   const hay = all.map(e => [e.title_en, e.title, e.drug, e.country, e.place, e.route, e.corridor, e.outlets, e.conceal, e.date].filter(Boolean).join(' ').toLowerCase());
   let hits = all.map((_, i) => i), shown = 0; const PAGE = 100;
-  const row = e => '<div class="wi" style="padding:7px 0;border-bottom:1px solid #e1e8f2"><span class="chip ' + esc(e.band) + '">' + e.score + '</span> <b>' + esc(e.date) + '</b> | ' + esc(e.drug) +
+  const row = e => '<div class="wi" style="padding:7px 0;border-bottom:1px solid #e1e8f2"><span class="chip ' + esc(e.band) + '">' + e.score + '</span> <b>' + esc(e.date) + '</b> | ' + esc(e.drug_label || e.drug) +
     (e.country ? ' | ' + esc([e.place, e.country].filter(Boolean).join(', ')) : '') + '<br><a href="' + esc(safe(e.url)) + '" target="_blank" rel="noopener noreferrer">' + esc(e.title_en || e.title || e.url) + '</a>' +
     (e.outlets ? ' <span class="small">(' + esc(e.outlets) + ')</span>' : '') + '</div>';
   function draw(reset) {

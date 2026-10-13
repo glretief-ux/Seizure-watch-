@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS articles(
   arrests INTEGER, organized INTEGER, insider INTEGER, controlled_delivery INTEGER, coverload INTEGER,
   route TEXT, corridor TEXT, mo_summary TEXT, completeness INTEGER, event_id INTEGER,
   vessel TEXT, shipping_line TEXT, container_numbers TEXT, cover_cargo TEXT, title_en TEXT, ner_places TEXT,
-  infrastructure TEXT, category TEXT
+  infrastructure TEXT, category TEXT, drug_type TEXT
 );
 CREATE INDEX IF NOT EXISTS ix_pub ON articles(published);
 CREATE INDEX IF NOT EXISTS ix_event ON articles(event_id);
@@ -37,7 +37,7 @@ def connect(path):
     global COLS
     COLS = {r["name"] for r in conn.execute("PRAGMA table_info(articles)")}
     for col in ("vessel", "shipping_line", "container_numbers", "cover_cargo", "title_en", "ner_places",
-                "infrastructure", "category"):      # databases made by older versions
+                "infrastructure", "category", "drug_type"):      # databases made by older versions
         if col not in COLS:
             conn.execute(f"ALTER TABLE articles ADD COLUMN {col} TEXT")
     COLS = {r["name"] for r in conn.execute("PRAGMA table_info(articles)")}
@@ -234,3 +234,17 @@ def get_meta(conn, key, default=None):
 def set_meta(conn, key, value):
     conn.execute("INSERT OR REPLACE INTO meta(k, v) VALUES(?, ?)", (key, str(value)))
     conn.commit()
+
+
+def backfill_drug_types(conn, type_fn, days=7):
+    """Name the kind of NSA (Captagon, Fentanyl, mephedrone...) for recent NSA reports stored without one."""
+    rows = conn.execute("SELECT id, title FROM articles WHERE relevant=1 AND primary_drug='NSA' AND drug_type IS NULL "
+                        "AND COALESCE(published, fetched) >= date('now', ?)", (f"-{int(days)} day",)).fetchall()
+    n = 0
+    for r in rows:
+        t = type_fn(norm(r[1]), "")
+        if t:
+            conn.execute("UPDATE articles SET drug_type=? WHERE id=?", (t, r[0]))
+            n += 1
+    conn.commit()
+    return n

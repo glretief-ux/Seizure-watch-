@@ -644,6 +644,16 @@ def _details(title, text, t):
             "container_numbers": "; ".join(_containers(raw)) or None, "cover_cargo": _cover_cargo(t)}
 
 
+def _nsa_type(title_n, text_n):
+    """The kind of synthetic drug (Captagon, Fentanyl, mephedrone...) an NSA report is about, by how often it is named."""
+    best, best_n = None, 0
+    for name, pat in L.NSA_TYPES:
+        n = len(pat.findall(text_n)) + 3 * len(pat.findall(title_n))
+        if n > best_n:
+            best, best_n = name, n
+    return best
+
+
 def locate(title, source_country=None):
     """Only the place facts of a headline (country, place, route), for re-reading reports stored without a country."""
     return _route(L.norm(title), source_country)
@@ -665,6 +675,7 @@ def extract(title, text="", source_country=None):
     in_container = 1 if L.CONTAINER.search(NON_SHIP_CONTAINER.sub(" ", t)) else 0
     cats, detail = _concealment(t, in_container)
     route = _route(t, source_country)
+    drug_type = _nsa_type(title_n, text_n) if primary == "NSA" else None
     arrests = _arrests(t)
     # A headline that names the item and says it was seized is a real report even without a weight
     # ("Heroin worth R2m seized at OR Tambo"); a generic headline needs a stated value or weight.
@@ -680,7 +691,7 @@ def extract(title, text="", source_country=None):
     controlled = 1 if L.CONTROLLED_DELIVERY.search(t) else 0
     coverload = 1 if re.search(r"cover\s*load|carga\s+de\s+cobertura", t) else 0
     rec.update({
-        "relevant": 1, "primary_drug": primary, "drugs": "|".join(drugs), "category": category,
+        "relevant": 1, "primary_drug": primary, "drug_type": drug_type, "drugs": "|".join(drugs), "category": category,
         "qty_kg": kg, "qty_units": units, "unit_type": unit_type,
         "concealment": "|".join(cats) or None, "concealment_detail": "; ".join(detail) or None,
         "transport": transport, "in_container": in_container,
