@@ -227,12 +227,23 @@ table.mini{border-collapse:collapse;font-size:13px;margin-top:6px}table.mini td{
 
 <div class="card" id="infCard"><h2>What this data suggests <span class="small">(law enforcement view of the events in view)</span></h2>
   <div class="small" style="line-height:1.45;margin-bottom:10px">A short reading of the reports in the current filter. It follows the filters above, so change the period, drug or country to see it change. These are patterns in <b>news reports</b>, not in all seizures: they show where to look, not proof.</div>
+  <div class="tabs"><button type="button" data-itab="c" class="on">Seizures and concealment</button><button type="button" data-itab="r">Route patterns</button></div>
+  <div id="infC">
   <div class="grid2" style="margin:0">
     <div><h4 style="margin:0 0 6px;font-size:12.5px;color:var(--brand)">What was seized (share of reports)</h4><div class="chartbox"><canvas id="cInfPie"></canvas></div></div>
     <div><h4 style="margin:0 0 6px;font-size:12.5px;color:var(--brand)">How it was hidden (number of reports)</h4><div class="chartbox"><canvas id="cInfCol"></canvas></div></div>
   </div>
   <h4 style="margin:14px 0 4px;font-size:12.5px;color:var(--brand)">What this suggests</h4>
   <ul id="infList" style="margin:4px 0 0 18px;padding:0;line-height:1.5"></ul>
+  </div>
+  <div id="infR" hidden>
+    <div class="grid2" style="margin:0">
+      <div><h4 style="margin:0 0 6px;font-size:12.5px;color:var(--brand)">Where the goods came from (share of reports with a known origin)</h4><div class="chartbox"><canvas id="cRtPie"></canvas></div></div>
+      <div><h4 style="margin:0 0 6px;font-size:12.5px;color:var(--brand)">Most repeated routes (number of reports)</h4><div class="chartbox"><canvas id="cRtCol"></canvas></div></div>
+    </div>
+    <h4 style="margin:14px 0 4px;font-size:12.5px;color:var(--brand)">What this suggests</h4>
+    <ul id="rtList" style="margin:4px 0 0 18px;padding:0;line-height:1.5"></ul>
+  </div>
 </div>
 
 <div class="card"><h2>How risk is scored</h2>
@@ -536,7 +547,7 @@ function render() {
   kpis(v); timeChart(v);
   hbar('cConc', topN(by(v.flatMap(e => e.conceal ? e.conceal.split('; ') : []), x => x), 10), '#2a6f97');
   hbar('cCorr', topN(by(v, e => e.corridor), 10), '#12355b');
-  mode(v); matrix(v); evTable(v); drawMap(v); inferences(v);
+  mode(v); matrix(v); evTable(v); drawMap(v); inferences(v); routeInferences(v);
 }
 
 // ---- "What this data suggests": a plain-language reading of the events in view, with a pie and a column chart
@@ -582,6 +593,48 @@ function inferences(v) {
   L.push('Read these as leads, not findings: facts are read automatically from news reports and can be wrong, and every item needs verification through the source link and your own channels.');
   $('infList').innerHTML = L.map(x => '<li style="margin:6px 0">' + x + '</li>').join('');
 }
+
+function routeInferences(v) {
+  const n = v.length, pct = (a, b) => b ? Math.round(100 * a / b) : 0, L = [];
+  const orig = topN(by(v, e => e.origin), 99), dest = topN(by(v, e => e.dest), 99), cor = topN(by(v, e => e.corridor), 99);
+  const ot = orig.slice(0, 6), orest = orig.slice(6).reduce((s, x) => s + x[1], 0), on = orig.reduce((s, x) => s + x[1], 0);
+  if (orest) ot.push(['Other', orest]);
+  const PAL = ['#12355b', '#2a6f97', '#2e8b57', '#e08a00', '#8e5bb5', '#c0392b', '#b8c4d6'];
+  chart('cRtPie', {type: 'pie', data: {labels: ot.map(x => x[0] + ' (' + pct(x[1], on) + '%)'), datasets: [{data: ot.map(x => x[1]), backgroundColor: ot.map((x, i) => x[0] === 'Other' ? '#b8c4d6' : PAL[i % 6])}]},
+    options: {plugins: {legend: {position: 'right', labels: {boxWidth: 12, font: {size: 11}}}}}});
+  const ct = cor.slice(0, 7);
+  chart('cRtCol', {type: 'bar', data: {labels: ct.map(x => x[0]), datasets: [{label: 'Reports', data: ct.map(x => x[1]), backgroundColor: '#2a6f97'}]},
+    options: {plugins: {legend: {display: false}}, scales: {x: {ticks: {font: {size: 10}, maxRotation: 40, minRotation: 20}}, y: {beginAtZero: true, ticks: {precision: 0}}}}});
+  if (n < 5 || !cor.length) { $('rtList').innerHTML = '<li>Too few reports with a stated route in this view to draw a pattern. Widen the period or clear a filter.</li>'; return; }
+  const withRoute = v.filter(e => e.corridor).length;
+  L.push('A route (origin and/or destination) is stated in ' + pct(withRoute, n) + '% of reports, so route findings describe only part of the picture. Where a route is known, it is the best starting point for pre-arrival risk rules.');
+  if (cor[0]) L.push('The most repeated route is <b>' + esc(cor[0][0]) + '</b> (' + cor[0][1] + ' reports)' + (cor[1] ? ', then ' + esc(cor[1][0]) + ' (' + cor[1][1] + ')' : '') + '. Repeated routes are the strongest candidates for joint operations, controlled deliveries and shared alerts between the countries on them.');
+  const top3 = cor.slice(0, 3).reduce((s, x) => s + x[1], 0), allc = cor.reduce((s, x) => s + x[1], 0);
+  L.push('The three busiest routes carry ' + pct(top3, allc) + '% of all reports with a route, ' + (pct(top3, allc) >= 40 ? 'so flows are concentrated and a few well-placed controls could reach much of the activity.' : 'so flows are spread over many routes and a single choke point is unlikely to catch most of it.'));
+  if (orig[0]) L.push('Most goods are reported as coming from <b>' + orig.slice(0, 3).map(x => esc(x[0])).join(', ') + '</b> (' + pct(orig.slice(0, 3).reduce((s, x) => s + x[1], 0), on) + '% of reports with a known origin). Early exchange with these origin countries, before the goods are loaded, gives the longest warning.');
+  if (dest[0]) L.push('The destinations named most are <b>' + dest.slice(0, 3).map(x => esc(x[0])).join(', ') + '</b>. Authorities in these countries can expect arrivals on the routes above and can check the receiving company, not only the goods.');
+  const tr = topN(by(v.flatMap(e => e.transit ? String(e.transit).split(/[|;] ?/) : []), x => x.trim()), 5), multi = v.filter(e => e.transit).length;
+  if (tr.length) L.push('<b>' + esc(tr.slice(0, 3).map(x => x[0]).join(', ')) + '</b> appear most as transit points (' + pct(multi, n) + '% of reports name a transit country). Hubs and transhipment ports on indirect routes are where a change of container or documents can happen, so they deserve extra attention.');
+  // new routes in the last 30 days that were not seen before (needs earlier history)
+  const today = new Date(D.meta.asof || fmt(new Date())), d30 = fmt(new Date(today.getTime() - 30 * 864e5));
+  const old = new Set(D.events.filter(e => e.date <= d30 && e.corridor).map(e => e.corridor));
+  const fresh = topN(by(D.events.filter(e => e.date > d30 && e.corridor && !old.has(e.corridor)), e => e.corridor), 3);
+  if (old.size >= 30 && fresh.length) L.push('Routes seen in the last 30 days but not before include <b>' + fresh.map(x => esc(x[0])).join(', ') + '</b>. New routes can mean displacement after enforcement elsewhere, or simply a new source of news, so check them against the alerts before acting.');
+  // route and transport
+  const sea = v.filter(e => e.corridor && /^Sea/.test(e.transport || '')).length, air = v.filter(e => e.corridor && /^(Air|Post)/.test(e.transport || '')).length, rd = v.filter(e => e.corridor && e.transport === 'Road').length;
+  const mx = Math.max(sea, air, rd);
+  if (mx > 4) L.push('On reports with a route, ' + (mx === sea ? 'sea freight' : mx === air ? 'air and post' : 'road transport') + ' is the most common way (' + pct(mx, withRoute) + '%). Put route-based targeting where that mode is handled: ' + (mx === sea ? 'ports, container terminals and shipping-line data.' : mx === air ? 'airports, express hubs and mail centres.' : 'border posts and trucking corridors.'));
+  L.push('Read these as leads, not findings: routes are read automatically from news reports, often from a short headline, and every route needs verification through the source link and your own channels.');
+  $('rtList').innerHTML = L.map(x => '<li style="margin:6px 0">' + x + '</li>').join('');
+}
+let infTab = 'c';
+function showInfTab(t) {
+  infTab = t;
+  document.querySelectorAll('#infCard .tabs button').forEach(b => b.classList.toggle('on', b.dataset.itab === t));
+  $('infC').hidden = t !== 'c'; $('infR').hidden = t !== 'r';
+  setTimeout(() => Object.values(charts).forEach(c => c.resize()), 0);
+}
+document.querySelectorAll('#infCard .tabs button').forEach(b => b.onclick = () => showInfTab(b.dataset.itab));
 // ---- route map (Leaflet; needs internet for the map tiles)
 const GEO = __GEO__;
 const BC = {High:'#c0392b', Medium:'#e08a00', Low:'#2e8b57'};
@@ -780,7 +833,7 @@ function renderLook() {
 function showCardBar() {
   $('cardBar').innerHTML = cardFilter ? 'Showing only reports for <b>' + esc(cardName) + '</b> &nbsp; <a href="#" id="cardClear">Show all</a>' : '';
 }
-document.querySelectorAll('#lookCard .tabs button').forEach(b => b.onclick = () => { lookTab = b.dataset.tab; renderLook(); });
+document.querySelectorAll('#lookCard .tabs button').forEach(b => b.onclick = () => { lookTab = b.dataset.tab; renderLook(); showInfTab(lookTab); });
 $('lookList').addEventListener('click', ev => {
   const open = ev.target.closest('[data-open]'), show = ev.target.closest('[data-show]'), copy = ev.target.closest('[data-copy]');
   if (open) {
