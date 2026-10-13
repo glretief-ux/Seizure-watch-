@@ -485,8 +485,12 @@ def _route(t, source_country):
         seizure_country, conf = sz_place[4], "high"
     elif sz_ctry:
         seizure_country, conf = sz_ctry[4], "medium"
-    elif source_country:
-        seizure_country = source_country
+    else:
+        cue = L.cue_country(t)
+        if cue:
+            seizure_country, conf = cue, "medium"       # an agency, county or currency in the text
+        elif source_country:
+            seizure_country = source_country
     origin = o[4] if o else None
     dest = d[4] if d else None
     res = {
@@ -638,6 +642,11 @@ def _details(title, text, t):
     raw = (title or "") + ". " + (text or "")
     return {"vessel": _vessel(raw), "shipping_line": "; ".join(_shipping_lines(t)) or None,
             "container_numbers": "; ".join(_containers(raw)) or None, "cover_cargo": _cover_cargo(t)}
+
+
+def locate(title, source_country=None):
+    """Only the place facts of a headline (country, place, route), for re-reading reports stored without a country."""
+    return _route(L.norm(title), source_country)
 
 
 def extract(title, text="", source_country=None):

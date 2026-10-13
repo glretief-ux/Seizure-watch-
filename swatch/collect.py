@@ -52,6 +52,12 @@ def _get(url, timeout=20, **kw):
 
 
 # ---------------------------------------------------------------- Google News
+# The Google News edition a headline came from is a weak hint of where it happened. It is used only when the
+# text names no place, country, agency or currency at all (see extract._route), and is stored as low confidence.
+_ED_COUNTRY = {"US": "United States", "GB": "United Kingdom", "AU": "Australia", "IN": "India", "ZA": "South Africa",
+               "NG": "Nigeria", "MX": "Mexico", "ES": "Spain", "CO": "Colombia", "FR": "France", "BR": "Brazil", "PT": "Portugal"}
+
+
 def google_news(query, ed, days):
     q = quote(f"{query} when:{days}d")
     url = (f"https://news.google.com/rss/search?q={q}&hl={ed['hl']}&gl={ed['gl']}&ceid={quote(ed['ceid'], safe=':')}")
@@ -76,7 +82,7 @@ def google_news(query, ed, days):
             published = None
         out.append({"url": it.findtext("link"), "title": title, "source": source, "published": published,
                     "snippet": _strip_html(it.findtext("description")), "lang": ed.get("lang"),
-                    "source_country": None, "via": "google"})
+                    "source_country": _ED_COUNTRY.get(ed.get("gl")), "via": "google"})
     return out
 
 

@@ -296,7 +296,7 @@ def render_html(c):
     countries = _hbar(c["country_bars"], [BLUE] * len(c["country_bars"]), label_w=120)
     cats = ""
     if len(c["cat_bars"]) > 1:
-        cats = _panel("What was seized", _hbar(c["cat_bars"], [NAVY, PURPLE, TEAL, AMBER, GREEN, RED, GREY][:len(c["cat_bars"])], label_w=150))
+        cats = _panel("What was seized", _hbar(c["cat_bars"], (([NAVY, PURPLE, TEAL, AMBER, GREEN, RED, GREY] * 3)[:len(c["cat_bars"])]), label_w=150))
     drivers = _panel("What drives the higher-risk reports",
                      _hbar(c["dim_bars"], [BLUE, PURPLE, TEAL, AMBER, GREY], label_w=200) +
                      f'<div class="note">Average points per report, {c["dim_n"]} Medium and High reports. Size alone never makes a report High.</div>') if c["dim_bars"] else ""

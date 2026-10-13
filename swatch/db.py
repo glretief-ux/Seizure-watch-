@@ -126,6 +126,32 @@ _STOP = set("with from that this into after over their they were have been will 
             "drugs drug worth million found".split())
 
 
+from .lexicon import LANG_COUNTRY  # noqa: E402
+
+LOCATION_COLS = ["seizure_country", "seizure_place", "location_conf", "origin", "origin_place", "destination",
+                 "destination_place", "transit", "route", "corridor"]
+
+
+def backfill_locations(conn, locate_fn):
+    """Re-read the headline of every seizure report that has no country yet, now that the place list, agency and
+    currency cues have grown. Only fills what is empty; never changes a country that was found before.
+    Returns how many reports gained a country."""
+    rows = conn.execute("SELECT id, title, COALESCE(source_country, ''), lang FROM articles WHERE relevant=1 AND seizure_country IS NULL").fetchall()
+    gained = 0
+    for r in rows:
+        try:
+            rec = locate_fn(r[1], r[2] or LANG_COUNTRY.get(r[3]))
+        except Exception:
+            continue
+        if not rec.get("seizure_country"):
+            continue
+        sets = {c: rec.get(c) for c in LOCATION_COLS if rec.get(c) is not None}
+        conn.execute("UPDATE articles SET " + ", ".join(f"{c}=?" for c in sets) + " WHERE id=?", [*sets.values(), r[0]])
+        gained += 1
+    conn.commit()
+    return gained
+
+
 def _tokens(title):
     """Words of 4+ letters (3+ in Arabic, Cyrillic, Devanagari); Chinese text is compared by pairs of characters."""
     t = slug(title)

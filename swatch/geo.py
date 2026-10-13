@@ -2,6 +2,8 @@
 """Map coordinates (latitude, longitude) for the countries and places the reader knows. Used by the dashboard maps.
 Add a place to lexicon.py AND here to see it on the map (a place without coordinates falls back to its country)."""
 COUNTRY = {
+"Fiji": [-17.7,
+178.0],
 "Afghanistan": [33.9,
 67.7],
 "Albania": [41.2,
@@ -2080,4 +2082,43 @@ PLACE.update({
     "Orenburg": [51.77, 55.10], "Perm": [58.01, 56.25], "Primorye": [43.12, 131.89], "Rostov": [47.24, 39.71], "Samara": [53.20, 50.15],
     "Saratov": [51.53, 46.03], "Stavropol": [45.04, 41.97], "Tomsk": [56.48, 84.95], "Tyumen": [57.15, 65.53], "Ufa": [54.74, 55.97],
     "Volgograd": [48.71, 44.51], "Voronezh": [51.67, 39.18], "Yekaterinburg": [56.84, 60.61],
+})
+
+# Places added in places_extra.py (approximate centres, for the map markers)
+PLACE.update({
+    "Abbotsford": [49.05, -122.30], "Aceh": [4.70, 96.75], "Adamawa": [9.33, 12.40], "Akwa Ibom": [5.00, 7.85], "Albany": [42.65, -73.76],
+    "Albuquerque": [35.08, -106.65], "Ampfing": [48.26, 12.41], "Anambra": [6.21, 7.07], "Anchorage": [61.22, -149.90], "Antioquia": [6.25, -75.56],
+    "Antofagasta": [-23.65, -70.40], "Arica": [-18.48, -70.31], "Baja California": [32.50, -117.00], "Bali": [-8.41, 115.19], "Barrie": [44.39, -79.69],
+    "Batam": [1.05, 104.03], "Batangas": [13.76, 121.06], "Benue": [7.34, 8.74], "Biobio": [-36.83, -73.05], "Birmingham (UK)": [52.48, -1.90],
+    "Bishkek": [42.87, 74.59], "Borno": [11.85, 13.15], "Brampton": [43.73, -79.76], "Brownsville": [25.90, -97.50], "Buffalo": [42.89, -78.88],
+    "Bulacan": [14.85, 120.81], "Cagayan de Oro": [8.48, 124.65], "Calexico": [32.68, -115.50], "Cancun": [21.16, -86.85], "Cauca": [2.44, -76.61],
+    "Cavite": [14.28, 120.87], "Charlotte": [35.23, -80.84], "Chattogram": [22.36, 91.78], "Chiang Mai": [18.79, 98.98], "Chilliwack": [49.16, -121.95],
+    "Christchurch": [-43.53, 172.64], "Cincinnati": [39.10, -84.51], "Cleveland": [41.50, -81.69], "Columbus (OH)": [39.96, -83.00], "Del Rio": [29.36, -100.90],
+    "Delta (Nigeria)": [5.70, 5.90], "Dyersburg": [36.03, -89.39], "Eagle Pass": [28.71, -100.50], "Edo": [6.34, 5.62], "Enugu": [6.46, 7.55],
+    "Erzincan": [39.75, 39.49], "Goa": [15.50, 73.83], "Greenville": [34.85, -82.40], "Guayas": [-2.17, -79.92], "Hamilton (ON)": [43.26, -79.87],
+    "Hartford": [41.76, -72.67], "Heathrow": [51.47, -0.45], "Honolulu": [21.31, -157.86], "Hyderabad (India)": [17.39, 78.49], "Iloilo": [10.72, 122.56],
+    "Imo": [5.49, 7.03], "Indianapolis": [39.77, -86.16], "Interstate 15": [33.49, -117.15], "Iquique": [-20.21, -70.15], "Jacksonville": [30.33, -81.66],
+    "Johannesburg": [-26.20, 28.05], "Johor": [1.49, 103.74], "Kaduna": [10.52, 7.44], "Kampala": [0.35, 32.58], "Kansas City": [39.10, -94.58],
+    "Katsina": [12.99, 7.60], "Kedah": [6.12, 100.37], "Kelantan": [6.13, 102.24], "Kelowna": [49.89, -119.50], "Kerry": [52.15, -9.55],
+    "Kildare": [53.16, -6.91], "Kitchener": [43.45, -80.49], "Kogi": [7.80, 6.74], "Kuching": [1.55, 110.35], "Laguna": [14.17, 121.33],
+    "Lakshadweep": [10.57, 72.64], "Laredo": [27.53, -99.51], "Lautoka": [-17.62, 177.45], "Leeds": [53.80, -1.55], "Lethbridge": [49.69, -112.84],
+    "Lewiston": [44.10, -70.21], "Limerick": [52.66, -8.63], "London (ON)": [42.98, -81.25], "Louisville": [38.25, -85.76], "Louth": [53.95, -6.54],
+    "Marrakech": [31.63, -8.00], "Marseille": [43.30, 5.37], "McAllen": [26.20, -98.23], "Meath": [53.60, -6.66], "Medan": [3.59, 98.67],
+    "Melaka": [2.19, 102.25], "Memphis": [35.15, -90.05], "Meta": [4.15, -72.65], "Milwaukee": [43.04, -87.91], "Minneapolis": [44.98, -93.27],
+    "Mississauga": [43.59, -79.64], "Mundra": [22.84, 69.72], "Nadi": [-17.80, 177.42], "Nariño": [1.29, -77.36], "Nashville": [36.16, -86.78],
+    "Negeri Sembilan": [2.73, 101.94], "New Brunswick": [46.57, -66.46], "New Orleans": [29.95, -90.07], "Niger State": [9.62, 6.55], "Nogales (AZ)": [31.34, -110.94],
+    "Norte de Santander": [7.89, -72.50], "Nuevo Leon": [25.67, -100.31], "Oklahoma City": [35.47, -97.52], "Omaha": [41.26, -95.93], "Oran": [35.70, -0.63],
+    "Orange County (CA)": [33.72, -117.83], "Orillia": [44.61, -79.42], "Orlando": [28.54, -81.38], "Oshawa": [43.90, -78.86], "Otay Mesa": [32.55, -116.94],
+    "Oyo": [7.38, 3.95], "Pahang": [3.81, 103.33], "Pampanga": [15.07, 120.66], "Pasay": [14.54, 121.00], "Penang": [5.41, 100.34], "Perak": [4.59, 101.09],
+    "Perlis": [6.44, 100.20], "Pittsburgh": [40.44, -80.00], "Piura": [-5.19, -80.63], "Plateau": [9.93, 8.89], "Portland (OR)": [45.52, -122.68],
+    "Pristina": [42.66, 21.17], "Providence": [41.82, -71.41], "Puebla": [19.04, -98.21], "Putrajaya": [2.93, 101.69], "Putumayo": [0.50, -76.50],
+    "Queretaro": [20.59, -100.39], "Quezon City": [14.68, 121.04], "Raleigh": [35.78, -78.64], "Red Deer": [52.27, -113.81], "Richmond (VA)": [37.54, -77.44],
+    "Rivers State": [4.84, 6.91], "Riverside": [33.95, -117.40], "Rochester (NY)": [43.16, -77.61], "Sabah": [5.98, 116.07], "Saint-Etienne": [45.44, 4.39],
+    "Salt Lake City": [40.76, -111.89], "San Antonio": [29.42, -98.49], "San Bernardino": [34.11, -117.29], "San Jose": [37.34, -121.89],
+    "Santa Cruz (Bolivia)": [-17.78, -63.18], "Santiago (Chile)": [-33.45, -70.67], "Sarawak": [2.50, 112.50], "Sarnia": [42.97, -82.40], "Selangor": [3.07, 101.52],
+    "Sheffield": [53.38, -1.47], "Sokoto": [13.06, 5.24], "Spokane": [47.66, -117.43], "St. Louis": [38.63, -90.20], "Stoke-on-Trent": [53.00, -2.18],
+    "Sudbury": [46.49, -80.99], "Surrey (BC)": [49.19, -122.85], "Suva": [-18.14, 178.44], "Syracuse": [43.05, -76.15], "Tacoma": [47.25, -122.44],
+    "Tamanrasset": [22.79, 5.53], "Tampa": [27.95, -82.46], "Tangier": [35.77, -5.80], "Temecula": [33.49, -117.15], "Terengganu": [5.31, 103.14],
+    "Thunder Bay": [48.38, -89.25], "Toulouse": [43.60, 1.44], "Tulsa": [36.15, -95.99], "Valle del Cauca": [3.45, -76.53], "Valparaiso": [-33.05, -71.62],
+    "Victoria (AU)": [-37.81, 144.96], "Wexford": [52.33, -6.46], "Windsor (ON)": [42.31, -83.04], "Yucatan": [20.97, -89.62], "Yuma": [32.69, -114.63], "Ñuble": [-36.61, -72.10],
 })

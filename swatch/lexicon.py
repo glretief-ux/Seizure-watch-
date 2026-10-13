@@ -1268,6 +1268,7 @@ Zimbabwe|زيمبابوي|zimbabve|зимбабве|津巴布韦|辛巴威|ज�
 """
 # extra names for the same country (each line: English name | alias | alias ...)
 COUNTRY_MORE = r"""
+Fiji|fiji
 Hong Kong|هونج كونج|香港特区
 Ivory Coast|كوت ديفوار|côte d'ivoire
 Iraq|العراق
@@ -1553,6 +1554,24 @@ REGIONS = [
     ("Moscow region", "Russia", ["подмосков"]), ("Orenburg", "Russia", ["оренбург"]), ("Astrakhan", "Russia", ["астрахан"]),
 ]
 PLACES += REGIONS
+# more towns, counties' cities and agency/currency cues (see places_extra.py); never overrides an existing alias
+from .places_extra import PLACES as _EXTRA_PLACES, CUES as _EXTRA_CUES, LANG_COUNTRY  # noqa: E402
+_have = {norm(_a) for _p in PLACES for _a in _p[2]}
+for _d, _c, _als in _EXTRA_PLACES:
+    _new = [_a for _a in _als if norm(_a) not in _have]
+    if _new:
+        PLACES.append((_d, _c, _new))
+        _have.update(norm(_a) for _a in _new)
+CUE_RX = [(re.compile(_rx), _c) for _rx, _c in _EXTRA_CUES]
+
+
+def cue_country(t):
+    """Country suggested by an agency, county or currency in already-normalised text (None if no cue)."""
+    for _rx, _c in CUE_RX:
+        if _rx.search(t):
+            return _c
+    return None
+
 for _disp, _ctry, _als in PLACES:
     for _a in _als:
         PLACE_ALIAS[norm(_a)] = (_disp, _ctry)

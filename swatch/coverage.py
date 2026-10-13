@@ -22,7 +22,7 @@ COUNTRY_LANGS = {
     "Cape Verde": ["pt"], "Chile": ["es"], "China": ["zh"], "Colombia": ["es"], "Congo": ["fr"], "Costa Rica": ["es"], "Croatia": ["hr"],
     "Cuba": ["es"], "Curacao": ["nl"], "Cyprus": ["el", "tr"], "Czech Republic": ["cs"], "Denmark": ["da"], "Dominican Republic": ["es"],
     "Ecuador": ["es"], "Egypt": ["ar"], "El Salvador": ["es"], "Equatorial Guinea": ["es", "fr"], "Estonia": ["et"], "Ethiopia": ["am"],
-    "Finland": ["fi"], "France": ["fr"], "French Guiana": ["fr"], "Gambia": ["en"], "Germany": ["de"], "Ghana": ["en"], "Greece": ["el"],
+    "Fiji": ["en"], "Finland": ["fi"], "France": ["fr"], "French Guiana": ["fr"], "Gambia": ["en"], "Germany": ["de"], "Ghana": ["en"], "Greece": ["el"],
     "Guadeloupe": ["fr"], "Guatemala": ["es"], "Guinea": ["fr"], "Guinea-Bissau": ["pt"], "Guyana": ["en"], "Haiti": ["fr"],
     "Honduras": ["es"], "Hong Kong": ["zh", "en"], "Hungary": ["hu"], "Iceland": ["is"], "India": ["hi", "en"], "Indonesia": ["id"],
     "Iran": ["fa"], "Iraq": ["ar"], "Ireland": ["en"], "Israel": ["he"], "Italy": ["it"], "Ivory Coast": ["fr"], "Jamaica": ["en"],

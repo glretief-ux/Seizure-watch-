@@ -356,3 +356,15 @@ def test_cultural_heritage():
 def test_hindi_ancient_is_not_china():
     # प्राचीन (ancient) contains चीन (China)
     assert extract("प्राचीन मूर्ति बरामद, दो तस्कर गिरफ्तार", "").get("seizure_country") != "China"
+
+
+def test_country_from_county_agency_currency_and_small_town():
+    from swatch import extract
+    cases = {"Nearly 1,000 pounds of liquid meth seized during Riverside County traffic stop": "United States",
+             "NDLEA arrests suspect, seizes cocaine": "Nigeria",
+             "Police seize cannabis worth RM1.2 million": "Malaysia",
+             "Customs seizes 48,080 cigarettes near Ampfing": "Germany",
+             "Fiji police seize cannabis in Nadi": "Fiji"}
+    for title, country in cases.items():
+        assert extract.locate(title)["seizure_country"] == country, title
+    assert extract.locate("Cocaine seized in County Meath")["seizure_country"] == "Ireland"

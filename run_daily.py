@@ -17,6 +17,7 @@ import yaml
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
+from swatch.lexicon import LANG_COUNTRY  # noqa: E402
 from swatch import db, collect, extract, analyze, report, translate, ner, verify  # noqa: E402
 
 
@@ -31,7 +32,7 @@ def ingest(conn, items, is_demo=False):
     now = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
     for it in items:
         try:
-            rec = extract.extract(it["title"], it.get("text", ""), it.get("source_country"))
+            rec = extract.extract(it["title"], it.get("text", ""), it.get("source_country") or LANG_COUNTRY.get(it.get("lang")))
         except Exception as exc:  # one bad article must never stop the whole run
             log(f"      skipped one article ({type(exc).__name__}: {exc}): {str(it.get('title'))[:80]}")
             continue
@@ -74,6 +75,43 @@ def ingest(conn, items, is_demo=False):
         log(f"      NER supplemented {ner_hits} article(s) (unrecognised place names logged to ner_places for review)")
 
     return stored, relevant
+
+
+REREAD_SKIP = {"id", "url", "title", "title_key", "source", "published", "fetched", "lang", "is_demo", "event_id",
+               "title_en", "ner_places", "relevant"}
+
+
+def reread_snippets(conn, cfg, limit=60, days=14):
+    """Reports stored from a headline and snippet only (the full-text reader was not working) get one more try:
+    read the whole article now and fill in whatever the headline did not say (country, place, route, concealment...).
+    Only empty fields are filled; nothing found earlier is overwritten. Each report is retried once."""
+    cutoff = (dt.date.today() - dt.timedelta(days=days)).isoformat()
+    rows = conn.execute("SELECT id, url, title, source, lang, source_country FROM articles WHERE relevant=1 AND text_mode='snippet' "
+                        "AND COALESCE(published, fetched) >= ? ORDER BY COALESCE(published, fetched) DESC LIMIT ?", (cutoff, limit)).fetchall()
+    if not rows:
+        return 0, 0
+    items = [{"url": r[1], "title": r[2], "snippet": "", "id": r[0], "lang": r[4], "source_country": r[5]} for r in rows]
+    items = collect.fetch_all(items, cfg["run"]["resolve_google_links"])
+    cols = [c[1] for c in conn.execute("PRAGMA table_info(articles)")]
+    done = 0
+    for it in items:
+        if it.get("text_mode") != "full":
+            conn.execute("UPDATE articles SET text_mode='snippet-retried' WHERE id=?", (it["id"],))
+            continue
+        rec = extract.extract(it["title"], it["text"], it.get("source_country") or LANG_COUNTRY.get(it.get("lang")))
+        if not rec.get("relevant"):
+            conn.execute("UPDATE articles SET text_mode='full' WHERE id=?", (it["id"],))
+            continue
+        cur = dict(zip(cols, conn.execute("SELECT * FROM articles WHERE id=?", (it["id"],)).fetchone()))
+        sets = {k: v for k, v in rec.items() if k in cols and k not in REREAD_SKIP and v not in (None, "", 0)
+                and cur.get(k) in (None, "", 0, "Unknown")}
+        if rec.get("seizure_country") and cur.get("location_conf") == "low" and not cur.get("seizure_place"):
+            sets["location_conf"] = rec.get("location_conf")
+        sets["text_mode"] = "full"
+        conn.execute("UPDATE articles SET " + ", ".join(f"{k}=?" for k in sets) + " WHERE id=?", [*sets.values(), it["id"]])
+        done += 1
+    conn.commit()
+    return done, len(items)
 
 
 def main():
@@ -129,6 +167,16 @@ def main():
         log(f"      attempted {n_bf} older headline(s) that predate this feature "
             f"({translate.stats['ok']} translated, {translate.stats['fail']} failed and kept as-is"
             + (f"; last error: {translate.stats['last_error']}" if translate.stats["fail"] else "") + ")")
+    if not args.demo:
+        try:
+            got, tried = reread_snippets(conn, cfg)
+            if tried:
+                log(f"      re-read {got} of {tried} earlier headline-only report(s) in full")
+        except Exception as exc:  # an extra: never stop the run
+            log(f"      re-reading earlier reports skipped ({type(exc).__name__}: {exc})")
+    n_loc = db.backfill_locations(conn, extract.locate)
+    if n_loc:
+        log(f"      found a country for {n_loc} earlier report(s) that had none")
     res = analyze.run(conn, cfg)
     if res is None:
         log("No seizure events stored yet - nothing to analyse. Try again after the first successful collection.")
