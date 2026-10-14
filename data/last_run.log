@@ -4,40 +4,161 @@
    RSS UK Border Force: 20 items
    ! https://ndlea.gov.ng/feed/... HTTPError
    RSS NDLEA Nigeria: 0 items
-   Official websites (28 searched): 1899 headlines
-   Google News: 6154 headlines
+   Official websites (28 searched): 1898 headlines
+   Google News: 6321 headlines
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28cocaine%20OR%20heroin%20OR%20metha... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28precursor%20chemicals%20OR%20cland... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22hazardous%20chemicals%22%20OR%2... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28mercury%29%20%28smuggling%20OR%20s... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28stolen%20vehicles%20OR%20stolen%20... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22CITES%22%20OR%20%22protected%20... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22CITES%20timber%22%20OR%20%22pro... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28ivory%20OR%20%22rhino%20horn%22%20... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28illegal%20firearms%20OR%20weapons%... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28antiquities%20OR%20%22cultural%20p... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28coca%C3%ADna%20OR%20hero%C3%ADna%2... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28qu%C3%ADmicos%20precursores%20OR%2... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28productos%20qu%C3%ADmicos%20OR%20p... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28veh%C3%ADculos%20robados%29%20%28d... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28armas%20de%20fuego%20OR%20municion... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22piezas%20arqueol%C3%B3gicas%22%... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28coca%C3%AFne%20OR%20h%C3%A9ro%C3%A... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28pr%C3%A9curseurs%20chimiques%29%20... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28v%C3%A9hicules%20vol%C3%A9s%29%20%... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28armes%20a%20feu%20OR%20munitions%2... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22biens%20culturels%22%20OR%20ant... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28coca%C3%ADna%20OR%20hero%C3%ADna%2... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28qu%C3%ADmicos%20precursores%29%20%... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28ve%C3%ADculos%20roubados%29%20%28a... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%D9%83%D9%88%D9%83%D8%A7%D9%8A%D9%... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%D9%85%D9%88%D8%A7%D8%AF%20%D9%83%... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22%D9%82%D8%B7%D8%B9%20%D8%A3%D8%... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28kokain%20OR%20eroin%20OR%20esrar%2... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28kimyasal%20OR%20%22tar%C4%B1m%20il... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22tarihi%20eser%22%29%20%28%22ele... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%D0%BA%D0%BE%D0%BA%D0%B0%D0%B8%D0%... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%D1%85%D0%B8%D0%BC%D0%B8%D0%BA%D0%... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22%D0%BA%D1%83%D0%BB%D1%8C%D1%82%... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%E5%8F%AF%E5%8D%A1%E5%9B%A0%20OR%2... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%E6%96%87%E7%89%A9%29%20%28%E8%B5%... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%E5%8D%B1%E9%99%A9%E5%8C%96%E5%AD%... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%E0%A4%95%E0%A5%8B%E0%A4%95%E0%A5%... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22ng%C3%A0%20voi%22%29%20%28thu%2... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22h%C3%B3a%20ch%E1%BA%A5t%22%20OR... HTTPError
    GDELT: 0 headlines
-      1250 candidate headlines, 254 new
+      1303 candidate headlines, 405 new
 [2/4] Reading articles...
-      links resolved: 252 of 252
-double free or corruption (!prev)
+      links resolved: 403 of 403
+   ! https://haipo.co.il/en/item/649765... HTTPError
+   ! https://www.tbnewswatch.com/local-news/2-charged-after-110k-in-drugs-seized-city-police-sa... HTTPError
+   ! https://www.westyorkshire.police.uk/news-appeals/bradford-gang-jailed-over-100-years-drug-... HTTPError
+   ! https://informat.ro/en/diaspora/french-customs-officers-discover-725-kg-of-cocaine-in-roma... HTTPError
+   ! https://www.mixvale.com.br/2026/10/14/liquid-cocaine-bust-at-bali-airport-leads-to-arrest-... HTTPError
+   ! https://elevenmyanmar.com/news/nearly-800-kg-of-crystal-meth-seized-in-taunggyi-three-arre... HTTPError
+   ! https://www.israelhayom.com/2026/10/13/israeli-gangs-smuggle-drugs-jordan-balloons/... HTTPError
+   ! https://www.newswest9.com/article/news/local/border-patrol-pounds-of-fentanyl-sierra-blanc... HTTPError
+   ! https://www.mlive.com/news/kalamazoo/2026/10/police-seize-stolen-guns-fentanyl-in-raids-in... HTTPError
+   ! https://www.wilsontimes.com/news/drug-trafficking-charges-brought-after-multi-county-inves... HTTPError
+   ! https://newsinfo.inquirer.net/2323490/p2-m-smuggled-cigarettes-in-ice-boxes-seized-in-lana... HTTPError
+   ! https://www.borderreport.com/border-report-tour/border-crime/man-sentenced-to-2-years-in-g... HTTPError
+   ! https://ktla.com/news/california/homemade-50-caliber-rifle-seized-in-southern-california-1... HTTPError
+   ! https://www.economist.com/europe/2026/10/14/european-museums-are-seeing-a-spike-in-high-va... HTTPError
+   ! https://www.saba.ye/en/news3810209.htm... HTTPError
+   ! https://www.ejercito.mil.co/ejercito-y-policia-incautan-cerca-de-una-tonelada-de-cocaina-e... HTTPError
+   ! https://informat.ro/es/diaspora/aduaneros-franceses-descubren-725-kg-de-cocaina-en-un-cami... HTTPError
+   ! https://www.nostalgica.cl/incautan-mas-de-1-700-kilos-de-marihuana-en-la-ruta-5-norte-cond... HTTPError
+   ! https://www.miradiols.cl/2026/10/14/incautan-mas-de-31-kilos-de-marihuana-avaluados-en-50-... HTTPError
+   ! https://www.noticierodelllano.com/2026/10/incautan-332-kilos-de-marihuana-en-un.html... HTTPError
+   ! https://informat.ro/fr/diaspora/les-douaniers-francais-decouvrent-725-kg-de-cocaine-dans-u... HTTPError
+   ! https://www.leprogres.fr/faits-divers-justice/2026/10/14/a36-plus-de-422-kg-de-cannabis-sa... HTTPError
+   ! https://fr.timesofisrael.com/israel-restitue-a-la-grece-22-antiquites/... HTTPError
+   ! https://www.itv.com/news/utv/2026-10-14/24m-worth-of-suspected-cocaine-seized-in-lisburn... ReadTimeout
+   ! https://odairmatias.com.br/posts/detalhes/8365... HTTPError
+   ! https://surgiu.com.br/2026/10/14/investigacao-de-homicidio-leva-a-apreensao-de-armas-e-dro... HTTPError
+   ! https://jmonline.com.br/policia/policia-aborda-suspeito-de-andar-armado-e-apreende-revolve... HTTPError
+   ! https://araguaianoticia.com.br/noticia/79567/homem-e-preso-por-trafico-de-drogas-policia-a... HTTPError
+   ! https://www.bnewsrn.com.br/amp/noticias/policia/prf-apreende-explosivos-arma-e-municoes-de... HTTPError
+   ! https://www.alojuca.com.br/noticia/baque-no-trafico-pm-apreende-mais-de-3-kg-de-drogas-e-m... HTTPError
+   ! https://www.alayyam.info/news/ASBTV5BZ-8WQ50N-A227... HTTPError
+   ! https://www.awanmasr.com/%D8%B6%D8%A8%D8%B7-%D8%B9%D8%A7%D8%B7%D9%84-%D8%A8%D8%A7%D9%84%D8... HTTPError
+   ! https://www.masrtimes.com/764307... HTTPError
+   ! https://www.masrtimes.com/764272... HTTPError
+   ! https://www.masrtimes.com/764204... HTTPError
+   ! https://www.vetogate.com/5750153... HTTPError
+   ! https://www.azzaman.com/%D8%A7%D9%84%D8%B9%D8%AB%D9%88%D8%B1-%D8%B9%D9%84%D9%89-119-%D9%82... HTTPError
+   ! https://klamkom.com/2026/10/14/%D8%AD%D9%85%D9%88%D8%B4%D9%8A-%D9%88%D8%A7%D9%84%D9%85%D9%... HTTPError
+   ! https://www.hatayekspres.com/metamfetamin-ve-uyusturucu-kullanim-aparati-ele-gecirildi/168... HTTPError
+   ! https://www.medyayenigun.net/haber/28982984/kumlu-uyusturucu-operasyonu-3578-gram-esrar... HTTPError
+   ! https://sakaryapostasi.com/haber/28975787/jandarma-ve-narkotikten-uyusturucu-operasyonu-52... HTTPError
+   ! https://www.mersinhaber.com/haber-samsunda-273-bin-300-uyusturucu-hap-ele-gecirildi/810290... HTTPError
+   ! https://www.turkgun.com/gundem/samsun-canikte-uyusturucu-operasyonu-273-bin-300-hap-ele-ge... HTTPError
+   ! https://hbrcaldiran.com/amp/haber/28978540/vanda-34-kilo-sivi-metamfetamin-ele-gecirildi... HTTPError
+   ! https://haipo.co.il/ru/item/649805... HTTPError
+   ! https://informat.ro/ru/diaspora/francuzskie-tamozenniki-obnaruzili-725-kg-kokaina-v-rumyns... HTTPError
+   ! https://prospect.com.ru/news/7094660/wsj-ataki-ssha-na-suda-narkotorgovtsev-ne-presekli-po... HTTPError
+   ! https://www.babnet.net/rttdetail-337796.asp... ReadTimeout
+   ! https://informat.ro/zh/diaspora-zh/french-customs-officers-discover-725-kg-of-cocaine-in-r... HTTPError
+   ! https://news.rambler.ua/incidents/57226673-v-dnr-politseyskie-izyali-u-mestnogo-zhitelya-k... ReadTimeout
+   ! https://www.tarunmitra.in/state/uttar-pradesh/firozabad-ganja-worth-rs-35-crore-recovered-... HTTPError
+   ! https://www.buxarkhabar.com/32-kg-of-cannabis-and-coins-weighing-113-kg-seized-during-a-po... HTTPError
+   ! https://www.dotookmedia.com/2026/10/blog-post_501.html... HTTPError
+   ! https://royalbulletin.in/interstate-ganja-smuggling-gang-busted-in-greater-noida-three-arr... HTTPError
+   ! https://www.jansatta.com/rajya/punjab-police-constable-deployed-on-anti-drone-duty-arreste... HTTPError
+   ! https://ndtv.in/india/punjab-police-constable-arrested-with-15-kg-of-heroin-12184080... HTTPError
+   ! https://danviet.vn/vu-phat-hien-co-vat-o-ninh-binh-cho-phep-nguoi-dan-tiep-tuc-thi-cong-de... HTTPError
+   ! https://news.rambler.ua/incidents/57235156-v-pervouralske-zaderzhali-podozrevaemogo-v-sbyt... ReadTimeout
+      read in full: 343; headline + snippet only: 62
+[3/4] Extracting facts and storing...
+      NER supplemented 74 article(s) (unrecognised place names logged to ner_places for review)
+      stored 397, of which 328 are seizure reports
+[4/4] Analysing and building report...
+      attempted 150 older headline(s) that predate this feature (167 translated, 218 failed and kept as-is; last error: _via_google: TooManyRequests: Server Error: You made too many requests to the server.According to google, you are allowed to make 5 requests per secondand up to 200k requests per day. You can wait and try again later oryou can try the translate_batch function)
+      links resolved: 12 of 12
+   ! https://elevenmyanmar.com/news/nearly-800-kg-of-crystal-meth-seized-in-taunggyi-three-arre... HTTPError
+   ! https://www.newswest9.com/article/news/local/border-patrol-pounds-of-fentanyl-sierra-blanc... HTTPError
+   ! https://www.mixvale.com.br/2026/10/14/liquid-cocaine-bust-at-bali-airport-leads-to-arrest-... HTTPError
+   ! https://newsinfo.inquirer.net/2323490/p2-m-smuggled-cigarettes-in-ice-boxes-seized-in-lana... HTTPError
+   ! https://informat.ro/en/diaspora/french-customs-officers-discover-725-kg-of-cocaine-in-roma... HTTPError
+   ! https://ktla.com/news/california/homemade-50-caliber-rifle-seized-in-southern-california-1... HTTPError
+   ! https://www.mlive.com/news/kalamazoo/2026/10/police-seize-stolen-guns-fentanyl-in-raids-in... HTTPError
+   ! https://www.ejercito.mil.co/ejercito-y-policia-incautan-cerca-de-una-tonelada-de-cocaina-e... HTTPError
+   ! https://informat.ro/es/diaspora/aduaneros-franceses-descubren-725-kg-de-cocaina-en-un-cami... HTTPError
+   ! https://informat.ro/fr/diaspora/les-douaniers-francais-decouvrent-725-kg-de-cocaine-dans-u... HTTPError
+   ! https://www.miradiols.cl/2026/10/14/incautan-mas-de-31-kilos-de-marihuana-avaluados-en-50-... HTTPError
+   ! https://jmonline.com.br/policia/policia-aborda-suspeito-de-andar-armado-e-apreende-revolve... HTTPError
+   ! https://odairmatias.com.br/posts/detalhes/8365... HTTPError
+   ! https://www.masrtimes.com/764204... HTTPError
+   ! https://araguaianoticia.com.br/noticia/79567/homem-e-preso-por-trafico-de-drogas-policia-a... HTTPError
+   ! https://klamkom.com/2026/10/14/%D8%AD%D9%85%D9%88%D8%B4%D9%8A-%D9%88%D8%A7%D9%84%D9%85%D9%... HTTPError
+   ! https://www.noticierodelllano.com/2026/10/incautan-332-kilos-de-marihuana-en-un.html... HTTPError
+   ! https://www.medyayenigun.net/haber/28982984/kumlu-uyusturucu-operasyonu-3578-gram-esrar... HTTPError
+   ! https://www.hatayekspres.com/metamfetamin-ve-uyusturucu-kullanim-aparati-ele-gecirildi/168... HTTPError
+   ! https://www.mersinhaber.com/haber-samsunda-273-bin-300-uyusturucu-hap-ele-gecirildi/810290... HTTPError
+   ! https://haipo.co.il/ru/item/649805... HTTPError
+   ! https://informat.ro/ru/diaspora/francuzskie-tamozenniki-obnaruzili-725-kg-kokaina-v-rumyns... HTTPError
+   ! https://informat.ro/zh/diaspora-zh/french-customs-officers-discover-725-kg-of-cocaine-in-r... HTTPError
+   ! https://www.tarunmitra.in/state/uttar-pradesh/firozabad-ganja-worth-rs-35-crore-recovered-... HTTPError
+   ! https://royalbulletin.in/interstate-ganja-smuggling-gang-busted-in-greater-noida-three-arr... HTTPError
+   ! https://www.buxarkhabar.com/32-kg-of-cannabis-and-coins-weighing-113-kg-seized-during-a-po... HTTPError
+   ! https://www.jansatta.com/rajya/punjab-police-constable-deployed-on-anti-drone-duty-arreste... HTTPError
+   ! https://www.leprogres.fr/faits-divers-justice/2026/10/14/a36-plus-de-422-kg-de-cannabis-sa... HTTPError
+   ! https://ndtv.in/india/punjab-police-constable-arrested-with-15-kg-of-heroin-12184080... HTTPError
+   ! https://www.bnewsrn.com.br/amp/noticias/policia/prf-apreende-explosivos-arma-e-municoes-de... HTTPError
+   ! https://sakaryapostasi.com/haber/28975787/jandarma-ve-narkotikten-uyusturucu-operasyonu-52... HTTPError
+   ! https://www.alojuca.com.br/noticia/baque-no-trafico-pm-apreende-mais-de-3-kg-de-drogas-e-m... HTTPError
+   ! https://danviet.vn/vu-phat-hien-co-vat-o-ninh-binh-cho-phep-nguoi-dan-tiep-tuc-thi-cong-de... HTTPError
+   ! https://hbrcaldiran.com/amp/haber/28978540/vanda-34-kilo-sivi-metamfetamin-ele-gecirildi... HTTPError
+   ! https://prospect.com.ru/news/7094660/wsj-ataki-ssha-na-suda-narkotorgovtsev-ne-presekli-po... HTTPError
+   ! https://www.agenzianova.com/en/news/Over-23-kilos-of-cocaine-seized-in-Palermo%3B-courier-... HTTPError
+   ! https://www.wtsp.com/article/news/crime/11-ounces-cocaine-arrest-tampa-lutz-drug-investiga... HTTPError
+   ! https://albertonews.com/internacionales/golpe-al-narcotrafico-incautan-en-costa-rica-52-ki... HTTPError
+   ! https://cebudailynews.inquirer.net/774283/%E2%82%B1278-8m-shabu-seized-in-cebu-city-larges... HTTPError
+   ! https://filipinotimes.net/latest-news/2026/10/11/pdea-probes-laos-drug-seizure-involving-5... HTTPError
+   ! https://www.crimeworld.com/ireland/teen-arrested-as-gardai-seize-drugs-worth-175000-in-dub... HTTPError
+   ! https://www.itv.com/news/utv/2026-10-14/24m-worth-of-suspected-cocaine-seized-in-lisburn... ReadTimeout
+      read in full: 12; headline + snippet only: 48
+      re-read 12 of 60 earlier headline-only report(s) in full
+Done. 8356 events in report, 448 alerts.
+Weekly bulletin written (/home/runner/work/Seizure-watch-/Seizure-watch-/docs/bulletin.html).
+Open: /home/runner/work/Seizure-watch-/Seizure-watch-/docs/index.html
+  [High  ] HIGH-RISK EVENT: Cocaine - Rio de Janeiro (score 80)
+  [High  ] HIGH-RISK EVENT: Cocaine - Australia (score 80)
+  [High  ] HIGH-RISK EVENT: Cocaine - Valle del Cauca (score 70)
+  [High  ] HIGH-RISK EVENT: Cannabis - Karachi (score 65)
+  [High  ] HIGH-RISK EVENT: Cocaine - Santo Domingo (score 65)
+  [High  ] HIGH-RISK EVENT: Cocaine - Madrid (score 60)
+  [High  ] HIGH-RISK EVENT: Cannabis - Malaga (score 60)
+  [High  ] HIGH-RISK EVENT: Cocaine - Spain (score 60)
