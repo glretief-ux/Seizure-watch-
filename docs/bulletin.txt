@@ -1,8 +1,8 @@
 SEIZURE WATCH - weekly bulletin, 08 Oct - 14 Oct 2026
 
-1924 seizure reports this week (previous week 1859); 21 high risk; 439.6 t reported.
-Main drugs: Cannabis (525), Cocaine (320), NSA (240)
-Main countries: India (317), Turkey (263), Brazil (144), United States (107)
+2015 seizure reports this week (previous week 1859); 24 high risk; 485.7 t reported.
+Main drugs: Cannabis (544), Cocaine (336), NSA (261)
+Main countries: India (329), Turkey (283), Brazil (149), United States (111)
 
 NEW AND SURGING CORRIDORS
 - Pakistan -> India: SURGING (22 this period, 3 before; mainly Heroin/Opium)
@@ -21,13 +21,13 @@ UNUSUAL EVENTS (highest risk first)
   https://arynews.tv/two-suspects-arrested-for-smuggling-drugs-hidden-in-slippers-in-karachi
 - [High 65] 11 Oct | Methamphetamine | 54 kg | Assam | Myanmar -> India | Legitimate cargo (industrial/goods); Vehicle compartment | cargo: cement
   https://www.millenniumpost.in/nation/guwahati-ncb-seizes-meth-worth-rs-43-cr-arrests-two-679461
+- [High 60] 14 Oct | Cocaine | 24.2 t | Spain | Impregnation / liquid / disguised
+  https://actu.fr/nouvelle-aquitaine/sames_64502/les-saisies-de-cocaine-s-enchainent-au-pays-basque-et-dans-les-landes-un-fleau-en-pleine-expansion-depuis-l-espagne_64922163.html
 - [High 60] 14 Oct | Cannabis | 2.5 t | Malaga | Sweden -> Spain | Vehicle compartment
   https://www.elespanol.com/malaga/20261014/chito-policia-cazo-banda-asaltaba-narcos-fusiles-asalto-nivel-violencia-va-vez-dl/1003744418664_0.html
-- [High 60] 12 Oct | Methamphetamine | 521 kg | Davao | Malaysia -> Philippines | Legitimate cargo (industrial/goods); Luggage / passenger goods | cargo: cement
-  https://news.google.com/rss/articles/CBMijwFBVV95cUxQVmZhN0g5NEgxQnhoYnpra1N5XzVnMzBvS29vUmJTeEdmdjZWN1cwbHhNX0JUczdPVnc3Z0w5Sm5xWTFUZDdWNmdqMkVJdW5ENTZPcTJEaFk0UjBkUTA2UjlSNjRyelVWckswRHR1NXVkcFd5R3NHUy1IQzJOX0huRUk0NEtxSnhWWVdKMl8yWQ?oc=5
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (179), Legitimate cargo (food/produce) (106), Postal / parcel (61)
-Cover cargo named: cement (52), الات (35), plastic (17), फल (10), chemicals (10)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (205), Legitimate cargo (food/produce) (116), Postal / parcel (66)
+Cover cargo named: cement (55), الات (37), plastic (22), फल (12), cacao (10)
 
 Coverage: searching 10 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Vietnamese, Chinese). 48 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
 Leads from open sources, not confirmed facts. Verify before acting.
