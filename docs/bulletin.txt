@@ -1,33 +1,33 @@
 SEIZURE WATCH - weekly bulletin, 08 Oct - 14 Oct 2026
 
-2226 seizure reports this week (previous week 1859); 31 high risk; 539.6 t reported.
-Main drugs: Cannabis (598), Cocaine (396), NSA (280)
-Main countries: India (362), Turkey (297), Brazil (192), United States (134)
+2273 seizure reports this week (previous week 1859); 36 high risk; 546.5 t reported.
+Main drugs: Cannabis (607), Cocaine (417), NSA (286)
+Main countries: India (365), Turkey (298), Brazil (199), United States (148)
 
 NEW AND SURGING CORRIDORS
 - Pakistan -> India: SURGING (23 this period, 3 before; mainly Heroin/Opium)
 - Ghana -> South Africa: NEW (16 this period, 0 before; mainly Heroin/Opium)
+- Mexico -> United States: SURGING (15 this period, 2 before; mainly Methamphetamine)
 - Thailand -> India: NEW (15 this period, 0 before; mainly Cannabis)
-- Mexico -> United States: SURGING (14 this period, 2 before; mainly Methamphetamine)
 - Iran -> Turkey: NEW (12 this period, 0 before; mainly Methamphetamine)
-- Nepal -> India: SURGING (10 this period, 1 before; mainly Cannabis)
+- Lebanon -> Syria: NEW (11 this period, 0 before; mainly NSA)
 
 UNUSUAL EVENTS (highest risk first)
 - [High 80] 13 Oct | Cocaine | 2.6 t | Australia | Fiji -> Australia | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Vessel hull / underwater | cargo: seafood; fish; cement; canned
   https://pmn.co.nz/read/law-and-order/cocaine-traffickers-exploit-pacific-tuna-routes-as-drug-seizures-mount-new-report-reveals
 - [High 80] 13 Oct | Cocaine | 150 kg | Rio de Janeiro | Legitimate cargo (food/produce); Vessel hull / underwater | cargo: cacao
   https://www.diariodoamapa.com.br/cadernos/policia/nova-rota-do-pcc-e-cv-usa-amapa-para-mandar-cocaina-para-a-europa/
+- [High 75] 11 Oct | Cannabis | 5 kg | Hong Kong airport | Philippines -> Hong Kong | Impregnation / liquid / disguised; Legitimate cargo (industrial/goods); Luggage / passenger goods | cargo: cement
+  https://news.google.com/rss/articles/CBMiyAFBVV95cUxQbXgwbF9jZWtVaWtkQkJuNUFuQXE1SHJfNjI5d2xjSlNSSXFrUmhaSjlCUXU4YUMySktqUzF5eU1JTVZtSW1qY0dsZ1ZnbGNmbHd0bnFIc3BxZzBCa3I3aGRhNU5nMXRzTXl3Z09lOG1oUndZc3ZIYkttWEhGNUNqRGRBZEdUTERxMEtyX0MzV29Db0tQUTg5SzZaNXJhdzAycHJ4V3NQZ0ExQTRxVGJyYU1YSGo0SkJYWG1RdHNQYy14M0dIbjQ4SQ?oc=5
 - [High 70] 14 Oct | Cocaine | Valle del Cauca | French Guiana -> Colombia | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Vessel hull / underwater | cargo: cement; chemical; fruit; charcoal
   https://www.livemint.com/global/why-us-airstrikes-are-failing-to-stop-the-global-cocaine-boom-11791939895590.html?openSearch=true
 - [High 65] 13 Oct | Cannabis | 3.8 t | Karachi | Afghanistan -> Pakistan | Hidden compartment (unspecified)
   https://arynews.tv/two-suspects-arrested-for-smuggling-drugs-hidden-in-slippers-in-karachi
 - [High 65] 14 Oct | Cocaine | 208 kg | Santo Domingo | Legitimate cargo (industrial/goods); Vehicle compartment | cargo: malta la negra; plastic; muebles
   https://elnacional.com.do/nacionales/judicial/piden-18-meses-prision-preventiva-cargamento-208-kilos-cocaina_583452.html
-- [High 65] 11 Oct | Methamphetamine | 54 kg | Assam | Myanmar -> India | Legitimate cargo (industrial/goods); Vehicle compartment | cargo: cement
-  https://www.millenniumpost.in/nation/guwahati-ncb-seizes-meth-worth-rs-43-cr-arrests-two-679461
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (267), Legitimate cargo (food/produce) (145), Postal / parcel (80)
-Cover cargo named: cement (68), الات (49), plastic (31), फल (19), cacao (14)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (291), Legitimate cargo (food/produce) (147), Postal / parcel (84)
+Cover cargo named: cement (80), الات (53), plastic (37), फल (21), cacao (14)
 
 Coverage: searching 10 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Vietnamese, Chinese). 48 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
 Leads from open sources, not confirmed facts. Verify before acting.
