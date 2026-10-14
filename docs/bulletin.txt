@@ -1,14 +1,14 @@
-SEIZURE WATCH - weekly bulletin, 07 Oct - 13 Oct 2026
+SEIZURE WATCH - weekly bulletin, 08 Oct - 14 Oct 2026
 
-2141 seizure reports this week (previous week 1986); 17 high risk; 412.6 t reported.
-Main drugs: Cannabis (594), Cocaine (358), NSA (268)
-Main countries: India (365), Turkey (293), Brazil (147), United States (103)
+1924 seizure reports this week (previous week 1859); 21 high risk; 439.6 t reported.
+Main drugs: Cannabis (525), Cocaine (320), NSA (240)
+Main countries: India (317), Turkey (263), Brazil (144), United States (107)
 
 NEW AND SURGING CORRIDORS
 - Pakistan -> India: SURGING (22 this period, 3 before; mainly Heroin/Opium)
 - Ghana -> South Africa: NEW (16 this period, 0 before; mainly Heroin/Opium)
-- Mexico -> United States: SURGING (15 this period, 1 before; mainly Methamphetamine)
 - Thailand -> India: NEW (15 this period, 0 before; mainly Cannabis)
+- Mexico -> United States: SURGING (14 this period, 2 before; mainly Methamphetamine)
 - Nepal -> India: SURGING (10 this period, 1 before; mainly Cannabis)
 - Lebanon -> Syria: NEW (10 this period, 0 before; mainly NSA)
 
@@ -21,13 +21,13 @@ UNUSUAL EVENTS (highest risk first)
   https://arynews.tv/two-suspects-arrested-for-smuggling-drugs-hidden-in-slippers-in-karachi
 - [High 65] 11 Oct | Methamphetamine | 54 kg | Assam | Myanmar -> India | Legitimate cargo (industrial/goods); Vehicle compartment | cargo: cement
   https://www.millenniumpost.in/nation/guwahati-ncb-seizes-meth-worth-rs-43-cr-arrests-two-679461
-- [High 60] 07 Oct | Cigarettes | 88 cigarettes | Hong Kong | Philippines -> Hong Kong | Legitimate cargo (industrial/goods); Luggage / passenger goods | cargo: cement
-  https://www.info.gov.hk/gia/general/202610/07/P2026100700698.htm
-- [High 60] 11 Oct | Cannabis | Hong Kong | Philippines -> Hong Kong | Legitimate cargo (industrial/goods); Luggage / passenger goods | cargo: cement
-  https://www.info.gov.hk/gia/general/202610/11/P2026101100219.htm
+- [High 60] 14 Oct | Cannabis | 2.5 t | Malaga | Sweden -> Spain | Vehicle compartment
+  https://www.elespanol.com/malaga/20261014/chito-policia-cazo-banda-asaltaba-narcos-fusiles-asalto-nivel-violencia-va-vez-dl/1003744418664_0.html
+- [High 60] 12 Oct | Methamphetamine | 521 kg | Davao | Malaysia -> Philippines | Legitimate cargo (industrial/goods); Luggage / passenger goods | cargo: cement
+  https://news.google.com/rss/articles/CBMijwFBVV95cUxQVmZhN0g5NEgxQnhoYnpra1N5XzVnMzBvS29vUmJTeEdmdjZWN1cwbHhNX0JUczdPVnc3Z0w5Sm5xWTFUZDdWNmdqMkVJdW5ENTZPcTJEaFk0UjBkUTA2UjlSNjRyelVWckswRHR1NXVkcFd5R3NHUy1IQzJOX0huRUk0NEtxSnhWWVdKMl8yWQ?oc=5
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (171), Legitimate cargo (food/produce) (87), Postal / parcel (59)
-Cover cargo named: cement (50), الات (33), plastic (15), chemicals (10), फल (9)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (179), Legitimate cargo (food/produce) (106), Postal / parcel (61)
+Cover cargo named: cement (52), الات (35), plastic (17), फल (10), chemicals (10)
 
 Coverage: searching 10 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Vietnamese, Chinese). 48 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
 Leads from open sources, not confirmed facts. Verify before acting.
