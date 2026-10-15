@@ -1,8 +1,8 @@
 SEIZURE WATCH - weekly bulletin, 09 Oct - 15 Oct 2026
 
-2013 seizure reports this week (previous week 1755); 37 high risk; 536.0 t reported.
-Main drugs: Cannabis (536), Cocaine (366), NSA (257)
-Main countries: India (324), Turkey (281), Brazil (191), United States (133)
+2187 seizure reports this week (previous week 1755); 44 high risk; 585.0 t reported.
+Main drugs: Cannabis (574), Cocaine (395), NSA (286)
+Main countries: India (347), Turkey (302), Brazil (210), United States (145)
 
 NEW AND SURGING CORRIDORS
 - Pakistan -> India: SURGING (23 this period, 3 before; mainly Heroin/Opium)
@@ -23,11 +23,11 @@ UNUSUAL EVENTS (highest risk first)
   https://www.livemint.com/global/why-us-airstrikes-are-failing-to-stop-the-global-cocaine-boom-11791939895590.html?openSearch=true
 - [High 65] 13 Oct | Cannabis | 3.8 t | Karachi | Afghanistan -> Pakistan | Hidden compartment (unspecified)
   https://arynews.tv/two-suspects-arrested-for-smuggling-drugs-hidden-in-slippers-in-karachi
-- [High 65] 14 Oct | Cocaine | 208 kg | Santo Domingo | Legitimate cargo (industrial/goods); Vehicle compartment | cargo: malta la negra; plastic; muebles
-  https://elnacional.com.do/nacionales/judicial/piden-18-meses-prision-preventiva-cargamento-208-kilos-cocaina_583452.html
+- [High 65] 15 Oct | Elephant ivory | 500 kg | Laem Chabang | Zambia -> Thailand | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods) | cargo: holding processed timber; rice
+  https://news.mongabay.com/short-article/thailand-seizes-ivory-shipment-from-zambia-to-launch-dna-investigation/
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (287), Legitimate cargo (food/produce) (143), Postal / parcel (79)
-Cover cargo named: cement (79), الات (52), plastic (36), फल (19), cacao (14)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (334), Legitimate cargo (food/produce) (154), Postal / parcel (93)
+Cover cargo named: cement (95), الات (59), plastic (48), फल (20), cacao (15)
 
 Coverage: searching 10 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Vietnamese, Chinese). 48 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
 Leads from open sources, not confirmed facts. Verify before acting.
