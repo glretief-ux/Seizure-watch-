@@ -1,14 +1,14 @@
 SEIZURE WATCH - weekly bulletin, 09 Oct - 15 Oct 2026
 
-2187 seizure reports this week (previous week 1755); 44 high risk; 585.0 t reported.
-Main drugs: Cannabis (574), Cocaine (395), NSA (286)
-Main countries: India (347), Turkey (302), Brazil (210), United States (145)
+2303 seizure reports this week (previous week 1755); 49 high risk; 599.1 t reported.
+Main drugs: Cannabis (606), Cocaine (424), NSA (299)
+Main countries: India (363), Turkey (314), Brazil (226), United States (161)
 
 NEW AND SURGING CORRIDORS
 - Pakistan -> India: SURGING (23 this period, 3 before; mainly Heroin/Opium)
 - Ghana -> South Africa: NEW (16 this period, 0 before; mainly Heroin/Opium)
 - Mexico -> United States: SURGING (16 this period, 2 before; mainly Cocaine)
-- Thailand -> India: NEW (15 this period, 0 before; mainly Cannabis)
+- Thailand -> India: NEW (16 this period, 0 before; mainly Cannabis)
 - Iran -> Turkey: NEW (12 this period, 0 before; mainly Methamphetamine)
 - Lebanon -> Syria: NEW (11 this period, 0 before; mainly NSA)
 
@@ -26,8 +26,8 @@ UNUSUAL EVENTS (highest risk first)
 - [High 65] 15 Oct | Elephant ivory | 500 kg | Laem Chabang | Zambia -> Thailand | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods) | cargo: holding processed timber; rice
   https://news.mongabay.com/short-article/thailand-seizes-ivory-shipment-from-zambia-to-launch-dna-investigation/
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (334), Legitimate cargo (food/produce) (154), Postal / parcel (93)
-Cover cargo named: cement (95), الات (59), plastic (48), फल (20), cacao (15)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (358), Legitimate cargo (food/produce) (167), Postal / parcel (103)
+Cover cargo named: cement (103), الات (62), plastic (51), फल (21), cacao (15)
 
 Coverage: searching 10 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Vietnamese, Chinese). 48 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
 Leads from open sources, not confirmed facts. Verify before acting.
