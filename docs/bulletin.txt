@@ -1,11 +1,11 @@
 SEIZURE WATCH - weekly bulletin, 09 Oct - 15 Oct 2026
 
-2303 seizure reports this week (previous week 1755); 49 high risk; 599.1 t reported.
-Main drugs: Cannabis (606), Cocaine (424), NSA (299)
-Main countries: India (363), Turkey (314), Brazil (226), United States (161)
+2365 seizure reports this week (previous week 1755); 50 high risk; 601.1 t reported.
+Main drugs: Cannabis (624), Cocaine (440), NSA (310)
+Main countries: India (370), Turkey (325), Brazil (236), United States (167)
 
 NEW AND SURGING CORRIDORS
-- Pakistan -> India: SURGING (23 this period, 3 before; mainly Heroin/Opium)
+- Pakistan -> India: SURGING (25 this period, 3 before; mainly Heroin/Opium)
 - Ghana -> South Africa: NEW (16 this period, 0 before; mainly Heroin/Opium)
 - Mexico -> United States: SURGING (16 this period, 2 before; mainly Cocaine)
 - Thailand -> India: NEW (16 this period, 0 before; mainly Cannabis)
@@ -21,13 +21,13 @@ UNUSUAL EVENTS (highest risk first)
   https://news.google.com/rss/articles/CBMiyAFBVV95cUxQbXgwbF9jZWtVaWtkQkJuNUFuQXE1SHJfNjI5d2xjSlNSSXFrUmhaSjlCUXU4YUMySktqUzF5eU1JTVZtSW1qY0dsZ1ZnbGNmbHd0bnFIc3BxZzBCa3I3aGRhNU5nMXRzTXl3Z09lOG1oUndZc3ZIYkttWEhGNUNqRGRBZEdUTERxMEtyX0MzV29Db0tQUTg5SzZaNXJhdzAycHJ4V3NQZ0ExQTRxVGJyYU1YSGo0SkJYWG1RdHNQYy14M0dIbjQ4SQ?oc=5
 - [High 70] 14 Oct | Cocaine | Valle del Cauca | French Guiana -> Colombia | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Vessel hull / underwater | cargo: cement; chemical; fruit; charcoal
   https://www.livemint.com/global/why-us-airstrikes-are-failing-to-stop-the-global-cocaine-boom-11791939895590.html?openSearch=true
+- [High 70] 15 Oct | Cocaine | Santos | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Vessel hull / underwater | cargo: cafe; cacao; timber
+  https://sindireceita.org.br/noticias/2026/10/15/trafico-internacional-de-drogas-e-o-fortalecimento-da-receita-federal
 - [High 65] 13 Oct | Cannabis | 3.8 t | Karachi | Afghanistan -> Pakistan | Hidden compartment (unspecified)
   https://arynews.tv/two-suspects-arrested-for-smuggling-drugs-hidden-in-slippers-in-karachi
-- [High 65] 15 Oct | Elephant ivory | 500 kg | Laem Chabang | Zambia -> Thailand | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods) | cargo: holding processed timber; rice
-  https://news.mongabay.com/short-article/thailand-seizes-ivory-shipment-from-zambia-to-launch-dna-investigation/
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (358), Legitimate cargo (food/produce) (167), Postal / parcel (103)
-Cover cargo named: cement (103), الات (62), plastic (51), फल (21), cacao (15)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (374), Legitimate cargo (food/produce) (174), Postal / parcel (105)
+Cover cargo named: cement (108), الات (66), plastic (52), फल (21), cacao (16)
 
 Coverage: searching 10 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Vietnamese, Chinese). 48 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
 Leads from open sources, not confirmed facts. Verify before acting.
