@@ -1,11 +1,11 @@
 SEIZURE WATCH - weekly bulletin, 10 Oct - 16 Oct 2026
 
-2166 seizure reports this week (previous week 1757); 52 high risk; 505.5 t reported.
-Main drugs: Cannabis (542), Cocaine (425), NSA (299)
-Main countries: India (341), Turkey (285), Brazil (237), United States (172)
+2282 seizure reports this week (previous week 1757); 58 high risk; 550.1 t reported.
+Main drugs: Cannabis (568), Cocaine (466), NSA (305)
+Main countries: India (361), Turkey (291), Brazil (255), United States (186)
 
 NEW AND SURGING CORRIDORS
-- Pakistan -> India: SURGING (24 this period, 4 before; mainly Heroin/Opium)
+- Pakistan -> India: SURGING (25 this period, 4 before; mainly Heroin/Opium)
 - Thailand -> India: NEW (18 this period, 0 before; mainly Cannabis)
 - Ghana -> South Africa: NEW (16 this period, 0 before; mainly Heroin/Opium)
 - Mexico -> United States: SURGING (16 this period, 2 before; mainly Cocaine)
@@ -26,8 +26,8 @@ UNUSUAL EVENTS (highest risk first)
 - [High 70] 15 Oct | Cocaine | Santos | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Vessel hull / underwater | cargo: cafe; cacao; timber
   https://sindireceita.org.br/noticias/2026/10/15/trafico-internacional-de-drogas-e-o-fortalecimento-da-receita-federal
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (400), Legitimate cargo (food/produce) (182), Postal / parcel (105)
-Cover cargo named: cement (120), الات (72), plastic (54), फल (19), cacao (17)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (425), Legitimate cargo (food/produce) (196), Postal / parcel (115)
+Cover cargo named: cement (128), الات (75), plastic (58), फल (20), cacao (19)
 
 Coverage: searching 10 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Vietnamese, Chinese). 48 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
 Leads from open sources, not confirmed facts. Verify before acting.
