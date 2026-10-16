@@ -1,8 +1,8 @@
 SEIZURE WATCH - weekly bulletin, 10 Oct - 16 Oct 2026
 
-2346 seizure reports this week (previous week 1757); 58 high risk; 596.0 t reported.
-Main drugs: Cannabis (578), Cocaine (489), NSA (316)
-Main countries: India (366), Turkey (295), Brazil (263), United States (192)
+2392 seizure reports this week (previous week 1757); 59 high risk; 601.9 t reported.
+Main drugs: Cannabis (585), Cocaine (502), NSA (320)
+Main countries: India (371), Turkey (295), Brazil (276), United States (200)
 
 NEW AND SURGING CORRIDORS
 - Pakistan -> India: SURGING (25 this period, 4 before; mainly Heroin/Opium)
@@ -26,8 +26,8 @@ UNUSUAL EVENTS (highest risk first)
 - [High 70] 14 Oct | Cocaine | Valle del Cauca | French Guiana -> Colombia | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Vessel hull / underwater | cargo: cement; chemical; fruit; charcoal
   https://www.livemint.com/global/why-us-airstrikes-are-failing-to-stop-the-global-cocaine-boom-11791939895590.html?openSearch=true
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (435), Legitimate cargo (food/produce) (198), Postal / parcel (119)
-Cover cargo named: cement (131), الات (77), plastic (58), फल (20), cacao (19)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (451), Legitimate cargo (food/produce) (200), Postal / parcel (123)
+Cover cargo named: cement (136), الات (86), plastic (59), फल (20), cacao (19)
 
 Coverage: searching 10 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Vietnamese, Chinese). 48 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
 Leads from open sources, not confirmed facts. Verify before acting.
