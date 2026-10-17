@@ -19,14 +19,40 @@ h1 { margin: 2px 0 0; font: 700 clamp(1.9rem, 4.2vw, 3rem)/1 var(--display); let
 .clock .d { font: 700 clamp(2.2rem, 5vw, 3.6rem)/1 var(--display); color: var(--now); font-variant-numeric: tabular-nums; }
 .clock .n { font-size: .8rem; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
 .stage { display: grid; gap: 14px; grid-template-columns: repeat(12, minmax(0, 1fr)); }
+.stage > .tile { grid-column: span 12; }
+.cols { grid-template-rows: auto 1fr auto; }
+/* fit modes: the whole board is laid out at a fixed size and scaled to the screen, so nothing needs scrolling */
+html.fit, html.fit body { height: 100%; overflow: hidden; }
+.wrap.fit { position: absolute; top: 0; left: 50%; transform-origin: top center; box-sizing: border-box; padding: 14px 18px; gap: 12px; align-content: start; max-width: none; margin: 0; }
+.wrap.fit .bar { position: static; padding-bottom: 8px; }
+.wrap.fit .note { display: none; }
+.wrap.fit h1 { font-size: 2.1rem; }
+.wrap.fit .clock .d { font-size: 2.6rem; }
+.wrap.fit .kpi { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding-block: 8px; }
+.wrap.fit .kpi h2 { order: 1; } .wrap.fit .kpi .v { order: 2; font-size: 2.4rem; } .wrap.fit .kpi .s { display: none; }
+.wrap.fit .kpi { grid-column: span 4; }
+.wrap.fit .mapbox { aspect-ratio: auto; }
+.wrap.land { width: 1400px; height: 960px; }
+.wrap.land .map { grid-column: 1 / span 7; grid-row: 2 / span 2; grid-template-rows: auto 1fr auto; }
+.wrap.land .mapbox { height: 100%; min-height: 0; }
+.wrap.land #raceI { grid-column: 8 / span 5; grid-row: 2; }
+.wrap.land #raceC { grid-column: 8 / span 5; grid-row: 3; }
+.wrap.land .cols { grid-column: 1 / span 12; grid-row: 4; grid-template-rows: auto 70px auto; }
+.wrap.land .col-box { min-height: 0; height: 70px; }
+.wrap.port { width: 820px; height: 1180px; }
+.wrap.port .map { grid-column: span 12; }
+.wrap.port .mapbox { aspect-ratio: 2 / 1; }
+.wrap.port .cols { grid-column: span 12; grid-template-rows: auto 70px auto; }
+.wrap.port .col-box { min-height: 0; height: 70px; }
+.wrap.port #raceI, .wrap.port #raceC { grid-column: span 6; }
+.wrap.port .kpi { flex-direction: column; align-items: flex-start; gap: 2px; }
+.wrap.port .kpi .v { font-size: 2.2rem; }
+.wrap.scroll .kpi .v { font-size: 3rem; }
+.wrap.scroll .clock { text-align: left; } .wrap.scroll .col-box { min-height: 160px; }
 .tile { background: var(--panel); border: 1px solid var(--edge); border-radius: 10px; padding: 14px 16px; min-width: 0; display: grid; gap: 8px; align-content: start; }
 .tile h2 { margin: 0; font: 600 .8rem var(--body); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
-.kpi { grid-column: span 4; }
 .kpi .v { font: 700 clamp(2.6rem, 6vw, 4.4rem)/1 var(--display); font-variant-numeric: tabular-nums; }
 .kpi .s { color: var(--muted); font-size: .85rem; }
-.map { grid-column: span 8; }
-.cols { grid-column: span 4; grid-template-rows: auto 1fr auto; }
-.race { grid-column: span 6; }
 .mapbox { position: relative; border-radius: 6px; overflow: hidden; background: var(--sea); aspect-ratio: 2 / 1; }
 canvas { display: block; width: 100%; height: 100%; }
 .legend { display: flex; gap: 16px; flex-wrap: wrap; color: var(--muted); font-size: .8rem; }
@@ -50,12 +76,9 @@ canvas { display: block; width: 100%; height: 100%; }
 .bar #play { background: var(--now); color: #1a0f06; border-color: var(--now); min-width: 92px; }
 .bar input[type=range] { flex: 1 1 200px; min-width: 0; accent-color: var(--now); height: 28px; }
 .note { color: var(--muted); font-size: .78rem; line-height: 1.5; max-width: 90ch; }
-@media (max-width: 980px) { .kpi { grid-column: span 12; } .map, .cols, .race { grid-column: span 12; } .kpi .v { font-size: 3rem; } }
-@media (min-width: 560px) and (max-width: 980px) { .kpi { grid-column: span 4; } }
-@media (max-width: 560px) { .clock { text-align: left; } .col-box { min-height: 160px; } }
 @media (prefers-reduced-motion: reduce) { .row { transition: none; } }
 </style>
-<div class="wrap">
+<div class="wrap scroll" id="wrap">
   <header>
     <div>
       <div class="kicker">Seizure Watch · open-source reports</div>
@@ -111,8 +134,8 @@ canvas { display: block; width: 100%; height: 100%; }
   const cv = $("map"), ctx = cv.getContext("2d");
   let W = 0, H = 0, proj, land, bg;
   function setupMap() {
-    const dpr = Math.min(window.devicePixelRatio || 1, 2), r = cv.parentNode.getBoundingClientRect();
-    W = Math.max(200, r.width); H = Math.max(100, r.height); cv.width = W * dpr; cv.height = H * dpr;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2), box = cv.parentNode;
+    W = Math.max(200, box.clientWidth); H = Math.max(100, box.clientHeight); cv.width = W * dpr; cv.height = H * dpr;
     proj = d3.geoEqualEarth().fitExtent([[4, 4], [W - 4, H - 4]], { type: "Sphere" });
     bg = document.createElement("canvas"); bg.width = cv.width; bg.height = cv.height;
     const b = bg.getContext("2d"); b.scale(dpr, dpr);
@@ -153,9 +176,10 @@ canvas { display: block; width: 100%; height: 100%; }
   }
 
   /* ---------- race bars ---------- */
-  const RH = 34, TOP = 8;
-  function mkRace(host, n) { host.style.height = n * RH + "px"; return { host, els: new Map() }; }
-  const raceI = mkRace($("rowsI"), TOP), raceC = mkRace($("rowsC"), TOP);
+  const RH = 34; let TOP = 8;
+  function mkRace(host) { return { host, els: new Map() }; }
+  const raceI = mkRace($("rowsI")), raceC = mkRace($("rowsC"));
+  function setTop(n) { TOP = n;[raceI, raceC].forEach(R => { R.host.style.height = n * RH + "px"; R.host.innerHTML = ""; R.els.clear(); }); }
   function drawRace(R, map) {
     const top = [...map.entries()].sort((a, b) => b[1] - a[1] || (a[0] < b[0] ? -1 : 1)).slice(0, TOP), max = top.length ? top[0][1] : 1, keep = new Set(top.map(x => x[0]));
     top.forEach(([k, v], i) => {
@@ -205,16 +229,29 @@ canvas { display: block; width: 100%; height: 100%; }
   $("replay").addEventListener("click", () => { tR = 0; frame(0); play(); });
   $("speed").addEventListener("click", () => { speed = speeds[(speeds.indexOf(speed) + 1) % speeds.length]; $("speed").textContent = speed + "×"; });
   $("scrub").addEventListener("input", e => { pause(); frame(+e.target.value / 3000 * N); $("play").textContent = "Resume"; });
-  let rz; window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { setupMap(); drawMap(tR); }, 150); });
+  /* pick a layout for this screen: phones scroll, tablets and desktops get a fixed-size board scaled to fit */
+  const wrap = $("wrap"), root = document.documentElement; let mode = "";
+  function layout() {
+    const vw = window.innerWidth, vh = window.innerHeight, m = vw < 600 ? "scroll" : (vw / vh >= 1.15 ? "land" : "port");
+    wrap.className = "wrap " + m + (m === "scroll" ? "" : " fit"); root.classList.toggle("fit", m !== "scroll");
+    if (m === "scroll") { wrap.style.transform = ""; wrap.style.left = ""; } else {
+      const w = m === "land" ? 1400 : 820, h = m === "land" ? 960 : 1180, k = Math.min(vw / w, vh / h);
+      wrap.style.transform = "translateX(-50%) scale(" + k + ")";
+    }
+    if (m !== mode) { mode = m; setTop(m === "scroll" ? 8 : 5); lastSlow = -1; }
+    setupMap(); frame(tR);
+  }
+  let rz; window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(layout, 120); });
 
   const noLoc = ev.filter(e => !e.ll).length;
   $("noLoc").textContent = fmt(noLoc) + " reports with no stated country are counted but not drawn";
   $("note").textContent = "Source: Seizure Watch, which reads open news reports and extracts the seizure facts automatically. Period " + dlab(M.days[0]) + " to " + dlab(M.days[N - 1]) + ". Counts are news reports, not official seizure statistics; one seizure can be reported more than once. Tonnes are only those stated in a report.";
-  setupMap();
+  layout(); tR = N;
   frame(N);                                  /* first frame shows the finished 30 days */
   $("play").textContent = "Play";
   if (!reduce) setTimeout(() => { if (tR >= N) { tR = 0; frame(0); play(); } }, 900);
   /* repeat the title-card data on slow fonts: redraw the map once fonts/layout settle */
   window.addEventListener("load", () => { setupMap(); drawMap(tR); });
+
 })();
 </script>
