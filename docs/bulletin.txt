@@ -1,14 +1,14 @@
-SEIZURE WATCH - weekly bulletin, 10 Oct - 16 Oct 2026
+SEIZURE WATCH - weekly bulletin, 11 Oct - 17 Oct 2026
 
-2392 seizure reports this week (previous week 1757); 59 high risk; 601.9 t reported.
-Main drugs: Cannabis (585), Cocaine (502), NSA (320)
-Main countries: India (371), Turkey (295), Brazil (276), United States (200)
+2144 seizure reports this week (previous week 1838); 60 high risk; 524.2 t reported.
+Main drugs: Cannabis (505), Cocaine (473), NSA (292)
+Main countries: India (310), Turkey (269), Brazil (265), United States (199)
 
 NEW AND SURGING CORRIDORS
-- Pakistan -> India: SURGING (25 this period, 4 before; mainly Heroin/Opium)
+- Pakistan -> India: SURGING (24 this period, 5 before; mainly Heroin/Opium)
 - Thailand -> India: NEW (18 this period, 0 before; mainly Cannabis)
+- Mexico -> United States: SURGING (17 this period, 2 before; mainly Methamphetamine)
 - Ghana -> South Africa: NEW (16 this period, 0 before; mainly Heroin/Opium)
-- Mexico -> United States: SURGING (16 this period, 2 before; mainly Cocaine)
 - Iran -> Turkey: NEW (12 this period, 0 before; mainly Methamphetamine)
 - Lebanon -> Syria: SURGING (11 this period, 1 before; mainly NSA)
 
@@ -26,8 +26,8 @@ UNUSUAL EVENTS (highest risk first)
 - [High 70] 14 Oct | Cocaine | Valle del Cauca | French Guiana -> Colombia | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Vessel hull / underwater | cargo: cement; chemical; fruit; charcoal
   https://www.livemint.com/global/why-us-airstrikes-are-failing-to-stop-the-global-cocaine-boom-11791939895590.html?openSearch=true
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (451), Legitimate cargo (food/produce) (200), Postal / parcel (123)
-Cover cargo named: cement (136), الات (86), plastic (59), फल (20), cacao (19)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (441), Legitimate cargo (food/produce) (197), Postal / parcel (116)
+Cover cargo named: cement (136), الات (82), plastic (59), फल (19), cacao (18)
 
 Coverage: searching 10 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Vietnamese, Chinese). 48 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
 Leads from open sources, not confirmed facts. Verify before acting.
