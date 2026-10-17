@@ -1,18 +1,20 @@
 SEIZURE WATCH - weekly bulletin, 11 Oct - 17 Oct 2026
 
-2319 seizure reports this week (previous week 1838); 68 high risk; 584.0 t reported.
-Main drugs: Cannabis (552), Cocaine (507), NSA (322)
-Main countries: India (363), Brazil (286), Turkey (281), United States (210)
+2350 seizure reports this week (previous week 1838); 70 high risk; 591.2 t reported.
+Main drugs: Cannabis (564), Cocaine (517), NSA (322)
+Main countries: India (367), Brazil (295), Turkey (281), United States (213)
 
 NEW AND SURGING CORRIDORS
 - Pakistan -> India: SURGING (25 this period, 5 before; mainly Heroin/Opium)
 - Thailand -> India: NEW (20 this period, 0 before; mainly Cannabis)
-- Mexico -> United States: SURGING (17 this period, 2 before; mainly Methamphetamine)
+- Mexico -> United States: SURGING (18 this period, 2 before; mainly Methamphetamine)
 - Ghana -> South Africa: NEW (16 this period, 0 before; mainly Heroin/Opium)
 - Iran -> Turkey: NEW (12 this period, 0 before; mainly Methamphetamine)
 - Lebanon -> Syria: SURGING (11 this period, 1 before; mainly NSA)
 
 UNUSUAL EVENTS (highest risk first)
+- [High 80] 16 Oct | Heroin/Opium | 3.0 t | Gujarat | Pakistan -> India | Legitimate cargo (industrial/goods) | cargo: cement
+  https://patialapolitics.com/77159/
 - [High 80] 13 Oct | Cocaine | 2.6 t | Australia | Fiji -> Australia | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Vessel hull / underwater | cargo: seafood; fish; cement; canned
   https://pmn.co.nz/read/law-and-order/cocaine-traffickers-exploit-pacific-tuna-routes-as-drug-seizures-mount-new-report-reveals
 - [High 80] 13 Oct | Cocaine | 150 kg | Rio de Janeiro | Legitimate cargo (food/produce); Vessel hull / underwater | cargo: cacao
@@ -21,13 +23,11 @@ UNUSUAL EVENTS (highest risk first)
   https://shop.ssbcrack.com/blogs/blog/delhi-customs-seizes-148-67-kg-hydroponic-weed-at-igi-airport-one-arrested
 - [High 75] 11 Oct | Cannabis | 5 kg | Hong Kong airport | Philippines -> Hong Kong | Impregnation / liquid / disguised; Legitimate cargo (industrial/goods); Luggage / passenger goods | cargo: cement
   https://news.google.com/rss/articles/CBMiyAFBVV95cUxQbXgwbF9jZWtVaWtkQkJuNUFuQXE1SHJfNjI5d2xjSlNSSXFrUmhaSjlCUXU4YUMySktqUzF5eU1JTVZtSW1qY0dsZ1ZnbGNmbHd0bnFIc3BxZzBCa3I3aGRhNU5nMXRzTXl3Z09lOG1oUndZc3ZIYkttWEhGNUNqRGRBZEdUTERxMEtyX0MzV29Db0tQUTg5SzZaNXJhdzAycHJ4V3NQZ0ExQTRxVGJyYU1YSGo0SkJYWG1RdHNQYy14M0dIbjQ4SQ?oc=5
-- [High 70] 16 Oct | Heroin/Opium | 3.0 t | Gujarat | Pakistan -> India
-  https://patialapolitics.com/77159/
 - [High 70] 14 Oct | Cocaine | Valle del Cauca | French Guiana -> Colombia | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Vessel hull / underwater | cargo: cement; chemical; fruit; charcoal
   https://www.livemint.com/global/why-us-airstrikes-are-failing-to-stop-the-global-cocaine-boom-11791939895590.html?openSearch=true
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (476), Legitimate cargo (food/produce) (218), Postal / parcel (128)
-Cover cargo named: cement (151), الات (90), plastic (59), फल (26), cacao (18)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (482), Legitimate cargo (food/produce) (221), Postal / parcel (128)
+Cover cargo named: cement (152), الات (93), plastic (60), फल (26), cacao (19)
 
 Coverage: searching 10 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Vietnamese, Chinese). 48 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
 Leads from open sources, not confirmed facts. Verify before acting.
