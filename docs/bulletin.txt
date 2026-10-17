@@ -1,12 +1,12 @@
 SEIZURE WATCH - weekly bulletin, 11 Oct - 17 Oct 2026
 
-2187 seizure reports this week (previous week 1838); 64 high risk; 534.4 t reported.
-Main drugs: Cannabis (513), Cocaine (487), NSA (296)
-Main countries: India (321), Brazil (272), Turkey (269), United States (203)
+2233 seizure reports this week (previous week 1838); 66 high risk; 570.3 t reported.
+Main drugs: Cannabis (530), Cocaine (494), NSA (305)
+Main countries: India (331), Brazil (276), Turkey (272), United States (206)
 
 NEW AND SURGING CORRIDORS
-- Pakistan -> India: SURGING (24 this period, 5 before; mainly Heroin/Opium)
-- Thailand -> India: NEW (18 this period, 0 before; mainly Cannabis)
+- Pakistan -> India: SURGING (25 this period, 5 before; mainly Heroin/Opium)
+- Thailand -> India: NEW (21 this period, 0 before; mainly Cannabis)
 - Mexico -> United States: SURGING (17 this period, 2 before; mainly Methamphetamine)
 - Ghana -> South Africa: NEW (16 this period, 0 before; mainly Heroin/Opium)
 - Iran -> Turkey: NEW (12 this period, 0 before; mainly Methamphetamine)
@@ -26,8 +26,8 @@ UNUSUAL EVENTS (highest risk first)
 - [High 70] 14 Oct | Cocaine | Valle del Cauca | French Guiana -> Colombia | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Vessel hull / underwater | cargo: cement; chemical; fruit; charcoal
   https://www.livemint.com/global/why-us-airstrikes-are-failing-to-stop-the-global-cocaine-boom-11791939895590.html?openSearch=true
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (446), Legitimate cargo (food/produce) (202), Postal / parcel (120)
-Cover cargo named: cement (138), الات (82), plastic (59), फल (20), cacao (18)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (459), Legitimate cargo (food/produce) (206), Postal / parcel (123)
+Cover cargo named: cement (142), الات (86), plastic (59), फल (22), cacao (18)
 
 Coverage: searching 10 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Vietnamese, Chinese). 48 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
 Leads from open sources, not confirmed facts. Verify before acting.
