@@ -1,0 +1,220 @@
+<title>Seizure Watch Motion</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
+<style>
+/* Layout: one 30-day clock drives a stage of tiles: KPI counters, a world map with pulses, daily columns and two ranking races. Dark single look (a night-time operations room); signal orange marks "now". */
+:root {
+  color-scheme: dark;
+  --bg: #0b1420; --panel: #111d2c; --edge: #1f3047; --ink: #e8eef5; --muted: #8ea0b5;
+  --now: #ff8a3d; --teal: #3fc1b0; --blue: #5b9bf0; --land: #1a2a3d; --land-edge: #243b55; --sea: #0d1a29;
+  --display: "Barlow Condensed", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --body: "Barlow", "Segoe UI", -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; }
+.wrap { max-width: 1500px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 18px 28px; display: grid; gap: 14px; }
+header { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 10px 24px; }
+.kicker { font: 600 .8rem var(--body); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+h1 { margin: 2px 0 0; font: 700 clamp(1.9rem, 4.2vw, 3rem)/1 var(--display); letter-spacing: .01em; text-wrap: balance; }
+.clock { text-align: right; }
+.clock .d { font: 700 clamp(2.2rem, 5vw, 3.6rem)/1 var(--display); color: var(--now); font-variant-numeric: tabular-nums; }
+.clock .n { font-size: .8rem; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
+.stage { display: grid; gap: 14px; grid-template-columns: repeat(12, minmax(0, 1fr)); }
+.tile { background: var(--panel); border: 1px solid var(--edge); border-radius: 10px; padding: 14px 16px; min-width: 0; display: grid; gap: 8px; align-content: start; }
+.tile h2 { margin: 0; font: 600 .8rem var(--body); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.kpi { grid-column: span 4; }
+.kpi .v { font: 700 clamp(2.6rem, 6vw, 4.4rem)/1 var(--display); font-variant-numeric: tabular-nums; }
+.kpi .s { color: var(--muted); font-size: .85rem; }
+.map { grid-column: span 8; }
+.cols { grid-column: span 4; grid-template-rows: auto 1fr auto; }
+.race { grid-column: span 6; }
+.mapbox { position: relative; border-radius: 6px; overflow: hidden; background: var(--sea); aspect-ratio: 2 / 1; }
+canvas { display: block; width: 100%; height: 100%; }
+.legend { display: flex; gap: 16px; flex-wrap: wrap; color: var(--muted); font-size: .8rem; }
+.legend i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
+.rows { position: relative; }
+.row { position: absolute; left: 0; right: 0; height: 30px; display: grid; grid-template-columns: minmax(70px, 30%) 1fr; align-items: center; gap: 10px; transition: transform .55s cubic-bezier(.3, .7, .2, 1); will-change: transform; }
+.row .l { font-size: .88rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: right; }
+.row .t { position: relative; height: 18px; }
+.row .b { position: absolute; left: 0; top: 0; height: 100%; border-radius: 0 3px 3px 0; background: var(--blue); min-width: 2px; }
+.row .n { position: absolute; top: 0; font: 600 .95rem/18px var(--display); letter-spacing: .02em; padding-left: 6px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.race.c .b { background: var(--teal); }
+.col-box { position: relative; min-height: 190px; height: 100%; display: flex; align-items: end; gap: 3px; border-bottom: 1px solid var(--edge); }
+.col-box i { flex: 1 1 0; min-width: 0; background: #2a4668; border-radius: 2px 2px 0 0; height: 0; }
+.col-box i.on { background: var(--blue); }
+.col-box i.now { background: var(--now); }
+.axis { display: flex; justify-content: space-between; color: var(--muted); font-size: .75rem; }
+.bar { position: sticky; bottom: 0; z-index: 5; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; background: var(--panel); border: 1px solid var(--edge); border-radius: 10px; padding: 10px 14px; padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px)); }
+.bar button { font: 600 .9rem var(--body); color: var(--ink); background: #1b2e45; border: 1px solid #2c4666; border-radius: 8px; padding: 8px 14px; cursor: pointer; min-height: 40px; }
+.bar button:hover { background: #22395a; }
+.bar button:focus-visible, .bar input:focus-visible { outline: 2px solid var(--now); outline-offset: 2px; }
+.bar #play { background: var(--now); color: #1a0f06; border-color: var(--now); min-width: 92px; }
+.bar input[type=range] { flex: 1 1 200px; min-width: 0; accent-color: var(--now); height: 28px; }
+.note { color: var(--muted); font-size: .78rem; line-height: 1.5; max-width: 90ch; }
+@media (max-width: 980px) { .kpi { grid-column: span 12; } .map, .cols, .race { grid-column: span 12; } .kpi .v { font-size: 3rem; } }
+@media (min-width: 560px) and (max-width: 980px) { .kpi { grid-column: span 4; } }
+@media (max-width: 560px) { .clock { text-align: left; } .col-box { min-height: 160px; } }
+@media (prefers-reduced-motion: reduce) { .row { transition: none; } }
+</style>
+<div class="wrap">
+  <header>
+    <div>
+      <div class="kicker">Seizure Watch · open-source reports</div>
+      <h1>The last 30 days, in motion</h1>
+    </div>
+    <div class="clock"><div class="d" id="date">–</div><div class="n" id="dayn">Day 30 of 30</div></div>
+  </header>
+  <div class="stage">
+    <div class="tile kpi"><h2>Seizure reports</h2><div class="v" id="kR">0</div><div class="s" id="kRs">cumulative since the first day</div></div>
+    <div class="tile kpi"><h2>Countries reporting</h2><div class="v" id="kC">0</div><div class="s">with at least one report</div></div>
+    <div class="tile kpi"><h2>Tonnes stated</h2><div class="v" id="kT">0</div><div class="s">where the report gives a weight</div></div>
+    <div class="tile map">
+      <h2>Where it happened</h2>
+      <div class="mapbox"><canvas id="map" role="img" aria-label="World map; a dot pulses where each report is placed as the 30 days play"></canvas></div>
+      <div class="legend"><span><i style="background:var(--now)"></i>new report</span><span><i style="background:var(--blue)"></i>earlier in the period</span><span id="noLoc"></span></div>
+    </div>
+    <div class="tile cols"><h2>Reports per day</h2><div class="col-box" id="cols"></div><div class="axis"><span id="ax0"></span><span id="ax1"></span></div></div>
+    <div class="tile race" id="raceI"><h2>What is being seized</h2><div class="rows" id="rowsI"></div></div>
+    <div class="tile race c" id="raceC"><h2>Where it is reported</h2><div class="rows" id="rowsC"></div></div>
+  </div>
+  <div class="bar">
+    <button id="play" type="button" aria-label="Play or pause">Pause</button>
+    <button id="replay" type="button">Replay</button>
+    <input id="scrub" type="range" min="0" max="3000" value="3000" aria-label="Day">
+    <button id="speed" type="button" aria-label="Playback speed">1×</button>
+  </div>
+  <p class="note" id="note"></p>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<script src="world.js"></script>
+<script src="data.js"></script>
+<script>
+(function () {
+  "use strict";
+  const M = window.MOT, N = M.days.length, $ = id => document.getElementById(id);
+  const fmt = n => Math.round(n).toLocaleString("en-GB");
+  const reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const dlab = s => { const p = s.split("-"); return +p[2] + " " + MON[+p[1] - 1] + " " + p[0]; };
+
+  /* events get a time inside their day so that reports stream in instead of jumping */
+  const ev = M.ev.map(r => ({ d: r[0], it: r[1], c: r[2], kg: r[3] }));
+  const perDay = new Array(N).fill(0); ev.forEach(e => perDay[e.d]++);
+  const seen = new Array(N).fill(0);
+  ev.forEach(e => { e.t = e.d + (seen[e.d]++ + 0.5) / perDay[e.d]; });
+  ev.sort((a, b) => a.t - b.t);
+  /* spread dots of one country a little so stacked reports stay visible (stable, no random) */
+  const jit = (i, k) => { const x = Math.sin(i * 12.9898 + k * 78.233) * 43758.5453; return x - Math.floor(x) - 0.5; };
+  ev.forEach((e, i) => { const g = e.c && M.geo[e.c]; e.ll = g ? [g[1] + jit(i, 1) * 3.2, g[0] + jit(i, 2) * 2.4] : null; });
+
+  /* ---------- map ---------- */
+  const cv = $("map"), ctx = cv.getContext("2d");
+  let W = 0, H = 0, proj, land, bg;
+  function setupMap() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2), r = cv.parentNode.getBoundingClientRect();
+    W = Math.max(200, r.width); H = Math.max(100, r.height); cv.width = W * dpr; cv.height = H * dpr;
+    proj = d3.geoEqualEarth().fitExtent([[4, 4], [W - 4, H - 4]], { type: "Sphere" });
+    bg = document.createElement("canvas"); bg.width = cv.width; bg.height = cv.height;
+    const b = bg.getContext("2d"); b.scale(dpr, dpr);
+    const path = d3.geoPath(proj, b);
+    if (window.CEN_WORLD && window.topojson) {
+      b.beginPath(); path(topojson.feature(CEN_WORLD.land, CEN_WORLD.land.objects.land));
+      b.fillStyle = css("--land"); b.fill(); b.lineWidth = .6; b.strokeStyle = css("--land-edge"); b.stroke();
+    }
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ev.forEach(e => { e.xy = e.ll ? proj(e.ll) : null; });
+  }
+  const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  function drawMap(t) {
+    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, cv.width, cv.height); ctx.drawImage(bg, 0, 0); ctx.restore();
+    const blue = css("--blue"), now = css("--now");
+    ctx.fillStyle = blue; ctx.globalAlpha = .38;
+    ctx.beginPath();
+    for (let i = 0; i < cursor; i++) { const p = ev[i].xy; if (p && t - ev[i].t > .5) { ctx.moveTo(p[0] + 2, p[1]); ctx.arc(p[0], p[1], 2, 0, 6.283); } }
+    ctx.fill(); ctx.globalAlpha = 1;
+    for (let i = cursor - 1; i >= 0; i--) {
+      const e = ev[i], age = t - e.t; if (age > .5) break;
+      const p = e.xy; if (!p) continue; const k = age / .5;
+      ctx.beginPath(); ctx.arc(p[0], p[1], 2 + 14 * k, 0, 6.283); ctx.strokeStyle = now; ctx.globalAlpha = (1 - k) * .9; ctx.lineWidth = 1.5; ctx.stroke();
+      ctx.beginPath(); ctx.arc(p[0], p[1], 2.6, 0, 6.283); ctx.fillStyle = now; ctx.globalAlpha = 1 - k * .4; ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  /* ---------- state that depends on the clock ---------- */
+  let cursor = 0, tR = 0, kgSum = 0; const items = new Map(), ctry = new Map();
+  function reset() { cursor = 0; kgSum = 0; items.clear(); ctry.clear(); }
+  function advance(t) {
+    if (cursor > 0 && ev[cursor - 1].t > t) reset();
+    while (cursor < ev.length && ev[cursor].t <= t) {
+      const e = ev[cursor++]; kgSum += e.kg || 0;
+      items.set(e.it, (items.get(e.it) || 0) + 1); if (e.c) ctry.set(e.c, (ctry.get(e.c) || 0) + 1);
+    }
+  }
+
+  /* ---------- race bars ---------- */
+  const RH = 34, TOP = 8;
+  function mkRace(host, n) { host.style.height = n * RH + "px"; return { host, els: new Map() }; }
+  const raceI = mkRace($("rowsI"), TOP), raceC = mkRace($("rowsC"), TOP);
+  function drawRace(R, map) {
+    const top = [...map.entries()].sort((a, b) => b[1] - a[1] || (a[0] < b[0] ? -1 : 1)).slice(0, TOP), max = top.length ? top[0][1] : 1, keep = new Set(top.map(x => x[0]));
+    top.forEach(([k, v], i) => {
+      let el = R.els.get(k);
+      if (!el) { el = document.createElement("div"); el.className = "row"; el.innerHTML = '<span class="l"></span><span class="t"><span class="b"></span><span class="n"></span></span>'; el.querySelector(".l").textContent = k; el.style.transform = "translateY(" + TOP * RH + "px)"; el.style.opacity = 0; R.host.appendChild(el); R.els.set(k, el); el._b = el.querySelector(".b"); el._n = el.querySelector(".n"); void el.offsetWidth; }
+      el.style.opacity = 1; el.style.transform = "translateY(" + (i * RH + 2) + "px)";
+      const w = 80 * v / max; el._b.style.width = w + "%"; el._n.style.left = w + "%"; el._n.textContent = fmt(v);
+    });
+    R.els.forEach((el, k) => { if (!keep.has(k)) { el.style.opacity = 0; el.style.transform = "translateY(" + TOP * RH + "px)"; } });
+  }
+
+  /* ---------- daily columns ---------- */
+  const colBox = $("cols"), maxDay = Math.max(...perDay), bars = [];
+  for (let i = 0; i < N; i++) { const b = document.createElement("i"); b.title = dlab(M.days[i]) + ": " + perDay[i] + " reports"; colBox.appendChild(b); bars.push(b); }
+  $("ax0").textContent = dlab(M.days[0]).replace(/ \d{4}$/, ""); $("ax1").textContent = dlab(M.days[N - 1]).replace(/ \d{4}$/, "");
+  function drawCols(t) {
+    const di = Math.min(N - 1, Math.floor(t));
+    for (let i = 0; i < N; i++) {
+      let h = 0; if (i < di) h = perDay[i]; else if (i === di) h = perDay[i] * (t - di);
+      bars[i].style.height = (92 * h / maxDay) + "%"; bars[i].className = i === di && t < N ? "now" : (i < di || t >= N ? "on" : "");
+    }
+  }
+
+  /* ---------- frame ---------- */
+  let lastSlow = -1;
+  function frame(t) {
+    t = Math.max(0, Math.min(N, t)); tR = t; advance(t);
+    const di = Math.min(N - 1, Math.floor(t));
+    $("date").textContent = dlab(M.days[di]); $("dayn").textContent = "Day " + (di + 1) + " of " + N;
+    $("kR").textContent = fmt(cursor); $("kC").textContent = fmt(ctry.size); $("kT").textContent = fmt(kgSum / 1000);
+    drawMap(t); drawCols(t);
+    const now = performance.now(); if (now - lastSlow > 120 || !playing) { drawRace(raceI, items); drawRace(raceC, ctry); lastSlow = now; }
+    $("scrub").value = Math.round(t / N * 3000);
+  }
+
+  /* ---------- playback ---------- */
+  let playing = false, raf = 0, last = 0, speed = 1; const BASE = N / 36; /* days per second at 1x: the full run takes 36 s */
+  const speeds = [0.5, 1, 2, 4];
+  function tick(ts) {
+    if (!playing) return; const dt = Math.min(.1, (ts - last) / 1000); last = ts;
+    const t = tR + dt * BASE * speed; frame(t);
+    if (t >= N) { pause(); return; } raf = requestAnimationFrame(tick);
+  }
+  function play() { if (tR >= N) tR = 0; playing = true; $("play").textContent = "Pause"; last = performance.now(); cancelAnimationFrame(raf); raf = requestAnimationFrame(tick); }
+  function pause() { playing = false; cancelAnimationFrame(raf); $("play").textContent = tR >= N ? "Play" : "Resume"; }
+  $("play").addEventListener("click", () => playing ? pause() : play());
+  $("replay").addEventListener("click", () => { tR = 0; frame(0); play(); });
+  $("speed").addEventListener("click", () => { speed = speeds[(speeds.indexOf(speed) + 1) % speeds.length]; $("speed").textContent = speed + "×"; });
+  $("scrub").addEventListener("input", e => { pause(); frame(+e.target.value / 3000 * N); $("play").textContent = "Resume"; });
+  let rz; window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { setupMap(); drawMap(tR); }, 150); });
+
+  const noLoc = ev.filter(e => !e.ll).length;
+  $("noLoc").textContent = fmt(noLoc) + " reports with no stated country are counted but not drawn";
+  $("note").textContent = "Source: Seizure Watch, which reads open news reports and extracts the seizure facts automatically. Period " + dlab(M.days[0]) + " to " + dlab(M.days[N - 1]) + ". Counts are news reports, not official seizure statistics; one seizure can be reported more than once. Tonnes are only those stated in a report.";
+  setupMap();
+  frame(N);                                  /* first frame shows the finished 30 days */
+  $("play").textContent = "Play";
+  if (!reduce) setTimeout(() => { if (tR >= N) { tR = 0; frame(0); play(); } }, 900);
+  /* repeat the title-card data on slow fonts: redraw the map once fonts/layout settle */
+  window.addEventListener("load", () => { setupMap(); drawMap(tR); });
+})();
+</script>

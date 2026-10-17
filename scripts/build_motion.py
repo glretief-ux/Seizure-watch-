@@ -18,3 +18,9 @@ out = {"asof": D["asof"], "days": days, "geo": {k: v for k, v in D["geo"].items(
 path = os.path.join(ROOT, "motion", "data.js")
 open(path, "w", encoding="utf-8").write("window.MOT=" + json.dumps(out, ensure_ascii=False, separators=(",", ":")) + ";")
 print(len(ev), "events", days[0], "->", days[-1], round(os.path.getsize(path) / 1e3), "KB")
+
+# also publish on the GitHub Pages site (docs/motion/) so it opens from a normal web link on any device
+import shutil
+dst = os.path.join(ROOT, "docs", "motion"); os.makedirs(dst, exist_ok=True)
+for f in ("index.html", "data.js", "world.js"):
+    shutil.copy2(os.path.join(ROOT, "motion", f), os.path.join(dst, f))

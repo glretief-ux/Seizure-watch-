@@ -44,7 +44,7 @@ jobs:
           BULLETIN_TO: ${{ secrets.BULLETIN_TO }}
           BULLETIN_FROM: ${{ secrets.BULLETIN_FROM }}
       - name: Build the seizure board for the web
-        run: python scripts/build_board.py
+        run: python scripts/build_board.py && python scripts/build_motion.py
       - name: Keep the run log (so a failure can be read)
         if: always()
         run: |
