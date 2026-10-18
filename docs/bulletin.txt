@@ -1,8 +1,8 @@
 SEIZURE WATCH - weekly bulletin, 12 Oct - 18 Oct 2026
 
-2295 seizure reports this week (previous week 1930); 70 high risk; 582.9 t reported.
-Main drugs: Cannabis (550), Cocaine (526), NSA (310)
-Main countries: India (352), Brazil (305), Turkey (275), United States (226)
+2349 seizure reports this week (previous week 1930); 142 high risk; 587.1 t reported.
+Main drugs: Cannabis (570), Cocaine (539), NSA (313)
+Main countries: India (354), Brazil (328), Turkey (277), United States (229)
 
 NEW AND SURGING CORRIDORS
 - Pakistan -> India: SURGING (28 this period, 6 before; mainly Heroin/Opium)
@@ -13,21 +13,21 @@ NEW AND SURGING CORRIDORS
 - Iran -> Turkey: NEW (12 this period, 0 before; mainly Methamphetamine)
 
 UNUSUAL EVENTS (highest risk first)
+- [High 90] 13 Oct | Cocaine | 2.6 t | Australia | Fiji -> Australia | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Vessel hull / underwater | cargo: seafood; fish; cement; canned
+  https://pmn.co.nz/read/law-and-order/cocaine-traffickers-exploit-pacific-tuna-routes-as-drug-seizures-mount-new-report-reveals
+- [High 85] 13 Oct | Cocaine | 150 kg | Rio de Janeiro | Legitimate cargo (food/produce); Vessel hull / underwater | cargo: cacao
+  https://www.diariodoamapa.com.br/cadernos/policia/nova-rota-do-pcc-e-cv-usa-amapa-para-mandar-cocaina-para-a-europa/
+- [High 80] 18 Oct | NSA | 8.7 t | Kano | India -> Ethiopia -> Nigeria | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods) | cargo: maize starch; rambo insecticide; palm oil; cement
+  https://www.vanguardngr.com/2026/10/ndlea-issues-public-alert-after-intercepting-woman-with-drugs-concealed-in-palm-oil-keg/
 - [High 80] 16 Oct | Heroin/Opium | 3.0 t | Gujarat | Pakistan -> India | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods) | cargo: cement; फल
   https://patialapolitics.com/77159/
-- [High 80] 13 Oct | Cocaine | 2.6 t | Australia | Fiji -> Australia | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Vessel hull / underwater | cargo: seafood; fish; cement; canned
-  https://pmn.co.nz/read/law-and-order/cocaine-traffickers-exploit-pacific-tuna-routes-as-drug-seizures-mount-new-report-reveals
-- [High 80] 13 Oct | Cocaine | 150 kg | Rio de Janeiro | Legitimate cargo (food/produce); Vessel hull / underwater | cargo: cacao
-  https://www.diariodoamapa.com.br/cadernos/policia/nova-rota-do-pcc-e-cv-usa-amapa-para-mandar-cocaina-para-a-europa/
-- [High 75] 13 Oct | Cannabis | 149 kg | Delhi | Thailand -> India | Hidden compartment (unspecified); Legitimate cargo (food/produce); Legitimate cargo (industrial/goods) | cargo: polyurethane; plastic; industrial goods; industrial consignment containing pu tubes | vessel: Complex Imports
+- [High 80] 17 Oct | NSA | 400 kg | Uttar Pradesh | Impregnation / liquid / disguised; Legitimate cargo (industrial/goods); Luggage / passenger goods | cargo: chemicals; cement; plastic; glass
+  https://www.hindustantimes.com/cities/delhi-news/foreigner-among-3-held-as-ncb-raids-drug-making-labs-in-gr-noida-101792259571697.html
+- [High 80] 13 Oct | Cannabis | 149 kg | Delhi | Thailand -> India | Hidden compartment (unspecified); Legitimate cargo (food/produce); Legitimate cargo (industrial/goods) | cargo: polyurethane; plastic; industrial goods; industrial consignment containing pu tubes | vessel: Complex Imports
   https://shop.ssbcrack.com/blogs/blog/delhi-customs-seizes-148-67-kg-hydroponic-weed-at-igi-airport-one-arrested
-- [High 70] 18 Oct | NSA | 8.7 t | Kano | India -> Ethiopia -> Nigeria | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods) | cargo: maize starch; rambo insecticide; palm oil; cement
-  https://www.vanguardngr.com/2026/10/ndlea-issues-public-alert-after-intercepting-woman-with-drugs-concealed-in-palm-oil-keg/
-- [High 70] 18 Oct | Cocaine | 22 kg | Hong Kong airport | Brazil -> Turkey -> Hong Kong | Legitimate cargo (industrial/goods); Luggage / passenger goods | cargo: cement
-  https://www.bastillepost.com/global/article/6264781-hong-kong-customs-seizes-suspected-drugs-worth-about-6-8-million-at-airport-arrests-two-passengers
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (500), Legitimate cargo (food/produce) (227), Postal / parcel (131)
-Cover cargo named: cement (155), الات (98), plastic (62), फल (25), cacao (21)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (512), Legitimate cargo (food/produce) (232), Postal / parcel (132)
+Cover cargo named: cement (158), الات (104), plastic (63), फल (25), cacao (21)
 
 Coverage: searching 10 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Vietnamese, Chinese). 48 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
 Leads from open sources, not confirmed facts. Verify before acting.
