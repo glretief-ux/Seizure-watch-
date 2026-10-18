@@ -1,11 +1,11 @@
 SEIZURE WATCH - weekly bulletin, 12 Oct - 18 Oct 2026
 
-2148 seizure reports this week (previous week 1930); 61 high risk; 544.9 t reported.
-Main drugs: Cannabis (504), Cocaine (497), NSA (292)
-Main countries: India (324), Brazil (284), Turkey (266), United States (218)
+2195 seizure reports this week (previous week 1930); 63 high risk; 558.7 t reported.
+Main drugs: Cannabis (517), Cocaine (508), NSA (296)
+Main countries: India (336), Brazil (288), Turkey (269), United States (220)
 
 NEW AND SURGING CORRIDORS
-- Pakistan -> India: SURGING (24 this period, 6 before; mainly Heroin/Opium)
+- Pakistan -> India: SURGING (25 this period, 6 before; mainly Heroin/Opium)
 - Thailand -> India: NEW (20 this period, 0 before; mainly Cannabis)
 - Mexico -> United States: SURGING (17 this period, 3 before; mainly Methamphetamine)
 - Ghana -> South Africa: NEW (16 this period, 0 before; mainly Heroin/Opium)
@@ -21,13 +21,13 @@ UNUSUAL EVENTS (highest risk first)
   https://www.diariodoamapa.com.br/cadernos/policia/nova-rota-do-pcc-e-cv-usa-amapa-para-mandar-cocaina-para-a-europa/
 - [High 75] 13 Oct | Cannabis | 149 kg | Delhi | Thailand -> India | Hidden compartment (unspecified); Legitimate cargo (food/produce); Legitimate cargo (industrial/goods) | cargo: polyurethane; plastic; industrial goods; industrial consignment containing pu tubes | vessel: Complex Imports
   https://shop.ssbcrack.com/blogs/blog/delhi-customs-seizes-148-67-kg-hydroponic-weed-at-igi-airport-one-arrested
+- [High 70] 18 Oct | Cocaine | 22 kg | Hong Kong airport | Brazil -> Turkey -> Hong Kong | Legitimate cargo (industrial/goods); Luggage / passenger goods | cargo: cement
+  https://www.bastillepost.com/global/article/6264781-hong-kong-customs-seizes-suspected-drugs-worth-about-6-8-million-at-airport-arrests-two-passengers
 - [High 70] 14 Oct | Cocaine | Valle del Cauca | French Guiana -> Colombia | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Vessel hull / underwater | cargo: cement; chemical; fruit; charcoal
   https://www.livemint.com/global/why-us-airstrikes-are-failing-to-stop-the-global-cocaine-boom-11791939895590.html?openSearch=true
-- [High 70] 15 Oct | Cocaine | Santos | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Vessel hull / underwater | cargo: cafe; cacao; timber
-  https://sindireceita.org.br/noticias/2026/10/15/trafico-internacional-de-drogas-e-o-fortalecimento-da-receita-federal
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (458), Legitimate cargo (food/produce) (213), Postal / parcel (125)
-Cover cargo named: cement (141), الات (86), plastic (60), फल (24), cacao (19)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (472), Legitimate cargo (food/produce) (214), Postal / parcel (126)
+Cover cargo named: cement (144), الات (90), plastic (60), फल (24), cacao (19)
 
 Coverage: searching 10 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Vietnamese, Chinese). 48 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
 Leads from open sources, not confirmed facts. Verify before acting.
