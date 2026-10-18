@@ -4,8 +4,8 @@
    RSS UK Border Force: 20 items
    ! https://ndlea.gov.ng/feed/... HTTPError
    RSS NDLEA Nigeria: 0 items
-   Official websites (28 searched): 1858 headlines
-   Google News: 5321 headlines
+   Official websites (28 searched): 1900 headlines
+   Google News: 5192 headlines
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28cocaine%20OR%20heroin%20OR%20metha... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28precursor%20chemicals%20OR%20cland... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22hazardous%20chemicals%22%20OR%2... HTTPError
@@ -13,20 +13,24 @@
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28stolen%20vehicles%20OR%20stolen%20... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22CITES%20timber%22%20OR%20%22pro... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28ivory%20OR%20%22rhino%20horn%22%20... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22CITES%22%20OR%20%22protected%20... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28illegal%20firearms%20OR%20weapons%... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28antiquities%20OR%20%22cultural%20p... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28coca%C3%ADna%20OR%20hero%C3%ADna%2... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28qu%C3%ADmicos%20precursores%20OR%2... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28productos%20qu%C3%ADmicos%20OR%20p... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28veh%C3%ADculos%20robados%29%20%28d... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28armas%20de%20fuego%20OR%20municion... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22piezas%20arqueol%C3%B3gicas%22%... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28coca%C3%AFne%20OR%20h%C3%A9ro%C3%A... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28pr%C3%A9curseurs%20chimiques%29%20... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28armes%20a%20feu%20OR%20munitions%2... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28v%C3%A9hicules%20vol%C3%A9s%29%20%... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22biens%20culturels%22%20OR%20ant... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28coca%C3%ADna%20OR%20hero%C3%ADna%2... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28qu%C3%ADmicos%20precursores%29%20%... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28ve%C3%ADculos%20roubados%29%20%28a... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28armas%20de%20fogo%20OR%20muni%C3%A... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%D9%83%D9%88%D9%83%D8%A7%D9%8A%D9%... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%D9%85%D9%88%D8%A7%D8%AF%20%D9%83%... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22%D9%82%D8%B7%D8%B9%20%D8%A3%D8%... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28kokain%20OR%20eroin%20OR%20esrar%2... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28kimyasal%20OR%20%22tar%C4%B1m%20il... HTTPError
@@ -38,86 +42,51 @@
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%E5%8D%B1%E9%99%A9%E5%8C%96%E5%AD%... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%E6%96%87%E7%89%A9%29%20%28%E8%B5%... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%E0%A4%95%E0%A5%8B%E0%A4%95%E0%A5%... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22ng%C3%A0%20voi%22%29%20%28thu%2... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%E0%A4%B0%E0%A4%B8%E0%A4%BE%E0%A4%... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22h%C3%B3a%20ch%E1%BA%A5t%22%20OR... HTTPError
    GDELT: 0 headlines
-      1018 candidate headlines, 208 new
+      983 candidate headlines, 111 new
 [2/4] Reading articles...
-      links resolved: 208 of 208
-   ! https://www.agenzianova.com/en/news/New-anti-drug-raid-in-Rome%3A-over-a-kilo-of-cocaine-a... HTTPError
-   ! https://www.thenigerianvoice.com/news/375324/ndlea-intercepts-illicit-drugs-hidden-in-palm... HTTPError
-   ! https://quinteist.com/traffic-stop-in-quinte-west-leads-to-drug-trafficking-charges-agains... HTTPError
-   ! https://tribuneonlineng.com/customs-hands-over-n511-4m-seized-pharmaceuticals-illicit-drug... HTTPError
-   ! https://italien.news/en/chronicle/carabinieri-break-up-cocaine-ring-two-arrested-weapon-se... HTTPError
-   ! https://times.co.zm/six-vehicles-wildlife-products-seized-72-immigrants-detained/... HTTPError
-   ! https://ultimasnoticias.com.ve/sucesos/incautan-4-152-panelas-de-droga/... HTTPError
-   ! https://folharegionalwebtv.com/tubarao-sc/pm-apreende-adolescentes-com-cocaina-maconha-e-q... HTTPError
-   ! https://www.bnewsrn.com.br/noticias/policia/operacao-apreende-520-kg-de-maconha-na-paraiba... HTTPError
-   ! https://portalguaira.com/guaira-policia-federal-e-bpfron-apreendem-35-mil-pacotes-de-cigar... HTTPError
-   ! https://radiomuriae.com.br/portal/trafico-delivery-pm-apreende-45-tabletes-de-maconha-e-pr... HTTPError
-   ! https://observeriraq.net/%D8%A7%D9%84%D9%82%D8%A8%D8%B6-%D8%B9%D9%84%D9%89-3-%D8%AA%D8%AC%... HTTPError
-   ! https://www.youlyou.com/75503... HTTPError
-   ! https://www.rosaelyoussef.com/1443011... HTTPError
-   ! https://gate.ahram.org.eg/News/5967274.aspx... HTTPError
-   ! https://www.alwafd.news/5982859... HTTPError
-   ! https://www.newsroom.info/472950... HTTPError
-   ! https://www.tahiamasr.com/1099362... HTTPError
-   ! https://www.algomhor.com/498217... HTTPError
-   ! https://www.awanmasr.com/%D8%B6%D8%B1%D8%A8%D8%A9-%D8%AC%D8%AF%D9%8A%D8%AF%D8%A9-%D9%84%D9... HTTPError
-   ! https://www.algomhor.com/498241... HTTPError
-   ! https://www.masrtimes.com/765762... HTTPError
-   ! https://www.algomhor.com/498203... HTTPError
-   ! https://www.masrtimes.com/765785... HTTPError
-   ! https://www.agenzianova.com/ar/news/nuovo-blitz-antidroga-a-roma-sequestrato-oltre-un-chil... HTTPError
-   ! https://www.albawabhnews.com/5424987... HTTPError
-   ! https://www.awanmasr.com/%D8%AD%D8%A8%D8%B3-%D8%AA%D8%A7%D8%AC%D8%B1-%D8%AD%D8%B4%D9%8A%D8... HTTPError
-   ! https://www.awanmasr.com/%D8%A7%D9%84%D8%AD%D8%A8%D8%B3-%D8%B3%D9%86%D8%A9-%D9%88%D8%BA%D8... HTTPError
-   ! https://www.albawabhnews.com/5424988... HTTPError
-   ! https://www.mwatan.news/1033985... HTTPError
-   ! https://newsroom.info/472999... HTTPError
-   ! https://www.turkgun.com/gundem/istanbulda-uyusturucu-operasyonu-binlerce-hap-ele-gecirildi... HTTPError
-   ! https://www.mersinhaber.com/haber-esenyurt-istanbulda-gerceklesen-uyusturucu-operasyonunda... HTTPError
-   ! https://www.mersinhaber.com/haber-eskisehir-odunpazarinda-jandarma-ekipleri-tarafindan-yap... HTTPError
-   ! https://www.turkgun.com/gundem/sislide-karavanli-uyusturucu-operasyonu-breaking-bad-dizi-s... HTTPError
-   ! https://www.habererk.com/haber/aydin-da-uyusturucu-operasyonunda-5-kisi-tutuklandi_356348/... HTTPError
-   ! https://www.gercekgundem.com/guncel/istanbulda-breaking-bad-operasyonu-karavanin-altindan-... HTTPError
-   ! https://www.turkgun.com/gundem/sabiha-gokcen-havalimaninda-salca-kutusunda-uyusturucu-sevk... HTTPError
-   ! https://www.24saatgazetesi.com/istanbul-esenyurtta-narkotik-operasyonu-4-supheli-tutukland... HTTPError
-   ! https://www.agenzianova.com/ru/news/%D0%92-%D0%A0%D0%B8%D0%BC%D0%B5-%D0%BF%D1%80%D0%BE%D0%... HTTPError
-   ! https://komionline.ru/news/dva-zhitelya-emvy-osuzhdeny-za-hranenie-narkotikov... ConnectionError
-   ! https://komionline.ru/news/v-vorkute-policzejskie-izyali-konoplyu-u-zhitelya-poselka-sejda... ConnectionError
-   ! https://news.mingpao.com/ins/%E6%B8%AF%E8%81%9E/article/20261018/s00001/1792325870278/%E5%... HTTPError
-   ! https://danviet.vn/manh-ruong-noi-dao-mong-nha-phat-lo-co-vat-thoi-nha-tran-o-ninh-binh-vo... HTTPError
-   ! https://voi.id/ar/news/598809... ReadTimeout
-   ! https://kokshetau.asia/newskz/knb-sovmestno-s-zarubezhnymi-partnerami-presek-mezhdunarodny... ReadTimeout
-      read in full: 158; headline + snippet only: 50
+      links resolved: 111 of 111
+   ! https://www.bssnews.net/district/436294... HTTPError
+   ! https://www.edhat.com/california/news/california-wildlife-trafficking-enforcement-ab-96-an... HTTPError
+   ! https://elquindiano.com/noticia/279164/autoridades-incautan-620-kilos-de-cocaina-y-captura... HTTPError
+   ! https://diariodigitalrd.com/2026/10/18/dncd-y-policia-detienen-a-152-personas-e-incautan-c... HTTPError
+   ! https://visornoticias.com.br/policia-apreende-pistola-e-84-municoes-apos-agressao-contra-m... HTTPError
+   ! https://www.issoenoticia.com.br/policia/forca-tatica-apreende-85-tabletes-de-maconha-pisto... HTTPError
+   ! https://gate.ahram.org.eg/News/5967413.aspx... HTTPError
+   ! https://www.albawabhnews.com/5425103... HTTPError
+   ! https://www.algomhor.com/498104... HTTPError
+   ! https://kech24.com/%D8%A3%D9%85%D9%86-%D9%85%D8%B1%D8%A7%D9%83%D8%B4-%D9%8A%D8%B7%D9%8A%D8... HTTPError
+   ! https://www.agenzianova.com/ar/news/%D9%85%D8%AF%D8%A7%D9%87%D9%85%D8%A9-%D8%AC%D8%AF%D9%8... HTTPError
+   ! https://www.mersinhaber.com/haber-bitlis-tatvanda-yapilan-operasyonda-758-gram-uyusturucu-... HTTPError
+   ! https://www.turkgun.com/gundem/artvinde-uyusturucu-operasyonu-evden-kilolarca-madde-bulund... HTTPError
+   ! https://www.kutahyaninsesi.com/haber/29004995/simavda-uyusturucu-operasyonu-bonzai-ele-gec... HTTPError
+   ! https://www.habererk.com/haber/izmir-de-yasa-disi-kenevir-ekimine-operasyon-yapildi_356350... HTTPError
+   ! https://www.dotookmedia.com/2026/10/5_0534320916.html... HTTPError
+      read in full: 95; headline + snippet only: 16
 [3/4] Extracting facts and storing...
-      NER supplemented 28 article(s) (unrecognised place names logged to ner_places for review)
-      stored 198, of which 133 are seizure reports
+      NER supplemented 20 article(s) (unrecognised place names logged to ner_places for review)
+      stored 100, of which 77 are seizure reports
 [4/4] Analysing and building report...
-      attempted 150 older headline(s) that predate this feature (195 translated, 47 failed and kept as-is; last error: _via_google: TooManyRequests: Server Error: You made too many requests to the server.According to google, you are allowed to make 5 requests per secondand up to 200k requests per day. You can wait and try again later oryou can try the translate_batch function)
-   ! https://www.agenzianova.com/en/news/New-anti-drug-raid-in-Rome%3A-over-a-kilo-of-cocaine-a... HTTPError
-   ! https://portalguaira.com/guaira-policia-federal-e-bpfron-apreendem-35-mil-pacotes-de-cigar... HTTPError
-   ! https://observeriraq.net/%D8%A7%D9%84%D9%82%D8%A8%D8%B6-%D8%B9%D9%84%D9%89-3-%D8%AA%D8%AC%... HTTPError
-   ! https://www.awanmasr.com/%D8%AD%D8%A8%D8%B3-%D8%AA%D8%A7%D8%AC%D8%B1-%D8%AD%D8%B4%D9%8A%D8... HTTPError
-   ! https://www.mwatan.news/1033985... HTTPError
-   ! https://newsroom.info/472999... HTTPError
-   ! https://www.agenzianova.com/ru/news/%D0%92-%D0%A0%D0%B8%D0%BC%D0%B5-%D0%BF%D1%80%D0%BE%D0%... HTTPError
-   ! https://www.mersinhaber.com/haber-esenyurt-istanbulda-gerceklesen-uyusturucu-operasyonunda... HTTPError
-   ! https://italien.news/en/chronicle/carabinieri-break-up-cocaine-ring-two-arrested-weapon-se... HTTPError
-   ! https://folharegionalwebtv.com/tubarao-sc/pm-apreende-adolescentes-com-cocaina-maconha-e-q... HTTPError
-   ! https://radiomuriae.com.br/portal/trafico-delivery-pm-apreende-45-tabletes-de-maconha-e-pr... HTTPError
-   ! https://www.bnewsrn.com.br/noticias/policia/operacao-apreende-520-kg-de-maconha-na-paraiba... HTTPError
-   ! https://komionline.ru/news/v-vorkute-policzejskie-izyali-konoplyu-u-zhitelya-poselka-sejda... ConnectionError
-      read in full: 1; headline + snippet only: 15
-      re-read 1 of 16 earlier headline-only report(s) in full
-Done. 9523 events in report, 550 alerts.
+      attempted 150 older headline(s) that predate this feature (165 translated, 43 failed and kept as-is; last error: _via_google: TooManyRequests: Server Error: You made too many requests to the server.According to google, you are allowed to make 5 requests per secondand up to 200k requests per day. You can wait and try again later oryou can try the translate_batch function)
+   ! https://elquindiano.com/noticia/279164/autoridades-incautan-620-kilos-de-cocaina-y-captura... HTTPError
+   ! https://diariodigitalrd.com/2026/10/18/dncd-y-policia-detienen-a-152-personas-e-incautan-c... HTTPError
+   ! https://visornoticias.com.br/policia-apreende-pistola-e-84-municoes-apos-agressao-contra-m... HTTPError
+   ! https://www.mersinhaber.com/haber-bitlis-tatvanda-yapilan-operasyonda-758-gram-uyusturucu-... HTTPError
+   ! https://www.agenzianova.com/ar/news/%D9%85%D8%AF%D8%A7%D9%87%D9%85%D8%A9-%D8%AC%D8%AF%D9%8... HTTPError
+   ! https://www.kutahyaninsesi.com/haber/29004995/simavda-uyusturucu-operasyonu-bonzai-ele-gec... HTTPError
+   ! https://www.issoenoticia.com.br/policia/forca-tatica-apreende-85-tabletes-de-maconha-pisto... HTTPError
+      read in full: 1; headline + snippet only: 7
+      re-read 1 of 8 earlier headline-only report(s) in full
+Done. 9565 events in report, 559 alerts.
 Weekly bulletin written (/home/runner/work/Seizure-watch-/Seizure-watch-/docs/bulletin.html).
 Open: /home/runner/work/Seizure-watch-/Seizure-watch-/docs/index.html
   [High  ] HIGH-RISK EVENT: Heroin/Opium - Gujarat (score 80)
+  [High  ] HIGH-RISK EVENT: NSA - Kano (score 70)
   [High  ] HIGH-RISK EVENT: Cocaine - Hong Kong airport (score 70)
-  [High  ] HIGH-RISK EVENT: Cocaine - Constanta (score 65)
-  [High  ] HIGH-RISK EVENT: NSA - Uttar Pradesh (score 65)
-  [High  ] HIGH-RISK EVENT: NSA - Lagos (score 65)
-  [High  ] HIGH-RISK EVENT: Cannabis - Lagos (score 65)
   [High  ] HIGH-RISK EVENT: Cocaine - Tokyo (score 65)
+  [High  ] HIGH-RISK EVENT: Cocaine - Constanta (score 65)
+  [High  ] HIGH-RISK EVENT: Cannabis - Lagos (score 65)
+  [High  ] HIGH-RISK EVENT: NSA - Uttar Pradesh (score 65)
   [High  ] HIGH-RISK EVENT: NSA - Uttar Pradesh (score 60)
