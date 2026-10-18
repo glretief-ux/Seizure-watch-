@@ -428,6 +428,43 @@ CONTROLLED_DELIVERY = rx(r"controlled\s+(?:delivery|operation)", r"entrega\s+(?:
                          r"livraison\s+(?:controlee|surveillee)")
 
 # --------------------------------------------------------------------------
+# EXTRA INDICATORS read from news text (from the cargo risk-indicator list; see config.yaml -> risk)
+# Each one is a *phrase in the article*, not a judgement about any person or nationality.
+# --------------------------------------------------------------------------
+FALSE_DECLARATION = rx(
+    r"(?:declared|labell?ed|manifested|disguised|passed\s+off)\s+(?:\w+\s+){0,3}?(?:as|to\s+be)\b(?!\s+(?:a\s+|an\s+|the\s+)?(?:wanted|fugitive|suspect|persona|winner|candidate|dead|missing|unfit|guilty))",
+    r"mislabell?ed", r"misdeclar\w*", r"false(?:ly)?\s+(?:declar|document|manifest|invoice|label|descri)\w*",
+    r"fake\s+(?:document|invoice|permit|licen[cs]e|certificate|paperwork|manifest)s?",
+    r"forged\s+(?:document|invoice|permit|licen[cs]e|certificate|paperwork|manifest|stamp)s?",
+    r"fraudulent\s+(?:document|invoice|permit|licen[cs]e|certificate|paperwork|declaration)s?",
+    r"(?:without|no|lacking|missing)\s+(?:a\s+|the\s+|any\s+|valid\s+)?(?:cites\s+)?(?:permit|licen[cs]e|certificate|export\s+papers|import\s+permit)s?",
+    r"unlicen[cs]ed", r"unpermitted", r"fraudulent\s+customs\s+declaration",
+    r"declarad\w*\s+como", r"falsa\s+declaracion", r"documentos?\s+(?:falsos?|falsificados?)", r"sin\s+(?:permiso|licencia)",
+    r"declare\w*\s+comme", r"fausses?\s+(?:declaration|factures?)", r"faux\s+documents?", r"sans\s+(?:permis|licence|autorisation)",
+    r"declarad\w*\s+como", r"documentos?\s+falsos?")
+FRONT_COMPANY = rx(
+    r"(?:front|shell|sham|bogus|phantom|dummy|fake)\s+(?:company|companies|firm|business|importer|exporter)",
+    r"(?:newly|recently)\s+(?:registered|incorporated|established|created|formed|set\s+up)\s+(?:\w+\s+){0,2}?(?:company|firm|business|importer|exporter)",
+    r"(?:company|firm|business|importer|exporter)\s+(?:\w+\s+){0,3}?(?:registered|set\s+up|created|established)\s+(?:only\s+)?(?:weeks|months|days)\s+(?:before|earlier)",
+    r"no\s+(?:trading|trade)\s+history", r"first[- ]time\s+(?:importer|exporter|shipper)",
+    r"(?:import|export)\s+(?:company|firm)\s+(?:\w+\s+){0,4}?(?:linked|tied|connected)\s+to",
+    r"empresa\s+(?:pantalla|fachada|fantasma)", r"societe\s+ecran", r"empresa\s+de\s+fachada")
+TRANSSHIPMENT = rx(
+    r"trans-?ship\w*", r"trans-?load\w*", r"re-?export\w*", r"re-?packed", r"re-?packag\w*",
+    r"free\s+(?:trade\s+)?zone", r"free\s+port", r"bonded\s+(?:warehouse|zone|area)", r"entrepot",
+    r"transbordo", r"zona\s+franca", r"reexporta\w*", r"transbordement", r"zone\s+franche", r"transbordo")
+ROUTE_CHANGE = rx(
+    r"(?:re-?routed|rerouted|diverted|redirected)", r"change[sd]?\s+(?:of\s+)?(?:course|route|port|vessel|destination)",
+    r"switched\s+(?:vessels?|ships?|ports?|containers?|routes?)", r"moved\s+(?:between|from\s+one)\s+(?:vessels?|ships?)",
+    r"unscheduled\s+(?:stop|call)", r"(?:altered|changed)\s+(?:its\s+)?(?:route|course)",
+    r"cambi\w*\s+de\s+(?:ruta|puerto|destino)", r"desvi\w*\s+(?:la\s+)?ruta", r"changement\s+de\s+(?:route|port|destination)")
+INTEL_TIP = rx(
+    r"intelligence[- ](?:led|based|driven)", r"acting\s+on\s+(?:a\s+)?(?:tip|intelligence|information)", r"tip[- ]?off",
+    r"following\s+(?:a\s+)?(?:tip|intelligence|alert)", r"(?:information|intelligence)\s+(?:provided|shared|received)\s+(?:by|from)",
+    r"(?:interpol|europol|wco|unodc)\b", r"risk\s+(?:profil|analysis|target)\w*", r"flagged\s+by",
+    r"target(?:ed|ing)\s+(?:system|unit|centre|center)", r"inteligencia", r"denuncia\s+anonima", r"renseignement",
+    r"alerted\s+by", r"red\s+notice")
+# --------------------------------------------------------------------------
 # ROUTE CUES (look at the ~60 characters *before* a place name)
 # --------------------------------------------------------------------------
 _TAIL = (r"\s*(?:the\s+|el\s+|la\s+|le\s+|l')?"

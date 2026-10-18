@@ -654,6 +654,16 @@ def _nsa_type(title_n, text_n):
     return best
 
 
+def _indicators(t):
+    """News-detectable indicators from the cargo risk-indicator list (phrases in the article, never traits of people)."""
+    found = []
+    for code, pat in (("false_declaration", L.FALSE_DECLARATION), ("front_company", L.FRONT_COMPANY),
+                      ("transshipment", L.TRANSSHIPMENT), ("route_change", L.ROUTE_CHANGE), ("intel_tip", L.INTEL_TIP)):
+        if pat.search(t):
+            found.append(code)
+    return found
+
+
 def locate(title, source_country=None):
     """Only the place facts of a headline (country, place, route), for re-reading reports stored without a country."""
     return _route(L.norm(title), source_country)
@@ -690,6 +700,7 @@ def extract(title, text="", source_country=None):
     insider = 1 if L.INSIDER.search(t) else 0
     controlled = 1 if L.CONTROLLED_DELIVERY.search(t) else 0
     coverload = 1 if re.search(r"cover\s*load|carga\s+de\s+cobertura", t) else 0
+    indicators = _indicators(t)
     rec.update({
         "relevant": 1, "primary_drug": primary, "drug_type": drug_type, "drugs": "|".join(drugs), "category": category,
         "qty_kg": kg, "qty_units": units, "unit_type": unit_type,
@@ -698,6 +709,7 @@ def extract(title, text="", source_country=None):
         "infrastructure": "|".join(_infrastructure(t)) or None,
         "arrests": arrests, "organized": organized, "insider": insider,
         "controlled_delivery": controlled, "coverload": coverload,
+        "indicators": "|".join(indicators) or None,
     })
     rec.update(route)
     rec.update(_details(title, text, t))
@@ -706,7 +718,8 @@ def extract(title, text="", source_country=None):
             ("concealed: " + "; ".join(cats)) if cats else None,
             ("route: " + route["route"]) if route["route"] else None,
             f"{arrests} arrests" if arrests else None,
-            "insider indicators" if insider else None, "controlled delivery" if controlled else None]
+            "insider indicators" if insider else None, "controlled delivery" if controlled else None,
+            ("signs: " + ", ".join(i.replace("_", " ") for i in indicators)) if indicators else None]
     rec["mo_summary"] = " | ".join(b for b in bits if b)
     rec["completeness"] = sum([primary != unspecified, bool(kg or units), bool(cats), transport != "Unknown",
                                bool(route["origin"]), bool(route["destination"]), bool(route["seizure_country"])])

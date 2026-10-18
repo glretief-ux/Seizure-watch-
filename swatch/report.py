@@ -73,7 +73,7 @@ def event_records(ev, homes=None):
             "arrests": _clean(r.arrests), "mode": r.text_mode, "lang": _clean(r.lang),
             "origin_place": _clean(r.origin_place), "dest_place": _clean(r.destination_place),
             "vessel": _clean(r.vessel), "line": _clean(r.shipping_line), "containers": _clean(r.container_numbers),
-            "cover": _clean(r.cover_cargo),
+            "cover": _clean(r.cover_cargo), "gaps": _clean(getattr(r, "data_gaps", None)),
             "approx": approx_country(r, homes),      # map only: country of the outlet when no place is named
         })
     return out
@@ -103,6 +103,7 @@ def export_table(ev, verifications=None):
         "Risk: concealment & method (max 30)": ev["risk_method"], "Risk: insiders & organised crime (max 30)": ev["risk_network"],
         "Risk: route (max 20)": ev["risk_route"], "Risk: scale (max 10)": ev["risk_scale"], "Risk: commodity (max 10)": ev["risk_commodity"],
         "Risk explanation": ev["risk_why"],
+        "Data gaps (not scored)": ev["data_gaps"] if "data_gaps" in ev.columns else None,
         "Reports (n)": ev["n_sources"], "Outlets": ev["outlets"].apply(", ".join),
         "Text used": ev["text_mode"], "Language": ev["lang"], "Headline": ev["title"],
         "Headline (English)": ev["title_en"] if "title_en" in ev.columns else ev["title"],

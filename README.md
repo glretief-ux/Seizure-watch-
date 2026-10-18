@@ -17,6 +17,9 @@ Push this folder to a GitHub repo and enable Actions. `.github/workflows/daily.y
 ## Configure
 Edit `config.yaml`: Google News editions/queries, GDELT queries, risk points, commodity tiers and thresholds (the dashboard has a "How risk is scored" box that stays in sync), and `rss_feeds` (add customs / police / agency feeds you trust).
 
+## Cargo risk indicators
+The score applies the news-detectable part of the Cargo Risk Indicators master list: false declaration or missing permit, front or new company, transshipment or free zone, route change, repeat vessel/container, intelligence-led finds (plus the existing concealment, container, network, route, scale and commodity signs). Dimensions are capped (method 30, network 30, route 20). `risk.watchlist` in `config.yaml` forces a matching vessel, container or term to High. Weak data is listed as "Data gaps" and never scored. Indicators are phrases in the article, never traits of a person or nationality; they justify a closer look and are not proof.
+
 ## What it flags
 High-risk events (0-100 score), insider signals, new and surging corridors, and statistical spikes (drug x country, drug x origin, drug x concealment). Trend alerts stay quiet until ~42 days of history exist.
 

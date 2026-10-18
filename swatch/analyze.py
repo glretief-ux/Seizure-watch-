@@ -21,19 +21,34 @@ FLAG_LABELS = {
     "organized_network": "Organised network",
     "insider_indicator": "Insider indicator",
     "polydrug": "Multiple drugs",
+    "false_declaration": "False declaration or no permit",
+    "front_company": "Front or new company",
+    "repeat_entity": "Repeat vessel or container",
+    "intel_tip": "Intelligence-led",
+    "transshipment": "Transshipment or free zone",
+    "route_change": "Route change or diversion",
 }
 
 
 DIM_LABELS = {"method": "Concealment & method", "network": "Insiders & organised crime", "route": "Route",
               "scale": "Scale", "commodity": "Commodity"}
-DIM_MAX = {"method": lambda P: sum(P["method"].values()), "network": lambda P: sum(P["network"].values()),
-           "route": lambda P: sum(P["route"].values()), "scale": lambda P: sum(P["scale"].values()),
+_CAPS = {}   # set from config.yaml (risk -> caps) by risk_model_description / score_events
+
+
+def _cap(d, P):
+    s = sum(P[d].values())
+    return min(s, _CAPS[d]) if d in _CAPS else s
+
+
+DIM_MAX = {"method": lambda P: _cap("method", P), "network": lambda P: _cap("network", P),
+           "route": lambda P: _cap("route", P), "scale": lambda P: sum(P["scale"].values()),
            "commodity": lambda P: max(P["commodity"].values())}
 
 
 def risk_model_description(cfg):
     """How the score is built, for the dashboard's 'How risk is scored' box (always in sync with config.yaml)."""
     R = cfg["risk"]; P = R["points"]
+    _CAPS.update(R.get("caps") or {})
     dims = []
     for d in ("method", "network", "route", "scale"):
         dims.append({"name": DIM_LABELS[d], "max": DIM_MAX[d](P),
@@ -41,7 +56,9 @@ def risk_model_description(cfg):
     dims.append({"name": DIM_LABELS["commodity"], "max": DIM_MAX["commodity"](P),
                  "items": [{"label": "Tier %d goods: %s" % (t, ", ".join(names[:6]) + ("..." if len(names) > 6 else "")), "points": P["commodity"].get(int(t), 0)}
                            for t, names in R["commodity_tiers"]["items"].items()]})
-    return {"dimensions": dims, "high": R["bands"]["high"], "medium": R["bands"]["medium"],
+    wl = R.get("watchlist") or {}
+    return {"dimensions": dims, "watchlist_on": any(wl.get(k) for k in ("vessels", "containers", "terms")),
+            "high": R["bands"]["high"], "medium": R["bands"]["medium"],
             "min_high": R.get("min_dimensions_high", 2), "min_medium": R.get("min_dimensions_medium", 1)}
 
 
@@ -62,6 +79,7 @@ def load_events(conn):
                 in_container_any=("in_container", "max"), insider_any=("insider", "max"),
                 organized_any=("organized", "max"), coverload_any=("coverload", "max"),
                 controlled_any=("controlled_delivery", "max"), arrests_any=("arrests", "max"),
+                indicators_any=("indicators", lambda s: "|".join(sorted({c for x in s.dropna() for c in str(x).split("|") if c}))),
                 conceal_any=("concealment", lambda s: "|".join(sorted({c for x in s.dropna() for c in x.split("|") if c}))),
                 vessel_any=("vessel", lambda s: next((x for x in s.dropna() if x), None)),
                 line_any=("shipping_line", lambda s: "; ".join(sorted({c.strip() for x in s.dropna() for c in x.split(";") if c.strip()})) or None),
@@ -80,6 +98,7 @@ def load_events(conn):
     ev["shipping_line"] = ev["shipping_line"].apply(_links.clean_lines)
     ev["vessel"] = ev["vessel"].apply(_links.clean_vessel)
     ev["concealment"] = ev["conceal_any"].replace("", None)
+    ev["indicators"] = ev["indicators_any"].replace("", None)
     ev = ev.drop(columns=[c for c in ev.columns if c.endswith("_any")])
     ev["date"] = ev["first_seen"]
     return ev.sort_values("date").reset_index(drop=True)
@@ -132,6 +151,22 @@ def score_events(ev, cfg, asof):
     f["organized_network"] = ev["organized"].fillna(0).astype(int) == 1
     f["insider_indicator"] = ev["insider"].fillna(0).astype(int) == 1
     f["polydrug"] = ev["drug_list"].apply(lambda d: len([x for x in d if x != "Unspecified"]) >= 2)
+    # indicators read from article text (see lexicon.py), kept in one column
+    ind = ev["indicators"].fillna("").astype(str).apply(lambda x: set(x.split("|")) - {""}) if "indicators" in ev else \
+        pd.Series([set()] * len(ev), index=ev.index)
+    for k in ("false_declaration", "front_company", "transshipment", "route_change", "intel_tip"):
+        f[k] = ind.apply(lambda s_, k=k: k in s_)
+    # the same vessel or container in more than one seizure (a repeat is a lead, not proof)
+    seen = {}
+    for r in ev.itertuples():
+        for name in ([str(r.vessel).strip().lower()] if isinstance(r.vessel, str) and r.vessel else []) + \
+                    [c.strip() for c in str(r.container_numbers or "").split(";") if c.strip()]:
+            seen.setdefault(name, set()).add(r.event_id)
+    f["repeat_entity"] = [any(len(seen.get(n, ())) >= 2 for n in
+                              ([str(r.vessel).strip().lower()] if isinstance(r.vessel, str) and r.vessel else []) +
+                              [c.strip() for c in str(r.container_numbers or "").split(";") if c.strip()])
+                          for r in ev.itertuples()]
+    f["repeat_entity"] = pd.Series(f["repeat_entity"], index=ev.index)
 
     # ---- five dimensions, each with its own cap (see config.yaml -> risk -> points) ----
     P = R["points"]
@@ -145,8 +180,12 @@ def score_events(ev, cfg, asof):
         return int(tiers["categories"].get(r_cat, tiers["default"]))
     ev["commodity_tier"] = [tier(i, c) for i, c in zip(ev["primary_drug"], cat)]
     dims = {}
+    caps = R.get("caps") or {}
+    _CAPS.update(caps)
     for d in ("method", "network", "route", "scale"):
         dims[d] = sum(f[k].astype(int) * v for k, v in P[d].items())
+        if d in caps:
+            dims[d] = dims[d].clip(upper=caps[d])
     dims["commodity"] = ev["commodity_tier"].map(lambda t: P["commodity"].get(t, 0))
     for d, v in dims.items():
         ev["risk_" + d] = v.astype(int)
@@ -160,8 +199,34 @@ def score_events(ev, cfg, asof):
     band = np.where(ev["risk_score"] >= b["high"], "High", np.where(ev["risk_score"] >= b["medium"], "Medium", "Low"))
     band = np.where((band == "High") & (n_op < R.get("min_dimensions_high", 2)), "Medium", band)
     band = np.where((band == "Medium") & (n_op < R.get("min_dimensions_medium", 1)), "Low", band)
+    # Watchlist hit (vessel, container or term chosen by the user) overrides the score
+    wl = R.get("watchlist") or {}
+    wv = {str(x).strip().lower() for x in (wl.get("vessels") or []) if str(x).strip()}
+    wc = {str(x).strip().upper().replace(" ", "") for x in (wl.get("containers") or []) if str(x).strip()}
+    wt = [str(x).strip().lower() for x in (wl.get("terms") or []) if str(x).strip()]
+
+    def _wl(r):
+        if isinstance(r.vessel, str) and r.vessel.strip().lower() in wv:
+            return True
+        if wc and any(c.strip().upper().replace(" ", "") in wc for c in str(r.container_numbers or "").split(";") if c.strip()):
+            return True
+        hay = " ".join(str(x) for x in (r.title, getattr(r, "title_en", ""), r.cover_cargo) if isinstance(x, str)).lower()
+        return bool(wt) and any(t_ in hay for t_ in wt)
+    f["watchlist_hit"] = [_wl(r) for r in ev.itertuples()] if (wv or wc or wt) else False
+    band = np.where(f["watchlist_hit"], "High", band)
     ev["risk_band"] = band
-    ev["risk_flags"] = f.apply(lambda r: ", ".join(FLAG_LABELS[k] for k in FLAG_LABELS if r[k]), axis=1)
+    ev["risk_flags"] = f.apply(lambda r: ", ".join(([] if not r.get("watchlist_hit") else ["Watchlist hit"]) +
+                                                   [FLAG_LABELS[k] for k in FLAG_LABELS if r[k]]), axis=1)
+    # data gaps: weak data is shown separately and never scored as risk (list s.10)
+    def _gaps(r):
+        g = []
+        if not r.origin: g.append("origin")
+        if not r.destination: g.append("destination")
+        if not r.seizure_country: g.append("seizure country")
+        if not r.conceal_list: g.append("concealment")
+        if pd.isna(r.qty_kg) and pd.isna(r.qty_units): g.append("quantity")
+        return ", ".join(g)
+    ev["data_gaps"] = ev.apply(_gaps, axis=1)
     ev["risk_why"] = ev.apply(lambda r: " | ".join(
         f"{DIM_LABELS[d]} {int(r['risk_' + d])}/{DIM_MAX[d](P)}" for d in DIM_LABELS if r["risk_" + d] > 0) or "No risk indicators found", axis=1)
     for k in FLAG_LABELS:

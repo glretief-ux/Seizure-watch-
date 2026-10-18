@@ -194,19 +194,35 @@ risk:
       advanced_concealment: 15       # false compartments, impregnation, hull attachments...
       concealed_in_legit_cargo: 10   # hidden inside food, goods or a cover load
       container_cargo: 5             # seized from / travelling in a shipping container
+      false_declaration: 8           # declared as other goods, forged papers, or no permit/licence (cargo risk list s.3-4)
     network:                         # max 30 - who was behind it
       insider_indicator: 15          # port / airport / customs staff involvement, rip-on/rip-off
       organized_network: 10          # article mentions cartel / organised crime network
       polydrug: 5                    # more than one drug type in the same consignment
+      front_company: 8               # shell / front / newly registered / first-time company named (list s.1)
+      repeat_entity: 10              # same vessel or container already in another seizure (list s.8)
+      intel_tip: 5                   # intelligence-led, tip-off, partner-agency alert or risk-profiling hit (list s.8)
     route:                           # max 20 - where it moved
       multi_country_route: 15        # 3+ countries in the route, or a named transit country
       emerging_corridor: 5           # origin->destination pair not seen before in the recent past
+      transshipment: 5               # transhipment, re-export, free zone or bonded warehouse named (list s.2)
+      route_change: 5                # diversion, change of port / vessel / route after departure (list s.2)
     scale:                           # max 10 - deliberately small: weight alone must never decide
       quantity_outlier: 10           # very large for its type (thresholds below)
     commodity:                       # max 10 - how harmful the goods are (tiers below)
       1: 10
       2: 5
       3: 0
+  caps:                              # each dimension is clipped here, however many indicators fire
+    method: 30
+    network: 30
+    route: 20
+  # WATCHLIST: a hit forces the event to High whatever its score (list s.8: "treat as High regardless").
+  # This repository is public, so only put names here that you are happy to publish.
+  watchlist:
+    vessels: []                      # e.g. ["MV EXAMPLE"]
+    containers: []                   # e.g. ["MSKU1234567"]
+    terms: []                        # words or phrases searched in the headline and cover cargo
   commodity_tiers:
     default: 2                       # anything not listed below
     categories: {Precursor chemical: 2, Hazardous chemical: 2, Cultural heritage: 2, Stolen vehicle: 2, CITES protected timber: 2}
