@@ -59,7 +59,7 @@ def event_records(ev, homes=None):
     for r in ev.itertuples():
         out.append({
             "id": int(r.event_id), "date": r.date.strftime("%Y-%m-%d"), "drug": r.primary_drug, "drug_label": (f"NSA/{r.drug_type}" if r.primary_drug == "NSA" and isinstance(r.drug_type, str) and r.drug_type else r.primary_drug),
-            "category": _clean(getattr(r, "category", None)) or "Drug",
+            "category": "Tobacco" if r.primary_drug == "Cigarettes" else (_clean(getattr(r, "category", None)) or "Drug"),
             "kg": _clean(r.qty_kg), "units": _clean(r.qty_units), "unit_type": _clean(r.unit_type),
             "origin": _clean(r.origin), "transit": "; ".join(r.transit_list) or None, "dest": _clean(r.destination),
             "country": _clean(r.seizure_country), "place": _clean(r.seizure_place), "corridor": _clean(r.corridor),

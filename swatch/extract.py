@@ -133,6 +133,7 @@ def _drugs(title_n, text_n):
 # Label used for an unnamed/generic mention within each category - mirrors "Unspecified" for drugs.
 UNSPECIFIED_LABEL = {
     "Drug": "Unspecified",
+    "Tobacco": "Unspecified tobacco",
     "Precursor chemical": "Unspecified precursor chemical",
     "Hazardous chemical": "Unspecified chemical",
     "Cultural heritage": "Unspecified cultural object",
@@ -172,7 +173,8 @@ def _classify(title_n, text_n):
 
     drug_ordered = _rank(L.DRUG_PATTERNS)
     if drug_ordered:
-        return drug_ordered[0], drug_ordered, "Drug"
+        # cigarettes are contraband but not a drug: their own category (a story that names a real drug first stays a drug story)
+        return drug_ordered[0], drug_ordered, ("Tobacco" if drug_ordered[0] == "Cigarettes" else "Drug")
 
     precursor_ordered = _rank(L.PRECURSOR_PATTERNS)
     if precursor_ordered:
@@ -681,7 +683,7 @@ def extract(title, text="", source_country=None):
         return rec
     unspecified = UNSPECIFIED_LABEL.get(category)
     kg, units, unit_type = _quantities(t, primary, len(title_n) + 2, _english(t), category=category,
-                                        skip_precursor_filter=(category != "Drug"))
+                                        skip_precursor_filter=(category not in ("Drug", "Tobacco")))
     in_container = 1 if L.CONTAINER.search(NON_SHIP_CONTAINER.sub(" ", t)) else 0
     cats, detail = _concealment(t, in_container)
     route = _route(t, source_country)

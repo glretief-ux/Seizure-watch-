@@ -225,7 +225,7 @@ risk:
     terms: []                        # words or phrases searched in the headline and cover cargo
   commodity_tiers:
     default: 2                       # anything not listed below
-    categories: {Precursor chemical: 2, Hazardous chemical: 2, Cultural heritage: 2, Stolen vehicle: 2, CITES protected timber: 2}
+    categories: {Tobacco: 3, Precursor chemical: 2, Hazardous chemical: 2, Cultural heritage: 2, Stolen vehicle: 2, CITES protected timber: 2}
     items:                           # tier 1 = highest harm, tier 3 = lowest
       1: [Cocaine, Heroin/Opium, Methamphetamine, NSA, Explosives/grenades, Explosive precursors, Firearms, Elephant ivory, Rhino horn, Pangolin, Big cat parts]
       3: [Cigarettes]

@@ -175,6 +175,7 @@ def main():
         except Exception as exc:  # an extra: never stop the run
             log(f"      re-reading earlier reports skipped ({type(exc).__name__}: {exc})")
     db.backfill_drug_types(conn, extract._nsa_type)
+    db.recategorise_tobacco(conn)
     n_loc = db.backfill_locations(conn, extract.locate)
     if n_loc:
         log(f"      found a country for {n_loc} earlier report(s) that had none")

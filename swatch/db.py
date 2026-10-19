@@ -248,3 +248,11 @@ def backfill_drug_types(conn, type_fn, days=7):
             n += 1
     conn.commit()
     return n
+
+
+def recategorise_tobacco(conn):
+    """Cigarettes are their own category (Tobacco), not a drug: move articles stored under Drug."""
+    n = conn.execute("UPDATE articles SET category='Tobacco' WHERE primary_drug='Cigarettes' "
+                     "AND (category IS NULL OR category='Drug')").rowcount
+    conn.commit()
+    return n
