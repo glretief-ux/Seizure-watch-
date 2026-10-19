@@ -1,12 +1,12 @@
 SEIZURE WATCH - weekly bulletin, 13 Oct - 19 Oct 2026
 
-2027 seizure reports this week (previous week 2033); 131 high risk; 507.3 t reported.
-Main drugs: Cannabis (521), Cocaine (482), NSA (290)
-Main countries: India (302), Brazil (302), United States (217), Turkey (198)
+2174 seizure reports this week (previous week 2033); 139 high risk; 550.0 t reported.
+Main drugs: Cannabis (558), Cocaine (513), NSA (312)
+Main countries: Brazil (323), India (322), United States (229), Turkey (217)
 
 NEW AND SURGING CORRIDORS
-- Pakistan -> India: SURGING (28 this period, 6 before; mainly Heroin/Opium)
-- Thailand -> India: SURGING (19 this period, 1 before; mainly Cannabis)
+- Pakistan -> India: SURGING (30 this period, 6 before; mainly Heroin/Opium)
+- Thailand -> India: SURGING (20 this period, 1 before; mainly Cannabis)
 - Ghana -> South Africa: NEW (16 this period, 0 before; mainly Heroin/Opium)
 - Mexico -> United States: SURGING (14 this period, 6 before; mainly Methamphetamine)
 - Lebanon -> Syria: SURGING (13 this period, 1 before; mainly NSA)
@@ -15,6 +15,8 @@ NEW AND SURGING CORRIDORS
 UNUSUAL EVENTS (highest risk first)
 - [High 90] 13 Oct | Cocaine | 2.6 t | Australia | Fiji -> Australia | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Vessel hull / underwater | cargo: fish; canned food
   https://pmn.co.nz/read/law-and-order/cocaine-traffickers-exploit-pacific-tuna-routes-as-drug-seizures-mount-new-report-reveals
+- [High 88] 18 Oct | Cannabis | 8.7 t | Lagos | India -> Ethiopia -> Saudi Arabia | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Luggage / passenger goods | cargo: starch; palm oil; insecticide
+  https://thefact.ng/ndlea-seizes-8725kg-tramadol-worth-%E2%82%A67bn/
 - [High 85] 13 Oct | Cocaine | 150 kg | Rio de Janeiro | Legitimate cargo (food/produce); Vessel hull / underwater | cargo: cocoa
   https://www.diariodoamapa.com.br/cadernos/policia/nova-rota-do-pcc-e-cv-usa-amapa-para-mandar-cocaina-para-a-europa/
 - [High 80] 18 Oct | NSA | 8.7 t | Kano | India -> Ethiopia -> Nigeria | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods) | cargo: starch; insecticide; palm oil
@@ -23,11 +25,9 @@ UNUSUAL EVENTS (highest risk first)
   https://patialapolitics.com/77159/
 - [High 80] 17 Oct | NSA | 400 kg | Uttar Pradesh | Impregnation / liquid / disguised; Legitimate cargo (industrial/goods); Luggage / passenger goods
   https://www.hindustantimes.com/cities/delhi-news/foreigner-among-3-held-as-ncb-raids-drug-making-labs-in-gr-noida-101792259571697.html
-- [High 80] 13 Oct | Cannabis | 149 kg | Delhi | Thailand -> India | Hidden compartment (unspecified); Legitimate cargo (food/produce); Legitimate cargo (industrial/goods) | cargo: polyurethane; general goods | vessel: Complex Imports
-  https://shop.ssbcrack.com/blogs/blog/delhi-customs-seizes-148-67-kg-hydroponic-weed-at-igi-airport-one-arrested
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (472), Legitimate cargo (food/produce) (175), Postal / parcel (121)
-Cover cargo named: cocoa (17), fruit (7), timber (7), furniture (6), vehicle parts (5)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (507), Legitimate cargo (food/produce) (194), Postal / parcel (125)
+Cover cargo named: cocoa (19), electronics (13), fruit (9), timber (7), furniture (6)
 
 Coverage: searching 10 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Vietnamese, Chinese). 48 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
 Leads from open sources, not confirmed facts. Verify before acting.
