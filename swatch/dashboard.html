@@ -98,6 +98,7 @@ details.lk[open]>summary:before{content:"\25BE"}
 details.lk[open]>summary{border-bottom:1px solid var(--line);background:#f6f8fb;border-radius:10px 10px 0 0}
 details.lk .lks{display:block;margin:3px 0 0 20px;font-size:12px;color:#5b6b7f}
 .lkb{padding:4px 16px 14px}
+.cscroll{max-height:60vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .lkb h4{margin:14px 0 4px;font-size:13px;color:#12355b}
 .lkb ul{margin:0;padding-left:18px}
 .lkb li{margin:4px 0;font-size:13px;line-height:1.4}
@@ -544,10 +545,10 @@ function coverLoad(v) {
     const ev = w.filter(e => e.cover_g.includes(g)).sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : b.score - a.score));
     const items = topN(by(ev.flatMap(e => (e.cover || '').split('; ').filter(x => GOODS_OF[x] === g)), x => x), 6).map(([k, c]) => esc(k) + ' ' + c).join(', ');
     return '<details class="lk" data-g="' + esc(g) + '"' + (open.has(g) ? ' open' : '') + '><summary><b>' + esc(g) + '</b><span class="cnt">' + n + '</span><span class="lks">' + items + '</span></summary>' +
-      '<div class="lkb tw"><table><tr><th>Date</th><th>Goods</th><th>Item</th><th>Route</th><th>Seized in</th><th>Risk</th><th>Report</th></tr>' +
-      ev.slice(0, 15).map(e => '<tr><td>' + esc(e.date) + '</td><td>' + esc(e.cover) + '</td><td>' + esc(e.drug_label || e.drug) + '</td><td class="w2">' + esc(e.route || e.corridor || '') + '</td><td class="w2">' +
+      '<div class="lkb tw cscroll"><table><tr><th>Date</th><th>Goods</th><th>Item</th><th>Route</th><th>Seized in</th><th>Risk</th><th>Report</th></tr>' +
+      ev.map(e => '<tr><td>' + esc(e.date) + '</td><td>' + esc(e.cover) + '</td><td>' + esc(e.drug_label || e.drug) + '</td><td class="w2">' + esc(e.route || e.corridor || '') + '</td><td class="w2">' +
         esc([e.place, e.country].filter(Boolean).join(', ')) + '</td><td><span class="chip ' + esc(e.band) + '">' + esc(e.band) + '</span></td><td><a href="' + esc(safe(e.url)) + '" target="_blank" rel="noopener noreferrer" title="' + esc(e.title_en || e.title) + '">news article</a></td></tr>').join('') +
-      '</table>' + (ev.length > 15 ? '<div class="small" style="margin-top:6px">Newest 15 of ' + ev.length + ' shown. Narrow the filters above to see the rest.</div>' : '') + '</div></details>';
+      '</table>' + '<div class="small" style="margin-top:6px">All ' + ev.length + ' shown, newest first. Scroll inside the block to see them all.</div>' + '</div></details>';
   }).join('');
 }
 
