@@ -5,7 +5,7 @@ import math
 import os
 import datetime as dt
 import pandas as pd
-from . import analyze, checklists, coverage, geo, lexicon
+from . import analyze, checklists, coverage, cover, geo, lexicon
 
 
 def _clean(v):
@@ -73,7 +73,7 @@ def event_records(ev, homes=None):
             "arrests": _clean(r.arrests), "mode": r.text_mode, "lang": _clean(r.lang),
             "origin_place": _clean(r.origin_place), "dest_place": _clean(r.destination_place),
             "vessel": _clean(r.vessel), "line": _clean(r.shipping_line), "containers": _clean(r.container_numbers),
-            "cover": _clean(r.cover_cargo), "gaps": _clean(getattr(r, "data_gaps", None)),
+            "cover": _clean(r.cover_cargo), "cover_g": cover.groups(_clean(r.cover_cargo)), "gaps": _clean(getattr(r, "data_gaps", None)),
             "approx": approx_country(r, homes),      # map only: country of the outlet when no place is named
         })
     return out
@@ -190,7 +190,7 @@ def write_all(res, out_dir, cfg, demo=False, verifications=None):
                  "first_date": ev["date"].min().strftime("%Y-%m-%d") if len(ev) else None,
                  "window_start": (res["asof"] - pd.Timedelta(days=days - 1)).strftime("%Y-%m-%d")},
         "coverage": coverage.payload(cfg), "risk_model": analyze.risk_model_description(cfg), "links": res.get("links", []), "chain": res.get("chain", {}),
-        "checklists": checklists.model(),
+        "checklists": checklists.model(), "cover_items": cover.GROUP_OF,
         "kpis": res["kpis"], "events": event_records(ev_r, outlet_homes(ev)), "alerts": res["alerts"],
         "monthly": monthly_counts(ev),
         "corridors": res["corridors"].head(40).to_dict("records") if len(res["corridors"]) else [],

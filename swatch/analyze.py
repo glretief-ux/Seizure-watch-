@@ -9,6 +9,7 @@ Three layers:
 """
 import numpy as np
 import pandas as pd
+from . import cover as _cover
 from .lexicon import LEGIT_CATEGORIES, ADVANCED_CATEGORIES
 
 FLAG_LABELS = {
@@ -69,6 +70,9 @@ def load_events(conn):
         return df
     df["published"] = pd.to_datetime(df["published"], errors="coerce").dt.normalize()
     df = df.dropna(subset=["published"])
+    # the stored cover cargo is whatever goods word the extractor matched, in any language and with some noise:
+    # keep recognised goods only, named in English (see cover.py)
+    df["cover_cargo"] = [_cover.clean(c, t, te) for c, t, te in zip(df["cover_cargo"], df["title"], df["title_en"])]
     df = df.sort_values(["event_id", "completeness", "qty_kg"], ascending=[True, False, False], na_position="last")
     g = df.groupby("event_id", sort=False)
     best = g.head(1).set_index("event_id")

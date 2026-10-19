@@ -214,6 +214,15 @@ table.mini{border-collapse:collapse;font-size:13px;margin-top:6px}table.mini td{
 
 <div class="card"><h2>Concealment x drug (events in view)</h2><div class="tw" id="matrix"></div></div>
 
+<div class="card" id="coverCard"><h2>Cover load <span class="small" id="coverNote"></span></h2>
+  <div class="small" style="line-height:1.45;margin-bottom:10px">The goods the drugs travelled with, or were declared as (for example fruit, timber or machinery). It is read from the wording of the news reports by keyword rules, so treat it as a lead and open the news article to check it. Only recognised goods are shown: a report that does not name the goods, or where the word is unclear, is left out. The section follows the filters above.</div>
+  <div class="grid2">
+    <div><div class="chartbox"><canvas id="cCover"></canvas></div></div>
+    <div class="tw" id="coverMx"></div>
+  </div>
+  <div id="coverList" style="margin-top:10px"></div>
+</div>
+
 <div class="grid2">
   <div class="card"><h2>Corridors <span class="small">(all history; trend = last 30 days vs the 30 before)</span></h2><div class="tw" id="corr"></div></div>
   <div class="card"><h2>Seizure hotspots <span class="small">(countries)</span></h2><div class="tw" id="hot"></div></div>
@@ -491,9 +500,9 @@ function timeChart(v) {
     data: labels.map(l => v.filter(e => e.drug === d && key(e.date) === l).length)}))},
     options: {scales: {x: {stacked: true, ticks: {maxRotation: 60}}, y: {stacked: true, beginAtZero: true, ticks: {precision: 0}}}, plugins: {legend: {position: 'bottom', labels: {boxWidth: 10}}}}});
 }
-function hbar(id, pairs, color) {
+function hbar(id, pairs, color, allLabels) {
   chart(id, {type: 'bar', data: {labels: pairs.map(p => p[0].length > 42 ? p[0].slice(0,40) + '...' : p[0]), datasets: [{data: pairs.map(p => p[1]), backgroundColor: color}]},
-    options: {indexAxis: 'y', plugins: {legend: {display: false}}, scales: {x: {beginAtZero: true, ticks: {precision: 0}}}}});
+    options: {indexAxis: 'y', plugins: {legend: {display: false}}, scales: {x: {beginAtZero: true, ticks: {precision: 0}}, y: {ticks: {autoSkip: !allLabels}}}}});
 }
 function mode(v) {
   const m = topN(by(v, e => e.transport || 'Unknown'), 8);
@@ -501,14 +510,45 @@ function mode(v) {
     options: {plugins: {legend: {position: 'right', labels: {boxWidth: 10}}}}});
 }
 
+// heat table: rows = {row name: {drug: count}}, one column per drug, darker = more reports
+function heat(rows, drugs, head) {
+  const names = Object.keys(rows).sort((a,b) => Object.values(rows[b]).reduce((s,x)=>s+x,0) - Object.values(rows[a]).reduce((s,x)=>s+x,0));
+  const mx = Math.max(...names.flatMap(n => Object.values(rows[n])));
+  return '<table class="heat"><tr><th>' + head + '</th>' + drugs.map(d => '<th>' + esc(d) + '</th>').join('') + '</tr>' +
+    names.map(n => '<tr><td>' + esc(n) + '</td>' + drugs.map(d => { const c = rows[n][d] || 0; return '<td style="background:rgba(18,53,91,' + (c ? (0.08 + 0.6 * c / mx).toFixed(2) : 0) + ');color:' + (c/mx > .5 ? '#fff' : 'inherit') + '">' + (c || '') + '</td>'; }).join('') + '</tr>').join('') + '</table>';
+}
 function matrix(v) {
   const rows = {}, drugs = [...new Set(v.map(e => e.drug))].sort();
   v.forEach(e => (e.conceal ? e.conceal.split('; ') : []).forEach(c => { rows[c] = rows[c] || {}; rows[c][e.drug] = (rows[c][e.drug] || 0) + 1; }));
-  const names = Object.keys(rows).sort((a,b) => Object.values(rows[b]).reduce((s,x)=>s+x,0) - Object.values(rows[a]).reduce((s,x)=>s+x,0));
-  if (!names.length) { $('matrix').innerHTML = '<div class="small">No concealment details in view.</div>'; return; }
-  const mx = Math.max(...names.flatMap(n => Object.values(rows[n])));
-  $('matrix').innerHTML = '<table class="heat"><tr><th>Concealment</th>' + drugs.map(d => '<th>' + esc(d) + '</th>').join('') + '</tr>' +
-    names.map(n => '<tr><td>' + esc(n) + '</td>' + drugs.map(d => { const c = rows[n][d] || 0; return '<td style="background:rgba(18,53,91,' + (c ? (0.08 + 0.6 * c / mx).toFixed(2) : 0) + ');color:' + (c/mx > .5 ? '#fff' : 'inherit') + '">' + (c || '') + '</td>'; }).join('') + '</tr>').join('') + '</table>';
+  if (!Object.keys(rows).length) { $('matrix').innerHTML = '<div class="small">No concealment details in view.</div>'; return; }
+  $('matrix').innerHTML = heat(rows, drugs, 'Concealment');
+}
+
+// ---- Cover load: the goods the drugs travelled with or were declared as (events in view that name them)
+const GOODS_OF = D.cover_items || {};      // goods item -> group
+function coverLoad(v) {
+  const w = v.filter(e => e.cover_g && e.cover_g.length);
+  $('coverNote').textContent = '(' + w.length + ' of ' + v.length + ' reports in view name the goods)';
+  hbar('cCover', topN(by(w.flatMap(e => e.cover_g), x => x), 13), '#c9a227', true);
+  if (!w.length) {
+    $('coverMx').innerHTML = '<div class="small">No cover load named in the reports in view.</div>';
+    $('coverList').innerHTML = '';
+    return;
+  }
+  const rows = {}, drugs = topN(by(w, e => e.drug), 6).map(x => x[0]).sort();      // the six most common items keep the table narrow
+  w.forEach(e => e.cover_g.forEach(g => { rows[g] = rows[g] || {}; if (drugs.includes(e.drug)) rows[g][e.drug] = (rows[g][e.drug] || 0) + 1; }));
+  $('coverMx').innerHTML = heat(rows, drugs, 'Cover load');
+  // one drop-down per group, newest cases first, each with its news article
+  const open = new Set([...document.querySelectorAll('#coverList details[open]')].map(d => d.dataset.g));
+  $('coverList').innerHTML = topN(by(w.flatMap(e => e.cover_g), x => x), 99).map(([g, n]) => {
+    const ev = w.filter(e => e.cover_g.includes(g)).sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : b.score - a.score));
+    const items = topN(by(ev.flatMap(e => (e.cover || '').split('; ').filter(x => GOODS_OF[x] === g)), x => x), 6).map(([k, c]) => esc(k) + ' ' + c).join(', ');
+    return '<details class="lk" data-g="' + esc(g) + '"' + (open.has(g) ? ' open' : '') + '><summary><b>' + esc(g) + '</b><span class="cnt">' + n + '</span><span class="lks">' + items + '</span></summary>' +
+      '<div class="lkb tw"><table><tr><th>Date</th><th>Goods</th><th>Item</th><th>Route</th><th>Seized in</th><th>Risk</th><th>Report</th></tr>' +
+      ev.slice(0, 15).map(e => '<tr><td>' + esc(e.date) + '</td><td>' + esc(e.cover) + '</td><td>' + esc(e.drug_label || e.drug) + '</td><td class="w2">' + esc(e.route || e.corridor || '') + '</td><td class="w2">' +
+        esc([e.place, e.country].filter(Boolean).join(', ')) + '</td><td><span class="chip ' + esc(e.band) + '">' + esc(e.band) + '</span></td><td><a href="' + esc(safe(e.url)) + '" target="_blank" rel="noopener noreferrer" title="' + esc(e.title_en || e.title) + '">news article</a></td></tr>').join('') +
+      '</table>' + (ev.length > 15 ? '<div class="small" style="margin-top:6px">Newest 15 of ' + ev.length + ' shown. Narrow the filters above to see the rest.</div>' : '') + '</div></details>';
+  }).join('');
 }
 
 function staticTables() {
@@ -549,7 +589,7 @@ function render() {
   kpis(v); timeChart(v);
   hbar('cConc', topN(by(v.flatMap(e => e.conceal ? e.conceal.split('; ') : []), x => x), 10), '#2a6f97');
   hbar('cCorr', topN(by(v, e => e.corridor), 10), '#12355b');
-  mode(v); matrix(v); evTable(v); drawMap(v); inferences(v); routeInferences(v);
+  mode(v); matrix(v); coverLoad(v); evTable(v); drawMap(v); inferences(v); routeInferences(v);
 }
 
 // ---- "What this data suggests": a plain-language reading of the events in view, with a pie and a column chart
