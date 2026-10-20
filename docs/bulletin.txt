@@ -1,33 +1,33 @@
-SEIZURE WATCH - weekly bulletin, 13 Oct - 19 Oct 2026
+SEIZURE WATCH - weekly bulletin, 14 Oct - 20 Oct 2026
 
-2326 seizure reports this week (previous week 2033); 148 high risk; 648.3 t reported.
-Main drugs: Cannabis (606), Cocaine (545), NSA (328)
-Main countries: Brazil (362), India (345), United States (253), Turkey (220)
+1934 seizure reports this week (previous week 2198); 128 high risk; 568.7 t reported.
+Main drugs: Cannabis (494), Cocaine (475), NSA (243)
+Main countries: Brazil (310), India (295), United States (202), Turkey (150)
 
 NEW AND SURGING CORRIDORS
-- Pakistan -> India: SURGING (30 this period, 6 before; mainly Heroin/Opium)
-- Thailand -> India: SURGING (19 this period, 1 before; mainly Cannabis)
-- Ghana -> South Africa: NEW (16 this period, 0 before; mainly Heroin/Opium)
+- Pakistan -> India: SURGING (26 this period, 10 before; mainly Heroin/Opium)
+- Thailand -> India: SURGING (17 this period, 3 before; mainly Cannabis)
 - Mexico -> United States: SURGING (14 this period, 6 before; mainly Methamphetamine)
-- Lebanon -> Syria: SURGING (13 this period, 1 before; mainly NSA)
 - Iran -> Turkey: NEW (12 this period, 0 before; mainly Methamphetamine)
+- Lebanon -> Syria: SURGING (11 this period, 3 before; mainly NSA)
+- Myanmar -> India: SURGING (9 this period, 2 before; mainly Methamphetamine)
 
 UNUSUAL EVENTS (highest risk first)
-- [High 90] 13 Oct | Cocaine | 2.6 t | Australia | Fiji -> Australia | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Vessel hull / underwater | cargo: fish; canned food
-  https://pmn.co.nz/read/law-and-order/cocaine-traffickers-exploit-pacific-tuna-routes-as-drug-seizures-mount-new-report-reveals
+- [High 95] 20 Oct | Cocaine | 3.0 t | Barranquilla | Brazil -> Luxembourg | Impregnation / liquid / disguised; Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Postal / parcel | cargo: fruit; juice; timber
+  https://www.eurasiareview.com/20102026-liquid-cocaine-puts-ports-laboratories-and-customs-agencies-to-the-test-analysis/
 - [High 90] 19 Oct | Cocaine | 1.5 t | Kingston | Honduras -> Belgium | Impregnation / liquid / disguised; Legitimate cargo (industrial/goods); Luggage / passenger goods
   https://jamaica-gleaner.com/article/news/20261020/more-1-billion-worth-cocaine-seized-48-hours
 - [High 88] 18 Oct | Cannabis | 8.7 t | Lagos | India -> Ethiopia -> Saudi Arabia | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Luggage / passenger goods | cargo: starch; palm oil; insecticide
   https://thefact.ng/ndlea-seizes-8725kg-tramadol-worth-%E2%82%A67bn/
-- [High 85] 13 Oct | Cocaine | 150 kg | Rio de Janeiro | Legitimate cargo (food/produce); Vessel hull / underwater | cargo: cocoa
-  https://www.diariodoamapa.com.br/cadernos/policia/nova-rota-do-pcc-e-cv-usa-amapa-para-mandar-cocaina-para-a-europa/
 - [High 80] 18 Oct | NSA | 8.7 t | Kano | India -> Ethiopia -> Nigeria | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods) | cargo: starch; insecticide; palm oil
   https://www.vanguardngr.com/2026/10/ndlea-issues-public-alert-after-intercepting-woman-with-drugs-concealed-in-palm-oil-keg/
 - [High 80] 16 Oct | Heroin/Opium | 3.0 t | Gujarat | Pakistan -> India | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods)
   https://patialapolitics.com/77159/
+- [High 80] 17 Oct | NSA | 400 kg | Uttar Pradesh | Impregnation / liquid / disguised; Legitimate cargo (industrial/goods); Luggage / passenger goods
+  https://www.hindustantimes.com/cities/delhi-news/foreigner-among-3-held-as-ncb-raids-drug-making-labs-in-gr-noida-101792259571697.html
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (545), Legitimate cargo (food/produce) (212), Postal / parcel (130)
-Cover cargo named: cocoa (21), electronics (17), fruit (11), timber (7), furniture (7)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (459), Legitimate cargo (food/produce) (170), Postal / parcel (108)
+Cover cargo named: cocoa (18), electronics (16), fruit (11), banana (7), furniture (6)
 
 Coverage: searching 10 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Vietnamese, Chinese). 48 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
 Leads from open sources, not confirmed facts. Verify before acting.
