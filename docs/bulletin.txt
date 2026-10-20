@@ -1,22 +1,22 @@
 SEIZURE WATCH - weekly bulletin, 14 Oct - 20 Oct 2026
 
-1988 seizure reports this week (previous week 2198); 134 high risk; 592.1 t reported.
-Main drugs: Cannabis (506), Cocaine (489), NSA (252)
-Main countries: Brazil (316), India (303), United States (206), Turkey (158)
+2117 seizure reports this week (previous week 2198); 141 high risk; 623.7 t reported.
+Main drugs: Cannabis (537), Cocaine (515), NSA (275)
+Main countries: Brazil (332), India (314), United States (221), Turkey (177)
 
 NEW AND SURGING CORRIDORS
 - Pakistan -> India: SURGING (26 this period, 10 before; mainly Heroin/Opium)
-- Thailand -> India: SURGING (17 this period, 3 before; mainly Cannabis)
+- Thailand -> India: SURGING (19 this period, 3 before; mainly Cannabis)
 - Mexico -> United States: SURGING (14 this period, 6 before; mainly Methamphetamine)
 - Iran -> Turkey: NEW (12 this period, 0 before; mainly Methamphetamine)
 - Lebanon -> Syria: SURGING (11 this period, 3 before; mainly NSA)
 - Myanmar -> India: SURGING (9 this period, 2 before; mainly Methamphetamine)
 
 UNUSUAL EVENTS (highest risk first)
+- [High 100] 19 Oct | Cocaine | 1.5 t | Kingston | Honduras -> Belgium | Impregnation / liquid / disguised; Legitimate cargo (industrial/goods); Luggage / passenger goods | vessel: Control Programme
+  https://jamaica-gleaner.com/article/news/20261020/more-1-billion-worth-cocaine-seized-48-hours
 - [High 95] 20 Oct | Cocaine | 3.0 t | Barranquilla | Brazil -> Luxembourg | Impregnation / liquid / disguised; Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Postal / parcel | cargo: fruit; juice; timber
   https://www.eurasiareview.com/20102026-liquid-cocaine-puts-ports-laboratories-and-customs-agencies-to-the-test-analysis/
-- [High 90] 19 Oct | Cocaine | 1.5 t | Kingston | Honduras -> Belgium | Impregnation / liquid / disguised; Legitimate cargo (industrial/goods); Luggage / passenger goods
-  https://jamaica-gleaner.com/article/news/20261020/more-1-billion-worth-cocaine-seized-48-hours
 - [High 88] 18 Oct | Cannabis | 8.7 t | Lagos | India -> Ethiopia -> Saudi Arabia | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Luggage / passenger goods | cargo: starch; palm oil; insecticide
   https://thefact.ng/ndlea-seizes-8725kg-tramadol-worth-%E2%82%A67bn/
 - [High 88] 16 Oct | Methamphetamine | 142 kg | Tamil Nadu | Nepal -> Sri Lanka | Legitimate cargo (industrial/goods)
@@ -26,9 +26,9 @@ UNUSUAL EVENTS (highest risk first)
 - [High 80] 18 Oct | NSA | 8.7 t | Kano | India -> Ethiopia -> Nigeria | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods) | cargo: starch; insecticide; palm oil
   https://www.vanguardngr.com/2026/10/ndlea-issues-public-alert-after-intercepting-woman-with-drugs-concealed-in-palm-oil-keg/
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (476), Legitimate cargo (food/produce) (176), Postal / parcel (112)
-Cover cargo named: cocoa (18), electronics (17), fruit (11), timber (8), banana (7)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (497), Legitimate cargo (food/produce) (188), Postal / parcel (118)
+Cover cargo named: cocoa (18), electronics (17), fruit (12), timber (8), banana (7)
 
-Coverage: searching 10 languages (Arabic, English, Spanish, French, Hindi, Portuguese, Russian, Turkish, Vietnamese, Chinese). 48 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
+Coverage: searching 11 languages (Arabic, English, Spanish, French, Hindi, Dutch, Portuguese, Russian, Turkish, Vietnamese, Chinese). 45 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
 Leads from open sources, not confirmed facts. Verify before acting.
 https://glretief-ux.github.io/Seizure-watch-/
