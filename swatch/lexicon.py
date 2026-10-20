@@ -1137,7 +1137,12 @@ Devanagari nukta are normalised on both sides."""
 # ---- drug words (regex parts, appended to the existing category patterns)
 DRUG_EXTRA = {
     "Cocaine": [
-        "كوكايين", "كوكاين", "kokain", "кокаин", "可卡因", "古柯碱", "古柯堿", "古柯鹼", "कोकीन", "कोकेन"],
+        "كوكايين", "كوكاين", "kokain", "кокаин", "可卡因", "古柯碱", "古柯堿", "古柯鹼", "कोकीन", "कोकेन",
+        # Dutch / Flemish slang "coke". Only in a drug context: a weight or a seizure word next to it, or a compound
+        # (cokevangst); so Coca-Cola, coal coke and coke ovens are not read as cocaine.
+        r"\b(?:ton|tonnen|kilo|kilos|kilogram|kg|pakken|pakketten|pakjes|ladingen?|stuks|bolletjes)\s+(?:pure\s+)?coke\b",
+        r"\bcoke\s+(?:onderschept|in\s+beslag|gevonden|aangetroffen|gesmokkeld|smokkel|vangst|lading|bende|netwerk|handel|dealer)",
+        r"coke(?:vangst|smokkel|bende|lading|handel|dealer|koerier)\w*"],
     "Cannabis": [
         "حشيش", "ماريجوانا", "ماريجوانه", "بانجو", "القنب", "esrar", "kenevir", "hashis", "марихуан", "гашиш", "каннабис",
         "конопл", "анаша", "大麻", "गांजा", "चरस", "मारिजुआना", "हशीश", r"(?<![\u0900-\u097f])भांग(?![\u0900-\u097f])",
@@ -1182,7 +1187,8 @@ SEIZURE_EXTRA = [
     # Dutch / Flemish (in beslag genomen = seized, onderschept = intercepted, gesmokkeld = smuggled,
     # ontmanteld = dismantled, opgerold = rolled up, aangetroffen = found, teruggevonden = recovered)
     r"\bbeslag\b", r"\binbeslag", r"onderschep", r"smokkel", r"gesmokkeld", r"ontmantel", r"opgerold",
-    r"aangetroffen", r"teruggevonden", r"buitgemaakt", r"(?:cocaine|drugs|cannabis|wiet|hasj|heroine)vangst",
+    r"aangetroffen", r"teruggevonden", r"buitgemaakt", r"\w*vangst\b",
+    r"(?:aangehouden|opgepakt|betrapt|gearresteerd|opgepakt)\s+met\b",
 ]
 CONTAINER_EXTRA = ["حاوية", "حاويات", "konteyner", "контейнер", "集装箱", "集裝箱", "货柜", "貨櫃", "कंटेनर"]
 PORT_WORDS = [r"ميناء", r"(?<![a-z])liman", r"морск\w+\s+порт", r"(?<![а-я])порт", r"港口", r"(?<!香)港", r"बंदरगाह",
@@ -1615,7 +1621,8 @@ _NL_ART = r"(?:\s+(?:de|het))?"
 ORIGIN_CUE = _cue_ext(ORIGIN_CUE, r"(?:(?<![a-z])uit|vanuit|afkomstig\s+(?:uit|van)|vertrokken\s+uit|komende\s+uit|aangekomen\s+uit|"
                                   r"ingevoerd\s+uit|gesmokkeld\s+uit|verscheept\s+vanuit)" + _NL_ART)
 DEST_CUE = _cue_ext(DEST_CUE, r"(?:bestemd\s+voor|met\s+bestemming|op\s+weg\s+naar|onderweg\s+naar|richting|verscheept\s+naar|"
-                              r"gesmokkeld\s+naar|geexporteerd\s+naar|(?<![a-z])naar)" + _NL_ART)
+                              r"gesmokkeld\s+naar|geexporteerd\s+naar|(?<![a-z])naar|"
+                              r"(?:coke|cocaine|hasj|cannabis|heroine|drugs|lading|container|containers|ton|kilo)\s+voor)" + _NL_ART)
 TRANSIT_CUE = _cue_ext(TRANSIT_CUE, r"(?:doorvoer\s+(?:via|door)|overslag\s+in|tussenstop\s+in)" + _NL_ART)
 TO_CUE = _cue_ext(TO_CUE, r"(?<![a-z])naar" + _NL_ART)
 # suffixes that come AFTER the country: Turkish 'dan / 'e, Hindi "se" (from) / "tak" (to)

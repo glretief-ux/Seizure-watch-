@@ -85,7 +85,8 @@ sources:
       vi: ["thu giữ ngà voi", "bắt giữ buôn lậu ngà voi", "hải quan phát hiện ngà voi", "ngà voi nhập lậu", "thu giữ hóa chất", "buôn lậu thuốc bảo vệ thực vật", "buôn lậu gas lạnh", "thu giữ thủy ngân", "tiền chất ma túy thu giữ", "thu giữ gỗ trắc", "buôn lậu gỗ quý hiếm", "thu giữ cổ vật", "buôn lậu cổ vật"]
       hi: ["ड्रग्स जब्त", "कोकीन जब्त", "गांजा बरामद", "हेरोइन बरामद", "अफीम जब्त", "नशीली गोलियां बरामद", "रसायन जब्त", "कीटनाशक जब्त", "अमोनियम नाइट्रेट बरामद", "लाल चंदन जब्त", "लाल चंदन तस्करी", "प्राचीन मूर्ति बरामद", "अष्टधातु मूर्ति बरामद"]
       # Dutch and Flemish ("in beslag genomen" = seized, "onderschept" = intercepted, "drugsvangst" = drug haul)
-      nl: ["drugs onderschept", "cocaïne in beslag genomen", "cocaïne onderschept haven", "drugsvangst haven Antwerpen",
+      nl: ["drugs onderschept", "coke onderschept", "coke in beslag genomen", "ton coke onderschept Antwerpen",
+           "cocaïne in beslag genomen", "cocaïne onderschept haven", "drugsvangst haven Antwerpen",
            "drugsvangst haven Rotterdam", "douane onderschept drugs container", "drugs onderschept Schiphol",
            "heroïne in beslag genomen", "cannabis in beslag genomen", "hennep in beslag genomen",
            "xtc-pillen in beslag genomen", "crystal meth in beslag genomen", "synthetische drugs in beslag genomen",
@@ -144,7 +145,7 @@ sources:
            '(रसायन OR कीटनाशक OR "अमोनियम नाइट्रेट") (जब्त OR बरामद)']
       vi: ['("ngà voi") (thu giữ OR bắt giữ OR buôn lậu)',
            '("hóa chất" OR "thuốc bảo vệ thực vật" OR "gas lạnh" OR "thủy ngân") (thu giữ OR buôn lậu)']
-      nl: ['(cocaïne OR heroïne OR cannabis OR hennep OR xtc OR amfetamine OR methamfetamine) ("in beslag" OR onderschept OR drugsvangst)',
+      nl: ['(cocaïne OR coke OR heroïne OR cannabis OR hennep OR xtc OR amfetamine OR methamfetamine) ("in beslag" OR onderschept OR drugsvangst)',
            '(precursoren OR drugslab OR drugslaboratorium) ("in beslag" OR ontmanteld)',
            '(chemicaliën OR bestrijdingsmiddelen OR kwik OR koelgas OR ammoniumnitraat OR "gevaarlijk afval") ("in beslag" OR gesmokkeld OR onderschept)',
            '(ivoor OR neushoorn OR schubdier OR wildsmokkel OR CITES) ("in beslag" OR gesmokkeld)',

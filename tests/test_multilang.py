@@ -217,3 +217,14 @@ def test_dutch_and_flemish_are_searched():
     assert collect.GDELT_LANGS["nl"] == "dutch" and translate._MYMEMORY_LOCALE["nl"] == "nl-NL"
     cov = coverage.payload(cfg)
     assert "nl" in cov["searched"] and cov["names"]["nl"] == "Dutch"
+
+
+def test_flemish_coke_slang_is_cocaine_but_coca_cola_and_coal_coke_are_not():
+    r = extract("15 ton coke voor Antwerpen onderschept in Jamaica: bendes maken omweg om autoriteiten te omzeilen", "")
+    assert r["relevant"] == 1 and r["primary_drug"] == "Cocaine" and abs(r["qty_kg"] - 15000) < 1
+    assert r["seizure_country"] == "Jamaica" and r["destination"] == "Belgium"
+    assert extract("Cokevangst in Antwerpse haven: 300 kilo coke tussen bananen", "")["relevant"] == 1
+    assert extract("Twee aangehouden met 5 kilo coke in Gent", "")["relevant"] == 1
+    for t in ("Coca-Cola opent nieuwe fabriek in Antwerpen", "Hoogovens sluit cokesfabriek", "Coke Zero lanceert nieuwe smaak",
+              "Staalbedrijf koopt 5 ton coke voor hoogovens", "Recordvangst: visser haalt 2 ton makreel binnen in Oostende"):
+        assert extract(t, "")["relevant"] == 0, t
