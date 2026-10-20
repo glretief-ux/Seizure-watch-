@@ -49,6 +49,9 @@ SITE_COUNTRY = {
     "uscg.mil": "United States", "gov.uk": "United Kingdom", "afp.gov.au": "Australia", "abf.gov.au": "Australia",
     "sars.gov.za": "South Africa", "saps.gov.za": "South Africa", "ndlea.gov.ng": "Nigeria", "nacoc.gov.gh": "Ghana",
     "pib.gov.in": "India", "pdea.gov.ph": "Philippines", "cnb.gov.sg": "Singapore", "douane.gouv.fr": "France", "zoll.de": "Germany",
+    "politie.nl": "Netherlands", "om.nl": "Netherlands", "fiod.nl": "Netherlands", "kmar.nl": "Netherlands",
+    "belastingdienst.nl": "Netherlands", "politie.be": "Belgium", "financien.belgium.be": "Belgium",
+    "federaalparket.be": "Belgium",
     "guardiacivil.es": "Spain", "agenciatributaria.es": "Spain", "policia.gov.co": "Colombia", "aduana.gob.ec": "Ecuador",
     "gob.pe": "Peru", "gob.mx": "Mexico", "gov.br": "Brazil",
 }

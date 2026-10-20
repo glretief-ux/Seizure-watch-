@@ -156,7 +156,7 @@ sources:
   # releases are picked up even when no newspaper reports them. Add or remove websites freely.
   official_sites:
     enabled: true
-    query: "site:{site} (seized OR seizure OR seizes OR intercepted OR incautan OR decomisan OR saisie OR apreensao) (cocaine OR heroin OR methamphetamine OR cannabis OR fentanyl OR captagon OR drugs OR cocaina OR droga OR cocaine OR drogue OR \"precursor chemicals\" OR \"hazardous chemicals\" OR \"toxic chemicals\" OR pesticides OR refrigerants OR mercury OR \"ammonium nitrate\" OR \"hazardous waste\" OR \"stolen vehicles\" OR \"protected timber\" OR antiquities OR \"cultural property\" OR \"archaeological artefacts\" OR rosewood OR \"illegal firearms\" OR \"weapons cache\" OR ammunition OR \"arms trafficking\" OR ivory OR \"rhino horn\" OR pangolin OR \"wildlife trafficking\" OR CITES)"
+    query: "site:{site} (seized OR seizure OR seizes OR intercepted OR incautan OR decomisan OR saisie OR apreensao OR \"in beslag genomen\" OR onderschept OR inbeslagname) (cocaine OR heroin OR methamphetamine OR cannabis OR fentanyl OR captagon OR drugs OR cocaina OR droga OR cocaine OR drogue OR \"precursor chemicals\" OR \"hazardous chemicals\" OR \"toxic chemicals\" OR pesticides OR refrigerants OR mercury OR \"ammonium nitrate\" OR \"hazardous waste\" OR \"stolen vehicles\" OR \"protected timber\" OR antiquities OR \"cultural property\" OR \"archaeological artefacts\" OR rosewood OR \"illegal firearms\" OR \"weapons cache\" OR ammunition OR \"arms trafficking\" OR ivory OR \"rhino horn\" OR pangolin OR \"wildlife trafficking\" OR CITES OR hasj OR hennep OR xtc OR kwik OR ivoor OR vuurwapens OR munitie OR cocaïne OR heroïne)"
     # `lang` is the language that site actually publishes in - it decides whether the
     # headline gets auto-translated to English, so it must be the SITE's language, not English,
     # even though the search itself always goes through the English Google News edition.
@@ -182,6 +182,14 @@ sources:
       - {site: cnb.gov.sg,            lang: en}  # Singapore Central Narcotics Bureau
       - {site: douane.gouv.fr,        lang: fr}  # French customs
       - {site: zoll.de,               lang: de}  # German customs
+      - {site: politie.nl,            lang: nl}  # Dutch national police
+      - {site: om.nl,                 lang: nl}  # Dutch Public Prosecution Service (Openbaar Ministerie)
+      - {site: fiod.nl,               lang: nl}  # Dutch fiscal investigation service (FIOD)
+      - {site: kmar.nl,               lang: nl}  # Royal Netherlands Marechaussee (Schiphol, borders)
+      - {site: belastingdienst.nl,    lang: nl}  # Dutch Tax and Customs Administration
+      - {site: politie.be,            lang: nl}  # Belgian federal police (Dutch-language pages)
+      - {site: financien.belgium.be,  lang: nl}  # Belgian customs (FPS Finance)
+      - {site: federaalparket.be,     lang: nl}  # Belgian federal prosecutor
       - {site: guardiacivil.es,       lang: es}  # Spanish Guardia Civil
       - {site: agenciatributaria.es,  lang: es}  # Spanish tax and customs agency
       - {site: policia.gov.co,        lang: es}  # Colombian national police
