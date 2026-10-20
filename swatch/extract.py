@@ -9,11 +9,14 @@ import re
 from . import lexicon as L
 
 NUMW = (r"(\d{1,3}|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|dos|tres|cuatro|cinco|seis|siete|"
-        r"ocho|nueve|diez|deux|trois|quatre|cinq|sept|huit|neuf|dix)")
+        r"ocho|nueve|diez|deux|trois|quatre|cinq|sept|huit|neuf|dix|"
+        r"(?<![a-z])(?:twee|drie|vier|vijf|zes|zeven|acht|negen|tien|elf|twaalf))")
 WORDNUM = {w: i for i, w in enumerate(
     "zero one two three four five six seven eight nine ten eleven twelve".split())}
 WORDNUM.update({"dos": 2, "tres": 3, "cuatro": 4, "cinco": 5, "seis": 6, "siete": 7, "ocho": 8, "nueve": 9,
                 "diez": 10, "deux": 2, "trois": 3, "quatre": 4, "cinq": 5, "sept": 7, "huit": 8, "neuf": 9, "dix": 10})
+WORDNUM.update({"twee": 2, "drie": 3, "vier": 4, "vijf": 5, "zes": 6, "zeven": 7, "acht": 8, "negen": 9, "tien": 10,
+                "elf": 11, "twaalf": 12})                       # Dutch / Flemish
 
 NUM = r"(?<![\d.,])(\d{1,3}(?:[.,]\d{3})+(?:[.,]\d+)?|\d{1,3}(?:[ \u00a0\u202f]\d{3})+(?:[.,]\d+)?|\d+(?:[.,]\d+)?)"
 MULT = r"(?:\s*(million|millions|millon|millones|milhao|milhoes|billion|thousand|mil|k)(?![a-z]))?"
@@ -21,7 +24,8 @@ _EXTRA_UNITS = [(L.strip_accents(re.sub(r"\\+", r"\\", u)), f) for u, f in L.UNI
 W_UNITS = (r"(tonnes?|tons?|toneladas?|tonelada|kilograms?|kilogrammes?|kilogramos|kilogramas|quilogramas?|kilos?|kgs?|"
            r"grams?|grammes?|gramos?|gramas?|gms?|" + "|".join(u for u, _ in _EXTRA_UNITS) + r"|g|lbs?|pounds?|libras?)")
 WEIGHT_RX = re.compile(NUM + MULT + r"[\s-]*" + W_UNITS + r"(?![a-z])")
-UNIT_RX = re.compile(NUM + MULT + r"[\s-]*(?:[a-z]+\s+)?(pills|tablets|capsules|comprimidos|pastillas|pilulas|pilules|"
+UNIT_RX = re.compile(NUM + MULT + r"[\s-]*(?:[a-z]+\s+)?(pillen|tabletten|sigaretten|pakjes|voertuigen|vuurwapens|patronen|"
+                     r"kogels|slagtanden|pills|tablets|capsules|comprimidos|pastillas|pilulas|pilules|"
                      r"comprimes|cigarettes|cigarrillos|cigarros|sticks|packs|cartons|cajetillas|master\s+cases|"
                      r"plants|plantas|plantes|doses|bricks|ladrillos|packages|packets|paquetes|bales|fardos|bundles|"
                      r"stolen\s+vehicles|vehicles|vehiculos|vehicules|veiculos|stolen\s+cars|cars|trucks|lorries|"
@@ -32,7 +36,10 @@ UNIT_RX = re.compile(NUM + MULT + r"[\s-]*(?:[a-z]+\s+)?(pills|tablets|capsules|
                      r"tusks?|horns|skins|pelts|fins|pieces|animals|specimens|turtles|tortoises|snakes|lizards|"
                      r"reptiles|birds|parrots|monkeys|pangolins|primates)"
                      r"(?![a-z])")
-UNIT_KIND = {"pills": "pills", "tablets": "pills", "capsules": "pills", "comprimidos": "pills", "pastillas": "pills",
+UNIT_KIND = {"pillen": "pills", "tabletten": "pills", "sigaretten": "cigarettes", "pakjes": "packs",
+             "voertuigen": "vehicles", "vuurwapens": "firearms", "patronen": "rounds", "kogels": "rounds",
+             "slagtanden": "tusks",                                  # Dutch / Flemish
+             "pills": "pills", "tablets": "pills", "capsules": "pills", "comprimidos": "pills", "pastillas": "pills",
              "pilulas": "pills", "pilules": "pills", "comprimes": "pills", "doses": "doses",
              "cigarettes": "cigarettes", "cigarrillos": "cigarettes", "cigarros": "cigarettes", "sticks": "cigarettes",
              "packs": "packs", "cartons": "packs", "cajetillas": "packs", "master cases": "cases",
@@ -54,7 +61,7 @@ UNIT_KIND = {"pills": "pills", "tablets": "pills", "capsules": "pills", "comprim
 WILDLIFE_KINDS = {"tusks", "horns", "skins", "fins", "pieces", "animals"}
 WILDLIFE_CATEGORIES = {"CITES elephant ivory", "CITES protected fauna"}
 ARREST_A = re.compile(NUMW + r"\s+(?:\w+\s+){0,3}?(?:were\s+|was\s+|have\s+been\s+|fueron\s+|han\s+sido\s+|ont\s+ete\s+)?"
-                      r"(?:arrested|detained|charged|apprehended|captured|detenid\w+|arrestad\w+|capturad\w+|"
+                      r"(?:arrested|detained|charged|apprehended|captured|aangehouden|opgepakt|gearresteerd|detenid\w+|arrestad\w+|capturad\w+|"
                       r"aprehendid\w+|interpelad\w+|arrete\w*|interpelle\w*|presos|detidos|presas)")
 ARREST_B = re.compile(r"(?:arrested|detained|arrestaron\s+a|detuvieron\s+a|arrests?\s+of|arrestation\s+de|"
                       r"interpellation\s+de)\s+(?:a\s+total\s+of\s+)?" + NUMW +
@@ -258,7 +265,8 @@ PRECURSOR = re.compile(r"precursor|chemical|quimic|chimique|\bacid|acido|acide|s
                        r"|anhidrido|\bp2p\b|\bbmk\b|\bpmk\b")
 MAX_SINGLE_KG = 40000.0          # more than 40 t in one seizure is almost always a running total or a parsing slip
 _EN = re.compile(r"\b(?:the|and|of|was|were|with|has|have|said|police|been|for|that|at|from|after|by)\b")
-_LAT = re.compile(r"\b(?:de|la|el|los|las|del|con|por|una|que|fue|se|en|le|les|des|du|et|dans|pour|est|um|uma|os|nao|com|para|foi|da|do|das|dos|y|o|e|au|aux|cua|duoc|cac|nhung|mot|voi|tai)\b")
+_LAT = re.compile(r"\b(?:de|la|el|los|las|del|con|por|una|que|fue|se|en|le|les|des|du|et|dans|pour|est|um|uma|os|nao|com|para|foi|da|do|das|dos|y|o|e|au|aux|cua|duoc|cac|nhung|mot|voi|tai|"
+                  r"het|een|van|naar|uit|voor|werd|werden|zijn|bij|aan|door|tussen|beslag|genomen|onderschept)\b")   # + Dutch / Flemish
 
 
 def _english(t):

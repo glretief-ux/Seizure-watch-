@@ -1140,13 +1140,16 @@ DRUG_EXTRA = {
         "كوكايين", "كوكاين", "kokain", "кокаин", "可卡因", "古柯碱", "古柯堿", "古柯鹼", "कोकीन", "कोकेन"],
     "Cannabis": [
         "حشيش", "ماريجوانا", "ماريجوانه", "بانجو", "القنب", "esrar", "kenevir", "hashis", "марихуан", "гашиш", "каннабис",
-        "конопл", "анаша", "大麻", "गांजा", "चरस", "मारिजुआना", "हशीश", r"(?<![\u0900-\u097f])भांग(?![\u0900-\u097f])"],
+        "конопл", "анаша", "大麻", "गांजा", "चरस", "मारिजुआना", "हशीश", r"(?<![\u0900-\u097f])भांग(?![\u0900-\u097f])",
+        # Dutch / Flemish (wiet = weed, hasj = hash, hennep = cannabis plants)
+        r"\bwiet", r"\bhasj", "hennep"],
     "Heroin/Opium": [
         "هيروين", "افيون", "أفيون", "eroin", "afyon", "героин", "опий", "опиат", "海洛因", "海洛英", "鸦片", "鴉片", "阿片",
         "हेरोइन", "हीरोइन", "अफीम", "स्मैक", "ब्राउन शुगर", "डोडा चूरा"],
     "Methamphetamine": [
         "ميثامفيتامين", "ميثامفيتامين", "الشابو", "metamfetamin", "метамфетамин", "冰毒", "甲基苯丙胺", "甲基安非他命",
-        "मेथामफेटामाइन", "मेथएम्फेटामाइन", r"(?<![\u0900-\u097f])मेथ(?![\u0900-\u097f])"],
+        "मेथामफेटामाइन", "मेथएम्फेटामाइन", r"(?<![\u0900-\u097f])मेथ(?![\u0900-\u097f])",
+        "methamfetamin", "kristalmeth"],                  # Dutch / Flemish (methamfetamine)
     "NSA": [
         "كبتاجون", "كابتاجون", "كبتاغون", "كابتاغون", "ترامادول", "امفيتامين", "أمفيتامين", "اكستاسي", "كيتامين", "فنتانيل",
         "مخدرات تخليقية", "حبوب مخدرة", "اقراص مخدرة", "أقراص مخدرة",
@@ -1156,13 +1159,17 @@ DRUG_EXTRA = {
         "摇头丸", "搖頭丸", "k粉", "氯胺酮", "芬太尼", "卡西酮", "新型毒品", "合成毒品", "曲马多", "曲馬多", "依托咪酯",
         "太空油", "(?<!甲基)安非他命", "(?<!甲基)苯丙胺",
         "ट्रामाडोल", "कैप्टागन", "एक्स्टसी", "सिंथेटिक ड्रग", "नशीली गोलियां", "नशीली गोलियाँ", "नशीले कैप्सूल", "एमडीएमए",
-        "मेफेड्रोन", "फेंटेनिल", "केटामाइन"],
+        "मेफेड्रोन", "फेंटेनिल", "केटामाइन",
+        r"\bxtc\b", r"synthetische\s+drugs?", r"party-?drugs?", r"designer-?drugs?", "drugspillen"],   # Dutch / Flemish
     "Cigarettes": [
         "سجائر", "تبغ", "kacak sigara", "sigara kacakciligi", "сигарет", "табачн", "香烟", "香菸", "卷烟", "捲菸", "私烟",
-        "烟草", "菸草", "सिगरेट", "तंबाकू"],
+        "烟草", "菸草", "सिगरेट", "तंबाकू",
+        "sigaret", r"\btabak"],                            # Dutch / Flemish (sigaretten, tabak)
 }
 GENERIC_EXTRA = ["مخدرات", "مواد مخدرة", "المخدر", "uyusturucu", "narkotik", "наркотик", "наркотическ", "психотропн",
-                 "毒品", "ड्रग्स", "नशीला पदार्थ", "नशीले पदार्थ", "मादक पदार्थ", "नारकोटिक्स"]
+                 "毒品", "ड्रग्स", "नशीला पदार्थ", "नशीले पदार्थ", "मादक पदार्थ", "नारकोटिक्स",
+                 # Dutch / Flemish: "drugs" alone is already covered, but not compounds such as drugsvangst
+                 r"drugs(?:vangst|smokkel|transport|handel|bende|netwerk|koerier)\w*", r"verdovende\s+middelen"]
 SEIZURE_EXTRA = [
     "ضبط", "احباط", "احبط", "مصادر", "تهريب", "القبض على",
     "ele gecir", "el konul", "yakalan", "kacakcilik",
@@ -1172,11 +1179,19 @@ SEIZURE_EXTRA = [
     # Vietnamese (seized, confiscated, caught red-handed, smuggling, illegal transport, busted, found, exhibits)
     r"\bbat\s+giu\b", r"\btich\s+thu\b", r"\bthu\s+giu\b", r"\bbat\s+qua\s+tang\b", r"\bbuon\s+lau\b",
     r"\bvan\s+chuyen\s+trai\s+phep\b", r"\btriet\s+pha\b", r"\bphat\s+hien\b", r"\btang\s+vat\b",
+    # Dutch / Flemish (in beslag genomen = seized, onderschept = intercepted, gesmokkeld = smuggled,
+    # ontmanteld = dismantled, opgerold = rolled up, aangetroffen = found, teruggevonden = recovered)
+    r"\bbeslag\b", r"\binbeslag", r"onderschep", r"smokkel", r"gesmokkeld", r"ontmantel", r"opgerold",
+    r"aangetroffen", r"teruggevonden", r"buitgemaakt", r"(?:cocaine|drugs|cannabis|wiet|hasj|heroine)vangst",
 ]
 CONTAINER_EXTRA = ["حاوية", "حاويات", "konteyner", "контейнер", "集装箱", "集裝箱", "货柜", "貨櫃", "कंटेनर"]
-PORT_WORDS = [r"ميناء", r"(?<![a-z])liman", r"морск\w+\s+порт", r"(?<![а-я])порт", r"港口", r"(?<!香)港", r"बंदरगाह"]
-AIR_WORDS = ["مطار", "havalimani", "havaalani", "аэропорт", "机场", "機場", "एयरपोर्ट", "हवाई अड्डा"]
-ROAD_WORDS = ["شاحنة", "شاحنات", r"tir\b", "kamyon", "грузовик", "фур[аы]", "卡车", "貨車", "货车", "ट्रक"]
+PORT_WORDS = [r"ميناء", r"(?<![a-z])liman", r"морск\w+\s+порт", r"(?<![а-я])порт", r"港口", r"(?<!香)港", r"बंदरगाह",
+              # Dutch / Flemish (haven = port; the English word "haven" only counts outside "tax haven" / "safe haven")
+              r"(?<!tax\s)(?<!safe\s)(?<![a-z])havens?(?![a-z])", "zeehaven", "containerschip", "vrachtschip", "havenbedrijf"]
+AIR_WORDS = ["مطار", "havalimani", "havaalani", "аэропорт", "机场", "機場", "एयरपोर्ट", "हवाई अड्डा",
+             "luchthaven", "vliegveld", "vliegtuig", "luchtvracht"]
+ROAD_WORDS = ["شاحنة", "شاحنات", r"tir\b", "kamyon", "грузовик", "фур[аы]", "卡车", "貨車", "货车", "ट्रक",
+              "vrachtwagen", "vrachtauto", "bestelwagen", "oplegger", "snelweg", "grensovergang"]
 
 # ---- weight units: (regex part, kg factor)
 UNITS_EXTRA = [
@@ -1407,6 +1422,22 @@ CONCEAL_EXTRA = {
     "Postal / parcel": ["طرد", "طرود", "(?<![a-z])kargo", "(?<![a-z])posta", "посылк", "почтов", "包裹", "邮包", "郵包", "पार्सल"],
     "Container structure / false compartment": ["جدار الحاوية", "قاع مزدوج", "çift taban", "cift taban", "двойн\\w+ дн", "夹层", "夾層", "暗格"],
 }
+# Dutch / Flemish concealment words (bananen are caught by the French "bananes" already; Flemish says "wagen" for car)
+for _k, _parts in {
+    "Legitimate cargo (food/produce)": ["ananas", "koffie", "suiker", "diepvries", "diepgevroren", "sinaasappel", "vruchtensap",
+                                        r"(?<![a-z])vis(?![a-z])", "vlees", "rijst", "groenten", "meel", "fruit"],
+    "Legitimate cargo (industrial/goods)": [r"(?<![a-z])hout(?![a-z])", "meubels", "tegels", "schroot", "kleding", "speelgoed",
+                                            "kunststof", "autoonderdelen", "reserveonderdelen", "marmer", "textiel", "chemicalien",
+                                            r"aangegeven\s+als", r"gedeclareerd\s+als", r"vermomd\s+als", "dekmantel"],
+    "Body concealment": ["ingeslikt", "slikkers", "bolletjes"],
+    "Luggage / passenger goods": ["koffers", r"(?<![a-z])koffer(?![a-z])", "rugzak", "reistas", "handbagage"],
+    "Postal / parcel": ["pakketten", r"(?<![a-z])pakket(?![a-z])", "postpakket", "koerier", "postzending"],
+    "Container structure / false compartment": ["dubbele bodem", "valse bodem", "verborgen ruimte"],
+    "Vessel hull / underwater": ["scheepsromp", "onderwater"],
+}.items():
+    CONCEAL_EXTRA.setdefault(_k, []).extend(_parts)
+GENERIC_COMPARTMENT = _ext(GENERIC_COMPARTMENT, r"dubbele\s+bodem", r"valse\s+bodem", r"verborgen\s+(?:ruimte|compartiment)",
+                           r"geheime\s+ruimte")
 for _k, _parts in CONCEAL_EXTRA.items():
     CONCEALMENT[_k] = _ext(CONCEALMENT[_k], *_parts)
 SEIZURE = _ext(SEIZURE, *SEIZURE_EXTRA)
@@ -1456,10 +1487,101 @@ GENERIC_CHEMICAL_EXTRA = [
 GENERIC_PRECURSOR_EXTRA = [
     "سلائف كيميائية", "السلائف", "مواد أولية لتصنيع المخدرات", "uyuşturucu öncül", "öncül kimyasal",
     "прекурсор", "易制毒化学品", "易制毒化學品", "制毒原料", "製毒原料", "प्रीकर्सर", "tiền chất"]
+# ---- Dutch / Flemish chemicals (kwik = mercury is unambiguous in Dutch, unlike English "mercury")
+for _k, _parts in {
+    "Ozone-depleting refrigerants": ["koelgas", "koelgassen", r"koel(?:middel|middelen)", "koudemiddel", r"\bhfk", r"\bcfk",
+                                     "ozonlaag", "ozonafbrekend"],
+    "Pesticides/agrochemicals": ["bestrijdingsmiddel", "gewasbeschermingsmiddel", "landbouwgif", "pesticiden"],
+    "Mercury": [r"\bkwik\b", "kwiksmokkel"],
+    "Explosive precursors": ["ammoniumnitraat", "kaliumchloraat", "waterstofperoxide", r"precursoren\s+(?:voor|van)\s+explosieven"],
+    "Hazardous/toxic waste": ["gevaarlijk afval", "giftig afval", "chemisch afval", "elektronisch afval", "afvalexport"],
+    "Industrial/toxic chemicals": ["zwavelzuur", "zoutzuur", "natriumhydroxide", "bijtende soda"],
+}.items():
+    CHEMICAL_EXTRA.setdefault(_k, []).extend(_parts)
+GENERIC_CHEMICAL_EXTRA += ["chemische stoffen", "chemicalien", "gevaarlijke stoffen", "giftige stoffen", "illegale chemicalien"]
+GENERIC_PRECURSOR_EXTRA += ["precursoren", "drugslab", "drugslaboratorium", "synthetisch drugslab"]
 for _k, _parts in CHEMICAL_EXTRA.items():
     CHEMICAL_PATTERNS[_k] = _ext(CHEMICAL_PATTERNS[_k], *_parts)
 GENERIC_CHEMICAL = _ext(GENERIC_CHEMICAL, *GENERIC_CHEMICAL_EXTRA)
 GENERIC_PRECURSOR = _ext(GENERIC_PRECURSOR, *GENERIC_PRECURSOR_EXTRA)
+
+# ---- Dutch / Flemish: timber, arms, ivory, wildlife, cultural heritage, precursors, stolen vehicles, risk phrases.
+# Written without accents (the text is normalised first). Flemish and Netherlands Dutch share one vocabulary here;
+# the only regional difference that matters is "wagen" (Flemish for car), which is included.
+for _tbl, _extra in (
+    (TIMBER_PATTERNS, {"Rosewood (Dalbergia)": ["palissander", "rozenhout"],
+                       "Red sandalwood (Pterocarpus santalinus)": [r"rood\s+sandelhout", r"rode\s+sandelhout"],
+                       "Mahogany": ["mahonie"], "Ebony": ["ebbenhout"]}),
+    (IVORY_PATTERNS, {"Elephant ivory": [r"\bivoor\b", "olifantenivoor", r"slagtanden?"]}),   # \bivoor\b does not match Ivoorkust
+    (FAUNA_PATTERNS, {"Rhino horn": [r"neushoorn\w*\s*hoorns?", r"hoorns?\s+van\s+(?:een\s+|de\s+)?neushoorn"],
+                      "Pangolin": ["schubdier"],
+                      "Big cat parts": [r"(?:tijger|luipaard|leeuw|jaguar)(?:huid|huiden|botten|klauwen|tanden|poten|welpen)",
+                                        r"huid(?:en)?\s+van\s+(?:een\s+)?(?:tijger|luipaard)"],
+                      "Reptiles and turtles": ["schildpad", "reptielen", "krokodil", "leguaan", "gekko", "kameleon"],
+                      "Birds": ["papegaai", "roofvogel", "zangvogel", r"exotische\s+vogels", r"beschermde\s+vogels"],
+                      "Primates": [r"(?<![a-z])apen(?![a-z])", "aapjes", r"orang-?oetan", "chimpansee"],
+                      "Sharks, rays and marine species": ["haaienvin", "zeepaardje"],
+                      "Glass eels": ["glasaal", "glasaaltjes", r"(?:gesmokkelde|smokkel\s+van|smokkel\s+met)\s+paling"],
+                      "Bear parts": ["berengal", "berenpoten"]}),
+    (ARMS_PATTERNS, {"Firearms": [r"vuurwapens?", "pistolen", r"(?<![a-z])pistool(?![a-z])", "geweren", r"(?<![a-z])geweer(?![a-z])",
+                                  "machinegeweer", "kalasjnikov"],
+                     "Ammunition": ["munitie", "patronen", "kogels"],
+                     "Explosives/grenades": [r"springstof\w*", r"explosieven?\b", r"handgranaten?", "dynamiet", "detonatoren",
+                                             r"(?<![a-z])granaten(?![a-z])"]}),
+    (HERITAGE_PATTERNS, {"Antiquities/archaeological objects": [r"archeologische\s+(?:voorwerpen|objecten|vondsten|stukken|artefacten|schatten)",
+                                                                r"antieke\s+(?:voorwerpen|beelden|objecten)", "oudheden",
+                                                                r"geplunderde\s+(?:voorwerpen|objecten|oudheden)"],
+                         "Ancient coins": [r"(?:oude|antieke|romeinse|middeleeuwse)\s+munten"],
+                         "Manuscripts/rare books": [r"(?:oude|antieke|middeleeuwse)\s+(?:handschriften|manuscripten)"],
+                         "Religious idols and icons": [r"(?:gestolen|oude|antieke)\s+iconen"],
+                         "Artworks": [r"gestolen\s+(?:schilderij|schilderijen|kunstwerken|kunst)", "kunstroof", "kunstdiefstal",
+                                      r"schilderijen?\s+(?:teruggevonden|in\s+beslag)"],
+                         "Fossils": [r"gesmokkelde\s+fossielen", r"fossielen\s+(?:gesmokkeld|in\s+beslag)",
+                                     r"dinosaurus(?:eieren|fossielen|botten)"]}),
+    (PRECURSOR_PATTERNS, {"Acetic anhydride": ["azijnzuuranhydride", "aceetanhydride"],
+                          "Ephedrine/Pseudoephedrine": ["efedrine", r"pseudo-?efedrine"],
+                          "Potassium permanganate": ["kaliumpermanganaat"], "Sodium cyanide": ["natriumcyanide"],
+                          "Red phosphorus": [r"rode\s+fosfor"], "Acetone/solvents": [r"\baceton\b", "tolueen"]}),
+    (STOLEN_VEHICLE_PATTERNS, {"Stolen car": ["personenwagens?", r"(?<![a-z])wagens(?![a-z])", "luxewagens"],
+                               "Stolen truck/heavy vehicle": ["vrachtwagens?", "bestelwagens?", "opleggers", r"zwaar\s+materieel"]}),
+):
+    for _k, _parts in _extra.items():
+        _tbl[_k] = _ext(_tbl[_k], *_parts)
+GENERIC_TIMBER = _ext(GENERIC_TIMBER, r"beschermd\s+hout", r"cites[- ]hout", r"bedreigde\s+houtsoorten?",
+                      r"beschermde\s+(?:houtsoorten|boomsoorten|tropische\s+houtsoorten)")
+GENERIC_FAUNA = _ext(GENERIC_FAUNA, "wildsmokkel", "dierensmokkel", r"illegale\s+dierenhandel", r"bedreigde\s+dier(?:soorten|en)",
+                     r"beschermde\s+dier(?:soorten|en)", r"exotische\s+dieren", r"stropers?", "stroperij")
+GENERIC_ARMS = _ext(GENERIC_ARMS, r"illegale\s+wapens", "wapensmokkel", r"illegale\s+wapenhandel", "wapenarsenaal", "wapenvondst",
+                    "wapencache")
+GENERIC_HERITAGE = _ext(GENERIC_HERITAGE, r"cultureel\s+erfgoed", "cultuurgoederen", r"erfgoed(?:voorwerpen|objecten)")
+GENERIC_STOLEN_VEHICLE = _ext(GENERIC_STOLEN_VEHICLE, r"gestolen\s+(?:voertuigen|auto'?s|wagens|personenwagens|vrachtwagens)",
+                              "autodiefstal", "voertuigdiefstal")
+VEHICLE_THEFT_CUE = _ext(VEHICLE_THEFT_CUE, "gestolen", "diefstal")
+VEHICLE_WORDS = _ext(VEHICLE_WORDS, "voertuig", "vrachtwagen", r"\bauto\b", "wagen", "bestelwagen", "oplegger")
+ANY_TIMBER = re.compile("|".join(p.pattern for p in list(TIMBER_PATTERNS.values()) + [GENERIC_TIMBER]), re.I)
+ANY_ARMS = re.compile("|".join(p.pattern for p in list(ARMS_PATTERNS.values()) + [GENERIC_ARMS]), re.I)
+ANY_IVORY = re.compile("|".join(p.pattern for p in IVORY_PATTERNS.values()), re.I)
+ANY_FAUNA = re.compile("|".join(p.pattern for p in list(FAUNA_PATTERNS.values()) + [GENERIC_FAUNA]), re.I)
+ANY_HERITAGE = re.compile("|".join(p.pattern for p in list(HERITAGE_PATTERNS.values()) + [GENERIC_HERITAGE]), re.I)
+ANY_STOLEN_VEHICLE = re.compile(
+    "|".join(p.pattern for p in list(STOLEN_VEHICLE_PATTERNS.values()) + [GENERIC_STOLEN_VEHICLE]), re.I)
+# risk-indicator phrases read from the article text (see config.yaml -> risk). Phrases only, never nationalities.
+ORGANIZED = _ext(ORGANIZED, r"criminele\s+(?:organisatie|bende|netwerk|groepering)", r"georganiseerde\s+misdaad", "drugsbende",
+                 "drugsnetwerk", "drugskartel", "maffia")
+INSIDER = _ext(INSIDER, r"(?:haven|douane|luchthaven|terminal)(?:medewerker|werknemer|arbeider|ambtenaar|beambte)s?\b.{0,60}?"
+                        r"(?:aangehouden|opgepakt|gearresteerd|verdacht|betrokken|omgekocht|corrupt)",
+               r"corrupte\s+(?:douane|havenmedewerker|ambtenaar)", "omgekocht", "omkoping", "uithalers", "uithaalploeg")
+CONTROLLED_DELIVERY = _ext(CONTROLLED_DELIVERY, r"gecontroleerde\s+(?:aflevering|doorlevering|levering)")
+FALSE_DECLARATION = _ext(FALSE_DECLARATION, r"valse\s+(?:aangifte|documenten|facturen|papieren)",
+                         r"vervalste\s+(?:documenten|papieren|facturen)", r"(?:onjuist|verkeerd)\s+aangegeven",
+                         r"zonder\s+(?:vergunning|cites-?vergunning|licentie)", r"aangegeven\s+als", r"gedeclareerd\s+als",
+                         r"vermomd\s+als")
+FRONT_COMPANY = _ext(FRONT_COMPANY, r"(?:schijn|dekmantel|brievenbus)\s*(?:bedrijf|firma|onderneming|vennootschap)",
+                     r"nieuw\s+opgerichte\s+(?:bedrijf|firma|onderneming)", r"geen\s+handelsgeschiedenis")
+TRANSSHIPMENT = _ext(TRANSSHIPMENT, "overslag", "overgeslagen", "doorvoer", "vrijhandelszone", "vrijhaven", "herverpakt")
+ROUTE_CHANGE = _ext(ROUTE_CHANGE, "omgeleid", "koerswijziging", r"route\s+(?:gewijzigd|aangepast)")
+INTEL_TIP = _ext(INTEL_TIP, r"op\s+basis\s+van\s+(?:een\s+)?(?:tip|informatie|inlichtingen)", r"na\s+een\s+tip", "inlichtingen",
+                 r"anonieme\s+tip", "risicoanalyse", "risicoprofiel")
 
 # Rebuild the combined headline gate AFTER every language has been added. It is first built near the top of
 # this file from the English-only lists, which silently dropped Arabic, Russian and Chinese headlines (and
@@ -1487,6 +1609,15 @@ ORIGIN_CUE = _cue_ext(ORIGIN_CUE, r"(?<![a-z])tu(?![a-z])|xuat\s+phat\s+tu|nhap\
 DEST_CUE = _cue_ext(DEST_CUE, r"(?<![a-z])sang(?![a-z])|(?<![a-z])\u0111en(?![a-z])|xuat\s+sang|van\s+chuyen\s+sang")
 TRANSIT_CUE = _cue_ext(TRANSIT_CUE, r"(?<![a-z])qua(?![a-z])|thong\s+qua|trung\s+chuyen\s+(?:qua|tai)")
 TO_CUE = _cue_ext(TO_CUE, r"(?<![a-z])(?:sang|\u0111en)(?![a-z])")
+# Dutch / Flemish: "uit X" / "vanuit X" (from), "naar X" / "bestemd voor X" (to), "via X" / "doorvoer via X" (via).
+# An optional "de" / "het" may sit between the cue and the country ("naar de Verenigde Staten").
+_NL_ART = r"(?:\s+(?:de|het))?"
+ORIGIN_CUE = _cue_ext(ORIGIN_CUE, r"(?:(?<![a-z])uit|vanuit|afkomstig\s+(?:uit|van)|vertrokken\s+uit|komende\s+uit|aangekomen\s+uit|"
+                                  r"ingevoerd\s+uit|gesmokkeld\s+uit|verscheept\s+vanuit)" + _NL_ART)
+DEST_CUE = _cue_ext(DEST_CUE, r"(?:bestemd\s+voor|met\s+bestemming|op\s+weg\s+naar|onderweg\s+naar|richting|verscheept\s+naar|"
+                              r"gesmokkeld\s+naar|geexporteerd\s+naar|(?<![a-z])naar)" + _NL_ART)
+TRANSIT_CUE = _cue_ext(TRANSIT_CUE, r"(?:doorvoer\s+(?:via|door)|overslag\s+in|tussenstop\s+in)" + _NL_ART)
+TO_CUE = _cue_ext(TO_CUE, r"(?<![a-z])naar" + _NL_ART)
 # suffixes that come AFTER the country: Turkish 'dan / 'e, Hindi "se" (from) / "tak" (to)
 POST_ORIGIN = re.compile(r"^(?:'(?:dan|den|tan|ten)(?![a-z])|\s*से(?![\u0900-\u097f]))")
 POST_DEST = re.compile(r"^(?:'(?:ya|ye|na|ne|a|e)(?![a-z])|\s*(?:तक|के\s+लिए)(?![\u0900-\u097f]))")
@@ -1510,6 +1641,95 @@ for _line in COUNTRIES.strip().splitlines():
     for _a in _f[1:]:
         _add_country(_f[0], _a)
 for _line in COUNTRY_MORE.strip().splitlines():
+    _f = [x.strip() for x in _line.split("|")]
+    for _a in _f[1:]:
+        _add_country(_f[0], _a)
+# ---- Dutch / Flemish country names (English name | Dutch spelling(s)). Spellings that are identical to an existing alias
+# after accents are removed (Belgie, Colombia, Ecuador, Suriname, Curacao, Egypte ...) are not repeated.
+COUNTRY_NL = r"""
+Netherlands|nederland
+Belgium|belgie
+Germany|duitsland
+France|frankrijk
+Spain|spanje
+Italy|italie
+Austria|oostenrijk
+Switzerland|zwitserland
+Poland|polen
+Czech Republic|tsjechie
+Slovakia|slowakije
+Hungary|hongarije
+Romania|roemenie
+Bulgaria|bulgarije
+Greece|griekenland
+Croatia|kroatie
+Serbia|servie
+Albania|albanie
+Slovenia|slovenie
+Bosnia and Herzegovina|bosnie
+North Macedonia|noord-macedonie
+Denmark|denemarken
+Sweden|zweden
+Norway|noorwegen
+Finland|finland
+Iceland|ijsland
+Ireland|ierland
+Lithuania|litouwen
+Latvia|letland
+Estonia|estland
+Luxembourg|luxemburg
+Russia|rusland
+Belarus|wit-rusland
+Ukraine|oekraine
+Kazakhstan|kazachstan
+Uzbekistan|oezbekistan
+Kyrgyzstan|kirgizie
+Tajikistan|tadzjikistan
+Azerbaijan|azerbeidzjan
+Armenia|armenie
+Turkey|turkije
+United Kingdom|verenigd koninkrijk|groot-brittannie
+United States|verenigde staten
+Canada
+Mexico
+Brazil|brazilie
+Argentina|argentinie
+Dominican Republic|dominicaanse republiek
+Trinidad and Tobago|trinidad en tobago
+French Guiana|frans-guyana
+Morocco|marokko
+Algeria|algerije
+Tunisia|tunesie
+Libya|libie
+Lebanon|libanon
+Syria|syrie
+Jordan|jordanie
+Saudi Arabia|saoedi-arabie
+United Arab Emirates|verenigde arabische emiraten
+Yemen|jemen
+Sudan|soedan
+Ethiopia|ethiopie
+Somalia|somalie
+Uganda|oeganda
+Cameroon|kameroen
+Madagascar|madagaskar
+Namibia|namibie
+Cape Verde|kaapverdie
+Ivory Coast|ivoorkust
+South Africa|zuid-afrika
+South Korea|zuid-korea
+New Zealand|nieuw-zeeland
+Papua New Guinea|papoea-nieuw-guinea
+Myanmar|birma
+Cambodia|cambodja
+Malaysia|maleisie
+Indonesia|indonesie
+Philippines|filipijnen
+Hong Kong|hongkong
+Mongolia|mongolie
+Australia|australie
+"""
+for _line in COUNTRY_NL.strip().splitlines():
     _f = [x.strip() for x in _line.split("|")]
     for _a in _f[1:]:
         _add_country(_f[0], _a)
@@ -1591,6 +1811,19 @@ REGIONS = [
     ("Moscow region", "Russia", ["подмосков"]), ("Orenburg", "Russia", ["оренбург"]), ("Astrakhan", "Russia", ["астрахан"]),
 ]
 PLACES += REGIONS
+# Dutch / Flemish ports, airports and cities (Antwerp and Rotterdam are the main European cocaine gateways).
+# Not included: "gent" (also English for a gentleman) and "luik" (also Dutch for a hatch).
+PLACES += [
+    ("Antwerp", "Belgium", ["antwerpse haven", "haven van antwerpen", "haven antwerpen"]),
+    ("Rotterdam", "Netherlands", ["rotterdamse haven", "haven van rotterdam", "maasvlakte", "europoort", "hoek van holland"]),
+    ("Brussels", "Belgium", ["brussel", "brussels airport", "zaventem"]),
+    ("Ghent", "Belgium", ["ghent", "gentse haven", "haven van gent"]),
+    ("Ostend", "Belgium", ["ostend", "oostende"]),
+    ("Vlissingen", "Netherlands", ["vlissingen"]),
+    ("Moerdijk", "Netherlands", ["moerdijk"]),
+    ("Eindhoven", "Netherlands", ["eindhoven"]),
+    ("The Hague", "Netherlands", ["den haag", "the hague"]),
+]
 # more towns, counties' cities and agency/currency cues (see places_extra.py); never overrides an existing alias
 from .places_extra import PLACES as _EXTRA_PLACES, CUES as _EXTRA_CUES, LANG_COUNTRY  # noqa: E402
 _have = {norm(_a) for _p in PLACES for _a in _p[2]}
@@ -1654,7 +1887,7 @@ NSA_TYPES = [
                                           "мефедрон", "मेफेड्रोन", "bonzai")),
     ("Cathinones", rx(r"cathinone", r"methylone", r"\bmdpv\b", r"alpha-?pvp", r"flakka", r"bath\s+salts", r"\b3-?mmc\b", "卡西酮")),
     ("Synthetic cannabinoids", rx(r"synthetic\s+cannabinoid", r"\bspice\b", r"\bk2\b", r"mdmb", r"\bcumyl", r"cannabinoides?\s+sinteticos?", "спайс", r"sentetik\s+kannabinoid")),
-    ("MDMA/ecstasy", rx(r"\bmdma\b", r"ecstasy", r"extasis", r"ekstazi", "اكستاسي", "экстази", "摇头丸", "搖頭丸", "एक्स्टसी", r"\bmolly\b")),
+    ("MDMA/ecstasy", rx(r"\bmdma\b", r"ecstasy", r"extasis", r"ekstazi", "اكستاسي", "экстази", "摇头丸", "搖頭丸", "एक्स्टसी", r"\bmolly\b", r"\bxtc\b")),
     ("Amphetamine", rx(r"(?<!meth)amphetamine", r"anfetamina", r"amfetamin", "امفيتامين", "أمفيتامين", "(?<!мет)амфетамин", r"(?<!methyl)\bspeed\b")),
     ("Ketamine", rx(r"ketamine", r"ketamin", "кетамин", "كيتامين", "氯胺酮", r"\bk powder\b", "केटामाइन")),
     ("Tramadol", rx(r"tramadol", "ترامادول", "трамадол", "曲马多", "曲馬多", "ट्रामाडोल")),

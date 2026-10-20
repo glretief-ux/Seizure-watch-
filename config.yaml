@@ -40,6 +40,10 @@ sources:
       - {lang: zh, hl: zh-TW,  gl: TW, ceid: "TW:zh-Hant"}
       - {lang: hi, hl: hi,     gl: IN, ceid: "IN:hi"}
       - {lang: vi, hl: vi,     gl: VN, ceid: "VN:vi"}   # Vietnam (ivory searches)
+      # Dutch and Flemish: both editions share the "nl" queries below (Antwerp and Rotterdam are the two big
+      # European cocaine gateways, so local Dutch-language reporting is often first)
+      - {lang: nl, hl: nl,     gl: NL, ceid: "NL:nl"}   # Netherlands (Dutch)
+      - {lang: nl, hl: nl,     gl: BE, ceid: "BE:nl"}   # Belgium, Flanders (Flemish)
     queries:
       en: ["drug seizure", "cocaine seized", "heroin seized", "methamphetamine seized",
            "cannabis seized customs", "captagon seized", "fentanyl seized", "MDMA ecstasy seized",
@@ -80,6 +84,21 @@ sources:
       zh: ["缴获毒品", "查获可卡因", "海关 查获 毒品", "檢獲 毒品", "檢獲 可卡因", "緝獲 冰毒", "查获 危险化学品", "走私 制冷剂", "查获 走私农药", "查获 易制毒化学品", "洋垃圾 走私 查获", "查获 走私 红木", "查获 紫檀 走私", "海关 查获 走私文物", "查获 文物 走私"]
       vi: ["thu giữ ngà voi", "bắt giữ buôn lậu ngà voi", "hải quan phát hiện ngà voi", "ngà voi nhập lậu", "thu giữ hóa chất", "buôn lậu thuốc bảo vệ thực vật", "buôn lậu gas lạnh", "thu giữ thủy ngân", "tiền chất ma túy thu giữ", "thu giữ gỗ trắc", "buôn lậu gỗ quý hiếm", "thu giữ cổ vật", "buôn lậu cổ vật"]
       hi: ["ड्रग्स जब्त", "कोकीन जब्त", "गांजा बरामद", "हेरोइन बरामद", "अफीम जब्त", "नशीली गोलियां बरामद", "रसायन जब्त", "कीटनाशक जब्त", "अमोनियम नाइट्रेट बरामद", "लाल चंदन जब्त", "लाल चंदन तस्करी", "प्राचीन मूर्ति बरामद", "अष्टधातु मूर्ति बरामद"]
+      # Dutch and Flemish ("in beslag genomen" = seized, "onderschept" = intercepted, "drugsvangst" = drug haul)
+      nl: ["drugs onderschept", "cocaïne in beslag genomen", "cocaïne onderschept haven", "drugsvangst haven Antwerpen",
+           "drugsvangst haven Rotterdam", "douane onderschept drugs container", "drugs onderschept Schiphol",
+           "heroïne in beslag genomen", "cannabis in beslag genomen", "hennep in beslag genomen",
+           "xtc-pillen in beslag genomen", "crystal meth in beslag genomen", "synthetische drugs in beslag genomen",
+           "drugslab ontmanteld", "precursoren in beslag genomen", "chemische stoffen in beslag genomen",
+           "illegale bestrijdingsmiddelen in beslag genomen", "koelgas smokkel in beslag genomen", "kwik gesmokkeld",
+           "ammoniumnitraat in beslag genomen", "gevaarlijk afval illegaal export onderschept",
+           "gestolen voertuigen onderschept haven", "gestolen auto's in beslag genomen",
+           "beschermd hout CITES in beslag genomen", "palissanderhout in beslag genomen",
+           "ivoor in beslag genomen", "neushoornhoorn in beslag genomen", "schubdieren in beslag genomen",
+           "wildsmokkel in beslag genomen", "glasaal smokkel in beslag genomen",
+           "vuurwapens in beslag genomen", "munitie in beslag genomen", "wapensmokkel onderschept",
+           "archeologische voorwerpen in beslag genomen", "cultureel erfgoed gesmokkeld", "gestolen kunstwerken teruggevonden",
+           "sigaretten in beslag genomen douane"]
 
   gdelt:                       # global news index; free, no key. Set enabled: false to skip.
     enabled: true
@@ -125,6 +144,13 @@ sources:
            '(रसायन OR कीटनाशक OR "अमोनियम नाइट्रेट") (जब्त OR बरामद)']
       vi: ['("ngà voi") (thu giữ OR bắt giữ OR buôn lậu)',
            '("hóa chất" OR "thuốc bảo vệ thực vật" OR "gas lạnh" OR "thủy ngân") (thu giữ OR buôn lậu)']
+      nl: ['(cocaïne OR heroïne OR cannabis OR hennep OR xtc OR amfetamine OR methamfetamine) ("in beslag" OR onderschept OR drugsvangst)',
+           '(precursoren OR drugslab OR drugslaboratorium) ("in beslag" OR ontmanteld)',
+           '(chemicaliën OR bestrijdingsmiddelen OR kwik OR koelgas OR ammoniumnitraat OR "gevaarlijk afval") ("in beslag" OR gesmokkeld OR onderschept)',
+           '(ivoor OR neushoorn OR schubdier OR wildsmokkel OR CITES) ("in beslag" OR gesmokkeld)',
+           '(vuurwapens OR munitie OR wapensmokkel) ("in beslag" OR onderschept)',
+           '("gestolen voertuigen") (onderschept OR teruggevonden OR "in beslag")',
+           '(archeologische OR erfgoed OR "gestolen kunstwerken") ("in beslag" OR gesmokkeld OR teruggevonden)']
 
   # Official newsrooms. Google News is searched once per website below (site:...), so official press
   # releases are picked up even when no newspaper reports them. Add or remove websites freely.

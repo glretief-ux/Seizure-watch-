@@ -117,6 +117,9 @@ CUES = [
     (r"\b(?:sanepa|sunat|digemid)\b", "Peru"),
     (r"\b(?:sedena|guardia nacional|fgr|semar)\b", "Mexico"),
     (r"\b(?:sars|saps)\b", "South Africa"),
+    # Dutch / Flemish agencies (used only when the text names no place or country)
+    (r"\b(?:federale gerechtelijke politie|federale politie|politiezone|douane antwerpen|parket antwerpen|vlaamse politie)\b", "Belgium"),
+    (r"\b(?:koninklijke marechaussee|kmar|fiod|openbaar ministerie|nederlandse douane|belastingdienst)\b", "Netherlands"),
     (r"\b(?:anti-narcotics force|anf)\b", "Pakistan"),
     (r"\b(?:bgb|dnc bangladesh|rab)\b", "Bangladesh"),
     # currencies written next to an amount

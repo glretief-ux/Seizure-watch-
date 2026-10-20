@@ -68,7 +68,7 @@ def _via_google(text):
 # covers the source languages this project actually collects (see config.yaml).
 _MYMEMORY_LOCALE = {
     "es": "es-ES", "fr": "fr-FR", "de": "de-DE", "pt": "pt-PT", "ar": "ar-SA",
-    "tr": "tr-TR", "ru": "ru-RU", "zh": "zh-CN", "hi": "hi-IN", "vi": "vi-VN",
+    "tr": "tr-TR", "ru": "ru-RU", "zh": "zh-CN", "hi": "hi-IN", "vi": "vi-VN", "nl": "nl-NL",
 }
 
 

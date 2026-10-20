@@ -2045,6 +2045,9 @@ PLACE.update({"Western Visayas": [10.72, 122.56], "Central Visayas": [10.0, 124.
               "Luzon": [16.5, 121.0], "Palawan": [9.75, 118.74]})
 PLACE.update({"Cat Lai": [10.76, 106.79], "Cai Mep": [10.53, 107.02], "Da Nang": [16.05, 108.21],
               "Noi Bai airport": [21.22, 105.81], "Tan Son Nhat airport": [10.82, 106.65]})
+# Flemish / Dutch ports and cities (approximate positions for the map markers)
+PLACE.update({"Ghent": [51.05, 3.72], "Ostend": [51.22, 2.93], "Vlissingen": [51.44, 3.57], "Moerdijk": [51.70, 4.60],
+              "Eindhoven": [51.44, 5.48], "The Hague": [52.08, 4.30]})
 
 # States, provinces and regional cities (approximate centres; added with lexicon.REGIONS)
 PLACE.update({

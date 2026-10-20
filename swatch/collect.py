@@ -21,7 +21,7 @@ import requests
 from . import lexicon as L
 
 UA = "Mozilla/5.0 (compatible; SeizureWatch/1.0; open-source news monitor)"
-HDRS = {"User-Agent": UA, "Accept-Language": "en,es;q=0.8,fr;q=0.6,pt;q=0.6"}
+HDRS = {"User-Agent": UA, "Accept-Language": "en,es;q=0.8,fr;q=0.6,pt;q=0.6,nl;q=0.6"}
 
 
 def log(*a):
@@ -55,7 +55,8 @@ def _get(url, timeout=20, **kw):
 # The Google News edition a headline came from is a weak hint of where it happened. It is used only when the
 # text names no place, country, agency or currency at all (see extract._route), and is stored as low confidence.
 _ED_COUNTRY = {"US": "United States", "GB": "United Kingdom", "AU": "Australia", "IN": "India", "ZA": "South Africa",
-               "NG": "Nigeria", "MX": "Mexico", "ES": "Spain", "CO": "Colombia", "FR": "France", "BR": "Brazil", "PT": "Portugal"}
+               "NG": "Nigeria", "MX": "Mexico", "ES": "Spain", "CO": "Colombia", "FR": "France", "BR": "Brazil", "PT": "Portugal",
+               "NL": "Netherlands", "BE": "Belgium"}
 
 
 def google_news(query, ed, days):
@@ -148,7 +149,7 @@ def resolve_google_links(items, interval=0.3, chunk=25):
 
 # ---------------------------------------------------------------------- GDELT
 GDELT_LANGS = {"en": "english", "es": "spanish", "fr": "french", "pt": "portuguese", "ar": "arabic", "tr": "turkish",
-               "ru": "russian", "zh": "chinese", "hi": "hindi", "vi": "vietnamese"}
+               "ru": "russian", "zh": "chinese", "hi": "hindi", "vi": "vietnamese", "nl": "dutch"}
 
 
 def gdelt(query, lang, days, maxrec=100):

@@ -154,3 +154,66 @@ def test_vietnamese_unrelated_and_ivory_coast_are_not_ivory():
     assert extract("Đội tuyển Việt Nam thắng đậm, bắt giữ cơ hội vào chung kết", "")["relevant"] == 0
     r = extract("Bắt giữ 3 kg cocaine tại Bờ Biển Ngà", "")      # Bờ Biển Ngà = Ivory Coast, not ivory
     assert r["category"] == "Drug" and r["seizure_country"] == "Ivory Coast"
+
+
+# ---- Dutch / Flemish ---------------------------------------------------------------------------
+NL_CASES = [
+    ("Douane onderschept 2,5 ton cocaïne in haven van Antwerpen, afkomstig uit Ecuador", "Cocaine", 2500, "Belgium", "Ecuador", None),
+    ("Bijna 500 kilo cocaïne in beslag genomen in bananencontainer in Rotterdamse haven, bestemd voor Duitsland",
+     "Cocaine", 500, "Netherlands", None, "Germany"),
+    ("Drugsvangst in Zeebrugge: 1.200 kilo cocaïne verstopt tussen fruit", "Cocaine", 1200, "Belgium", None, None),   # 1.200 = 1200
+    ("Federale politie neemt 200 kilo hasj in beslag aan grensovergang", "Cannabis", 200, "Belgium", None, None),
+    ("Marechaussee onderschept 40 kilo cocaïne op Schiphol, drie verdachten aangehouden", "Cocaine", 40, "Netherlands", None, None),
+]
+
+
+def test_dutch_and_flemish_drug_seizures_are_read():
+    for title, drug, kg, country, origin, dest in NL_CASES:
+        r = extract(title, "")
+        assert r["relevant"] == 1, title
+        assert r["primary_drug"] == drug, (title, r["primary_drug"])
+        assert abs(r["qty_kg"] - kg) < 0.5, (title, r["qty_kg"])
+        assert r["seizure_country"] == country, (title, r["seizure_country"])
+        if origin:
+            assert r["origin"] == origin, (title, r["origin"])
+        if dest:
+            assert r["destination"] == dest, (title, r["destination"])
+
+
+def test_dutch_arrests_and_container_are_read():
+    r = extract("Marechaussee onderschept 40 kilo cocaïne op Schiphol, drie verdachten aangehouden", "")
+    assert r["arrests"] == 3
+    assert extract("Bijna 500 kilo cocaïne in beslag genomen in bananencontainer in Rotterdamse haven", "")["in_container"] == 1
+
+
+def test_dutch_non_drug_categories():
+    r = extract("Douane Antwerpen onderschept 3 ton ivoor uit Nigeria bestemd voor Vietnam", "")
+    assert r["category"] == "CITES elephant ivory" and r["origin"] == "Nigeria" and r["destination"] == "Vietnam"
+    r = extract("250 kilo kwik gesmokkeld via Rotterdam", "")
+    assert r["category"] == "Hazardous chemical" and abs(r["qty_kg"] - 250) < 0.5
+    r = extract("Vuurwapens en munitie in beslag genomen in Brussel", "")
+    assert r["category"] == "Arms and ammunition" and r["seizure_country"] == "Belgium"
+    r = extract("Gestolen wagens onderschept in haven van Antwerpen: 15 voertuigen op weg naar Afrika", "")   # Flemish "wagens"
+    assert r["category"] == "Stolen vehicle" and r["seizure_country"] == "Belgium"
+
+
+def test_dutch_unrelated_and_ivoorkust_are_not_seizures():
+    assert extract("Feyenoord wint van Ajax in De Kuip", "")["relevant"] == 0
+    assert extract("Ivoorkust wint Afrika Cup", "")["relevant"] == 0
+    assert extract("Zichzelf aangehouden voor snelheidsovertreding", "")["relevant"] == 0
+    r = extract("3 kilo cocaïne in beslag genomen in Ivoorkust", "")      # Ivoorkust = Ivory Coast, not ivory
+    assert r["category"] == "Drug" and r["seizure_country"] == "Ivory Coast"
+
+
+def test_dutch_and_flemish_are_searched():
+    cfg = yaml.safe_load(open(os.path.join(os.path.dirname(__file__), "..", "config.yaml"), encoding="utf-8"))
+    g = cfg["sources"]["google_news"]
+    nl_eds = {e["gl"] for e in g["editions"] if e["lang"] == "nl"}
+    assert nl_eds == {"NL", "BE"}, nl_eds                                   # Netherlands and Flanders
+    assert len(g["queries"]["nl"]) >= 20 and len(cfg["sources"]["gdelt"]["queries"]["nl"]) >= 5
+    for ed in g["editions"]:                                                 # no edition without queries
+        assert g["queries"].get(ed["lang"]), ed
+    from swatch import collect, translate
+    assert collect.GDELT_LANGS["nl"] == "dutch" and translate._MYMEMORY_LOCALE["nl"] == "nl-NL"
+    cov = coverage.payload(cfg)
+    assert "nl" in cov["searched"] and cov["names"]["nl"] == "Dutch"
