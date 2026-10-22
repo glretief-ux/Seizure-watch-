@@ -54,11 +54,11 @@ jobs:
           git config user.email "actions@users.noreply.github.com"
           git add data/last_run.log
           git diff --cached --quiet || git commit -m "Run log $(date -u +%FT%TZ)"
-          git push || (git pull --rebase -X theirs origin main && git push) || true
+          git push || (git pull --rebase --autostash -X theirs origin main && git push) || true
       - name: Save results
         run: |
           git config user.name  "seizure-watch-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add data/seizure_watch.db docs
+          git add data/seizure_watch.db docs board
           git diff --cached --quiet || git commit -m "Daily update $(date -u +%F)"
-          git push || (git pull --rebase -X theirs origin main && git push)
+          git push || (git pull --rebase --autostash -X theirs origin main && git push)

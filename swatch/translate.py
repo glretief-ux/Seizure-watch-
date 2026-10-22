@@ -26,7 +26,8 @@ headline often comes from several outlets on the same day.
 import threading
 
 _cache = {}
-stats = {"ok": 0, "fail": 0, "last_error": None}
+stats = {"ok": 0, "fail": 0, "last_error": None, "streak": 0, "disabled": False}
+MAX_FAIL_STREAK = 8   # after this many failures in a row both backends are treated as down for the rest of the run
 CALL_TIMEOUT = 5  # seconds - deliberately short; there are a lot of headlines to get through,
 # and the GitHub Actions job as a whole is only given 45 minutes (see .github/workflows/daily.yaml)
 
@@ -84,6 +85,8 @@ def to_english(text, lang):
     key = (str(lang).lower(), text)
     if key in _cache:
         return _cache[key]
+    if stats["disabled"]:  # backends are down: do not burn up to 10 s per headline (this caused the 45-minute timeouts)
+        return text
 
     result = None
     for backend, args in ((_via_mymemory, (text, lang)), (_via_google, (text,))):
@@ -97,9 +100,13 @@ def to_english(text, lang):
 
     if result is None:
         stats["fail"] += 1
+        stats["streak"] += 1
+        if stats["streak"] >= MAX_FAIL_STREAK:
+            stats["disabled"] = True
         result = text
     else:
         stats["ok"] += 1
+        stats["streak"] = 0
 
     _cache[key] = result
     return result

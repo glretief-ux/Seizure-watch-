@@ -11,6 +11,7 @@ import argparse
 import datetime as dt
 import os
 import sys
+import time
 
 import yaml
 
@@ -25,12 +26,23 @@ def log(*a):
     print(*a, flush=True)
 
 
+START = time.monotonic()
+# The workflow gives the whole job 45 minutes. Stop extracting after this many minutes so analysis, the
+# board build and "Save results" still run; anything not reached is picked up again by the next run.
+INGEST_BUDGET_MIN = float(os.environ.get("INGEST_BUDGET_MIN", "28"))
+
+
 def ingest(conn, items, is_demo=False):
     """Extract facts from each item and store. Returns (stored, relevant)."""
     stored = relevant = 0
     ner_hits = 0  # how many articles NER supplemented something the lexicon missed
     now = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
-    for it in items:
+    for n, it in enumerate(items):
+        if not is_demo and time.monotonic() - START > INGEST_BUDGET_MIN * 60:
+            log(f"      time budget reached after {n} of {len(items)} articles; the rest are left for the next run")
+            break
+        if n and n % 50 == 0:
+            conn.commit()  # keep progress even if the job is cut off
         try:
             rec = extract.extract(it["title"], it.get("text", ""), it.get("source_country") or LANG_COUNTRY.get(it.get("lang")))
         except Exception as exc:  # one bad article must never stop the whole run
