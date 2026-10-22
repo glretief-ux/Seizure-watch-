@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Writes board/data.js (the data for the open-source seizure board artifact) from the latest dashboard build.
-Usage: python scripts/build_board.py   (reads docs/index.html, which run_daily.py rebuilds every hour)."""
+Usage: python scripts/build_board.py   (reads docs/index.html, which run_daily.py rebuilds once a day)."""
 import json, os, re, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)

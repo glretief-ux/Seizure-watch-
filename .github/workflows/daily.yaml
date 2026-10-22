@@ -2,8 +2,8 @@ name: daily-seizure-watch
 
 on:
   schedule:
-    # hourly (at 17 minutes past), so a new report shows up within about an hour
-    - cron: "17 * * * *"
+    # once a day at 08:00 UTC (10:00 in Central European Summer Time, 09:00 in winter)
+    - cron: "0 8 * * *"
   workflow_dispatch:               # lets you press "Run workflow" by hand
     inputs:
       days:
