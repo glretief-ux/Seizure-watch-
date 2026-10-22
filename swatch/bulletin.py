@@ -319,7 +319,7 @@ def render_html(c):
     return f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Seizure Watch weekly bulletin {esc(c['period'])}</title>
 <style>
-@page{{size:A4;margin:9mm}}
+@page{{size:A4;margin:0}}
 *{{box-sizing:border-box}}
 body{{margin:0;background:#eef2f7;color:#1c2b3a;font:12px/1.45 {FONT};-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 .wrap{{max-width:860px;margin:0 auto;padding:12px}}
@@ -344,7 +344,7 @@ table.tb{{width:100%;border-collapse:collapse}}.tb th{{background:#f0f3f7;text-a
 .how{{font-size:10.5px;color:#44546a;line-height:1.5}}.how b{{color:#12355b}}
 .foot{{margin:10px 2px 0;font-size:10px;color:#66758a;line-height:1.5}}.web{{text-align:center;font-size:11px;margin:6px 0}}
 @media(max-width:640px){{.kpis{{grid-template-columns:repeat(2,1fr)}}.grid{{grid-template-columns:1fr}}}}
-@media print{{body{{background:#fff}}.wrap{{padding:0;max-width:none}}.web{{display:none}}}}
+@media print{{body{{background:#fff;padding:9mm}}.wrap{{padding:0;max-width:none}}.web{{display:none}}}}
 </style></head><body><div class="wrap">
 {web}{logo_html}
 <div class="hero"><h1>SEIZURE WATCH &mdash; Weekly Bulletin</h1><div class="sub">{esc(c['period'])}</div><div class="lead">{lead}</div></div>
