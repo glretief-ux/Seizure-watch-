@@ -81,6 +81,27 @@ _RAW = [
     (CLOTH, "textiles", r"textile|tekstil", False),
     (GOODS, "toys", r"\btoys?\b|oyuncak|игрушк|玩具|खिलौने|^العاب$", False),
     (GOODS, "general goods", r"(?:consumer|household|industrial|general|non-hazardous)\s+(?:goods|products)|^goods$", False),
+    # German, Danish, Estonian, Amharic, Icelandic, Mongolian, Norwegian, Slovak, Swedish
+    (FRUIT, "pineapple", r"^ananas", False),
+    (FRUIT, "citrus", r"^orangen|^appelsin|^apelsin", False),
+    (FRUIT, "fruit", r"^obst|^frugt|^frukt|^puuvili|^ovocie|ፍራፍሬ|жимс", False),
+    (FRUIT, "vegetables", r"^gemuse|^gronnsaker|^grontsager|^gronsaker|^zelenina", False),
+    (FOOD, "sugar", r"^zucker|^sukker|^socker|^suhkur|^cukor|^sykur|ስኳር", False),
+    (FOOD, "rice", r"^hrisgrjon|ሩዝ", False),
+    (FOOD, "flour", r"ዱቄት", False),
+    (COFFEE, "coffee", r"^kaffee|^kaffe|^kohv|^kaffi|^kava$|ቡና", False),
+    (FISH, "fish", r"^fisch|^fisk|^ryba$|загас", False),
+    (FISH, "meat", r"^fleisch|^maso$", False),
+    (FISH, "frozen goods", r"^tiefkuhl|^gefrier|^frossen|^fryst|^kulmutatud|^mrazen", True),
+    (TIMBER, "timber", r"^holz$|^timbur$|^puit$|^drevo$|እንጨት", False),
+    (FURN, "furniture", r"^mobel|^mobler|^møbler|^husgogn|^mooblid|^nabytok|тавилга", False),
+    (BUILD, "tiles & ceramics", r"^fliesen|^fliser|^flisar|^obklad", False),
+    (BUILD, "marble & granite", r"^marmor|^mramor|^marmari", False),
+    (METAL, "scrap metal", r"^schrott|^skrot|^brotajarn", False),
+    (MACH, "vehicle parts", r"^ersatzteile|^autoteile|^reservedele|^reservdelar|^varuosad|^nahradne diely|^varahlutir|эд анги|የመኪና መለዋወጫ", False),
+    (CLOTH, "clothing", r"^kleidung|^klaeder|^klader|^riided|^oblecenie|хувцас|ልብስ", True),
+    (CLOTH, "textiles", r"^textilien|ጨርቃ ጨርቅ", False),
+    (GOODS, "toys", r"^spielzeug|^legetoj|^leketoy|^leksaker|^hracky|^leikfong|^mangu|тоглоом", False),
 ]
 
 ITEMS = [(g, label, re.compile(strip_accents(p), re.I), bool(c)) for g, label, p, c in _RAW]

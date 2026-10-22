@@ -25,12 +25,19 @@ High-risk events (0-100 score), insider signals, new and surging corridors, and 
 
 ## Notes
 - Only extracted facts and the article link are stored, not article text.
-- Extraction is rule-based (English, Spanish, French, Portuguese, Dutch and Flemish, Arabic, Turkish, Russian, Chinese, Hindi; Vietnamese for elephant-ivory seizures only); treat output as leads to verify, not confirmed intelligence.
+- Extraction is rule-based (English, Spanish, French, Portuguese, Dutch and Flemish, German (Austria and Germany), Danish, Norwegian, Swedish, Estonian, Slovak, Icelandic, Mongolian, Amharic, Arabic, Turkish, Russian, Chinese, Hindi; Vietnamese for elephant-ivory seizures only); treat output as leads to verify, not confirmed intelligence.
 - Live collection was not tested in the build sandbox (no internet access to news sites); run the backfill once and check the counts.
 
 ## Languages, coverage and detail
 - The dashboard's **Coverage** map shows where the tool may be blind: countries whose main language is not searched (red), quiet ones (yellow) and those with reports (green).
 - Each report can carry the ports/airports, vessel name, shipping line, container number (check-digit validated) and the cover cargo, when the article names them.
+
+### Austria, Nordic and Baltic countries, Slovakia, Ethiopia and Mongolia
+German (Austria), Danish, Estonian, Amharic, Icelandic, Mongolian, Norwegian, Slovak and Swedish are collected (Google News edition, GDELT and the police and customs newsrooms in `config.yaml`) and read by `swatch/lang_more.py`, which holds the word lists in one place (drugs, seizure verbs, ports, units, concealment, chemicals, ivory, arms, heritage, stolen vehicles, risk phrases, countries, ports and cities). To add a word, add it there.
+- **Good coverage:** German, Danish, Norwegian, Swedish. **Good for common words, names expanded into their inflected forms:** Estonian, Slovak, Icelandic. **Basic - the common drug, seizure and place words only; please have a native speaker extend them:** Mongolian and Amharic.
+- Estonian case endings tell the direction ("Ecuadorist" = from Ecuador, "Soomesse" = to Finland); the other languages use prepositions ("fra", "från", "aus", "nach", "z", "do").
+- Google News may not publish an edition for every one of these (Iceland and Mongolia in particular). The run log prints one line per edition, for example `edition IS/is: 0 headlines`; a 0 means that edition returned nothing and GDELT and the official sites carry that language. Remove an edition that stays at 0.
+- YAML reads a bare `no` as the boolean false. Norwegian is therefore written `"no"` (in quotes) everywhere in `config.yaml`; keep the quotes.
 
 ## Weekly bulletin
 `docs/bulletin.html` is rebuilt every run. To also e-mail it every Monday, add these GitHub secrets (Settings > Secrets and variables > Actions): `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `BULLETIN_TO` (comma-separated), optionally `BULLETIN_FROM`. Never put them in the repository (it is public).

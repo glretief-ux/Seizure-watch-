@@ -21,7 +21,8 @@ def _clean(v):
 
 
 # languages spoken almost only in one country: a local story in them is very likely from there
-LANG_HOME = {"hi": "India", "tr": "Turkey", "vi": "Vietnam"}
+LANG_HOME = {"hi": "India", "tr": "Turkey", "vi": "Vietnam", "et": "Estonia", "sk": "Slovakia", "is": "Iceland", "mn": "Mongolia",
+             "am": "Ethiopia", "da": "Denmark", "sv": "Sweden", "no": "Norway"}
 
 
 def outlet_homes(ev, min_stories=3, share=0.6):

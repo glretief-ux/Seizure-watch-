@@ -120,6 +120,14 @@ CUES = [
     # Dutch / Flemish agencies (used only when the text names no place or country)
     (r"\b(?:federale gerechtelijke politie|federale politie|politiezone|douane antwerpen|parket antwerpen|vlaamse politie)\b", "Belgium"),
     (r"\b(?:koninklijke marechaussee|kmar|fiod|openbaar ministerie|nederlandse douane|belastingdienst)\b", "Netherlands"),
+    # Nordic, Baltic, Slovak and Austrian agencies
+    (r"\b(?:tolletaten|tollvesenet|kripos|politidistrikt|oslo politidistrikt)\b", "Norway"),
+    (r"\b(?:tullverket|polismyndigheten|polisregion|kustbevakningen)\b", "Sweden"),
+    (r"\b(?:rigspolitiet|skattestyrelsen|told ?skat|koebenhavns politi|københavns politi)\b", "Denmark"),
+    (r"\b(?:maksu- ja tolliamet|emta|politsei- ja piirivalveamet)\b", "Estonia"),
+    (r"\b(?:financna sprava|financnej spravy|policajny zbor|policajt\w*|colnic\w*|colna sprava)\b", "Slovakia"),
+    (r"\b(?:tollg(?:ae|æ)sla\w*|logreglan|rikislogreglustjori|landhelgisg(?:ae|æ)slan)\b", "Iceland"),
+    (r"\b(?:suchtgift|bundeskriminalamt|landespolizeidirektion|zollamt (?:wien|salzburg|graz|linz|innsbruck))\b", "Austria"),
     (r"\b(?:anti-narcotics force|anf)\b", "Pakistan"),
     (r"\b(?:bgb|dnc bangladesh|rab)\b", "Bangladesh"),
     # currencies written next to an amount
@@ -141,4 +149,5 @@ CUES = [
 ]
 
 # Languages that are in practice spoken in one country of our sources; used only when the text names no place at all
-LANG_COUNTRY = {"tr": "Turkey", "hi": "India", "vi": "Vietnam"}
+LANG_COUNTRY = {"tr": "Turkey", "hi": "India", "vi": "Vietnam", "et": "Estonia", "sk": "Slovakia", "is": "Iceland", "mn": "Mongolia",
+                "am": "Ethiopia", "da": "Denmark", "sv": "Sweden", "no": "Norway"}

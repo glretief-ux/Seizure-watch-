@@ -69,6 +69,7 @@ def _via_google(text):
 _MYMEMORY_LOCALE = {
     "es": "es-ES", "fr": "fr-FR", "de": "de-DE", "pt": "pt-PT", "ar": "ar-SA",
     "tr": "tr-TR", "ru": "ru-RU", "zh": "zh-CN", "hi": "hi-IN", "vi": "vi-VN", "nl": "nl-NL",
+    "da": "da-DK", "et": "et-EE", "am": "am-ET", "is": "is-IS", "mn": "mn-MN", "no": "no-NO", "sk": "sk-SK", "sv": "sv-SE",
 }
 
 

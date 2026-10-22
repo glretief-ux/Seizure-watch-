@@ -21,7 +21,7 @@ import requests
 from . import lexicon as L
 
 UA = "Mozilla/5.0 (compatible; SeizureWatch/1.0; open-source news monitor)"
-HDRS = {"User-Agent": UA, "Accept-Language": "en,es;q=0.8,fr;q=0.6,pt;q=0.6,nl;q=0.6"}
+HDRS = {"User-Agent": UA, "Accept-Language": "en,es;q=0.8,fr;q=0.6,pt;q=0.6,nl;q=0.6,de;q=0.5,sv;q=0.4,da;q=0.4,no;q=0.4"}
 
 
 def log(*a):
@@ -56,7 +56,8 @@ def _get(url, timeout=20, **kw):
 # text names no place, country, agency or currency at all (see extract._route), and is stored as low confidence.
 _ED_COUNTRY = {"US": "United States", "GB": "United Kingdom", "AU": "Australia", "IN": "India", "ZA": "South Africa",
                "NG": "Nigeria", "MX": "Mexico", "ES": "Spain", "CO": "Colombia", "FR": "France", "BR": "Brazil", "PT": "Portugal",
-               "NL": "Netherlands", "BE": "Belgium"}
+               "NL": "Netherlands", "BE": "Belgium", "AT": "Austria", "DK": "Denmark", "EE": "Estonia", "ET": "Ethiopia",
+               "IS": "Iceland", "MN": "Mongolia", "NO": "Norway", "SK": "Slovakia", "SE": "Sweden"}
 
 
 def google_news(query, ed, days):
@@ -149,7 +150,8 @@ def resolve_google_links(items, interval=0.3, chunk=25):
 
 # ---------------------------------------------------------------------- GDELT
 GDELT_LANGS = {"en": "english", "es": "spanish", "fr": "french", "pt": "portuguese", "ar": "arabic", "tr": "turkish",
-               "ru": "russian", "zh": "chinese", "hi": "hindi", "vi": "vietnamese", "nl": "dutch"}
+               "ru": "russian", "zh": "chinese", "hi": "hindi", "vi": "vietnamese", "nl": "dutch", "de": "german", "da": "danish", "et": "estonian",
+               "am": "amharic", "is": "icelandic", "mn": "mongolian", "no": "norwegian", "sk": "slovak", "sv": "swedish"}
 
 
 def gdelt(query, lang, days, maxrec=100):
@@ -246,16 +248,24 @@ def collect(cfg, days):
     if s.get("google_news", {}).get("enabled", True):
         g = s["google_news"]
         for ed in g["editions"]:
+            n_ed = 0
             for q in g["queries"].get(ed["lang"], []):
                 got = google_news(q, ed, days)
                 items += got
+                n_ed += len(got)
                 time.sleep(g.get("delay_seconds", 1.0))
+            # one line per non-English edition, so an edition Google does not serve (0 headlines) is easy to spot
+            if ed["lang"] != "en":
+                log(f"      edition {ed['gl']}/{ed['lang']}: {n_ed} headlines")
         log(f"   Google News: {len(items)} headlines")
     if s.get("gdelt", {}).get("enabled", True):
         n0 = len(items)
         for lang, queries in s["gdelt"]["queries"].items():
+            n_l = len(items)
             for q in queries:
                 items += gdelt(q, lang, days)
+            if lang != "en":
+                log(f"      GDELT {lang}: {len(items) - n_l} headlines")
         log(f"   GDELT: {len(items) - n0} headlines")
     return official + items
 

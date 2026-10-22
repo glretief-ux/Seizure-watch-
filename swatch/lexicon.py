@@ -25,7 +25,9 @@ _DIGITS = str.maketrans("\u0660\u0661\u0662\u0663\u0664\u0665\u0666\u0667\u0668\
 
 
 def norm(s):
-    return strip_accents((s or "").replace("\u2019", "'").translate(_DIGITS)).lower()
+    # Ethiopic full stop and word separator behave like ". " and " " (Amharic text)
+    s = (s or "").replace("\u2019", "'").replace("\u1362", ". ").replace("\u1361", " ").replace("\u1363", ", ")
+    return strip_accents(s.translate(_DIGITS)).lower()
 
 
 def slug(s):
@@ -1412,6 +1414,17 @@ PLACES = [
 ]
 
 
+# German (Austria), Danish, Estonian, Amharic, Icelandic, Mongolian, Norwegian, Slovak, Swedish - see lang_more.py
+from . import lang_more as _M  # noqa: E402
+for _k, _parts in _M.DRUG.items():
+    DRUG_EXTRA[_k] = list(DRUG_EXTRA[_k]) + _parts
+GENERIC_EXTRA += _M.GENERIC
+SEIZURE_EXTRA += _M.SEIZURE
+CONTAINER_EXTRA += _M.CONTAINER
+PORT_WORDS += _M.PORT
+AIR_WORDS += _M.AIR
+ROAD_WORDS += _M.ROAD
+UNITS_EXTRA += _M.UNITS
 for _k, _parts in DRUG_EXTRA.items():
     DRUG_PATTERNS[_k] = _ext(DRUG_PATTERNS[_k], *_parts)
 GENERIC_DRUG = _ext(GENERIC_DRUG, *GENERIC_EXTRA)
@@ -1442,6 +1455,9 @@ for _k, _parts in {
     "Vessel hull / underwater": ["scheepsromp", "onderwater"],
 }.items():
     CONCEAL_EXTRA.setdefault(_k, []).extend(_parts)
+for _k, _parts in _M.CONCEAL.items():
+    CONCEAL_EXTRA.setdefault(_k, []).extend(_parts)
+GENERIC_COMPARTMENT = _ext(GENERIC_COMPARTMENT, *_M.GENERIC_COMPARTMENT)
 GENERIC_COMPARTMENT = _ext(GENERIC_COMPARTMENT, r"dubbele\s+bodem", r"valse\s+bodem", r"verborgen\s+(?:ruimte|compartiment)",
                            r"geheime\s+ruimte")
 for _k, _parts in CONCEAL_EXTRA.items():
@@ -1506,6 +1522,10 @@ for _k, _parts in {
     CHEMICAL_EXTRA.setdefault(_k, []).extend(_parts)
 GENERIC_CHEMICAL_EXTRA += ["chemische stoffen", "chemicalien", "gevaarlijke stoffen", "giftige stoffen", "illegale chemicalien"]
 GENERIC_PRECURSOR_EXTRA += ["precursoren", "drugslab", "drugslaboratorium", "synthetisch drugslab"]
+for _k, _parts in _M.CHEM.items():
+    CHEMICAL_EXTRA.setdefault(_k, []).extend(_parts)
+GENERIC_CHEMICAL_EXTRA += _M.GENERIC_CHEMICAL
+GENERIC_PRECURSOR_EXTRA += _M.GENERIC_PRECURSOR
 for _k, _parts in CHEMICAL_EXTRA.items():
     CHEMICAL_PATTERNS[_k] = _ext(CHEMICAL_PATTERNS[_k], *_parts)
 GENERIC_CHEMICAL = _ext(GENERIC_CHEMICAL, *GENERIC_CHEMICAL_EXTRA)
@@ -1564,6 +1584,17 @@ GENERIC_STOLEN_VEHICLE = _ext(GENERIC_STOLEN_VEHICLE, r"gestolen\s+(?:voertuigen
                               "autodiefstal", "voertuigdiefstal")
 VEHICLE_THEFT_CUE = _ext(VEHICLE_THEFT_CUE, "gestolen", "diefstal")
 VEHICLE_WORDS = _ext(VEHICLE_WORDS, "voertuig", "vrachtwagen", r"\bauto\b", "wagen", "bestelwagen", "oplegger")
+for _tn, _extra in _M.TABLES.items():
+    _tbl = globals()[_tn]
+    for _k, _parts in _extra.items():
+        _tbl[_k] = _ext(_tbl[_k], *_parts)
+GENERIC_TIMBER = _ext(GENERIC_TIMBER, *_M.GENERICS["GENERIC_TIMBER"])
+GENERIC_FAUNA = _ext(GENERIC_FAUNA, *_M.GENERICS["GENERIC_FAUNA"])
+GENERIC_ARMS = _ext(GENERIC_ARMS, *_M.GENERICS["GENERIC_ARMS"])
+GENERIC_HERITAGE = _ext(GENERIC_HERITAGE, *_M.GENERICS["GENERIC_HERITAGE"])
+GENERIC_STOLEN_VEHICLE = _ext(GENERIC_STOLEN_VEHICLE, *_M.GENERICS["GENERIC_STOLEN_VEHICLE"])
+VEHICLE_THEFT_CUE = _ext(VEHICLE_THEFT_CUE, *_M.VEHICLE_THEFT_CUE)
+VEHICLE_WORDS = _ext(VEHICLE_WORDS, *_M.VEHICLE_WORDS)
 ANY_TIMBER = re.compile("|".join(p.pattern for p in list(TIMBER_PATTERNS.values()) + [GENERIC_TIMBER]), re.I)
 ANY_ARMS = re.compile("|".join(p.pattern for p in list(ARMS_PATTERNS.values()) + [GENERIC_ARMS]), re.I)
 ANY_IVORY = re.compile("|".join(p.pattern for p in IVORY_PATTERNS.values()), re.I)
@@ -1588,6 +1619,15 @@ TRANSSHIPMENT = _ext(TRANSSHIPMENT, "overslag", "overgeslagen", "doorvoer", "vri
 ROUTE_CHANGE = _ext(ROUTE_CHANGE, "omgeleid", "koerswijziging", r"route\s+(?:gewijzigd|aangepast)")
 INTEL_TIP = _ext(INTEL_TIP, r"op\s+basis\s+van\s+(?:een\s+)?(?:tip|informatie|inlichtingen)", r"na\s+een\s+tip", "inlichtingen",
                  r"anonieme\s+tip", "risicoanalyse", "risicoprofiel")
+
+ORGANIZED = _ext(ORGANIZED, *_M.RISK["ORGANIZED"])
+INSIDER = _ext(INSIDER, *_M.RISK["INSIDER"])
+CONTROLLED_DELIVERY = _ext(CONTROLLED_DELIVERY, *_M.RISK["CONTROLLED_DELIVERY"])
+FALSE_DECLARATION = _ext(FALSE_DECLARATION, *_M.RISK["FALSE_DECLARATION"])
+FRONT_COMPANY = _ext(FRONT_COMPANY, *_M.RISK["FRONT_COMPANY"])
+TRANSSHIPMENT = _ext(TRANSSHIPMENT, *_M.RISK["TRANSSHIPMENT"])
+ROUTE_CHANGE = _ext(ROUTE_CHANGE, *_M.RISK["ROUTE_CHANGE"])
+INTEL_TIP = _ext(INTEL_TIP, *_M.RISK["INTEL_TIP"])
 
 # Rebuild the combined headline gate AFTER every language has been added. It is first built near the top of
 # this file from the English-only lists, which silently dropped Arabic, Russian and Chinese headlines (and
@@ -1625,9 +1665,21 @@ DEST_CUE = _cue_ext(DEST_CUE, r"(?:bestemd\s+voor|met\s+bestemming|op\s+weg\s+na
                               r"(?:coke|cocaine|hasj|cannabis|heroine|drugs|lading|container|containers|ton|kilo)\s+voor)" + _NL_ART)
 TRANSIT_CUE = _cue_ext(TRANSIT_CUE, r"(?:doorvoer\s+(?:via|door)|overslag\s+in|tussenstop\s+in)" + _NL_ART)
 TO_CUE = _cue_ext(TO_CUE, r"(?<![a-z])naar" + _NL_ART)
+# German, Danish, Norwegian, Swedish, Estonian, Slovak, Icelandic, Amharic
+ORIGIN_CUE = _cue_ext(ORIGIN_CUE, _M.ORIGIN_CUE)
+DEST_CUE = _cue_ext(DEST_CUE, _M.DEST_CUE)
+TRANSIT_CUE = _cue_ext(TRANSIT_CUE, _M.TRANSIT_CUE)
+TO_CUE = _cue_ext(TO_CUE, _M.TO_CUE)
 # suffixes that come AFTER the country: Turkish 'dan / 'e, Hindi "se" (from) / "tak" (to)
 POST_ORIGIN = re.compile(r"^(?:'(?:dan|den|tan|ten)(?![a-z])|\s*से(?![\u0900-\u097f]))")
 POST_DEST = re.compile(r"^(?:'(?:ya|ye|na|ne|a|e)(?![a-z])|\s*(?:तक|के\s+लिए)(?![\u0900-\u097f]))")
+POST_DEST = re.compile(POST_DEST.pattern + "|" + _M.POST_DEST)
+MN_FROM = re.compile(_M.MN_FROM)            # Mongolian ablative on a country name = "from X"
+ARREST_MORE = strip_accents(_M.ARREST_VERBS)
+CUMUL_MORE = strip_accents(_M.CUMUL)
+LAT_MORE = strip_accents(_M.LAT_WORDS)
+UNIT_MORE_KIND = {w: k for w, k in _M.UNIT_WORDS}
+UNIT_MORE_RX = "|".join(sorted((strip_accents(w) for w, _ in _M.UNIT_WORDS), key=len, reverse=True))
 
 # countries in other languages (Russian names need case endings, so they are matched as stems)
 _RU_STEMS = []            # (stem regex, English name)
@@ -1740,6 +1792,13 @@ for _line in COUNTRY_NL.strip().splitlines():
     _f = [x.strip() for x in _line.split("|")]
     for _a in _f[1:]:
         _add_country(_f[0], _a)
+# ---- German, Danish, Estonian, Amharic, Icelandic, Mongolian, Norwegian, Slovak, Swedish country names
+for _eng, _als in _M.country_rows():
+    for _a in _als:
+        _n = norm(_a)
+        if re.search(r"[\u0400-\u04ff]", _n) or COUNTRY_ALIAS.get(_n, _eng) == _eng:
+            _add_country(_eng, _a)
+ALIAS_ROLE = _M.ALIAS_ROLE
 # ---- states, provinces and big cities that local news names instead of the country (country-level pin).
 # Ambiguous names are left out on purpose: Para / Natal / Salvador (common words or another country),
 # Van / Batman / Ordu, Punjab and Hyderabad in English (India or Pakistan), Georgia.
@@ -1831,6 +1890,13 @@ PLACES += [
     ("Eindhoven", "Netherlands", ["eindhoven"]),
     ("The Hague", "Netherlands", ["den haag", "the hague"]),
 ]
+# German (Austria), Nordic, Baltic, Slovak, Icelandic, Mongolian and Ethiopian ports, airports and cities
+_have_pl = {norm(_a) for _p in PLACES for _a in _p[2]}
+for _d, _c, _als in _M.place_rows():
+    _new = [_a for _a in _als if norm(_a) not in _have_pl]
+    if _new:
+        PLACES.append((_d, _c, _new))
+        _have_pl.update(norm(_a) for _a in _new)
 # more towns, counties' cities and agency/currency cues (see places_extra.py); never overrides an existing alias
 from .places_extra import PLACES as _EXTRA_PLACES, CUES as _EXTRA_CUES, LANG_COUNTRY  # noqa: E402
 _have = {norm(_a) for _p in PLACES for _a in _p[2]}
@@ -1881,7 +1947,7 @@ def _alt(keys):
     return "|".join(re.escape(k) for k in sorted(keys, key=len, reverse=True))
 
 
-COUNTRY_RX = re.compile(r"(?<![a-z\u0900-\u097f])(" + _alt(COUNTRY_ALIAS) + r")(?![a-z\u0600-\u06ff\u0900-\u097f])")
+COUNTRY_RX = re.compile(r"(?<![a-z\u0900-\u097f])(?<!chanvre )(?<!hemp )(" + _alt(COUNTRY_ALIAS) + r")(?![a-z\u0600-\u06ff\u0900-\u097f])")
 PLACE_RX = re.compile(r"(?<![a-z\u0900-\u097f])(" + _alt(PLACE_ALIAS) + r")(?![a-z\u0600-\u06ff\u0900-\u097f])")
 
 

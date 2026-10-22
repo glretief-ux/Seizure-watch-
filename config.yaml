@@ -44,6 +44,18 @@ sources:
       # European cocaine gateways, so local Dutch-language reporting is often first)
       - {lang: nl, hl: nl,     gl: NL, ceid: "NL:nl"}   # Netherlands (Dutch)
       - {lang: nl, hl: nl,     gl: BE, ceid: "BE:nl"}   # Belgium, Flanders (Flemish)
+      # Austria, Nordic and Baltic countries, Slovakia, Ethiopia and Mongolia. Google News may not serve every one of
+      # these editions (Iceland and Mongolia in particular); the run log prints "edition XX/lang: N headlines",
+      # so a 0 there means that edition returned nothing and GDELT and the official sites are doing the work.
+      - {lang: de, hl: de,     gl: AT, ceid: "AT:de"}   # Austria (German)
+      - {lang: da, hl: da,     gl: DK, ceid: "DK:da"}   # Denmark (Danish)
+      - {lang: et, hl: et,     gl: EE, ceid: "EE:et"}   # Estonia (Estonian)
+      - {lang: am, hl: am,     gl: ET, ceid: "ET:am"}   # Ethiopia (Amharic)
+      - {lang: is, hl: is,     gl: IS, ceid: "IS:is"}   # Iceland (Icelandic)
+      - {lang: mn, hl: mn,     gl: MN, ceid: "MN:mn"}   # Mongolia (Mongolian)
+      - {lang: "no", hl: "no",    gl: "NO", ceid: "NO:no"}   # Norway (Norwegian)
+      - {lang: sk, hl: sk,     gl: SK, ceid: "SK:sk"}   # Slovakia (Slovak)
+      - {lang: sv, hl: sv,     gl: SE, ceid: "SE:sv"}   # Sweden (Swedish)
     queries:
       en: ["drug seizure", "cocaine seized", "heroin seized", "methamphetamine seized",
            "cannabis seized customs", "captagon seized", "fentanyl seized", "MDMA ecstasy seized",
@@ -101,6 +113,45 @@ sources:
            "archeologische voorwerpen in beslag genomen", "cultureel erfgoed gesmokkeld", "gestolen kunstwerken teruggevonden",
            "sigaretten in beslag genomen douane"]
 
+      # German (Austria): "sichergestellt/beschlagnahmt" = seized, "Suchtgift" = Austrian word for narcotics
+      de: ["Suchtgift sichergestellt", "Kokain sichergestellt", "Kokain beschlagnahmt Hafen", "Heroin sichergestellt",
+           "Cannabis sichergestellt Zoll", "Crystal Meth sichergestellt", "Suchtgiftschmuggel Wien", "Drogenfund Zoll Flughafen",
+           "Drogenlabor ausgehoben", "Chemikalien beschlagnahmt Zoll", "Schmuggel Zigaretten Zoll beschlagnahmt",
+           "Elfenbein sichergestellt", "Artenschutz Schmuggel sichergestellt", "Waffen sichergestellt Schmuggel",
+           "gestohlene Fahrzeuge sichergestellt", "Kulturgüter Schmuggel sichergestellt"]
+      # Danish
+      da: ["kokain beslaglagt", "narkotika beslaglagt", "hash beslaglagt", "told beslaglægger kokain havn",
+           "amfetamin beslaglagt", "heroin beslaglagt", "stoffer beslaglagt lufthavn", "narkolaboratorium",
+           "kemikalier beslaglagt", "cigaretter beslaglagt told", "elfenben beslaglagt", "våben beslaglagt smugling",
+           "stjålne biler beslaglagt", "kulturgenstande smugling beslaglagt"]
+      # Estonian
+      et: ["kokaiin konfiskeeriti", "narkootikumid konfiskeeriti", "Muuga sadam kokaiin", "salakaubavedu narkootikumid",
+           "heroiin tabati", "amfetamiin konfiskeeriti", "kanep konfiskeeriti", "narkolabor avastati",
+           "sigaretid konfiskeeriti toll", "maksu- ja tolliamet narkootikumid", "elevandiluu konfiskeeriti",
+           "relvad konfiskeeriti salakaubavedu", "varastatud autod avastati"]
+      # Amharic
+      am: ["አደንዛዥ ዕፅ ተያዘ", "ኮኬይን ተያዘ", "ሄሮይን ተያዘ", "ኮንትሮባንድ ዕቃ ተያዘ", "ጉምሩክ በቁጥጥር ስር አዋለ",
+           "ቦሌ አየር ማረፊያ አደንዛዥ ዕፅ", "ሀሺሽ ተያዘ", "የዝሆን ጥርስ ተያዘ", "ህገ ወጥ የጦር መሳሪያ ተያዘ", "ሲጋራ ኮንትሮባንድ ተያዘ"]
+      # Icelandic
+      is: ["lagði hald á kókaín", "lagði hald á fíkniefni", "fíkniefni haldlögð tollgæslan", "kannabis haldlagt",
+           "amfetamín haldlagt", "fíkniefnasmygl Keflavík", "kókaín Seyðisfjörður", "fíkniefnaframleiðsla kannabisræktun",
+           "sígarettur smygl haldlagðar", "vopn haldlögð"]
+      # Mongolian (Cyrillic)
+      mn: ["мансууруулах бодис хураан авлаа", "мансууруулах бодис илрүүллээ", "кокаин хураалаа", "хар тамхи хураагдлаа",
+           "гааль мансууруулах бодис", "хилээр хууль бусаар нэвтрүүлэх мансууруулах", "гар буу хураан авлаа", "тамхи хууль бусаар нэвтрүүлсэн"]
+      # Norwegian ("beslag" = seizure)
+      "no": ["kokain beslag", "tok i beslag kokain", "narkotika beslag tollvesenet", "hasj beslag", "amfetamin beslag",
+           "heroin beslag", "narkotika beslaglagt havn", "narkotikalaboratorium avdekket", "kjemikalier beslag toll",
+           "sigaretter beslag toll", "elfenben beslag", "våpen beslag smugling", "stjålne biler beslag"]
+      # Slovak
+      sk: ["zaistili kokaín", "zaistili drogy", "colníci zaistili drogy", "heroín zaistili", "marihuana zaistili",
+           "pervitín zaistili", "varňa drog laboratórium", "cigarety zaistili colnici", "slonovina zaistili",
+           "zbrane zaistili pašovanie", "ukradnuté autá zaistili", "kultúrne pamiatky pašovanie"]
+      # Swedish ("beslag" = seizure, "tullen" = customs)
+      sv: ["kokain beslag", "beslagtog kokain", "narkotika beslag tullen", "hasch beslag", "amfetamin beslag",
+           "heroin beslag", "narkotikafynd hamn Göteborg", "narkotikalaboratorium avslöjat", "kemikalier beslag tullen",
+           "cigaretter beslag tullen", "elfenben beslag", "vapen beslag smuggling", "stulna bilar beslag"]
+
   gdelt:                       # global news index; free, no key. Set enabled: false to skip.
     enabled: true
     queries:
@@ -152,12 +203,22 @@ sources:
            '(vuurwapens OR munitie OR wapensmokkel) ("in beslag" OR onderschept)',
            '("gestolen voertuigen") (onderschept OR teruggevonden OR "in beslag")',
            '(archeologische OR erfgoed OR "gestolen kunstwerken") ("in beslag" OR gesmokkeld OR teruggevonden)']
+      de: ['(Kokain OR Heroin OR Cannabis OR Suchtgift OR Rauschgift OR Haschisch OR Methamphetamin) (sichergestellt OR beschlagnahmt)',
+           '(Chemikalien OR Pestizide OR Drogenlabor) (sichergestellt OR beschlagnahmt)']
+      da: ['(kokain OR heroin OR hash OR amfetamin OR narkotika) (beslaglagt OR beslaglagde OR beslaglægger)']
+      et: ['(kokaiin OR heroiin OR kanep OR amfetamiin OR narkootikumid) (konfiskeeriti OR tabati OR avastati)']
+      am: ['(ኮኬይን OR ሄሮይን OR ሀሺሽ OR "አደንዛዥ ዕፅ") (ተያዘ OR ተያዙ)']
+      is: ['(kókaín OR fíkniefni OR kannabis OR amfetamín) (haldlagt OR haldlögð OR "lagði hald")']
+      mn: ['(кокаин OR героин OR мансууруулах) (хураан OR илрүүллээ OR хураагдлаа)']
+      "no": ['(kokain OR heroin OR hasj OR amfetamin OR narkotika) (beslag OR beslaglagt OR "tok i beslag")']
+      sk: ['(kokaín OR heroín OR marihuana OR pervitín OR drogy) (zaistili OR zaistené OR zadržali)']
+      sv: ['(kokain OR heroin OR hasch OR amfetamin OR narkotika) (beslag OR beslagtog OR beslagtagit)']
 
   # Official newsrooms. Google News is searched once per website below (site:...), so official press
   # releases are picked up even when no newspaper reports them. Add or remove websites freely.
   official_sites:
     enabled: true
-    query: "site:{site} (seized OR seizure OR seizes OR intercepted OR incautan OR decomisan OR saisie OR apreensao OR \"in beslag genomen\" OR onderschept OR inbeslagname) (cocaine OR heroin OR methamphetamine OR cannabis OR fentanyl OR captagon OR drugs OR cocaina OR droga OR cocaine OR drogue OR \"precursor chemicals\" OR \"hazardous chemicals\" OR \"toxic chemicals\" OR pesticides OR refrigerants OR mercury OR \"ammonium nitrate\" OR \"hazardous waste\" OR \"stolen vehicles\" OR \"protected timber\" OR antiquities OR \"cultural property\" OR \"archaeological artefacts\" OR rosewood OR \"illegal firearms\" OR \"weapons cache\" OR ammunition OR \"arms trafficking\" OR ivory OR \"rhino horn\" OR pangolin OR \"wildlife trafficking\" OR CITES OR hasj OR hennep OR xtc OR kwik OR ivoor OR vuurwapens OR munitie OR cocaïne OR heroïne)"
+    query: "site:{site} (seized OR seizure OR seizes OR intercepted OR incautan OR decomisan OR saisie OR apreensao OR \"in beslag genomen\" OR onderschept OR inbeslagname OR sichergestellt OR beschlagnahmt OR beslaglagt OR beslag OR zaistili OR konfiskeeriti OR haldlagt OR \"lagði hald\") (cocaine OR heroin OR methamphetamine OR cannabis OR fentanyl OR captagon OR drugs OR cocaina OR droga OR cocaine OR drogue OR \"precursor chemicals\" OR \"hazardous chemicals\" OR \"toxic chemicals\" OR pesticides OR refrigerants OR mercury OR \"ammonium nitrate\" OR \"hazardous waste\" OR \"stolen vehicles\" OR \"protected timber\" OR antiquities OR \"cultural property\" OR \"archaeological artefacts\" OR rosewood OR \"illegal firearms\" OR \"weapons cache\" OR ammunition OR \"arms trafficking\" OR ivory OR \"rhino horn\" OR pangolin OR \"wildlife trafficking\" OR CITES OR hasj OR hennep OR xtc OR kwik OR ivoor OR vuurwapens OR munitie OR cocaïne OR heroïne OR Suchtgift OR Kokain OR kokaín OR narkotika OR kokaiin OR fíkniefni OR hasch OR hasj)"
     # `lang` is the language that site actually publishes in - it decides whether the
     # headline gets auto-translated to English, so it must be the SITE's language, not English,
     # even though the search itself always goes through the English Google News edition.
@@ -191,6 +252,23 @@ sources:
       - {site: politie.be,            lang: nl}  # Belgian federal police (Dutch-language pages)
       - {site: financien.belgium.be,  lang: nl}  # Belgian customs (FPS Finance)
       - {site: federaalparket.be,     lang: nl}  # Belgian federal prosecutor
+      # Austria, Nordic and Baltic countries, Slovakia, Ethiopia, Mongolia (lang = the language of that site)
+      - {site: bmi.gv.at,             lang: de}  # Austrian interior ministry (police press releases, Suchtgift)
+      - {site: bmf.gv.at,             lang: de}  # Austrian finance ministry (customs)
+      - {site: politi.dk,             lang: da}  # Danish police
+      - {site: skat.dk,               lang: da}  # Danish tax and customs
+      - {site: politsei.ee,           lang: et}  # Estonian police and border guard
+      - {site: emta.ee,               lang: et}  # Estonian tax and customs board
+      - {site: customs.gov.mn,        lang: mn}  # Mongolian customs
+      - {site: tollur.is,             lang: is}  # Icelandic customs
+      - {site: logreglan.is,          lang: is}  # Icelandic police
+      - {site: toll.no,               lang: "no"}  # Norwegian customs (Tolletaten)
+      - {site: politiet.no,           lang: "no"}  # Norwegian police
+      - {site: financnasprava.sk,     lang: sk}  # Slovak financial administration (customs)
+      - {site: minv.sk,               lang: sk}  # Slovak interior ministry (police)
+      - {site: tullverket.se,         lang: sv}  # Swedish customs
+      - {site: polisen.se,            lang: sv}  # Swedish police
+      - {site: ecc.gov.et,            lang: am}  # Ethiopian customs commission
       - {site: guardiacivil.es,       lang: es}  # Spanish Guardia Civil
       - {site: agenciatributaria.es,  lang: es}  # Spanish tax and customs agency
       - {site: policia.gov.co,        lang: es}  # Colombian national police

@@ -24,7 +24,7 @@ _EXTRA_UNITS = [(L.strip_accents(re.sub(r"\\+", r"\\", u)), f) for u, f in L.UNI
 W_UNITS = (r"(tonnes?|tons?|toneladas?|tonelada|kilograms?|kilogrammes?|kilogramos|kilogramas|quilogramas?|kilos?|kgs?|"
            r"grams?|grammes?|gramos?|gramas?|gms?|" + "|".join(u for u, _ in _EXTRA_UNITS) + r"|g|lbs?|pounds?|libras?)")
 WEIGHT_RX = re.compile(NUM + MULT + r"[\s-]*" + W_UNITS + r"(?![a-z])")
-UNIT_RX = re.compile(NUM + MULT + r"[\s-]*(?:[a-z]+\s+)?(pillen|tabletten|sigaretten|pakjes|voertuigen|vuurwapens|patronen|"
+UNIT_RX = re.compile(NUM + MULT + r"[\s-]*(?:[a-z]+\s+)?(" + L.UNIT_MORE_RX + r"|pillen|tabletten|sigaretten|pakjes|voertuigen|vuurwapens|patronen|"
                      r"kogels|slagtanden|pills|tablets|capsules|comprimidos|pastillas|pilulas|pilules|"
                      r"comprimes|cigarettes|cigarrillos|cigarros|sticks|packs|cartons|cajetillas|master\s+cases|"
                      r"plants|plantas|plantes|doses|bricks|ladrillos|packages|packets|paquetes|bales|fardos|bundles|"
@@ -58,11 +58,12 @@ UNIT_KIND = {"pillen": "pills", "tabletten": "pills", "sigaretten": "cigarettes"
              "tortoises": "animals", "snakes": "animals", "lizards": "animals", "reptiles": "animals",
              "birds": "animals", "parrots": "animals", "monkeys": "animals", "pangolins": "animals",
              "primates": "animals"}
+UNIT_KIND.update(L.UNIT_MORE_KIND)
 WILDLIFE_KINDS = {"tusks", "horns", "skins", "fins", "pieces", "animals"}
 WILDLIFE_CATEGORIES = {"CITES elephant ivory", "CITES protected fauna"}
 ARREST_A = re.compile(NUMW + r"\s+(?:\w+\s+){0,3}?(?:were\s+|was\s+|have\s+been\s+|fueron\s+|han\s+sido\s+|ont\s+ete\s+)?"
                       r"(?:arrested|detained|charged|apprehended|captured|aangehouden|opgepakt|gearresteerd|detenid\w+|arrestad\w+|capturad\w+|"
-                      r"aprehendid\w+|interpelad\w+|arrete\w*|interpelle\w*|presos|detidos|presas)")
+                      r"aprehendid\w+|interpelad\w+|arrete\w*|interpelle\w*|presos|detidos|presas|" + L.ARREST_MORE + r")")
 ARREST_B = re.compile(r"(?:arrested|detained|arrestaron\s+a|detuvieron\s+a|arrests?\s+of|arrestation\s+de|"
                       r"interpellation\s+de)\s+(?:a\s+total\s+of\s+)?" + NUMW +
                       r"\s+(?:people|persons|men|women|suspects|individuals|others|personas|hombres|mujeres|"
@@ -259,7 +260,7 @@ CUMUL = re.compile(
     r"|\baltogether\b|\boverall\b|\bcumulative\b|\bcompared (?:with|to)\b|\bannual(?:ly)?\b|\bpreviously\b|\bearlier this\b"
     r"|\bcampaign\b|\bcrackdown\b|\boperations\b"
     r"|\bdesde\b|en lo que va|durante (?:el|los|las|este|esta|2\d{3})|hasta la fecha|\ben el ano\b|\bdepuis\b|cette annee|\bau total\b"
-    r"|\bao longo\b|\bnos ultimos\b|ate agora")
+    r"|\bao longo\b|\bnos ultimos\b|ate agora|" + L.CUMUL_MORE)
 # Chemicals used to make drugs are not drugs: keep them out of the seized-weight figure.
 PRECURSOR = re.compile(r"precursor|chemical|quimic|chimique|\bacid|acido|acide|solvent|reagent|ephedrine|efedrina|acetone|acetic"
                        r"|anhidrido|\bp2p\b|\bbmk\b|\bpmk\b")
@@ -267,6 +268,7 @@ MAX_SINGLE_KG = 40000.0          # more than 40 t in one seizure is almost alway
 _EN = re.compile(r"\b(?:the|and|of|was|were|with|has|have|said|police|been|for|that|at|from|after|by)\b")
 _LAT = re.compile(r"\b(?:de|la|el|los|las|del|con|por|una|que|fue|se|en|le|les|des|du|et|dans|pour|est|um|uma|os|nao|com|para|foi|da|do|das|dos|y|o|e|au|aux|cua|duoc|cac|nhung|mot|voi|tai|"
                   r"het|een|van|naar|uit|voor|werd|werden|zijn|bij|aan|door|tussen|beslag|genomen|onderschept)\b")   # + Dutch / Flemish
+_LAT = re.compile(_LAT.pattern[:-3] + "|" + L.LAT_MORE + r")\b")                              # + nine more languages
 
 
 def _english(t):
@@ -471,6 +473,10 @@ def _route(t, source_country):
             role = "origin"
         elif L.POST_DEST.match(t[e: e + 14]):
             role = "dest"
+        elif L.ALIAS_ROLE.get(t[s:e]):                  # Estonian case endings: Ecuadorist = from, Soomesse = to
+            role = L.ALIAS_ROLE[t[s:e]]
+        elif re.search(r"[\u0400-\u04ff]", t[s:e]) and L.MN_FROM.search(t[s:e]):      # Mongolian ablative = from
+            role = "origin"
         elif L.TO_CUE.search(pre) and i > 0 and roles[i - 1] in ("origin", "transit") and s - ments[i - 1][1] <= 30:
             role = "dest"
         roles.append(role)

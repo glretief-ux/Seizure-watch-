@@ -2125,3 +2125,9 @@ PLACE.update({
     "Thunder Bay": [48.38, -89.25], "Toulouse": [43.60, 1.44], "Tulsa": [36.15, -95.99], "Valle del Cauca": [3.45, -76.53], "Valparaiso": [-33.05, -71.62],
     "Victoria (AU)": [-37.81, 144.96], "Wexford": [52.33, -6.46], "Windsor (ON)": [42.31, -83.04], "Yucatan": [20.97, -89.62], "Yuma": [32.69, -114.63], "Ñuble": [-36.61, -72.10],
 })
+
+
+# German (Austria), Nordic, Baltic, Slovak, Icelandic, Mongolian and Ethiopian places (see lang_more.py)
+from .lang_more import GEO_PLACES as _GP, GEO_COUNTRIES as _GC  # noqa: E402
+PLACE.update({k: list(v) for k, v in _GP.items() if k not in PLACE})
+COUNTRY.update({k: list(v) for k, v in _GC.items() if k not in COUNTRY})
