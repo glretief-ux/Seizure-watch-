@@ -4,54 +4,54 @@
    RSS UK Border Force: 20 items
    ! https://ndlea.gov.ng/feed/... HTTPError
    RSS NDLEA Nigeria: 0 items
-   Official websites (52 searched): 2084 headlines
-      edition MX/es: 113 headlines
-      edition ES/es: 109 headlines
-      edition CO/es: 113 headlines
-      edition FR/fr: 66 headlines
-      edition BR/pt: 199 headlines
-      edition PT/pt: 191 headlines
-      edition SA/ar: 311 headlines
-      edition EG/ar: 295 headlines
-      edition AE/ar: 321 headlines
-      edition TR/tr: 445 headlines
-      edition RU/ru: 297 headlines
+   Official websites (52 searched): 2253 headlines
+      edition MX/es: 106 headlines
+      edition ES/es: 105 headlines
+      edition CO/es: 105 headlines
+      edition FR/fr: 84 headlines
+      edition BR/pt: 205 headlines
+      edition PT/pt: 207 headlines
+      edition SA/ar: 315 headlines
+      edition EG/ar: 291 headlines
+      edition AE/ar: 314 headlines
+      edition TR/tr: 389 headlines
+      edition RU/ru: 328 headlines
       edition UA/ru: 335 headlines
-      edition CN/zh: 25 headlines
-      edition HK/zh: 11 headlines
-      edition TW/zh: 11 headlines
-      edition IN/hi: 257 headlines
-      edition VN/vi: 209 headlines
-      edition NL/nl: 86 headlines
-      edition BE/nl: 83 headlines
-      edition AT/de: 68 headlines
+      edition CN/zh: 22 headlines
+      edition HK/zh: 9 headlines
+      edition TW/zh: 9 headlines
+      edition IN/hi: 264 headlines
+      edition VN/vi: 206 headlines
+      edition NL/nl: 97 headlines
+      edition BE/nl: 96 headlines
+      edition AT/de: 77 headlines
       edition DK/da: 1 headlines
-      edition EE/et: 2 headlines
+      edition EE/et: 1 headlines
       edition ET/am: 0 headlines
       edition IS/is: 0 headlines
       edition MN/mn: 0 headlines
       edition NO/no: 0 headlines
-      edition SK/sk: 12 headlines
+      edition SK/sk: 10 headlines
       edition SE/sv: 1 headlines
-   Google News: 7133 headlines
+   Google News: 7011 headlines
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28cocaine%20OR%20heroin%20OR%20metha... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28precursor%20chemicals%20OR%20cland... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22hazardous%20chemicals%22%20OR%2... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28mercury%29%20%28smuggling%20OR%20s... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28stolen%20vehicles%20OR%20stolen%20... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22CITES%20timber%22%20OR%20%22pro... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28ivory%20OR%20%22rhino%20horn%22%20... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22CITES%22%20OR%20%22protected%20... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28illegal%20firearms%20OR%20weapons%... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28antiquities%20OR%20%22cultural%20p... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28coca%C3%ADna%20OR%20hero%C3%ADna%2... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28qu%C3%ADmicos%20precursores%20OR%2... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28productos%20qu%C3%ADmicos%20OR%20p... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28veh%C3%ADculos%20robados%29%20%28d... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28armas%20de%20fuego%20OR%20municion... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22piezas%20arqueol%C3%B3gicas%22%... HTTPError
       GDELT es: 0 headlines
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28coca%C3%AFne%20OR%20h%C3%A9ro%C3%A... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28pr%C3%A9curseurs%20chimiques%29%20... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28v%C3%A9hicules%20vol%C3%A9s%29%20%... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28armes%20a%20feu%20OR%20munitions%2... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22biens%20culturels%22%20OR%20ant... HTTPError
       GDELT fr: 0 headlines
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28qu%C3%ADmicos%20precursores%29%20%... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28ve%C3%ADculos%20roubados%29%20%28a... HTTPError
@@ -63,39 +63,42 @@
       GDELT ar: 0 headlines
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28kokain%20OR%20eroin%20OR%20esrar%2... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28kimyasal%20OR%20%22tar%C4%B1m%20il... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22tarihi%20eser%22%29%20%28%22ele... HTTPError
       GDELT tr: 0 headlines
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%D0%BA%D0%BE%D0%BA%D0%B0%D0%B8%D0%... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%D1%85%D0%B8%D0%BC%D0%B8%D0%BA%D0%... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22%D0%BA%D1%83%D0%BB%D1%8C%D1%82%... HTTPError
       GDELT ru: 0 headlines
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%E5%8F%AF%E5%8D%A1%E5%9B%A0%20OR%2... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%E5%8D%B1%E9%99%A9%E5%8C%96%E5%AD%... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%E6%96%87%E7%89%A9%29%20%28%E8%B5%... HTTPError
       GDELT zh: 0 headlines
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%E0%A4%95%E0%A5%8B%E0%A4%95%E0%A5%... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%E0%A4%B0%E0%A4%B8%E0%A4%BE%E0%A4%... HTTPError
       GDELT hi: 0 headlines
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22ng%C3%A0%20voi%22%29%20%28thu%2... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22h%C3%B3a%20ch%E1%BA%A5t%22%20OR... HTTPError
       GDELT vi: 0 headlines
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28coca%C3%AFne%20OR%20coke%20OR%20he... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28precursoren%20OR%20drugslab%20OR%2... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28chemicali%C3%ABn%20OR%20bestrijdin... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28ivoor%20OR%20neushoorn%20OR%20schu... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28vuurwapens%20OR%20munitie%20OR%20w... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22gestolen%20voertuigen%22%29%20%... HTTPError
       GDELT nl: 0 headlines
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28Kokain%20OR%20Heroin%20OR%20Cannab... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28Chemikalien%20OR%20Pestizide%20OR%... HTTPError
       GDELT de: 0 headlines
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28kokain%20OR%20heroin%20OR%20hash%2... HTTPError
       GDELT da: 0 headlines
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28kokaiin%20OR%20heroiin%20OR%20kane... HTTPError
       GDELT et: 0 headlines
       GDELT am: 0 headlines
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28k%C3%B3ka%C3%ADn%20OR%20f%C3%ADkni... HTTPError
       GDELT is: 0 headlines
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%D0%BA%D0%BE%D0%BA%D0%B0%D0%B8%D0%... HTTPError
       GDELT mn: 0 headlines
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28kokain%20OR%20heroin%20OR%20hasj%2... HTTPError
       GDELT no: 0 headlines
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28koka%C3%ADn%20OR%20hero%C3%ADn%20O... HTTPError
       GDELT sk: 0 headlines
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28kokain%20OR%20heroin%20OR%20hasch%... HTTPError
       GDELT sv: 0 headlines
    GDELT: 0 headlines
-      1435 candidate headlines, 1367 new
+      1424 candidate headlines, 1370 new
 [2/4] Reading articles...
