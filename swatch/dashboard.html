@@ -115,6 +115,7 @@ table.mini{border-collapse:collapse;font-size:13px;margin-top:6px}table.mini td{
 .plist{max-height:210px;overflow:auto;margin-top:6px;-webkit-overflow-scrolling:touch}
 .pi{padding:5px 0;border-top:1px solid #e3e8ef;font-size:12px;line-height:1.35}
 .leaflet-container a.pop-open{font-weight:600}
+.cname span{position:absolute;transform:translate(-50%,10px);white-space:nowrap;font:700 11.5px/1 system-ui,-apple-system,Segoe UI,Arial,sans-serif;color:#14243a;letter-spacing:.02em;pointer-events:none;text-shadow:0 0 2px #fff,0 0 2px #fff,0 0 3px #fff,0 0 4px #fff,0 0 5px #fff}
 @media print{.filters{display:none}}
 .msel{position:relative;flex:1 1 170px}
 .mselBtn{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;font-size:14px;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:6px}
@@ -682,19 +683,34 @@ document.querySelectorAll('#infCard .tabs button').forEach(b => b.onclick = () =
 const GEO = __GEO__;
 const BC = {High:'#c0392b', Medium:'#e08a00', Low:'#2e8b57'};
 let map = null, mapLayer = null;
-// base maps: a coloured street map by default, with a switch for the grey, terrain and satellite views
+// base maps: a coloured map by default (with our own bold, dark country names), with a switch for terrain, satellite and light grey
+function countryNames(m) {
+  const cnt = {}; D.events.forEach(e => { if (e.country) cnt[e.country] = (cnt[e.country] || 0) + 1; });
+  const names = Object.keys(GEO.c).sort((a, b) => (cnt[b] || 0) - (cnt[a] || 0));
+  if (!m.getPane('cnames')) { const pn = m.createPane('cnames'); pn.style.zIndex = 660; pn.style.pointerEvents = 'none'; }
+  const g = L.layerGroup(), all = [];
+  names.forEach((n, i) => { const c = GEO.c[n]; if (!c) return;
+    const mk = L.marker(c, {pane: 'cnames', interactive: false, keyboard: false, icon: L.divIcon({className: 'cname', html: '<span>' + esc(n) + '</span>', iconSize: [0, 0]})});
+    mk._rank = i; all.push(mk); });
+  const update = () => {                       // fewer names when zoomed out, all of them when zoomed in; map tiles name places from zoom 5
+    const z = m.getZoom(), lim = z <= 2 ? 45 : z === 3 ? 95 : 999;
+    g.clearLayers(); if (z < 5) all.forEach(mk => { if (mk._rank < lim) g.addLayer(mk); });
+  };
+  m.on('zoomend', update); update();
+  return g;
+}
 function addBase(m) {
   const esri = (name, o) => L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/' + name + '/MapServer/tile/{z}/{y}/{x}', Object.assign({maxZoom: 16, attribution: 'Tiles &copy; Esri'}, o || {}));
+  const carto = (name, o) => L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/' + name + '/{z}/{x}/{y}{r}.png', Object.assign({subdomains: 'abcd', maxZoom: 16, attribution: '&copy; OpenStreetMap contributors &copy; CARTO'}, o || {}));
   const base = {
-    'Colour': L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {subdomains: 'abcd', maxZoom: 16, attribution: '&copy; OpenStreetMap contributors &copy; CARTO'}),
+    'Colour': L.layerGroup([carto('voyager_nolabels'), carto('voyager_only_labels', {minZoom: 5}), countryNames(m)]),
     'Terrain': esri('World_Topo_Map'),
-    'Satellite': esri('World_Imagery'),
+    'Satellite': L.layerGroup([esri('World_Imagery'), esri('Reference/World_Boundaries_and_Places')]),
     'Light grey': esri('Canvas/World_Light_Gray_Base')
   };
   base['Colour'].addTo(m);
   L.control.layers(base, null, {position: 'topright', collapsed: true}).addTo(m);
 }
-
 function pt(name, role, isPlace) {
   if (!name) return null;
   const p = isPlace ? GEO.p[name] : null;
