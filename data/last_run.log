@@ -4,26 +4,26 @@
    RSS UK Border Force: 20 items
    ! https://ndlea.gov.ng/feed/... HTTPError
    RSS NDLEA Nigeria: 0 items
-   Official websites (52 searched): 2253 headlines
-      edition MX/es: 106 headlines
-      edition ES/es: 105 headlines
-      edition CO/es: 105 headlines
-      edition FR/fr: 84 headlines
-      edition BR/pt: 205 headlines
-      edition PT/pt: 207 headlines
-      edition SA/ar: 315 headlines
-      edition EG/ar: 291 headlines
-      edition AE/ar: 314 headlines
-      edition TR/tr: 389 headlines
-      edition RU/ru: 328 headlines
-      edition UA/ru: 335 headlines
+   Official websites (52 searched): 2251 headlines
+      edition MX/es: 101 headlines
+      edition ES/es: 107 headlines
+      edition CO/es: 107 headlines
+      edition FR/fr: 86 headlines
+      edition BR/pt: 193 headlines
+      edition PT/pt: 191 headlines
+      edition SA/ar: 301 headlines
+      edition EG/ar: 307 headlines
+      edition AE/ar: 302 headlines
+      edition TR/tr: 374 headlines
+      edition RU/ru: 327 headlines
+      edition UA/ru: 333 headlines
       edition CN/zh: 22 headlines
       edition HK/zh: 9 headlines
       edition TW/zh: 9 headlines
-      edition IN/hi: 264 headlines
+      edition IN/hi: 229 headlines
       edition VN/vi: 206 headlines
       edition NL/nl: 97 headlines
-      edition BE/nl: 96 headlines
+      edition BE/nl: 91 headlines
       edition AT/de: 77 headlines
       edition DK/da: 1 headlines
       edition EE/et: 1 headlines
@@ -33,23 +33,22 @@
       edition NO/no: 0 headlines
       edition SK/sk: 10 headlines
       edition SE/sv: 1 headlines
-   Google News: 7011 headlines
+   Google News: 6922 headlines
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28cocaine%20OR%20heroin%20OR%20metha... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28precursor%20chemicals%20OR%20cland... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22hazardous%20chemicals%22%20OR%2... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28mercury%29%20%28smuggling%20OR%20s... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28stolen%20vehicles%20OR%20stolen%20... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22CITES%20timber%22%20OR%20%22pro... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28ivory%20OR%20%22rhino%20horn%22%20... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22CITES%22%20OR%20%22protected%20... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28illegal%20firearms%20OR%20weapons%... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28antiquities%20OR%20%22cultural%20p... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28coca%C3%ADna%20OR%20hero%C3%ADna%2... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28qu%C3%ADmicos%20precursores%20OR%2... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28productos%20qu%C3%ADmicos%20OR%20p... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28armas%20de%20fuego%20OR%20municion... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22piezas%20arqueol%C3%B3gicas%22%... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28veh%C3%ADculos%20robados%29%20%28d... HTTPError
       GDELT es: 0 headlines
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28coca%C3%AFne%20OR%20h%C3%A9ro%C3%A... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28pr%C3%A9curseurs%20chimiques%29%20... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28v%C3%A9hicules%20vol%C3%A9s%29%20%... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28armes%20a%20feu%20OR%20munitions%2... HTTPError
       GDELT fr: 0 headlines
@@ -57,7 +56,6 @@
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28ve%C3%ADculos%20roubados%29%20%28a... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28armas%20de%20fogo%20OR%20muni%C3%A... HTTPError
       GDELT pt: 0 headlines
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%D9%83%D9%88%D9%83%D8%A7%D9%8A%D9%... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%D9%85%D9%88%D8%A7%D8%AF%20%D9%83%... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22%D9%82%D8%B7%D8%B9%20%D8%A3%D8%... HTTPError
       GDELT ar: 0 headlines
@@ -65,7 +63,7 @@
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28kimyasal%20OR%20%22tar%C4%B1m%20il... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22tarihi%20eser%22%29%20%28%22ele... HTTPError
       GDELT tr: 0 headlines
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%D0%BA%D0%BE%D0%BA%D0%B0%D0%B8%D0%... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%D1%85%D0%B8%D0%BC%D0%B8%D0%BA%D0%... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22%D0%BA%D1%83%D0%BB%D1%8C%D1%82%... HTTPError
       GDELT ru: 0 headlines
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%E5%8D%B1%E9%99%A9%E5%8C%96%E5%AD%... HTTPError
@@ -75,7 +73,6 @@
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%E0%A4%B0%E0%A4%B8%E0%A4%BE%E0%A4%... HTTPError
       GDELT hi: 0 headlines
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22ng%C3%A0%20voi%22%29%20%28thu%2... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22h%C3%B3a%20ch%E1%BA%A5t%22%20OR... HTTPError
       GDELT vi: 0 headlines
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28coca%C3%AFne%20OR%20coke%20OR%20he... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28precursoren%20OR%20drugslab%20OR%2... HTTPError
@@ -83,6 +80,7 @@
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28ivoor%20OR%20neushoorn%20OR%20schu... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28vuurwapens%20OR%20munitie%20OR%20w... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22gestolen%20voertuigen%22%29%20%... HTTPError
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28archeologische%20OR%20erfgoed%20OR... HTTPError
       GDELT nl: 0 headlines
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28Kokain%20OR%20Heroin%20OR%20Cannab... HTTPError
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28Chemikalien%20OR%20Pestizide%20OR%... HTTPError
@@ -90,6 +88,7 @@
       GDELT da: 0 headlines
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28kokaiin%20OR%20heroiin%20OR%20kane... HTTPError
       GDELT et: 0 headlines
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%E1%8A%AE%E1%8A%AC%E1%8B%AD%E1%8A%... HTTPError
       GDELT am: 0 headlines
       GDELT is: 0 headlines
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%D0%BA%D0%BE%D0%BA%D0%B0%D0%B8%D0%... HTTPError
@@ -100,5 +99,98 @@
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28kokain%20OR%20heroin%20OR%20hasch%... HTTPError
       GDELT sv: 0 headlines
    GDELT: 0 headlines
-      1424 candidate headlines, 1370 new
+      1398 candidate headlines, 1348 new
 [2/4] Reading articles...
+      links resolved: 1335 of 1335
+   ! https://www.fox21news.com/news/crime/police-recover-over-180-pounds-of-meth-in-drug-bust/... HTTPError
+   ! https://newsinfo.inquirer.net/2329184/barmm-ex-mp-denies-link-to-seized-laos-drug-cargo... HTTPError
+   ! https://globalnation.inquirer.net/343440/ph-may-appeal-possible-death-sentence-for-filipin... HTTPError
+   ! https://indianexpress.com/article/cities/pune/pune-airport-drug-bust-hydroponic-weed-seize... HTTPError
+   ! https://www.thevibes.com/index.php/articles/news/128700/malaysia-philippines-launch-joint-... HTTPError
+   ! https://www.belfasttelegraph.co.uk/area/armagh/news/man-who-killed-mum-of-newborn-baby-in-... HTTPError
+   ! https://urbanacres.in/%E2%82%B925-71-crore-drug-seizure-exposes-gujarats-inter-state-suppl... HTTPError
+   ! https://indianexpress.com/article/india/bihar-drug-crisis-prohibition-ndps-act-explained-g... HTTPError
+   ! https://indianexpress.com/article/cities/ahmedabad/gujarat-drug-seizure-heroin-md-rs-25-cr... HTTPError
+   ! https://www.centredaily.com/news/nation-world/national/article317751925.html... ReadTimeout
+   ! https://thenewsmill.com/2026/10/two-sentenced-to-10-years-for-2017-barabanki-heroin-and-ga... HTTPError
+   ! https://www.openpr.com/news/4670886/epilepsy-drugs-market-report-2026-market-outlook-suppo... HTTPError
+   ! https://www.businesswire.com/news/home/20261023479534/en/Neuromodulation-Publishes-Full-36... ReadTimeout
+   ! https://www.rediff.com/news/report/three-passengers-held-with-hydroponic-ganja-at-bengalur... ReadTimeout
+   ! https://www.latestly.com/agency-news/india-news-2-convicted-in-2017-barabanki-drug-seizure... HTTPError
+   ! https://www.wric.com/news/virginia-news/vsp-weekly-crime-report-oct-23/... HTTPError
+   ! https://www.porttechnology.org/news/incident-reports/us-coast-guard-seizes-5-5-million-coc... HTTPError
+   ! https://www.news10.com/news/crime/two-arrested-after-troopers-seize-over-half-pound-of-coc... HTTPError
+   ! https://www.washingtontimes.com/news/2026/oct/22/law-enforcement-seizes-1309-pounds-cocain... HTTPError
+   ! https://www.trucknews.com/security/two-charged-after-127-kg-of-suspected-cocaine-seized-fr... HTTPError
+   ! https://kdvr.com/video/100-illegal-firearms-along-with-drugs-seized-in-fbi-operation-acros... HTTPError
+   ! https://www.wkyc.com/article/news/local/northeast-ohio/mansfield-drug-bust-10-indicted-on-... HTTPError
+   ! https://www.staffordshire.police.uk/news/staffordshire/news/2026/october/two-drug-dealers-... HTTPError
+   ! https://www.gmp.police.uk/news/greater-manchester/news/news/2026/october/four-arrests-as-e... HTTPError
+   ! https://www.porttechnology.org/news/incident-reports/dockworkers-arrested-algeciras-cocain... HTTPError
+   ! https://www.insauga.com/machine-gun-cocaine-and-other-drugs-found-during-police-search-of-... HTTPError
+   ! https://www.notllocal.com/police-beat/man-charged-after-police-seize-200k-worth-of-drugs-i... HTTPError
+   ! https://www.rediff.com/news/report/rs-25-crore-drugs-seized-near-ahmedabad-toll-plaza-thre... ReadTimeout
+   ! https://www.portal.hr/en/novosti/hr/114833-video-nastavak-uspjesnih-akcija-nekoliko-dana-p... HTTPError
+   ! https://twaslnews1.twaslnews.com/6393049/... HTTPError
+   ! https://indianexpress.com/article/express-exclusive/bihar-prohibition-10-years-drug-crisis... HTTPError
+   ! https://www.rediff.com/news/report/myanmar-national-held-with-over-1-kg-of-heroin-in-mizor... ReadTimeout
+   ! https://www.newsbytesapp.com/news/india/dri-seizes-foreign-gold-cocaine-worth-rs447cr-at-m... HTTPError
+   ! https://www.ndtv.com/india-news/drugs-worth-rs-60-crore-seized-7-arrested-interstate-heroi... HTTPError
+   ! https://www.thehawk.in/news/india/heroin-burmese-betel-nuts-worth-rs-274-crore-seized-in-m... HTTPError
+   ! https://www.hstoday.us/subject-matter-areas/border-security/cbp-seizes-nearly-1600-pounds-... HTTPError
+   ! https://ktxs.com/news/big-country/14-arrested-in-atf-led-abilene-operation-guns-suspected-... HTTPError
+   ! https://cw39.com/crime/dea-houston-seizes-800-lbs-meth/... HTTPError
+   ! https://cw39.com/video/dea-seizes-over-800-pounds-of-meth-from-houston-trailer/12295855/... HTTPError
+   ! https://indiaeducationdiary.in/dri-seizes-more-than-9-kg-methamphetamine-in-intensified-cr... HTTPError
+   ! https://www.wwltv.com/article/news/crime/3-women-arrested-for-meth-fentanyl-found-at-slide... HTTPError
+   ! https://www.newsbytesapp.com/news/india/customs-stop-woman-at-delhi-igi-with-299kg-hydropo... HTTPError
+   ! https://www.lokmattimes.com/national/ahmedabad-rs25-crore-drugs-seized-near-toll-plaza-thr... ReadTimeout
+   ! https://www.crimeworld.com/courts/dubliner-caught-with-86k-worth-of-drugs-after-controlled... HTTPError
+   ! https://ina.iq/en/local/53149-in-coordination-with-the-uae-the-ministry-of-interior-seizes... HTTPError
+   ! https://www.blufftontoday.com/story/news/crime/2026/10/23/jasper-county-narcotics-investig... HTTPError
+   ! https://www.abc10.com/article/news/crime/dea-operation-in-california-seizes-3286-pounds-of... HTTPError
+   ! https://udayavani.com/karnataka/rs-10-crore-worth-of-cigarettes-seized-at-kempegowda-airpo... HTTPError
+   ! https://newsinfo.inquirer.net/2328915/p146-m-smuggled-cigarettes-equipment-seized-at-zamba... HTTPError
+   ! https://newskarnataka.com/bengaluru/bengaluru-airport-cigarette-seizures-jump-57-in-six-mo... HTTPError
+   ! https://dailynews.lk/2026/10/23/breaking-news/1046456/two-bills-to-allow-dispose-of-seized... HTTPError
+   ! https://thenewsmill.com/2026/10/dri-arrests-zambian-national-for-cocaine-smuggling-at-mumb... HTTPError
+   ! https://www.thevibes.com/articles/news/128698/illegal-temple-in-klang-used-to-store-drugs... HTTPError
+   ! https://worldanimalnews.com/2026/10/21/446-pieces-of-elephant-ivory-seized-in-thailand-as-... HTTPError
+   ! https://gizmodo.com/lost-to-science-for-89-years-a-venomous-primate-has-been-sneaking-into... HTTPError
+   ! https://chimpreports.com/minister-witonze-calls-for-joint-crackdown-on-cross-border-drug-t... HTTPError
+   ! https://ng.headtopics.com/news/again-customs-rescues-five-pangolins-in-fresh-wildlife-bust... HTTPError
+   ! https://www.bvibeacon.com/handgun-seized-at-club-in-long-bush/... HTTPError
+   ! https://inkorr.com/en/u-kievi-pripinili-dialnist-dvoh-narkodileriv-vilucili-kanabis-na-2-m... HTTPError
+   ! https://haipo.co.il/en/item/651168... HTTPError
+   ! https://english.ahram.org.eg/News/580617.aspx... HTTPError
+   ! https://www.rediff.com/news/report/man-arrested-with-mdma-after-ramming-police-in-kochi/20... ReadTimeout
+   ! https://www.khmertimeskh.com/502044379/chinese-nationals-arrested-over-drug-trafficking-ca... HTTPError
+   ! https://www.heraldsun.com.au/truecrimeaustralia/police-courts-victoria/police-bust-illegal... HTTPError
+   ! https://english.ahram.org.eg/News/580687.aspx... HTTPError
+   ! https://newsinfo.inquirer.net/2328467/6-nabbed-as-cops-seize-p2-1m-suspected-shabu-in-metr... HTTPError
+   ! https://www.heraldonline.co.zw/zrp-intensify-crackdown-on-smuggling-of-vehicles-and-drugs/... HTTPError
+   ! https://www.arabnews.com/world/indonesia-makes-two-major-drug-busts-worth-millions-3007921... HTTPError
+   ! https://www.diarioepoca.com/1393308-golpe-al-narcomenudeo-incautan-170-dosis-de-cocaina-y-... HTTPError
+   ! https://www.albaceteabierto.es/noticia/79343/castilla-la-mancha/incautan-5768-kilos-de-coc... HTTPError
+   ! https://hsbnoticias.com/noticias/contundente-golpe-al-narcotrafico-en-mallama-incautan-una... HTTPError
+   ! https://elpais.bo/seguridad/20261022_incautan-narco-encomienda-con-tres-paquetes-de-cocain... HTTPError
+   ! https://radio-corporacion.com/blog/archivos/210089/incautan-casi-media-tonelada-de-cocaina... HTTPError
+   ! https://www.red43.com.ar/nota/2026-10-22-19-59-3-golpe-al-narcotrafico-en-chubut-incautaro... HTTPError
+   ! https://7dias.com.do/2026/10/22/autoridades-incautan-555-paquetes-de-cocaina-en-una-narcol... HTTPError
+   ! https://hsbnoticias.com/noticias/incautan-124-kilos-de-marihuana-en-pipiral... HTTPError
+   ! https://lacalle.com.ve/pnb-y-gnb-incautan-28-panelas-de-droga-en-barinas/... HTTPError
+   ! https://www.catamarcactual.com.ar/policiales/2026/10/23/detienen-a-un-hombre-y-secuestran-... HTTPError
+   ! https://www.rediff.com/news/report/man-held-for-possessing-illegal-firearm-in-nanded/20261... ReadTimeout
+   ! https://acn.com.ve/incautan-falcon-1-735-panelas-drogas/amp/... HTTPError
+   ! https://www.rediff.com/news/report/delhi-police-arrests-naveen-bali-gang-shooter-recovers-... ReadTimeout
+   ! https://www.milenio.com/policia/detienen-a-pasajero-en-el-aicm-con-casi-10-kilos-de-droga... HTTPError
+   ! https://cactus24.com.ve/incautan-casi-una-tonelada-y-media-de-droga-tras-la-intercepcion-d... HTTPError
+   ! https://www.ouest-france.fr/societe/drogue/a-arles-un-chien-renifleur-decouvre-pres-dun-mi... HTTPError
+   ! https://www.zinfos974.com/saint-denis-deux-kilos-de-cocaine-du-cannabis-et-quatre-armes-a-... HTTPError
+   ! https://kossev.info/fr/drzavljanin-srbije-osudjen-u-sad-na-17-godina-zatvora-sa-krijumcari... HTTPError
+   ! https://www.tvanouvelles.ca/2026/10/22/la-police-decouvre-chez-lui-400-g-de-cocaine-et-dau... HTTPError
+   ! https://www.sudinfo.be/id1214693/article/2026-10-23/des-armes-des-munitions-et-de-la-marij... HTTPError
+   ! https://www.linfo.re/la-reunion/faits-divers/un-homme-interpelle-a-saint-denis-2-kg-de-coc... HTTPError
+   ! https://reporteri.net/fr/nouvelles/1281289/... HTTPError
+   ! https://www.portaldecamaqua.com.br/noticias/111262/brigada-militar-prende-homem-e-apreende... HTTPError
+   ! https://www.independente.com.br/artigo/policia-recupera-veiculo-roubado-e-apreendem-5-kg-d... HTTPError
