@@ -30,6 +30,16 @@ START = time.monotonic()
 # The workflow gives the whole job 45 minutes. Stop extracting after this many minutes so analysis, the
 # board build and "Save results" still run; anything not reached is picked up again by the next run.
 INGEST_BUDGET_MIN = float(os.environ.get("INGEST_BUDGET_MIN", "28"))
+# Reading the articles (the slow, network-bound step) must be finished by this minute of the run, so that
+# extraction (until INGEST_BUDGET_MIN) and the rest still fit. Articles not read keep headline + snippet.
+FETCH_DEADLINE_MIN = float(os.environ.get("FETCH_DEADLINE_MIN", "20"))
+
+
+def fetch_budget_min(cap=None):
+    """Minutes left for reading articles: until FETCH_DEADLINE_MIN of the run, never more than `cap`."""
+    left = FETCH_DEADLINE_MIN - (time.monotonic() - START) / 60
+    left = max(1.0, left)
+    return min(left, cap) if cap else left
 
 
 def ingest(conn, items, is_demo=False):
@@ -103,7 +113,7 @@ def reread_snippets(conn, cfg, limit=60, days=3):
     if not rows:
         return 0, 0
     items = [{"url": r[1], "title": r[2], "snippet": "", "id": r[0], "lang": r[4], "source_country": r[5]} for r in rows]
-    items = collect.fetch_all(items, cfg["run"]["resolve_google_links"])
+    items = collect.fetch_all(items, cfg["run"]["resolve_google_links"], budget_min=fetch_budget_min(cap=4))
     cols = [c[1] for c in conn.execute("PRAGMA table_info(articles)")]
     done = 0
     for it in items:
@@ -160,7 +170,7 @@ def main():
         log(f"      {len(items)} candidate headlines, {len(new)} new")
         log("[2/4] Reading articles...")
         if cfg["run"]["fetch_full_text"]:
-            new = collect.fetch_all(new, cfg["run"]["resolve_google_links"])
+            new = collect.fetch_all(new, cfg["run"]["resolve_google_links"], budget_min=fetch_budget_min(cap=14))
         else:
             for i in new:
                 i["text"], i["text_mode"] = i.get("snippet", ""), "snippet"

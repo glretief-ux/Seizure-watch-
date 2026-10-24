@@ -134,6 +134,41 @@ def test_official_sources_come_first():
     assert titles[0].startswith("FEED") and titles[1].startswith("OFFICIAL") and titles[2].startswith("OFFICIAL") and titles[3].startswith("NEWS")
     assert calls[:2] == ["site:cbp.gov seized", "site:dea.gov seized"]
 
+def test_fetch_all_stops_at_time_limit():
+    import time as _t
+    class R:
+        headers = {"Content-Type": "text/html"}
+        text = "<html><body><article><p>" + ("Customs officers seized 120 kg of cocaine at the port. " * 20) + "</p></article></body></html>"
+    def slow(url, **kw):
+        _t.sleep(0.4)
+        return R()
+    orig = collect._get
+    collect._get = slow
+    try:
+        items = [{"url": f"https://site{i}.example/a", "snippet": f"s{i}"} for i in range(60)]
+        t0 = _t.monotonic()
+        out = collect.fetch_all(items, resolve=False, workers=4, budget_min=0.02)   # ~1.2 s budget
+        took = _t.monotonic() - t0
+    finally:
+        collect._get = orig
+    assert took < 5, took                                   # 60 x 0.4 s / 4 workers would be 6 s without the limit
+    assert len(out) == 60 and all("text" in i and "text_mode" in i for i in out)
+    assert any(i["text_mode"] == "full" for i in out) and any(i["text_mode"] == "snippet" and i["text"].startswith("s") for i in out)
+
+def test_failing_domain_is_skipped_after_three_tries():
+    calls = []
+    orig = collect._get
+    collect._get = lambda url, **kw: (calls.append(url), None)[1]
+    try:
+        items = [{"url": f"https://blocked.example/{i}", "snippet": "s"} for i in range(10)] + \
+                [{"url": "https://other.example/x", "snippet": "s"}]
+        out = collect.fetch_all(items, resolve=False, workers=1, budget_min=1)
+    finally:
+        collect._get = orig
+    assert len([c for c in calls if "blocked.example" in c]) == collect.DOMAIN_MAX_FAILS
+    assert len(calls) == collect.DOMAIN_MAX_FAILS + 1       # the other site is still tried
+    assert all(i["text_mode"] == "snippet" for i in out)
+
 if __name__ == "__main__":
     for k, v in list(globals().items()):
         if k.startswith("test_"):

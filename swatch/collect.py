@@ -7,13 +7,16 @@ Collectors. All free, no API keys:
 Only headlines + links come from the feeds; article text is fetched (politely) to read the facts,
 and only the extracted facts + link are stored - never the article body.
 """
+import os
 import re
 import time
 import html
+import threading
 import email.utils
 import datetime as dt
 import xml.etree.ElementTree as ET
-from concurrent.futures import ThreadPoolExecutor
+from collections import Counter
+from concurrent.futures import ThreadPoolExecutor, wait
 from urllib.parse import quote, urlsplit, urlunsplit, parse_qsl, urlencode
 
 import requests
@@ -41,13 +44,33 @@ def _strip_html(s):
     return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", s or ""))).strip()
 
 
-def _get(url, timeout=20, **kw):
+_FAIL_STATS = Counter()   # why article downloads failed this run (summarised once, instead of one log line per URL)
+
+
+def _get(url, timeout=20, quiet=False, max_seconds=None, max_bytes=None, **kw):
+    """GET with a connect/read timeout. max_seconds / max_bytes put a hard cap on one download, because a
+    read timeout alone only limits the gap between two chunks: a server that trickles bytes can hold a
+    worker for many minutes. quiet=True counts failures in _FAIL_STATS instead of logging every one."""
     try:
-        r = requests.get(url, headers=HDRS, timeout=timeout, **kw)
+        if max_seconds is None and max_bytes is None:
+            r = requests.get(url, headers=HDRS, timeout=timeout, **kw)
+            r.raise_for_status()
+            return r
+        r = requests.get(url, headers=HDRS, timeout=timeout, stream=True, **kw)
         r.raise_for_status()
+        t0, buf = time.monotonic(), bytearray()
+        for chunk in r.iter_content(65536):
+            buf += chunk
+            if (max_bytes and len(buf) > max_bytes) or (max_seconds and time.monotonic() - t0 > max_seconds):
+                break
+        r._content, r._content_consumed = bytes(buf), True   # so r.content / r.text work as usual
+        r.close()
         return r
     except Exception as e:
-        log(f"   ! {url[:90]}... {type(e).__name__}")
+        if quiet:
+            _FAIL_STATS[type(e).__name__] += 1
+        else:
+            log(f"   ! {url[:90]}... {type(e).__name__}")
         return None
 
 
@@ -107,7 +130,7 @@ def resolve_google_link(url):
         return url
 
 
-def resolve_google_links(items, interval=0.3, chunk=25):
+def resolve_google_links(items, interval=0.3, chunk=25, deadline=None):
     """Turn the Google News redirect links of many items into real article addresses (in place).
     One polite pass, one small batch at a time. Returns (resolved, failed) and logs why links failed."""
     todo = [it for it in items if "news.google.com" in it.get("url", "")]
@@ -120,6 +143,9 @@ def resolve_google_links(items, interval=0.3, chunk=25):
         return 0, len(todo)
     done, why = 0, {}
     for i in range(0, len(todo), chunk):
+        if deadline and time.monotonic() > deadline:
+            log(f"      link resolving stopped at its time limit after {done} of {len(todo)}; the rest are read from headline + snippet")
+            break
         batch = todo[i:i + chunk]
         urls = [b["url"] for b in batch]
         try:
@@ -298,6 +324,30 @@ def prefilter(items, cutoff_date):
     return out
 
 
+# Sites that keep refusing us (bot walls, paywalls, dead hosts) are skipped after a few failures in a row instead
+# of being tried again for every one of their articles. Reset at the start of every fetch_all().
+DOMAIN_MAX_FAILS = 3
+_dom_fails, _dom_lock = {}, threading.Lock()
+
+
+def _domain(url):
+    try:
+        return urlsplit(url).netloc.lower()
+    except Exception:
+        return ""
+
+
+def _domain_blocked(url):
+    with _dom_lock:
+        return _dom_fails.get(_domain(url), 0) >= DOMAIN_MAX_FAILS
+
+
+def _domain_result(url, ok):
+    d = _domain(url)
+    with _dom_lock:
+        _dom_fails[d] = 0 if ok else _dom_fails.get(d, 0) + 1
+
+
 def fetch_text(item, resolve=True, max_chars=9000):
     """Fetch and extract article text. Returns (text, mode). Falls back to headline + snippet."""
     url = item["url"]
@@ -307,7 +357,11 @@ def fetch_text(item, resolve=True, max_chars=9000):
             item["url"] = clean_url(url)
         if "news.google.com" in url:
             return item.get("snippet", ""), "snippet"
-        r = _get(url, timeout=15)
+        if _domain_blocked(url):
+            _FAIL_STATS["skipped (site kept failing)"] += 1
+            return item.get("snippet", ""), "snippet"
+        r = _get(url, timeout=(5, 10), quiet=True, max_seconds=20, max_bytes=2_000_000)
+        _domain_result(url, r is not None)
         if r is not None and "text" in r.headers.get("Content-Type", "text"):
             try:
                 import trafilatura
@@ -317,20 +371,42 @@ def fetch_text(item, resolve=True, max_chars=9000):
             if len(txt) > 200:
                 return txt[:max_chars], "full"
     except Exception as e:
-        log(f"   ! fetch failed {type(e).__name__}")
+        _FAIL_STATS[type(e).__name__] += 1
     return item.get("snippet", ""), "snippet"
 
 
-def fetch_all(items, resolve=True, workers=6):
+def fetch_all(items, resolve=True, workers=None, budget_min=None):
+    """Read the articles in parallel. Everything is bounded: each download has a hard cap (see fetch_text) and the
+    whole step stops after budget_min minutes (env FETCH_BUDGET_MIN, default 14). Articles not reached keep their
+    headline + snippet, so the run still goes on to analysis, the dashboard and 'Save results'."""
+    workers = workers or int(os.environ.get("FETCH_WORKERS", "16"))
+    budget_min = budget_min if budget_min is not None else float(os.environ.get("FETCH_BUDGET_MIN", "14"))
+    t_end = time.monotonic() + budget_min * 60
+    with _dom_lock:
+        _dom_fails.clear()
+    _FAIL_STATS.clear()
     if resolve:
-        resolve_google_links(items)
+        # link resolving may use at most half of the budget; the rest is for reading the articles
+        resolve_google_links(items, deadline=time.monotonic() + budget_min * 30)
 
     def one(it):
+        if time.monotonic() > t_end:
+            return it
         txt, mode = fetch_text(it, resolve=False)
         it["text"], it["text_mode"] = txt, mode
         return it
-    with ThreadPoolExecutor(max_workers=workers) as ex:
-        out = list(ex.map(one, items))
-    full = sum(1 for i in out if i.get("text_mode") == "full")
-    log(f"      read in full: {full}; headline + snippet only: {len(out) - full}")
-    return out
+    ex = ThreadPoolExecutor(max_workers=workers)
+    futs = [ex.submit(one, it) for it in items]
+    _, not_done = wait(futs, timeout=max(1, t_end - time.monotonic()))
+    for f in not_done:
+        f.cancel()
+    ex.shutdown(wait=False, cancel_futures=True)   # downloads still running are capped at ~20 s by fetch_text
+    for it in items:                                # anything not reached: headline + snippet only
+        if "text" not in it:
+            it["text"], it["text_mode"] = it.get("snippet", ""), "snippet"
+    full = sum(1 for i in items if i.get("text_mode") == "full")
+    log(f"      read in full: {full}; headline + snippet only: {len(items) - full}"
+        + (f" (time limit of {budget_min:g} min reached)" if not_done else ""))
+    if _FAIL_STATS:
+        log("      download problems: " + ", ".join(f"{k} x{v}" for k, v in _FAIL_STATS.most_common(6)))
+    return items
