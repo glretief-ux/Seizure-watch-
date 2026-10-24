@@ -29,6 +29,6 @@ UNUSUAL EVENTS (highest risk first)
 HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (427), Legitimate cargo (food/produce) (171), Postal / parcel (104)
 Cover cargo named: cocoa (17), electronics (15), fruit (10), timber (7), banana (7)
 
-Coverage: searching 11 languages (Arabic, English, Spanish, French, Hindi, Dutch, Portuguese, Russian, Turkish, Vietnamese, Chinese). 45 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Austria, Azerbaijan, Bangladesh).
+Coverage: searching 20 languages (Amharic, Arabic, Danish, German, English, Spanish, Estonian, French, Hindi, Icelandic, Mongolian, Dutch, Norwegian, Portuguese, Russian, Slovak, Swedish, Turkish, Vietnamese, Chinese). 35 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Azerbaijan, Bangladesh, Bosnia and Herzegovina).
 Leads from open sources, not confirmed facts. Verify before acting.
 https://glretief-ux.github.io/Seizure-watch-/
