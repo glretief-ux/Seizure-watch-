@@ -701,9 +701,8 @@ function countryNames(m) {
 }
 function addBase(m) {
   const esri = (name, o) => L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/' + name + '/MapServer/tile/{z}/{y}/{x}', Object.assign({maxZoom: 16, attribution: 'Tiles &copy; Esri'}, o || {}));
-  const carto = (name, o) => L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/' + name + '/{z}/{x}/{y}{r}.png', Object.assign({subdomains: 'abcd', maxZoom: 16, attribution: '&copy; OpenStreetMap contributors &copy; CARTO'}, o || {}));
   const base = {
-    'Colour': L.layerGroup([carto('voyager_nolabels', {className: 'tint'}), carto('voyager_only_labels', {minZoom: 5}), countryNames(m)]),
+    'Colour': L.layerGroup([esri('World_Terrain_Base', {className: 'tint', maxNativeZoom: 13}), esri('Reference/World_Boundaries_and_Places', {minZoom: 5}), countryNames(m)]),
     'Terrain': esri('World_Topo_Map'),
     'Satellite': L.layerGroup([esri('World_Imagery'), esri('Reference/World_Boundaries_and_Places')]),
     'Light grey': esri('Canvas/World_Light_Gray_Base')
