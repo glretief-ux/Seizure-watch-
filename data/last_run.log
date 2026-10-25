@@ -1,120 +1,87 @@
-[1/4] Searching the web (last 2 day(s))...
+[1/4] Searching the web (last 7 day(s))...
    RSS Hong Kong government press releases (includes Customs): 100 items
    RSS UK National Crime Agency: 20 items
    RSS UK Border Force: 20 items
    ! https://ndlea.gov.ng/feed/... HTTPError
    RSS NDLEA Nigeria: 0 items
-   Official websites (52 searched): 2068 headlines
-      edition MX/es: 73 headlines
-      edition ES/es: 74 headlines
-      edition CO/es: 74 headlines
-      edition FR/fr: 67 headlines
-      edition BR/pt: 183 headlines
-      edition PT/pt: 114 headlines
-      edition SA/ar: 199 headlines
-      edition EG/ar: 204 headlines
-      edition AE/ar: 202 headlines
-      edition TR/tr: 352 headlines
-      edition RU/ru: 188 headlines
-      edition UA/ru: 188 headlines
-      edition CN/zh: 26 headlines
-      edition HK/zh: 15 headlines
-      edition TW/zh: 16 headlines
-      edition IN/hi: 225 headlines
-      edition VN/vi: 216 headlines
-      edition NL/nl: 72 headlines
-      edition BE/nl: 71 headlines
-      edition AT/de: 27 headlines
-      edition DK/da: 5 headlines
-      edition EE/et: 0 headlines
+   Official websites (52 searched): 2028 headlines
+      edition MX/es: 271 headlines
+      edition ES/es: 272 headlines
+      edition CO/es: 274 headlines
+      edition FR/fr: 200 headlines
+      edition BR/pt: 323 headlines
+      edition PT/pt: 276 headlines
+      edition SA/ar: 479 headlines
+      edition EG/ar: 452 headlines
+      edition AE/ar: 467 headlines
+      edition TR/tr: 593 headlines
+      edition RU/ru: 346 headlines
+      edition UA/ru: 437 headlines
+      edition CN/zh: 74 headlines
+      edition HK/zh: 38 headlines
+      edition TW/zh: 39 headlines
+      edition IN/hi: 411 headlines
+      edition VN/vi: 299 headlines
+      edition NL/nl: 312 headlines
+      edition BE/nl: 256 headlines
+      edition AT/de: 111 headlines
+      edition DK/da: 15 headlines
+      edition EE/et: 3 headlines
       edition ET/am: 0 headlines
       edition IS/is: 0 headlines
       edition MN/mn: 0 headlines
-      edition NO/no: 0 headlines
-      edition SK/sk: 2 headlines
-      edition SE/sv: 5 headlines
-   Google News: 4923 headlines
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28cocaine%20OR%20heroin%20OR%20metha... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28precursor%20chemicals%20OR%20cland... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28mercury%29%20%28smuggling%20OR%20s... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28stolen%20vehicles%20OR%20stolen%20... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22CITES%20timber%22%20OR%20%22pro... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28ivory%20OR%20%22rhino%20horn%22%20... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22CITES%22%20OR%20%22protected%20... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28illegal%20firearms%20OR%20weapons%... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28antiquities%20OR%20%22cultural%20p... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28productos%20qu%C3%ADmicos%20OR%20p... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28veh%C3%ADculos%20robados%29%20%28d... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28armas%20de%20fuego%20OR%20municion... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22piezas%20arqueol%C3%B3gicas%22%... HTTPError
+      edition NO/no: 8 headlines
+      edition SK/sk: 13 headlines
+      edition SE/sv: 9 headlines
+   Google News: 12013 headlines
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28cocaine%20OR%20heroin%20OR%20metha... ReadTimeout
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28precursor%20chemicals%20OR%20cland... ReadTimeout
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22hazardous%20chemicals%22%20OR%2... ReadTimeout
+   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28mercury%29%20%28smuggling%20OR%20s... ReadTimeout
+   ! GDELT failed 4 times in a row; skipping GDELT for the rest of this run
       GDELT es: 0 headlines
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28v%C3%A9hicules%20vol%C3%A9s%29%20%... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28armes%20a%20feu%20OR%20munitions%2... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22biens%20culturels%22%20OR%20ant... HTTPError
       GDELT fr: 0 headlines
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28ve%C3%ADculos%20roubados%29%20%28a... HTTPError
       GDELT pt: 0 headlines
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%D9%83%D9%88%D9%83%D8%A7%D9%8A%D9%... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%D9%85%D9%88%D8%A7%D8%AF%20%D9%83%... HTTPError
       GDELT ar: 0 headlines
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28kokain%20OR%20eroin%20OR%20esrar%2... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28kimyasal%20OR%20%22tar%C4%B1m%20il... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22tarihi%20eser%22%29%20%28%22ele... HTTPError
       GDELT tr: 0 headlines
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22%D0%BA%D1%83%D0%BB%D1%8C%D1%82%... HTTPError
       GDELT ru: 0 headlines
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%E5%8F%AF%E5%8D%A1%E5%9B%A0%20OR%2... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%E5%8D%B1%E9%99%A9%E5%8C%96%E5%AD%... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%E6%96%87%E7%89%A9%29%20%28%E8%B5%... HTTPError
       GDELT zh: 0 headlines
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%E0%A4%95%E0%A5%8B%E0%A4%95%E0%A5%... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%E0%A4%B0%E0%A4%B8%E0%A4%BE%E0%A4%... HTTPError
       GDELT hi: 0 headlines
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22ng%C3%A0%20voi%22%29%20%28thu%2... HTTPError
       GDELT vi: 0 headlines
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28precursoren%20OR%20drugslab%20OR%2... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28chemicali%C3%ABn%20OR%20bestrijdin... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28ivoor%20OR%20neushoorn%20OR%20schu... HTTPError
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28archeologische%20OR%20erfgoed%20OR... HTTPError
       GDELT nl: 0 headlines
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28Kokain%20OR%20Heroin%20OR%20Cannab... HTTPError
       GDELT de: 0 headlines
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28kokain%20OR%20heroin%20OR%20hash%2... HTTPError
       GDELT da: 0 headlines
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28kokaiin%20OR%20heroiin%20OR%20kane... HTTPError
       GDELT et: 0 headlines
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%E1%8A%AE%E1%8A%AC%E1%8B%AD%E1%8A%... HTTPError
       GDELT am: 0 headlines
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28k%C3%B3ka%C3%ADn%20OR%20f%C3%ADkni... HTTPError
       GDELT is: 0 headlines
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%D0%BA%D0%BE%D0%BA%D0%B0%D0%B8%D0%... HTTPError
       GDELT mn: 0 headlines
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28kokain%20OR%20heroin%20OR%20hasj%2... HTTPError
       GDELT no: 0 headlines
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28koka%C3%ADn%20OR%20hero%C3%ADn%20O... HTTPError
       GDELT sk: 0 headlines
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28kokain%20OR%20heroin%20OR%20hasch%... HTTPError
       GDELT sv: 0 headlines
    GDELT: 0 headlines
-      1052 candidate headlines, 1011 new
+      2741 candidate headlines, 1500 new
 [2/4] Reading articles...
-      link resolving stopped at its time limit after 75 of 999; the rest are read from headline + snippet
-      links resolved: 75 of 999
-      read in full: 67; headline + snippet only: 944
-      download problems: HTTPError x15, ReadTimeout x1
+      link resolving stopped at its time limit after 100 of 1488; the rest are read from headline + snippet
+      links resolved: 100 of 1488
+      read in full: 80; headline + snippet only: 1420
+      download problems: HTTPError x15, ReadTimeout x5
 [3/4] Extracting facts and storing...
-      time budget reached after 0 of 1011 articles; the rest are left for the next run
-      stored 0, of which 0 are seizure reports
+      NER supplemented 215 article(s) (unrecognised place names logged to ner_places for review)
+      stored 1500, of which 974 are seizure reports
 [4/4] Analysing and building report...
-      attempted 150 older headline(s) that predate this feature (150 translated, 0 failed and kept as-is)
-Done. 10321 events in report, 510 alerts.
+      attempted 150 older headline(s) that predate this feature (177 translated, 8 failed and kept as-is; last error: _via_google: TooManyRequests: Server Error: You made too many requests to the server.According to google, you are allowed to make 5 requests per secondand up to 200k requests per day. You can wait and try again later oryou can try the translate_batch function)
+      links resolved: 60 of 60
+      read in full: 51; headline + snippet only: 9
+      download problems: HTTPError x5, ReadTimeout x1
+      re-read 50 of 60 earlier headline-only report(s) in full
+Done. 10989 events in report, 405 alerts.
 Weekly bulletin written (/home/runner/work/Seizure-watch-/Seizure-watch-/docs/bulletin.html).
 Open: /home/runner/work/Seizure-watch-/Seizure-watch-/docs/index.html
-  [High  ] HIGH-RISK EVENT: Cocaine - Kingston (score 100)
-  [High  ] HIGH-RISK EVENT: Cocaine - Barranquilla (score 95)
-  [High  ] HIGH-RISK EVENT: Cocaine - Seoul (score 85)
-  [High  ] HIGH-RISK EVENT: Pangolin - Oyo (score 70)
-  [High  ] HIGH-RISK EVENT: Cocaine - Brussels (score 70)
-  [High  ] HIGH-RISK EVENT: Cocaine - Santos (score 70)
-  [High  ] HIGH-RISK EVENT: Firearms - Oyo (score 70)
-  [High  ] HIGH-RISK EVENT: Cannabis - Belgrade (score 70)
+  [High  ] HIGH-RISK EVENT: Methamphetamine - Aceh (score 85)
+  [High  ] HIGH-RISK EVENT: NSA - Lithuania (score 75)
+  [High  ] HIGH-RISK EVENT: Cocaine - El Paso (score 75)
+  [High  ] HIGH-RISK EVENT: Unspecified - OR Tambo / Johannesburg (score 65)
+  [High  ] HIGH-RISK EVENT: Cocaine - Liverpool (score 65)
+  [High  ] HIGH-RISK EVENT: Cocaine - Hong Kong (score 60)
+  [High  ] HIGH-RISK EVENT: Cocaine - Hong Kong airport (score 60)
+  [High  ] HIGH-RISK EVENT: Heroin/Opium - Mizoram (score 60)
