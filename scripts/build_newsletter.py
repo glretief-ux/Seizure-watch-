@@ -173,7 +173,7 @@ def main():
     cards = []
     for link, photo, head, text, outlet in feat:
         src = img_src(photo)
-        cards.append(f'''<article class="card"><a href="{html.escape(link)}"><div class="ph"><img src="{html.escape(src)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()"></div></a>
+        cards.append(f'''<article class="card"><a href="{html.escape(link)}"><div class="ph"><span>Photo: open the article</span><img src="{html.escape(src)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()"></div></a>
 <div class="cb"><h3><a href="{html.escape(link)}">{html.escape(head)}</a></h3><p>{html.escape(text)}</p>
 <p class="cr">Photo and report: <a href="{html.escape(link)}">{html.escape(outlet)}</a></p></div></article>''')
     also = "\n".join(f'<li><a href="{html.escape(l)}">{html.escape(t)}</a></li>' for l, t in also_l)
@@ -191,14 +191,16 @@ def main():
 h1{{font-size:28px;line-height:1.2;margin:6px 0 4px}}
 .dates{{color:var(--mut);margin:0}}
 .lead{{padding:8px 32px 0;font-size:15px}}
-.kpis{{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin:22px 32px 0}}
+.kpis{{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin:22px 32px 0}}
 .k{{background:#fff;padding:14px 12px}}.k b{{display:block;font-size:24px;line-height:1.1}}.k span{{font-size:11px;color:var(--mut)}}.k em{{display:block;font-style:normal;font-size:11px;color:var(--mut);margin-top:3px}}
 h2{{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--a);margin:0 0 14px;padding-bottom:8px;border-bottom:2px solid var(--a)}}
 section{{padding:30px 32px 0}}
 .grid{{display:grid;grid-template-columns:1fr 1fr;gap:20px}}
 .card{{border:1px solid var(--line);min-width:0}}
-.ph{{aspect-ratio:16/10;background:linear-gradient(135deg,#e3eaf0,#cdd8e1);overflow:hidden}}
-.ph img{{width:100%;height:100%;object-fit:cover;display:block}}
+.ph{{position:relative;height:190px;background:linear-gradient(135deg,#e3eaf0,#cdd8e1);overflow:hidden}}
+.ph span{{position:absolute;left:0;right:0;top:44%;text-align:center;font-size:11px;color:#5b6a76}}
+.ph img{{position:absolute;left:0;top:0;width:100%;height:100%;object-fit:cover;display:block}}
+@page{{size:A4;margin:10mm 0}}@media print{{body{{background:#fff}}.card,.bar,.k,ul.also li{{break-inside:avoid}}section{{break-inside:auto}}h2{{break-after:avoid}}}}
 .cb{{padding:14px 16px 16px}}.cb h3{{font-size:15px;line-height:1.3;margin:0 0 8px}}.cb h3 a{{color:var(--ink);text-decoration:none}}
 .cb p{{margin:0 0 8px;font-size:13px}}.cr{{color:var(--mut);font-size:11px!important;margin:0!important}}
 a{{color:var(--a)}}
@@ -211,7 +213,7 @@ ul.also{{margin:0;padding:0;list-style:none}}ul.also li{{padding:9px 0;border-bo
 .legend{{font-size:12px;color:var(--mut)}}
 .note{{padding:24px 32px 30px;font-size:11px;color:var(--mut)}}
 .foot{{background:#12304a;color:#d4e0ea;padding:18px 32px;font-size:11px}}.foot a{{color:#fff}}
-@media(max-width:620px){{.grid,.cols{{grid-template-columns:1fr}}.head,section,.lead,.note,.foot{{padding-left:18px;padding-right:18px}}.kpis{{margin-left:18px;margin-right:18px}}h1{{font-size:23px}}}}
+@media(max-width:620px){{.kpis{{grid-template-columns:1fr 1fr}}.ph{{height:170px}}.grid,.cols{{grid-template-columns:1fr}}.head,section,.lead,.note,.foot{{padding-left:18px;padding-right:18px}}.kpis{{margin-left:18px;margin-right:18px}}h1{{font-size:23px}}}}
 </style></head><body><div class="wrap">
 {f'<img class="banner" src="{logo}" alt="AIRCOP and Container Control Programme">' if logo else ''}
 <div class="head"><div class="eyebrow">Seizure Watch · Weekly Newsletter</div>
@@ -247,6 +249,13 @@ ul.also{{margin:0;padding:0;list-style:none}}ul.also li{{padding:9px 0;border-bo
     out = sys.argv[2] if len(sys.argv) > 2 else os.path.join(ROOT, "docs", "newsletter.html")
     open(out, "w", encoding="utf-8").write(page)
     print("wrote", out, len(page) // 1024, "KB;", len(wk), "reports", start, "to", end)
+    try:   # PDF with clickable links (needs: pip install weasyprint)
+        from weasyprint import HTML
+        pdf = os.path.splitext(out)[0] + ".pdf"
+        HTML(string=page, base_url=SITE).write_pdf(pdf)
+        print("wrote", pdf)
+    except ImportError:
+        print("weasyprint not installed; PDF skipped")
 
 
 if __name__ == "__main__":

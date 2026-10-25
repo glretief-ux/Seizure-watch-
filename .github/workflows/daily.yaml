@@ -47,7 +47,9 @@ jobs:
         run: python scripts/build_board.py && python scripts/build_motion.py
       - name: Build the weekly newsletter (with article photos)
         continue-on-error: true
-        run: python scripts/build_newsletter.py
+        run: |
+          pip install weasyprint
+          python scripts/build_newsletter.py
       - name: Keep the run log (so a failure can be read)
         if: always()
         run: |
