@@ -1,33 +1,33 @@
-SEIZURE WATCH - weekly bulletin, 15 Oct - 21 Oct 2026
+SEIZURE WATCH - weekly bulletin, 19 Oct - 25 Oct 2026
 
-1861 seizure reports this week (previous week 2330); 116 high risk; 585.7 t reported.
-Main drugs: Cannabis (480), Cocaine (447), NSA (243)
-Main countries: Brazil (306), India (268), United States (192), Turkey (153)
+1316 seizure reports this week (previous week 2403); 54 high risk; 406.5 t reported.
+Main drugs: Cannabis (305), Cocaine (286), NSA (159)
+Main countries: Brazil (203), United States (178), Turkey (140), India (135)
 
 NEW AND SURGING CORRIDORS
-- Pakistan -> India: SURGING (26 this period, 10 before; mainly Heroin/Opium)
-- Mexico -> United States: SURGING (14 this period, 6 before; mainly Methamphetamine)
-- Iran -> Turkey: NEW (12 this period, 0 before; mainly Methamphetamine)
-- Lebanon -> Syria: SURGING (11 this period, 3 before; mainly NSA)
-- Myanmar -> India: SURGING (9 this period, 2 before; mainly Methamphetamine)
-- United States -> Egypt: NEW (9 this period, 0 before; mainly Cannabis)
+- Bulgaria -> Turkey: NEW (9 this period, 0 before; mainly Cannabis)
+- Myanmar -> India: SURGING (8 this period, 3 before; mainly Methamphetamine)
+- United States -> Canada: SURGING (8 this period, 1 before; mainly Cocaine)
+- United States -> Egypt: SURGING (8 this period, 1 before; mainly Cannabis)
+- Israel -> Jordan: NEW (7 this period, 0 before; mainly Cannabis)
+- Malaysia -> Japan: NEW (6 this period, 0 before; mainly Cocaine)
 
 UNUSUAL EVENTS (highest risk first)
 - [High 100] 19 Oct | Cocaine | 1.5 t | Kingston | Honduras -> Belgium | Impregnation / liquid / disguised; Legitimate cargo (industrial/goods); Luggage / passenger goods | vessel: Control Programme
   https://jamaica-gleaner.com/article/news/20261020/more-1-billion-worth-cocaine-seized-48-hours
 - [High 95] 20 Oct | Cocaine | 3.0 t | Barranquilla | Brazil -> Luxembourg | Impregnation / liquid / disguised; Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Postal / parcel | cargo: fruit; juice; timber
   https://www.eurasiareview.com/20102026-liquid-cocaine-puts-ports-laboratories-and-customs-agencies-to-the-test-analysis/
-- [High 88] 18 Oct | Cannabis | 8.7 t | Lagos | India -> Ethiopia -> Saudi Arabia | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Luggage / passenger goods | cargo: starch; palm oil; insecticide
-  https://thefact.ng/ndlea-seizes-8725kg-tramadol-worth-%E2%82%A67bn/
-- [High 88] 16 Oct | Methamphetamine | 142 kg | Tamil Nadu | Nepal -> Sri Lanka | Legitimate cargo (industrial/goods)
-  https://thesouthfirst.com/tamilnadu/nagapattinam-crystal-meth-seizure-provides-dmk-fresh-ammo-to-target-tvk/
+- [High 85] 23 Oct | Methamphetamine | 2.0 t | Aceh | Malaysia -> Indonesia | Impregnation / liquid / disguised; Legitimate cargo (industrial/goods) | vessel: Global 168
+  https://www.bozemandailychronicle.com/wire/international/indonesia-seizes-over-2-tons-of-narcotics-in-one-of-the-country-s-largest-drug/article_b89c7077-07e4-5375-a511-8e465edc77e0.html
 - [High 85] 20 Oct | Cocaine | 600 kg | Seoul | Legitimate cargo (industrial/goods); Postal / parcel
   https://en.fnnews.com/news/202610201614562079
-- [High 80] 18 Oct | NSA | 8.7 t | Kano | India -> Ethiopia -> Nigeria | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods) | cargo: starch; insecticide; palm oil
-  https://www.vanguardngr.com/2026/10/ndlea-issues-public-alert-after-intercepting-woman-with-drugs-concealed-in-palm-oil-keg/
+- [High 85] 21 Oct | Cocaine | Sinaloa | Nigeria -> Cape Verde | Legitimate cargo (industrial/goods); Postal / parcel; Vessel hull / underwater
+  https://africacenter.org/spotlight/latin-america-drug-cartels-hub/
+- [High 80] 19 Oct | Cocaine | 7.6 t | Cartagena | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods) | cargo: sugar
+  https://thecitypaperbogota.com/news/colombia-seizes-7-6-tonnes-of-cocaine-in-cartagenas-biggest-port-bust/
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (427), Legitimate cargo (food/produce) (171), Postal / parcel (104)
-Cover cargo named: cocoa (17), electronics (15), fruit (10), timber (7), banana (7)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (197), Legitimate cargo (food/produce) (64), Postal / parcel (47)
+Cover cargo named: electronics (11), cocoa (6), banana (5), furniture (4), rice (4)
 
 Coverage: searching 20 languages (Amharic, Arabic, Danish, German, English, Spanish, Estonian, French, Hindi, Icelandic, Mongolian, Dutch, Norwegian, Portuguese, Russian, Slovak, Swedish, Turkish, Vietnamese, Chinese). 35 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Azerbaijan, Bangladesh, Bosnia and Herzegovina).
 Leads from open sources, not confirmed facts. Verify before acting.
