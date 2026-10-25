@@ -1,0 +1,38 @@
+name: weekly-newsletter
+
+on:
+  workflow_dispatch:
+    inputs:
+      end_date:
+        description: "Last day of the 7-day week (YYYY-MM-DD); empty = latest day in the data"
+        default: ""
+  push:
+    paths:
+      - .github/workflows/newsletter.yaml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: newsletter
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install weasyprint
+      - name: Build newsletter (HTML + PDF, photos embedded)
+        run: python scripts/build_newsletter.py ${{ github.event.inputs.end_date }}
+      - name: Save
+        run: |
+          git config user.name  "seizure-watch-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add docs/newsletter.html docs/newsletter.pdf
+          git diff --cached --quiet || git commit -m "Newsletter $(date -u +%F)"
+          git push || (git pull --rebase --autostash -X theirs origin main && git push)
