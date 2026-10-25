@@ -9,7 +9,7 @@ Usage:  python3 scripts/build_newsletter.py [END_DATE YYYY-MM-DD] [OUT.html]
   back to a plain panel if the image cannot load.
 - Charts are plain HTML/CSS, so the file works in a browser and in most mail clients.
 """
-import base64, csv, collections, datetime as dt, html, os, re, sys, urllib.request
+import base64, csv, collections, datetime as dt, html, os, re, sys, urllib.parse, urllib.request
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CSV = os.path.join(ROOT, "docs", "events.csv")
@@ -72,6 +72,55 @@ def img_src(url):
     return url
 
 
+def og_image(url):
+    """Lead photo of an article (its og:image / twitter:image), or None. Needs internet access."""
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=15) as r:
+            page = r.read(400_000).decode("utf-8", "ignore")
+        for pat in (r'<meta[^>]+(?:property|name)=["\'](?:og:image|twitter:image)["\'][^>]*content=["\']([^"\']+)',
+                    r'<meta[^>]+content=["\']([^"\']+)["\'][^>]*(?:property|name)=["\'](?:og:image|twitter:image)["\']'):
+            m = re.search(pat, page, re.I)
+            if m:
+                return urllib.parse.urljoin(url, html.unescape(m.group(1)))
+    except Exception:
+        pass
+    return None
+
+
+def auto_pick(wk, n_feat=4, n_also=7, max_fetch=40):
+    """Pick the week's stories automatically: highest risk first, real seizures only, one per outlet."""
+    cands = sorted((r for r in wk if r["Link"] and r["Headline (English)"] and fnum(r["Total quantity (kg)"]) > 0),
+                   key=lambda r: (-fnum(r["Risk score"]), -fnum(r["Total quantity (kg)"])))
+    feat, also, outlets, fetched = [], [], set(), 0
+    for r in cands:
+        outlet = (r["Outlets"].split(",")[0] or "source").strip()
+        if outlet in outlets:
+            continue
+        head = r["Headline (English)"].strip()
+        if len(feat) < n_feat and fetched < max_fetch:
+            fetched += 1
+            photo = og_image(r["Link"])
+            if photo:
+                bits = [f'{r["Drug type"]}, {fnum(r["Total quantity (kg)"]):,.0f} kg']
+                where = ", ".join(x for x in (r["Seizure place"], r["Seizure country"]) if x)
+                if where:
+                    bits.append("seized in " + where)
+                if r["Origin"] and r["Destination"]:
+                    bits.append(f'route {r["Origin"]} to {r["Destination"]}')
+                if r["Concealment"]:
+                    bits.append("hidden in " + r["Concealment"].split(";")[0].lower())
+                feat.append((r["Link"], photo, head, "; ".join(bits) + ".", outlet))
+                outlets.add(outlet)
+                continue
+        if len(also) < n_also:
+            also.append((r["Link"], head))
+            outlets.add(outlet)
+        if len(feat) >= n_feat and len(also) >= n_also:
+            break
+    return feat, also
+
+
 def bars(items, total=None, color="var(--a)"):
     top = max([v for _, v in items] or [1])
     out = []
@@ -113,17 +162,21 @@ def main():
     routes = collections.Counter(f'{r["Origin"]} → {r["Destination"]}' for r in wk if r["Origin"] and r["Destination"]).most_common(6)
     conc = collections.Counter(r["Concealment"] for r in wk if r["Concealment"]).most_common(5)
 
+    feat, also_l = FEATURED, ALSO
+    if not all(any(r["Link"] == f[0] for r in wk) for f in FEATURED):   # hand-picked list is for another week
+        feat, also_l = auto_pick(wk)
+
     logo = ""
     if os.path.exists(LOGO):
         logo = "data:image/jpeg;base64," + base64.b64encode(open(LOGO, "rb").read()).decode()
 
     cards = []
-    for link, photo, head, text, outlet in FEATURED:
+    for link, photo, head, text, outlet in feat:
         src = img_src(photo)
         cards.append(f'''<article class="card"><a href="{html.escape(link)}"><div class="ph"><img src="{html.escape(src)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()"></div></a>
 <div class="cb"><h3><a href="{html.escape(link)}">{html.escape(head)}</a></h3><p>{html.escape(text)}</p>
 <p class="cr">Photo and report: <a href="{html.escape(link)}">{html.escape(outlet)}</a></p></div></article>''')
-    also = "\n".join(f'<li><a href="{html.escape(l)}">{html.escape(t)}</a></li>' for l, t in ALSO)
+    also = "\n".join(f'<li><a href="{html.escape(l)}">{html.escape(t)}</a></li>' for l, t in also_l)
 
     fmt = lambda d: d.strftime("%-d %b")
     page = f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
