@@ -1,5 +1,5 @@
 name: weekly-newsletter
-# design v2: colourful layout
+# design v2.1: colourful layout
 
 on:
   workflow_dispatch:

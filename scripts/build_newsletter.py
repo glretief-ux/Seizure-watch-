@@ -95,6 +95,8 @@ def auto_pick(wk, n_feat=4, n_also=7, max_fetch=40):
     feat, also, outlets, fetched = [], [], set(), 0
     for r in cands:
         outlet = (r["Outlets"].split(",")[0] or "source").strip()
+        if not outlet.isascii():   # the PDF font has no CJK/Arabic glyphs: show the site name instead
+            outlet = urllib.parse.urlparse(r["Link"]).netloc.replace("www.", "") or "source"
         if outlet in outlets:
             continue
         head = r["Headline (English)"].strip()
@@ -309,12 +311,15 @@ def main():
     legend = "".join(f'<b style="background:{c}"></b>{b} {bands[b]:,}' for b, c in (("High", RED), ("Medium", AMBER), ("Low", GREEN)))
     pan = lambda title, items, col, bg: f'<div class="panel" style="background:{bg}"><h4 style="color:{col}">{title}</h4>{bars(items, col)}</div>'
     chg = (len(wk) - len(pv)) / len(pv) * 100 if pv else 0
+    early = sorted(dc[d.isoformat()] for d in days[:5])[2]
+    filling = early and dc[days[-1].isoformat()] < 0.5 * early   # newest days still being collected
+    fill_note = " The latest days are still filling in, so totals will rise." if filling else ""
     body = f"""<div class="wrap">
 {f'<img class="banner" src="{logo}" alt="AIRCOP and Container Control Programme">' if logo else ''}
 <div class="mast"><div class="l"><div class="kick">The weekly newsletter</div><h1>Seizure Watch</h1></div>
 <div class="r"><div class="wk">Week</div><div class="no">{end.isocalendar()[1]}</div><div class="dt">{fmt(start)} &ndash; {fmt(end)} {end.year}</div></div></div>
 <div class="stripe"><i style="background:{BLUE}"></i><i style="background:{TEAL}"></i><i style="background:{ORANGE}"></i><i style="background:{RED}"></i></div>
-<div class="intro">{len(wk):,} seizure reports from {ctry} countries, {abs(chg):.0f}% {'more' if chg >= 0 else 'fewer'} than the week before. {len(hi)} were rated high risk. Cannabis ({drugs[0][1]}) and cocaine ({drugs[1][1] if len(drugs) > 1 else 0}) led the reports.</div>
+<div class="intro">{len(wk):,} seizure reports from {ctry} countries, {abs(chg):.0f}% {'more' if chg >= 0 else 'fewer'} than the week before. {len(hi)} were rated high risk. Cannabis ({drugs[0][1]}) and cocaine ({drugs[1][1] if len(drugs) > 1 else 0}) led the reports.{fill_note}</div>
 <div class="tiles">
 <div class="tile" style="background:{BLUE}"><b>{len(wk):,}</b><span>Seizure reports</span><em>{delta(len(wk), len(pv))}</em></div>
 <div class="tile" style="background:{RED}"><b>{len(hi)}</b><span>High risk</span><em>{delta(len(hi), len(phi))}</em></div>
