@@ -33,6 +33,9 @@ INGEST_BUDGET_MIN = float(os.environ.get("INGEST_BUDGET_MIN", "28"))
 # Reading the articles (the slow, network-bound step) must be finished by this minute of the run, so that
 # extraction (until INGEST_BUDGET_MIN) and the rest still fit. Articles not read keep headline + snippet.
 FETCH_DEADLINE_MIN = float(os.environ.get("FETCH_DEADLINE_MIN", "20"))
+# Extraction always gets at least this many minutes from its own start, even when searching and reading ran long.
+# (On 2026-10-21..25 slow searching used the whole INGEST_BUDGET_MIN before extraction began, so 0 articles were stored.)
+INGEST_MIN_MIN = float(os.environ.get("INGEST_MIN_MIN", "8"))
 
 
 def fetch_budget_min(cap=None):
@@ -47,8 +50,10 @@ def ingest(conn, items, is_demo=False):
     stored = relevant = 0
     ner_hits = 0  # how many articles NER supplemented something the lexicon missed
     now = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
+    t_ingest = time.monotonic()
     for n, it in enumerate(items):
-        if not is_demo and time.monotonic() - START > INGEST_BUDGET_MIN * 60:
+        if (not is_demo and time.monotonic() - START > INGEST_BUDGET_MIN * 60
+                and time.monotonic() - t_ingest > INGEST_MIN_MIN * 60):
             log(f"      time budget reached after {n} of {len(items)} articles; the rest are left for the next run")
             break
         if n and n % 50 == 0:

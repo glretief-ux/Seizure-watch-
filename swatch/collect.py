@@ -180,14 +180,25 @@ GDELT_LANGS = {"en": "english", "es": "spanish", "fr": "french", "pt": "portugue
                "am": "amharic", "is": "icelandic", "mn": "mongolian", "no": "norwegian", "sk": "slovak", "sv": "swedish"}
 
 
+_GDELT_FAILS = 0
+GDELT_MAX_FAILS = 4   # after this many failures in a row, skip GDELT for the rest of the run (it is down or blocking us)
+
+
 def gdelt(query, lang, days, maxrec=100):
+    global _GDELT_FAILS
+    if _GDELT_FAILS >= GDELT_MAX_FAILS:
+        return []
     q = f"({query}) sourcelang:{GDELT_LANGS.get(lang, 'english')}"
     url = ("https://api.gdeltproject.org/api/v2/doc/doc?query=" + quote(q) +
            f"&mode=artlist&maxrecords={maxrec}&format=json&sort=datedesc&timespan={days}d")
-    r = _get(url, timeout=40)
+    r = _get(url, timeout=(5, 15))
     time.sleep(6)  # GDELT asks for <= 1 request / 5 s
     if r is None:
+        _GDELT_FAILS += 1
+        if _GDELT_FAILS == GDELT_MAX_FAILS:
+            print(f"   ! GDELT failed {GDELT_MAX_FAILS} times in a row; skipping GDELT for the rest of this run", flush=True)
         return []
+    _GDELT_FAILS = 0
     try:
         arts = r.json().get("articles", [])
     except Exception:
