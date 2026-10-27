@@ -4,36 +4,36 @@
    RSS UK Border Force: 20 items
    ! https://ndlea.gov.ng/feed/... HTTPError
    RSS NDLEA Nigeria: 0 items
-   Official websites (52 searched): 2014 headlines
-      edition MX/es: 81 headlines
-      edition ES/es: 80 headlines
-      edition CO/es: 65 headlines
-      edition FR/fr: 56 headlines
-      edition BR/pt: 159 headlines
-      edition PT/pt: 155 headlines
-      edition SA/ar: 212 headlines
-      edition EG/ar: 213 headlines
-      edition AE/ar: 213 headlines
-      edition TR/tr: 390 headlines
-      edition RU/ru: 199 headlines
-      edition UA/ru: 223 headlines
-      edition CN/zh: 37 headlines
+   Official websites (52 searched): 1906 headlines
+      edition MX/es: 99 headlines
+      edition ES/es: 101 headlines
+      edition CO/es: 105 headlines
+      edition FR/fr: 64 headlines
+      edition BR/pt: 149 headlines
+      edition PT/pt: 141 headlines
+      edition SA/ar: 169 headlines
+      edition EG/ar: 175 headlines
+      edition AE/ar: 174 headlines
+      edition TR/tr: 400 headlines
+      edition RU/ru: 179 headlines
+      edition UA/ru: 180 headlines
+      edition CN/zh: 40 headlines
       edition HK/zh: 15 headlines
-      edition TW/zh: 17 headlines
-      edition IN/hi: 296 headlines
-      edition VN/vi: 194 headlines
-      edition NL/nl: 74 headlines
-      edition BE/nl: 71 headlines
-      edition AT/de: 21 headlines
-      edition DK/da: 4 headlines
+      edition TW/zh: 14 headlines
+      edition IN/hi: 256 headlines
+      edition VN/vi: 170 headlines
+      edition NL/nl: 92 headlines
+      edition BE/nl: 91 headlines
+      edition AT/de: 32 headlines
+      edition DK/da: 9 headlines
       edition EE/et: 0 headlines
       edition ET/am: 0 headlines
       edition IS/is: 0 headlines
       edition MN/mn: 0 headlines
-      edition NO/no: 3 headlines
-      edition SK/sk: 4 headlines
-      edition SE/sv: 3 headlines
-   Google News: 5145 headlines
+      edition NO/no: 6 headlines
+      edition SK/sk: 14 headlines
+      edition SE/sv: 4 headlines
+   Google News: 5607 headlines
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28cocaine%20OR%20heroin%20OR%20metha... ReadTimeout
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28precursor%20chemicals%20OR%20cland... ReadTimeout
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22hazardous%20chemicals%22%20OR%2... ReadTimeout
@@ -59,30 +59,8 @@
       GDELT sk: 0 headlines
       GDELT sv: 0 headlines
    GDELT: 0 headlines
-      1134 candidate headlines, 818 new
+      1157 candidate headlines, 624 new
 [2/4] Reading articles...
-      link resolving stopped at its time limit after 100 of 811; the rest are read from headline + snippet
-      links resolved: 100 of 811
-      read in full: 84; headline + snippet only: 734
-      download problems: HTTPError x19, ReadTimeout x1
-[3/4] Extracting facts and storing...
-      NER supplemented 94 article(s) (unrecognised place names logged to ner_places for review)
-      stored 817, of which 469 are seizure reports
-[4/4] Analysing and building report...
-      attempted 150 older headline(s) that predate this feature (198 translated, 8 failed and kept as-is; last error: _via_google: TooManyRequests: Server Error: You made too many requests to the server.According to google, you are allowed to make 5 requests per secondand up to 200k requests per day. You can wait and try again later oryou can try the translate_batch function)
-      links resolved: 56 of 56
-      read in full: 43; headline + snippet only: 17
-      download problems: HTTPError x15, ConnectTimeout x1
-      re-read 43 of 60 earlier headline-only report(s) in full
-Done. 11303 events in report, 413 alerts.
-Weekly bulletin written (/home/runner/work/Seizure-watch-/Seizure-watch-/docs/bulletin.html).
-Bulletin e-mail: e-mail is not set up (add the SMTP_HOST, SMTP_USER, SMTP_PASS and BULLETIN_TO secrets)
-Open: /home/runner/work/Seizure-watch-/Seizure-watch-/docs/index.html
-  [High  ] HIGH-RISK EVENT: Elephant ivory - Bangkok (score 85)
-  [High  ] HIGH-RISK EVENT: Elephant ivory - Laem Chabang (score 78)
-  [High  ] HIGH-RISK EVENT: Cocaine - Colombia (score 75)
-  [High  ] HIGH-RISK EVENT: NSA - Lithuania (score 75)
-  [High  ] HIGH-RISK EVENT: Hazardous/toxic waste - Thailand (score 73)
-  [High  ] HIGH-RISK EVENT: Methamphetamine - Johor (score 70)
-  [High  ] HIGH-RISK EVENT: Cocaine - OR Tambo / Johannesburg (score 70)
-  [High  ] HIGH-RISK EVENT: Cocaine - OR Tambo / Johannesburg (score 65)
+      link resolving stopped at its time limit after 100 of 621; the rest are read from headline + snippet
+      links resolved: 100 of 621
+free(): invalid pointer
