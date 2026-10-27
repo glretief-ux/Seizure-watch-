@@ -225,6 +225,19 @@ table.mini{border-collapse:collapse;font-size:13px;margin-top:6px}table.mini td{
   <div id="coverList" style="margin-top:10px"></div>
 </div>
 
+<div class="card" id="coverAnCard"><h2>Cover load analysis <span class="small" id="coverAnNote"></span></h2>
+  <div class="small" style="line-height:1.45;margin-bottom:10px">What the cover loads in the block above add up to: which goods were used most, what was hidden in them, where they were seized and how risky those cases were. It uses only the reports that name the goods (see the note above), follows the filters at the top, and is a lead to check, not proof. News coverage favours large and unusual seizures.</div>
+  <ul id="coverAnList" style="margin:4px 0 12px 18px;padding:0;line-height:1.5"></ul>
+  <div class="grid2">
+    <div><h4 style="margin:0 0 6px;font-size:12.5px;color:var(--brand)">What the cover load was (share of goods mentions)</h4><div class="chartbox"><canvas id="cCovPie"></canvas></div></div>
+    <div><h4 style="margin:0 0 6px;font-size:12.5px;color:var(--brand)">Most used goods (number of reports)</h4><div class="chartbox"><canvas id="cCovItems"></canvas></div></div>
+    <div><h4 style="margin:0 0 6px;font-size:12.5px;color:var(--brand)">What was hidden in the cover load (share of reports)</h4><div class="chartbox"><canvas id="cCovDrugPie"></canvas></div></div>
+    <div><h4 style="margin:0 0 6px;font-size:12.5px;color:var(--brand)">Cover load by item seized (stacked)</h4><div class="chartbox"><canvas id="cCovDrugBar"></canvas></div></div>
+    <div><h4 style="margin:0 0 6px;font-size:12.5px;color:var(--brand)">Risk band of each cover load</h4><div class="chartbox"><canvas id="cCovRisk"></canvas></div></div>
+    <div><h4 style="margin:0 0 6px;font-size:12.5px;color:var(--brand)">Where cover loads were seized (top countries)</h4><div class="chartbox"><canvas id="cCovCountry"></canvas></div></div>
+  </div>
+</div>
+
 <div class="grid2">
   <div class="card"><h2>Corridors <span class="small">(all history; trend = last 30 days vs the 30 before)</span></h2><div class="tw" id="corr"></div></div>
   <div class="card"><h2>Seizure hotspots <span class="small">(countries)</span></h2><div class="tw" id="hot"></div></div>
@@ -553,6 +566,70 @@ function coverLoad(v) {
   }).join('');
 }
 
+// ---- Cover load analysis: pie and bar charts plus a plain-language reading of the cover loads in view
+function coverAnalysis(v) {
+  const w = v.filter(e => e.cover_g && e.cover_g.length), n = w.length;
+  const pct = (a, b) => b ? Math.round(100 * a / b) : 0;
+  const PALC = ['#12355b', '#2a6f97', '#c9a227', '#2e8b57', '#e08a00', '#8e5bb5', '#c0392b', '#61a5c2', '#7f8c5a', '#a05a2c', '#5d6d7e', '#d98cb3', '#b8c4d6'];
+  $('coverAnNote').textContent = '(' + n + ' of ' + v.length + ' reports in view name the goods)';
+  const ids = ['cCovPie', 'cCovItems', 'cCovDrugPie', 'cCovDrugBar', 'cCovRisk', 'cCovCountry'];
+  if (!n) {
+    ids.forEach(i => { if (charts[i]) { charts[i].destroy(); delete charts[i]; } });
+    $('coverAnList').innerHTML = '<li>No cover load named in the reports in view. Widen the period or clear a filter.</li>';
+    return;
+  }
+  // 1 group share (a report with two kinds of goods counts once in each)
+  const grp = topN(by(w.flatMap(e => e.cover_g), x => x), 99), gTot = grp.reduce((s, x) => s + x[1], 0);
+  const gTop = grp.slice(0, 7), gRest = grp.slice(7).reduce((s, x) => s + x[1], 0);
+  if (gRest) gTop.push(['Other', gRest]);
+  chart('cCovPie', {type: 'pie', data: {labels: gTop.map(x => x[0] + ' (' + pct(x[1], gTot) + '%)'), datasets: [{data: gTop.map(x => x[1]),
+    backgroundColor: gTop.map((x, i) => x[0] === 'Other' ? '#b8c4d6' : PALC[i % PALC.length])}]},
+    options: {plugins: {legend: {position: 'right', labels: {boxWidth: 12, font: {size: 11}}}}}});
+  // 2 individual goods
+  const items = topN(by(w.flatMap(e => (e.cover || '').split('; ').filter(x => GOODS_OF[x])), x => x), 12);
+  hbar('cCovItems', items, '#12355b', true);
+  // 3 drugs / items found in cover loads
+  const drugs = topN(by(w, e => e.drug), 99), dTop = drugs.slice(0, 6), dRest = drugs.slice(6).reduce((s, x) => s + x[1], 0);
+  if (dRest) dTop.push(['Other', dRest]);
+  chart('cCovDrugPie', {type: 'pie', data: {labels: dTop.map(x => x[0] + ' (' + pct(x[1], n) + '%)'), datasets: [{data: dTop.map(x => x[1]),
+    backgroundColor: dTop.map(x => x[0] === 'Other' ? '#b8c4d6' : col(x[0]))}]},
+    options: {plugins: {legend: {position: 'right', labels: {boxWidth: 12, font: {size: 11}}}}}});
+  // 4 stacked bars: cover group x item seized (top 8 groups, top 5 items)
+  const g8 = grp.slice(0, 8).map(x => x[0]), d5 = drugs.slice(0, 5).map(x => x[0]);
+  const sets = d5.map(d => ({label: d, backgroundColor: col(d), data: g8.map(g => w.filter(e => e.drug === d && e.cover_g.includes(g)).length)}));
+  const oth = g8.map(g => w.filter(e => !d5.includes(e.drug) && e.cover_g.includes(g)).length);
+  if (oth.some(x => x)) sets.push({label: 'Other', backgroundColor: '#b8c4d6', data: oth});
+  chart('cCovDrugBar', {type: 'bar', data: {labels: g8.map(g => g.length > 22 ? g.slice(0, 20) + '...' : g), datasets: sets},
+    options: {indexAxis: 'y', scales: {x: {stacked: true, beginAtZero: true, ticks: {precision: 0}}, y: {stacked: true, ticks: {autoSkip: false}}},
+      plugins: {legend: {position: 'bottom', labels: {boxWidth: 10, font: {size: 10}}}}}});
+  // 5 risk band per group
+  const BANDC = {High: '#c0392b', Medium: '#e08a00', Low: '#2e8b57'};
+  chart('cCovRisk', {type: 'bar', data: {labels: g8.map(g => g.length > 22 ? g.slice(0, 20) + '...' : g),
+    datasets: ['High', 'Medium', 'Low'].map(b => ({label: b, backgroundColor: BANDC[b], data: g8.map(g => w.filter(e => e.band === b && e.cover_g.includes(g)).length)}))},
+    options: {indexAxis: 'y', scales: {x: {stacked: true, beginAtZero: true, ticks: {precision: 0}}, y: {stacked: true, ticks: {autoSkip: false}}},
+      plugins: {legend: {position: 'bottom', labels: {boxWidth: 10, font: {size: 10}}}}}});
+  // 6 seizure countries
+  const ctry = topN(by(w, e => e.country), 10);
+  hbar('cCovCountry', ctry, '#2a6f97', true);
+  // plain-language reading
+  const L = [], hi = w.filter(e => e.band === 'High').length;
+  L.push('<b>' + esc(grp[0][0]) + '</b> was the most common cover load: ' + grp[0][1] + ' of the ' + n + ' reports that name the goods (' + pct(grp[0][1], n) + '%)' +
+    (grp[1] ? ', followed by ' + esc(grp[1][0]) + ' (' + pct(grp[1][1], n) + '%)' : '') + (grp[2] ? ' and ' + esc(grp[2][0]) + ' (' + pct(grp[2][1], n) + '%).' : '.'));
+  if (items[0]) L.push('The single most named goods were <b>' + esc(items[0][0]) + '</b> (' + items[0][1] + ')' + (items[1] ? ', ' + esc(items[1][0]) + ' (' + items[1][1] + ')' : '') + (items[2] ? ' and ' + esc(items[2][0]) + ' (' + items[2][1] + ')' : '') +
+    '. Compare these against the declared trade of the shipper and consignee: goods that do not fit the company or the route are the lead.');
+  if (drugs[0]) L.push('Cover loads most often hid <b>' + esc(drugs[0][0]) + '</b> (' + pct(drugs[0][1], n) + '% of these reports)' + (drugs[1] ? ', then ' + esc(drugs[1][0]) + ' (' + pct(drugs[1][1], n) + '%)' : '') + '.');
+  // which group leans most toward one item (needs at least 4 reports)
+  let lean = null;
+  grp.filter(g => g[1] >= 4).forEach(([g]) => { const ev = w.filter(e => e.cover_g.includes(g)), top = topN(by(ev, e => e.drug), 1)[0], s = top[1] / ev.length;
+    if (!lean || s > lean.s) lean = {g, d: top[0], s, n: ev.length}; });
+  if (lean && lean.s >= 0.5) L.push('<b>' + esc(lean.g) + '</b> leans strongly one way: ' + pct(lean.s * lean.n, lean.n) + '% of its ' + lean.n + ' reports involved ' + esc(lean.d) + '.');
+  // riskiest group (needs at least 4 reports)
+  const riskG = grp.filter(g => g[1] >= 4).map(([g, c]) => { const ev = w.filter(e => e.cover_g.includes(g)); return {g, c, avg: ev.reduce((s, e) => s + (e.score || 0), 0) / ev.length, hi: ev.filter(e => e.band === 'High').length}; }).sort((a, b) => b.avg - a.avg);
+  if (riskG[0]) L.push('Overall ' + pct(hi, n) + '% of these cases are High risk. The highest average risk score is for <b>' + esc(riskG[0].g) + '</b> (' + riskG[0].avg.toFixed(0) + ', ' + riskG[0].hi + ' of ' + riskG[0].c + ' High).');
+  if (ctry[0]) { const t3 = ctry.slice(0, 3); L.push('Cover loads were seized most in <b>' + t3.map(x => esc(x[0])).join(', ') + '</b> (' + pct(t3.reduce((s, x) => s + x[1], 0), n) + '% of these reports).'); }
+  $('coverAnList').innerHTML = L.map(x => '<li style="margin:6px 0">' + x + '</li>').join('');
+}
+
 function staticTables() {
   $('corr').innerHTML = D.corridors.length ? '<table><tr><th>Corridor</th><th>Trend</th><th>30d</th><th>Prev 30d</th><th>Total</th><th>Main drug</th><th>Avg risk</th></tr>' +
     D.corridors.slice(0, 25).map(c => '<tr><td>' + esc(c.corridor) + '</td><td><span class="chip ' + esc(c.trend) + '">' + esc(c.trend) + '</span></td><td>' + c.events_recent + '</td><td>' + c.events_prior + '</td><td>' + c.events_total + '</td><td>' + esc(c.top_drug) + '</td><td>' + c.avg_risk + '</td></tr>').join('') + '</table>' : '<div class="small">No corridors with a known origin/destination yet.</div>';
@@ -591,7 +668,7 @@ function render() {
   kpis(v); timeChart(v);
   hbar('cConc', topN(by(v.flatMap(e => e.conceal ? e.conceal.split('; ') : []), x => x), 10), '#2a6f97');
   hbar('cCorr', topN(by(v, e => e.corridor), 10), '#12355b');
-  mode(v); matrix(v); coverLoad(v); evTable(v); drawMap(v); inferences(v); routeInferences(v);
+  mode(v); matrix(v); coverLoad(v); coverAnalysis(v); evTable(v); drawMap(v); inferences(v); routeInferences(v);
 }
 
 // ---- "What this data suggests": a plain-language reading of the events in view, with a pie and a column chart
