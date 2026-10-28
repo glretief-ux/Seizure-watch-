@@ -4,36 +4,36 @@
    RSS UK Border Force: 20 items
    ! https://ndlea.gov.ng/feed/... HTTPError
    RSS NDLEA Nigeria: 0 items
-   Official websites (52 searched): 1906 headlines
-      edition MX/es: 99 headlines
-      edition ES/es: 101 headlines
-      edition CO/es: 105 headlines
-      edition FR/fr: 64 headlines
-      edition BR/pt: 149 headlines
-      edition PT/pt: 141 headlines
-      edition SA/ar: 169 headlines
-      edition EG/ar: 175 headlines
-      edition AE/ar: 174 headlines
-      edition TR/tr: 400 headlines
-      edition RU/ru: 179 headlines
-      edition UA/ru: 180 headlines
-      edition CN/zh: 40 headlines
-      edition HK/zh: 15 headlines
-      edition TW/zh: 14 headlines
-      edition IN/hi: 256 headlines
-      edition VN/vi: 170 headlines
-      edition NL/nl: 92 headlines
-      edition BE/nl: 91 headlines
-      edition AT/de: 32 headlines
-      edition DK/da: 9 headlines
+   Official websites (52 searched): 1850 headlines
+      edition MX/es: 114 headlines
+      edition ES/es: 96 headlines
+      edition CO/es: 93 headlines
+      edition FR/fr: 79 headlines
+      edition BR/pt: 226 headlines
+      edition PT/pt: 184 headlines
+      edition SA/ar: 193 headlines
+      edition EG/ar: 176 headlines
+      edition AE/ar: 188 headlines
+      edition TR/tr: 399 headlines
+      edition RU/ru: 211 headlines
+      edition UA/ru: 165 headlines
+      edition CN/zh: 32 headlines
+      edition HK/zh: 17 headlines
+      edition TW/zh: 16 headlines
+      edition IN/hi: 297 headlines
+      edition VN/vi: 189 headlines
+      edition NL/nl: 124 headlines
+      edition BE/nl: 111 headlines
+      edition AT/de: 42 headlines
+      edition DK/da: 10 headlines
       edition EE/et: 0 headlines
       edition ET/am: 0 headlines
       edition IS/is: 0 headlines
       edition MN/mn: 0 headlines
-      edition NO/no: 6 headlines
-      edition SK/sk: 14 headlines
-      edition SE/sv: 4 headlines
-   Google News: 5607 headlines
+      edition NO/no: 5 headlines
+      edition SK/sk: 17 headlines
+      edition SE/sv: 2 headlines
+   Google News: 6192 headlines
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28cocaine%20OR%20heroin%20OR%20metha... ReadTimeout
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28precursor%20chemicals%20OR%20cland... ReadTimeout
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22hazardous%20chemicals%22%20OR%2... ReadTimeout
@@ -59,8 +59,7 @@
       GDELT sk: 0 headlines
       GDELT sv: 0 headlines
    GDELT: 0 headlines
-      1157 candidate headlines, 624 new
+      1344 candidate headlines, 1263 new
 [2/4] Reading articles...
-      link resolving stopped at its time limit after 100 of 621; the rest are read from headline + snippet
-      links resolved: 100 of 621
-free(): invalid pointer
+      link resolving stopped at its time limit after 75 of 1254; the rest are read from headline + snippet
+      links resolved: 75 of 1254
