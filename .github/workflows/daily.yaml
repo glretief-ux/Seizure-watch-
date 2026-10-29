@@ -34,7 +34,13 @@ jobs:
       - run: pip install -r requirements.txt
       - run: python -m spacy download en_core_web_sm
       - name: Collect, analyse, build the dashboard and bulletin
-        run: python -u run_daily.py --days "${{ github.event.inputs.days || '2' }}" ${{ github.event.inputs.send_bulletin == 'true' && '--send-bulletin' || '' }} 2>&1 | tee run.log
+        run: |
+          set +e
+          python -X faulthandler -u run_daily.py --days "${{ github.event.inputs.days || '2' }}" ${{ github.event.inputs.send_bulletin == 'true' && '--send-bulletin' || '' }} 2>&1 | tee run.log
+          code=${PIPESTATUS[0]}
+          echo "run_daily.py exit code: $code" | tee -a run.log
+          echo "$code" > run.exit
+          exit 0
         env:
           # optional: only needed to e-mail the weekly bulletin (add them under Settings > Secrets and variables > Actions)
           SMTP_HOST: ${{ secrets.SMTP_HOST }}
@@ -67,3 +73,8 @@ jobs:
           git add data/seizure_watch.db docs board
           git diff --cached --quiet || git commit -m "Daily update $(date -u +%F)"
           git push || (git pull --rebase --autostash -X theirs origin main && git push)
+      - name: Fail the run if the collection crashed (so it is not reported as a success)
+        if: always()
+        run: |
+          code=$(cat run.exit 2>/dev/null || echo missing)
+          if [ "$code" != "0" ]; then echo "run_daily.py exit code: $code"; exit 1; fi

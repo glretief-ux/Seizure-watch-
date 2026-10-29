@@ -41,8 +41,42 @@ INGEST_MIN_MIN = float(os.environ.get("INGEST_MIN_MIN", "8"))
 def fetch_budget_min(cap=None):
     """Minutes left for reading articles: until FETCH_DEADLINE_MIN of the run, never more than `cap`."""
     left = FETCH_DEADLINE_MIN - (time.monotonic() - START) / 60
-    left = max(1.0, left)
+    left = max(FETCH_MIN_MIN, left)   # slow searching must not squeeze reading down to ~1 minute (as on 2026-10-27/28)
     return min(left, cap) if cap else left
+
+
+FETCH_MIN_MIN = float(os.environ.get("FETCH_MIN_MIN", "4"))
+
+
+def fetch_isolated(items, resolve, budget_min):
+    """Read the articles in a child process. On 2026-10-27 and 28 the interpreter died silently (no traceback)
+    while reading, which lost the whole day's data. A crash in the child now only costs the full text: the
+    articles keep headline + snippet and the run goes on to extraction, analysis and 'Save results'."""
+    import json
+    import subprocess
+    import tempfile
+    tmp = tempfile.mkdtemp(prefix="sw_fetch_")
+    fin, fout = os.path.join(tmp, "in.json"), os.path.join(tmp, "out.json")
+    with open(fin, "w", encoding="utf-8") as f:
+        json.dump(items, f, default=str)
+    cmd = [sys.executable, "-X", "faulthandler", os.path.abspath(__file__), "--fetch-child", fin, fout,
+           str(budget_min), "1" if resolve else "0"]
+    try:
+        r = subprocess.run(cmd, timeout=budget_min * 60 + 180)
+        code = r.returncode
+    except subprocess.TimeoutExpired:
+        code = "timeout"
+    if code == 0 and os.path.exists(fout):
+        try:
+            with open(fout, encoding="utf-8") as f:
+                return json.load(f)
+        except Exception as exc:
+            log(f"      reading step output unreadable ({type(exc).__name__}: {exc})")
+    else:
+        log(f"      ! article reading crashed or timed out (exit {code}); using headline + snippet for this run")
+    for i in items:
+        i["text"], i["text_mode"] = i.get("snippet", ""), "snippet"
+    return items
 
 
 def ingest(conn, items, is_demo=False):
@@ -141,7 +175,20 @@ def reread_snippets(conn, cfg, limit=60, days=3):
     return done, len(items)
 
 
+def fetch_child(argv):
+    import json
+    fin, fout, budget, resolve = argv
+    with open(fin, encoding="utf-8") as f:
+        items = json.load(f)
+    items = collect.fetch_all(items, resolve == "1", budget_min=float(budget))
+    with open(fout, "w", encoding="utf-8") as f:
+        json.dump(items, f)
+    return 0
+
+
 def main():
+    if len(sys.argv) > 1 and sys.argv[1] == "--fetch-child":
+        return fetch_child(sys.argv[2:])
     ap = argparse.ArgumentParser()
     ap.add_argument("--config", default=os.path.join(HERE, "config.yaml"))
     ap.add_argument("--demo", action="store_true", help="use invented sample articles (offline)")
@@ -175,7 +222,7 @@ def main():
         log(f"      {len(items)} candidate headlines, {len(new)} new")
         log("[2/4] Reading articles...")
         if cfg["run"]["fetch_full_text"]:
-            new = collect.fetch_all(new, cfg["run"]["resolve_google_links"], budget_min=fetch_budget_min(cap=14))
+            new = fetch_isolated(new, cfg["run"]["resolve_google_links"], fetch_budget_min(cap=14))
         else:
             for i in new:
                 i["text"], i["text_mode"] = i.get("snippet", ""), "snippet"
