@@ -1,14 +1,14 @@
 SEIZURE WATCH - weekly bulletin, 23 Oct - 29 Oct 2026
 
-1302 seizure reports this week (previous week 1795); 69 high risk; 263.5 t reported.
-Main drugs: Cannabis (322), Cocaine (252), Heroin/Opium (126)
-Main countries: India (220), Brazil (183), United States (141), Turkey (130)
+1522 seizure reports this week (previous week 1795); 86 high risk; 309.2 t reported.
+Main drugs: Cannabis (384), Cocaine (293), NSA (160)
+Main countries: India (253), Brazil (218), United States (159), Turkey (149)
 
 NEW AND SURGING CORRIDORS
 - Thailand -> India: SURGING (20 this period, 10 before; mainly Cannabis)
-- Myanmar -> India: SURGING (9 this period, 3 before; mainly Methamphetamine)
+- Myanmar -> India: SURGING (10 this period, 3 before; mainly Methamphetamine)
+- United States -> Egypt: SURGING (9 this period, 1 before; mainly Cannabis)
 - United States -> Canada: SURGING (8 this period, 2 before; mainly Cocaine)
-- United States -> Egypt: SURGING (8 this period, 1 before; mainly Cannabis)
 - Israel -> Jordan: NEW (7 this period, 0 before; mainly Cannabis)
 - Zambia -> Thailand: NEW (6 this period, 0 before; mainly Elephant ivory)
 
@@ -23,11 +23,11 @@ UNUSUAL EVENTS (highest risk first)
   https://news.google.com/rss/articles/CBMiYkFVX3lxTE5QQUptajRPM3B2UGZTNnE0Y3BJUW0yMzN6dXd4U24tSkVOelZ1amdEa1h5bWZWaVR5T0M2Nnc2NmtkTFNnWmgzSWRkcFduaVpRWHF4ZUxJWnhDSGpDeDlQRDR3?oc=5
 - [High 75] 23 Oct | NSA | 1.1 t | Medan | Thailand -> Indonesia | Legitimate cargo (industrial/goods) | vessel: Global 168
   https://www.bangkokpost.com/world/3342333/indonesia-seizes-11-tonnes-of-ketamine-at-sea
-- [High 75] 25 Oct | NSA | 800 kg | Lithuania | China -> Czech Republic | Legitimate cargo (industrial/goods)
-  https://tvpworld.com/96118229/polish-police-tip-off-helps-bust-massive-drug-lab-in-lithuania
+- [High 75] 28 Oct | Methamphetamine | 971 kg | San Bernardino | Mexico -> United States | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods)
+  https://www.bakersfield.com/news/national-first-responders-day-kern-county-sheriff-s-office-kc-hidta-drug-task-force-dismantles/article_6cdb6bc8-4756-4166-9abc-9b2446d1266d.amp.html
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (168), Luggage / passenger goods (44), Postal / parcel (33)
-Cover cargo named: aluminium (5), fish (5), furniture (4), timber (4), fruit (4)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (232), Luggage / passenger goods (51), Legitimate cargo (food/produce) (50)
+Cover cargo named: toys (5), aluminium (5), fish (5), cocoa (5), tiles & ceramics (5)
 
 Coverage: searching 20 languages (Amharic, Arabic, Danish, German, English, Spanish, Estonian, French, Hindi, Icelandic, Mongolian, Dutch, Norwegian, Portuguese, Russian, Slovak, Swedish, Turkish, Vietnamese, Chinese). 35 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Azerbaijan, Bangladesh, Bosnia and Herzegovina).
 Leads from open sources, not confirmed facts. Verify before acting.
