@@ -1156,14 +1156,16 @@ fetch('https://gertberi.goatcounter.com/counter/TOTAL.json')
 </script>
 <!-- BYTE-HELPER-START: "Ask Byte" help button, question box and clip. Included by report.build_dashboard (marker __BYTE__). -->
 <style>
-#byteBtn{position:fixed;right:16px;bottom:16px;z-index:9998;display:flex;align-items:center;gap:8px;padding:10px 16px;border:0;border-radius:999px;background:#12355b;color:#fff;font:600 14px/1 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;box-shadow:0 4px 14px rgba(18,53,91,.35);cursor:pointer}
+#byteBtn{position:fixed;right:12px;bottom:10px;z-index:9998;display:flex;flex-direction:column;align-items:center;padding:0;border:0;background:none;cursor:pointer;font:600 13px/1 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;-webkit-tap-highlight-color:transparent;animation:byPop .9s cubic-bezier(.2,.9,.3,1.3) .5s both}
+#byteBtn .bz{width:92px;height:100px;display:block;overflow:visible;filter:drop-shadow(0 6px 8px rgba(18,53,91,.25));transition:transform .2s}
+#byteBtn:hover .bz,#byteBtn:focus-visible .bz{transform:scale(1.08) rotate(-3deg)}
+#byteBtn .blab{margin-top:-6px;background:#12355b;color:#fff;border-radius:999px;padding:7px 13px;box-shadow:0 4px 12px rgba(18,53,91,.35);white-space:nowrap}
 #byteBtn:focus-visible,#byteBox button:focus-visible,#byteQ:focus-visible{outline:3px solid #5b8def;outline-offset:2px}
 .bd{width:22px;height:22px;border-radius:7px;background:#5b8def;border:2px solid #3460c4;position:relative;display:inline-block;flex:0 0 auto}
 .bd:before,.bd:after{content:"";position:absolute;top:6px;width:4px;height:6px;border-radius:2px;background:#7df9ff}
 .bd:before{left:3px}.bd:after{right:3px}
-#byteBtn .bd{background:#5b8def}
-#byteNudge{position:fixed;right:20px;bottom:68px;z-index:9998;max-width:240px;background:#fff;color:#1c2733;border:1px solid #cbd5e1;border-radius:14px;padding:10px 12px;font:13px/1.4 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;box-shadow:0 4px 14px rgba(0,0,0,.15);cursor:pointer}
-#byteNudge:after{content:"";position:absolute;right:34px;bottom:-8px;width:14px;height:14px;background:#fff;border-right:1px solid #cbd5e1;border-bottom:1px solid #cbd5e1;transform:rotate(45deg)}
+#byteNudge{position:fixed;right:18px;bottom:150px;z-index:9998;max-width:240px;background:#fff;color:#1c2733;border:1px solid #cbd5e1;border-radius:14px;padding:10px 12px;font:13px/1.4 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;box-shadow:0 4px 14px rgba(0,0,0,.15);cursor:pointer}
+#byteNudge:after{content:"";position:absolute;right:62px;bottom:-8px;width:14px;height:14px;background:#fff;border-right:1px solid #cbd5e1;border-bottom:1px solid #cbd5e1;transform:rotate(45deg)}
 #byteModal{position:fixed;inset:0;z-index:9999;background:rgba(15,23,42,.6);display:flex;align-items:center;justify-content:center;padding:12px}
 #byteModal[hidden],#byteNudge[hidden],#byteVidBox[hidden]{display:none}
 #byteBox{background:#fff;border-radius:12px;max-width:640px;width:100%;max-height:96vh;overflow:auto;box-shadow:0 10px 40px rgba(0,0,0,.4);font:14px/1.45 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#1c2733}
@@ -1189,9 +1191,51 @@ fetch('https://gertberi.goatcounter.com/counter/TOTAL.json')
 #byteVidTog{background:#fff;color:#12355b;border:1px solid #b6c6dd;padding:7px 14px;width:100%}
 #byteBox video{display:block;width:100%;background:#e8eef8;border-radius:8px;margin-top:8px}
 #byteBox .bnote{padding:10px 16px 14px;font-size:12px;color:#66758a}
-@media (prefers-reduced-motion:reduce){#byteBtn,#byteNudge{transition:none}}
+@keyframes byPop{0%{transform:translateY(160px) scale(.7);opacity:0}100%{transform:none;opacity:1}}
+@keyframes byFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes byShadow{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.78)}}
+@keyframes byHop{0%,84%,100%{transform:none}88%{transform:scale(1.07,.9)}93%{transform:translateY(-16px) scale(.95,1.08)}97%{transform:scale(1.06,.93)}}
+@keyframes byHey{0%,100%{transform:none}40%{transform:translateY(-18px) scale(.96,1.07)}70%{transform:scale(1.06,.93)}}
+@keyframes byBlink{0%,92%,100%{transform:scaleY(1)}95.5%{transform:scaleY(.08)}}
+@keyframes byLook{0%,35%,100%{transform:translateX(0)}42%,58%{transform:translateX(-3px)}66%,84%{transform:translateX(3px)}}
+@keyframes byAnt{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
+@keyframes byBall{0%,100%{fill:#ef4444}50%{fill:#fbbf24}}
+@keyframes byWave{0%,68%,100%{transform:rotate(0)}72%{transform:rotate(-50deg)}76%{transform:rotate(-15deg)}80%{transform:rotate(-50deg)}84%{transform:rotate(-15deg)}88%{transform:rotate(-45deg)}94%{transform:rotate(0)}}
+@keyframes byDot{0%,60%,100%{transform:translateY(0);opacity:.35}30%{transform:translateY(-4px);opacity:1}}
+@keyframes byMsg{from{transform:translateY(6px);opacity:0}to{transform:none;opacity:1}}
+@keyframes byBox{from{transform:translateY(16px) scale(.97);opacity:0}to{transform:none;opacity:1}}
+.bhop{animation:byHop 10s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+#byteBtn.hey .bhop{animation:byHey .7s ease-in-out infinite}
+.bfloat{animation:byFloat 3.2s ease-in-out infinite}
+.bshadow{animation:byShadow 3.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.beyes{animation:byLook 8s ease-in-out infinite}
+.beye,.bd:before,.bd:after{transform-box:fill-box;transform-origin:center;animation:byBlink 4.4s infinite}
+.bant{transform-box:fill-box;transform-origin:50% 100%;animation:byAnt 1.9s ease-in-out infinite}
+.bball{animation:byBall 1.6s ease-in-out infinite}
+.barmR{transform-box:fill-box;transform-origin:0% 50%;animation:byWave 9s ease-in-out infinite}
+.bm{animation:byMsg .25s ease}
+#byteBox{animation:byBox .22s ease}
+.btyp span{display:inline-block;width:7px;height:7px;margin:4px 2px;border-radius:50%;background:#12355b;animation:byDot 1s infinite}
+.btyp span:nth-child(2){animation-delay:.15s}.btyp span:nth-child(3){animation-delay:.3s}
+@media (max-width:480px){#byteBtn .bz{width:72px;height:78px}#byteNudge{bottom:128px}}
+@media (prefers-reduced-motion:reduce){#byteBtn,.bhop,.bfloat,.bshadow,.beyes,.beye,.bant,.bball,.barmR,.bm,#byteBox,.btyp span,.bd:before,.bd:after{animation:none!important}}
 </style>
-<button type="button" id="byteBtn" aria-haspopup="dialog" aria-controls="byteModal"><span class="bd" aria-hidden="true"></span>Need help? Ask Byte</button>
+<button type="button" id="byteBtn" aria-haspopup="dialog" aria-controls="byteModal" aria-label="Need help? Ask Byte">
+<svg class="bz" viewBox="0 0 120 130" aria-hidden="true" focusable="false">
+ <ellipse class="bshadow" cx="60" cy="122" rx="34" ry="5" fill="rgba(15,23,42,.2)"/>
+ <g class="bhop"><g class="bfloat">
+  <g class="bant"><line x1="60" y1="24" x2="60" y2="10" stroke="#3460c4" stroke-width="4" stroke-linecap="round"/><circle class="bball" cx="60" cy="8" r="6.5" fill="#ef4444" stroke="#3460c4" stroke-width="2"/></g>
+  <path d="M30 80 L22 110 L58 86 Z" fill="#5b8def" stroke="#3460c4" stroke-width="3" stroke-linejoin="round"/>
+  <g><line x1="24" y1="62" x2="9" y2="72" stroke="#4a78d6" stroke-width="5" stroke-linecap="round"/><circle cx="8" cy="73" r="6" fill="#4a78d6" stroke="#3460c4" stroke-width="2"/></g>
+  <g class="barmR"><line x1="96" y1="62" x2="111" y2="72" stroke="#4a78d6" stroke-width="5" stroke-linecap="round"/><circle cx="112" cy="73" r="6" fill="#4a78d6" stroke="#3460c4" stroke-width="2"/></g>
+  <rect x="22" y="22" width="76" height="66" rx="22" fill="#5b8def" stroke="#3460c4" stroke-width="3"/>
+  <line x1="31" y1="31" x2="47" y2="28" stroke="#a0bffa" stroke-width="3.5" stroke-linecap="round"/>
+  <rect x="30" y="32" width="60" height="44" rx="14" fill="#14213d"/>
+  <g class="beyes"><rect class="beye" x="41" y="42" width="11" height="18" rx="5.5" fill="#7df9ff"/><rect class="beye" x="68" y="42" width="11" height="18" rx="5.5" fill="#7df9ff"/></g>
+  <ellipse cx="38" cy="67" rx="5" ry="3" fill="#f9a8d4"/><ellipse cx="82" cy="67" rx="5" ry="3" fill="#f9a8d4"/>
+  <path d="M53 66 Q60 71 67 66" fill="none" stroke="#7df9ff" stroke-width="2.5" stroke-linecap="round"/>
+ </g></g>
+</svg><span class="blab">Need help? Ask Byte</span></button>
 <div id="byteNudge" hidden role="status">Not sure where to start? Tap here and ask Byte.</div>
 <div id="byteModal" hidden role="dialog" aria-modal="true" aria-labelledby="byteTitle">
   <div id="byteBox">
@@ -1482,6 +1526,7 @@ fetch('https://gertberi.goatcounter.com/counter/TOTAL.json')
   /* ---------- chat window ---------- */
   function scrollLog(){log.scrollTop=log.scrollHeight;}
   function addUser(t){var d=document.createElement('div');d.className='bm u';var b=document.createElement('div');b.className='bb';b.textContent=t;d.appendChild(b);log.appendChild(d);scrollLog();}
+  function addTyping(){var d=document.createElement('div');d.className='bm';d.setAttribute('aria-hidden','true');d.innerHTML='<span class="bd"></span><div class="bb btyp"><span></span><span></span><span></span></div>';log.appendChild(d);scrollLog();return d;}
   function addByte(html,acts){
     var d=document.createElement('div');d.className='bm';
     d.innerHTML='<span class="bd" aria-hidden="true"></span><div class="bb">'+html+'</div>';
@@ -1492,12 +1537,14 @@ fetch('https://gertberi.goatcounter.com/counter/TOTAL.json')
   function ask(q){
     q=(q||'').trim();if(!q)return;
     addUser(q);var dm=null;try{dm=dataAnswer(q);}catch(err){dm=null;}var m=dm?null:best(q);
+    var typ=addTyping();
     setTimeout(function(){
+      if(typ.parentNode)typ.parentNode.removeChild(typ);
       if(dm){addByte(dm.a,dm.act);}
       else if(m){addByte(m.a,m.act);}
       else{var acts=[];if(q.length<=60){acts.push(A('Search the events for "'+q+'"',function(){setQ(q);go(top);}));}
         addByte('<p>I don\'t have an answer for that one yet. I can help with the filters, searching, the map, risk scores, the watchlist, alerts, the events table, where the data comes from and its languages.</p><p>You can also search the events for your words.</p>',acts);}
-    },250);}
+    },700);}
   form.addEventListener('submit',function(e){e.preventDefault();var q=inp.value;inp.value='';ask(q);});
   STARTERS.forEach(function(s){var b=document.createElement('button');b.type='button';b.textContent=s[0];b.addEventListener('click',function(){ask(s[1]);});chips.appendChild(b);});
   vtog.addEventListener('click',function(){var open=vbox.hidden;vbox.hidden=!open;vtog.setAttribute('aria-expanded',open?'true':'false');
@@ -1505,7 +1552,7 @@ fetch('https://gertberi.goatcounter.com/counter/TOTAL.json')
     if(open){try{vbox.scrollIntoView({block:'nearest'});}catch(e){}}else{try{vid.pause();}catch(e){}}});
 
   /* ---------- open / close ---------- */
-  function hideNudge(){nudge.hidden=true;}
+  function hideNudge(){nudge.hidden=true;btn.classList.remove('hey');}
   function openH(){hideNudge();lastFocus=document.activeElement;modal.hidden=false;
     if(!greeted){greeted=true;addByte('<p>Hi, I\'m Byte! Ask me how to use this dashboard, or tap one of the questions below.</p>',[]);}
     if(!(window.matchMedia&&matchMedia('(pointer:coarse)').matches)){inp.focus();}else{closeB.focus();}}
@@ -1521,7 +1568,7 @@ fetch('https://gertberi.goatcounter.com/counter/TOTAL.json')
   var seen=false;try{seen=sessionStorage.getItem('byteNudged')==='1';}catch(e){}
   if(!seen){
     var idle=null,done=false;
-    function show(){done=true;nudge.hidden=false;try{sessionStorage.setItem('byteNudged','1');}catch(e){}setTimeout(hideNudge,14000);}
+    function show(){done=true;nudge.hidden=false;btn.classList.add('hey');try{sessionStorage.setItem('byteNudged','1');}catch(e){}setTimeout(hideNudge,14000);}
     function arm(){if(done)return;clearTimeout(idle);idle=setTimeout(show,25000);}
     ['click','keydown','scroll','touchstart'].forEach(function(ev){window.addEventListener(ev,arm,{passive:true});});
     arm();
