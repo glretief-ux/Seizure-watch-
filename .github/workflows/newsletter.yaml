@@ -10,6 +10,7 @@ on:
   push:
     paths:
       - .github/workflows/newsletter.yaml
+      - scripts/build_newsletter.py
 
 permissions:
   contents: write
