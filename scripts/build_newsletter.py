@@ -231,9 +231,7 @@ def main():
     latest = max(r["Date"] for r in rows if r["Date"])
     end = dt.date.fromisoformat(sys.argv[1]) if len(sys.argv) > 1 and sys.argv[1] else dt.date.fromisoformat(latest)
     if not (len(sys.argv) > 1 and sys.argv[1]):   # no date given: skip a newest day that is still being collected
-        per_day = collections.Counter(r["Date"] for r in rows if r["Date"] >= (end - dt.timedelta(days=8)).isoformat())
-        typical = sorted(v for d, v in per_day.items() if d < latest)[len(per_day) // 2:][:1]
-        if typical and per_day[latest] < 0.6 * typical[0]:
+        if end >= dt.datetime.now(dt.timezone.utc).date():   # today's reports are still coming in
             end -= dt.timedelta(days=1)
     start = end - dt.timedelta(days=6)
     pend, pstart = start - dt.timedelta(days=1), start - dt.timedelta(days=7)
