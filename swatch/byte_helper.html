@@ -54,7 +54,7 @@
         </video>
       </div>
     </div>
-    <div class="bnote">I'm not a live AI. I answer from a built-in list of questions about this dashboard, so short, simple questions work best. Everything on this page is a lead to verify, not proof.</div>
+    <div class="bnote">I'm not a live AI. I answer from a built-in list of questions and I can count and rank the reports in this dashboard's data, so short, simple questions work best. Everything on this page is a lead to verify, not proof.</div>
   </div>
 </div>
 <script>
@@ -71,7 +71,8 @@
     for(var i=0;i<h.length;i++){if(h[i].textContent.replace(/\s+/g,' ').trim().toLowerCase().indexOf(t)===0)return h[i].closest('.card');}return null;}
   function setSel(id,v){var e=g(id);if(!e)return;e.value=v;e.dispatchEvent(new Event('change',{bubbles:true}));}
   function setQ(v){var e=g('fQ');if(!e)return;e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}
-  function resetFilters(){setQ('');setSel('fCategory','');setSel('fDrug','');setSel('fBand','');setSel('fMode','');setSel('fDays','90');
+  function clearCard(){try{window.cardFilter=null;window.cardName='';if(typeof showCardBar==='function')showCardBar();}catch(err){}}
+  function resetFilters(){clearCard();setQ('');setSel('fCategory','');setSel('fDrug','');setSel('fBand','');setSel('fMode','');setSel('fDays','90');
     var c=g('fInfraClearBtn');if(c)c.click();}
   function go(find,focusId){closeH(true);
     setTimeout(function(){var el=find();if(!el)return;
@@ -92,7 +93,7 @@
   /* ---------- the built-in answers ---------- */
   var E=[
    {k:['who are you','what are you','what can you do','are you ai','are you a bot','chatbot','byte','about you'],
-    a:'<p>I\'m Byte, the helper for this dashboard. I\'m not a live AI model: I answer from a built-in list of questions about how Seizure Watch works, and I can jump to a section or set a filter for you.</p><p>Ask in simple words, or tap one of the questions below.</p>',act:[toFilters]},
+    a:'<p>I\'m Byte, the helper for this dashboard. I\'m not a live AI model: I answer from a built-in list of questions about how Seizure Watch works, and I can jump to a section or set a filter for you.</p><p>I can also count and rank the reports in the data, for example <i>how many seizures last week?</i> or <i>which country had the biggest drug seizure?</i></p>',act:[toFilters]},
    {k:['where do i start','where to start','start','begin','what do i do','~how do i use','~how to use','help','lost','confused','dont know','getting started','first time','new here','~how does this work','~how it works'],
     a:'<p>A quick way in:</p><ul><li><b>Filter</b> with the boxes at the top (category, type, risk, period, transport) or type a route or place in the search box.</li><li><b>Check the Alerts</b> to see what stands out.</li><li><b>Open the Route map</b> and tap a line or a number for the reports.</li><li><b>Read the Events table</b> and open the article link to verify.</li></ul>',act:[toFilters,toAlerts,toMap]},
    {k:['filter','filters','narrow','category','categories','drug type','transport','country','dropdown','box','boxes'],
@@ -138,8 +139,176 @@
    {k:['thanks','thank you','thx','cheers','merci','great'],a:'<p>You\'re welcome! Ask me anything else.</p>',act:[]},
    {k:['hi','hello','hey','good morning','good evening','yo'],a:'<p>Hi! What would you like to know about the dashboard?</p>',act:[]}
   ];
-  var STARTERS=[['Where do I start?','where do i start'],['Show me high-risk events','high risk'],['How is risk scored?','how is risk scored'],
-    ['How do I use the map?','map'],['What is the watchlist?','watchlist'],['Where does the data come from?','where does the data come from']];
+  var STARTERS=[['Where do I start?','where do i start'],['How many seizures last week?','How many seizures last week?'],
+    ['Biggest drug seizure?','Which country made the biggest drug seizure?'],['Show me high-risk events','high risk'],
+    ['How is risk scored?','how is risk scored'],['How do I use the map?','map'],['What is the watchlist?','watchlist']];
+
+  /* ---------- questions about the numbers: counts, biggest, top countries (uses the page's own data, D) ---------- */
+  var DD=null;try{if(typeof D!=='undefined'&&D&&D.events&&D.meta)DD=D;}catch(err){}
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  var MON=['january','february','march','april','may','june','july','august','september','october','november','december'];
+  var MSH=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+  function two(n){return (n<10?'0':'')+n;}
+  function addD(s,n){return new Date(Date.parse(s+'T00:00:00Z')+n*864e5).toISOString().slice(0,10);}
+  function dShort(s){return (+s.slice(8,10))+' '+MSH[+s.slice(5,7)-1];}
+  function dayDiff(a,b){return Math.round((Date.parse(b+'T00:00:00Z')-Date.parse(a+'T00:00:00Z'))/864e5);}
+  function num(n){return Math.round(n).toLocaleString('en-GB');}
+  function fmtKg(kg){return kg>=1000?(Math.round(kg/100)/10).toLocaleString('en-GB')+' tonnes':num(kg)+' kg';}
+  function monthEndS(y,m){return new Date(Date.UTC(y,m,0)).toISOString().slice(0,10);}
+  function rangeTxt(a,b){return a===b?dShort(a):dShort(a)+' to '+dShort(b);}
+  function safeUrl(u){return (typeof u==='string'&&/^https?:\/\//i.test(u))?esc(u):'';}
+  function cntBy(arr,fn){var m={};arr.forEach(function(e){var k=fn(e);if(k)m[k]=(m[k]||0)+1;});
+    return Object.keys(m).map(function(k){return [k,m[k]];}).sort(function(a,b){return b[1]-a[1];});}
+  function kgBy(arr,fn){var m={};arr.forEach(function(e){var k=fn(e);if(k&&e.kg>0)m[k]=(m[k]||0)+e.kg;});
+    return Object.keys(m).map(function(k){return [k,m[k]];}).sort(function(a,b){return b[1]-a[1];});}
+  function topN(list,k,fmt){return list.slice(0,k).map(function(x){return esc(x[0])+' ('+(fmt?fmt(x[1]):num(x[1]))+')';}).join(', ');}
+
+  function periodOf(t){
+    var asof=DD.meta.asof,first=DD.meta.first_date||asof,y=+asof.slice(0,4),mo=+asof.slice(5,7),m,r=null;
+    function roll(n,label){return {from:addD(asof,-(n-1)),to:asof,label:label,n:n,val:n===7?'7':n===30?'30':n===90?'90':null};}
+    if((m=t.match(/\b(?:last|past|previous)\s+(\d{1,3})\s+days?\b/))&&+m[1]>0){r=roll(+m[1],'in the last '+(+m[1])+' days');}
+    else if(/\b(today|yesterday|latest day)\b/.test(t)){r={from:asof,to:asof,label:'on '+dShort(asof)+' (the latest day in the data)',n:1,val:null};}
+    else if(/\b(last|past|previous|this)\s+week\b|\bseven days\b|\bweek\b/.test(t)){r=roll(7,'in the last 7 days');}
+    else if(/\b(last|previous)\s+month\b/.test(t)){var pm=mo===1?12:mo-1,py=mo===1?y-1:y;
+      r={from:py+'-'+two(pm)+'-01',to:monthEndS(py,pm),label:'in '+cap(MON[pm-1])+' '+py,n:0,val:'m:'+py+'-'+two(pm)};}
+    else if(/\bthis month\b/.test(t)){r={from:y+'-'+two(mo)+'-01',to:asof,label:'so far this month',n:0,val:'m:'+y+'-'+two(mo)};}
+    else if(/\bpast month\b/.test(t)){r=roll(30,'in the last 30 days');}
+    else{for(var i=0;i<12;i++){
+        if(new RegExp(i===4?'\\bin may\\b':'\\b'+MON[i]+'\\b').test(t)){var yy=(i+1)<=mo?y:y-1;
+          r={from:yy+'-'+two(i+1)+'-01',to:(yy===y&&i+1===mo)?asof:monthEndS(yy,i+1),label:'in '+cap(MON[i])+' '+yy,n:0,val:'m:'+yy+'-'+two(i+1)};break;}}}
+    if(!r){r={from:'0000-01-01',to:asof,label:'in all the data so far (since '+dShort(first)+')',n:0,val:'9999',all:true};}
+    r.partial=!r.all&&r.from<first;
+    if(r.from<first)r.shownFrom=first;
+    return r;}
+
+  var IDX=null;
+  function idx(){if(IDX)return IDX;var drugs={},cats={},ctry={};
+    DD.events.forEach(function(e){if(e.drug)drugs[e.drug]=1;if(e.category)cats[e.category]=1;['country','origin','dest'].forEach(function(f){if(e[f])ctry[e[f]]=1;});});
+    IDX={drugs:Object.keys(drugs),cats:cats,ctry:Object.keys(ctry)};return IDX;}
+  var ALIAS={cannabis:['marijuana','marihuana','weed','hashish','hash','ganja','cannabis'],cocaine:['cocaine','coke','crack'],methamphetamine:['methamphetamine','meth','crystal meth'],
+    'heroin/opium':['heroin','opium'],firearms:['firearm','gun','pistol','rifle'],ammunition:['ammunition','ammo'],cigarettes:['cigarette'],nsa:['nsa','synthetic drug','new psychoactive']};
+  var STOP={objects:1,other:1,types:1,unspecified:1,and:1};
+  var CALIAS={'united states':'United States',usa:'United States',america:'United States','united kingdom':'United Kingdom',uk:'United Kingdom',britain:'United Kingdom',
+    'great britain':'United Kingdom',uae:'United Arab Emirates',holland:'Netherlands',korea:'South Korea'};
+  var CATS=[[/\bdrugs?\b|\bnarcotics?\b/,'Drug'],[/\btobacco\b/,'Tobacco'],[/\bivory\b/,'CITES elephant ivory'],[/\btimber\b|\bwood\b/,'CITES protected timber'],
+    [/\bwildlife\b|\bfauna\b|\banimals?\b/,'CITES protected fauna'],[/\bcultural\b|\bantiquit\w*\b|\bheritage\b/,'Cultural heritage'],[/\bprecursors?\b/,'Precursor chemical'],
+    [/\bchemicals?\b/,'Hazardous chemical'],[/\bvehicles?\b/,'Stolen vehicle'],[/\barms\b|\bweapons?\b|\bfirearms?\b|\bammunition\b/,'Arms and ammunition']];
+  function parseFilters(n){
+    var I=idx(),f={drugs:[],cat:null,countries:[],band:null},w=n,names=[];
+    I.ctry.forEach(function(c){names.push([c.toLowerCase().replace(/[^a-z0-9 ]+/g,' ').replace(/\s+/g,' ').trim(),c]);});
+    Object.keys(CALIAS).forEach(function(k){names.push([k,CALIAS[k]]);});
+    names.sort(function(a,b){return b[0].length-a[0].length;});
+    names.forEach(function(p){var key=' '+p[0]+' ',i=w.indexOf(key);
+      if(i>=0&&I.ctry.indexOf(p[1])>=0){
+        var before=w.slice(Math.max(0,i-16),i+1);
+        var role=/\bfrom $/.test(before)?'origin':/\b(to|into|towards|bound for|destined for) $/.test(before)?'dest':'country';
+        if(!f.countries.some(function(c){return c.name===p[1]&&c.role===role;}))f.countries.push({name:p[1],role:role});
+        w=w.slice(0,i)+' '+w.slice(i+key.length);}});
+    I.drugs.forEach(function(d){var dl=d.toLowerCase(),as=ALIAS[dl]||dl.split(/[\/\s,()-]+/).filter(function(x){return x.length>=4&&!STOP[x];});
+      for(var j=0;j<as.length;j++){if(new RegExp('\\b'+as[j]+'s?\\b').test(w)){f.drugs.push(d);break;}}});
+    for(var i=0;i<CATS.length;i++){if(CATS[i][0].test(w)&&I.cats[CATS[i][1]]){f.cat=CATS[i][1];break;}}
+    if(/\bhigh risk\b/.test(w))f.band='High';
+    return f;}
+  function matcher(f,per){
+    var roles={};f.countries.forEach(function(c){(roles[c.role]=roles[c.role]||[]).push(c.name);});
+    return function(e){
+      if(per&&(e.date<per.from||e.date>per.to))return false;
+      if(f.cat&&e.category!==f.cat)return false;
+      if(f.drugs.length&&f.drugs.indexOf(e.drug)<0)return false;
+      if(f.band&&e.band!==f.band)return false;
+      for(var r in roles){var field=r==='country'?'country':r;if(roles[r].indexOf(e[field])<0)return false;}
+      return true;};}
+  function where(f){var by={country:[],origin:[],dest:[]};f.countries.forEach(function(c){by[c.role].push(c.name);});
+    return (by.country.length?' in '+by.country.join(' or '):'')+(by.origin.length?' from '+by.origin.join(' or '):'')+(by.dest.length?' to '+by.dest.join(' or '):'');}
+  function noun(f,dflt){
+    var s=f.drugs.length?f.drugs.join(' or ').toLowerCase()+' ':f.cat?(f.cat==='Drug'?'drug ':f.cat.toLowerCase()+' '):(dflt?'drug ':'');
+    return (f.band?'high-risk ':'')+s;}
+  function evLine(e){
+    var val=e.kg>0?fmtKg(e.kg):(e.units?num(e.units)+' '+esc(e.unit_type||'units'):''),u=safeUrl(e.url);
+    var ttl=esc(String(e.title_en||e.title||'').slice(0,100));
+    return '<b>'+(val||'weight not stated')+'</b> '+esc(e.drug||e.category||'')+' - '+(e.country?esc(e.country):'country not identified')+(e.place?', '+esc(e.place):'')+
+      ' ('+dShort(e.date)+')'+(u?' <a href="'+u+'" target="_blank" rel="noopener noreferrer">article</a>':'')+
+      (ttl?'<br><span style="color:#66758a;font-size:12px">'+ttl+'</span>':'');}
+  function viewVal(per){
+    if(per.val){var el=g('fDays');if(el&&Array.prototype.some.call(el.options,function(o){return o.value===per.val;}))return per.val;}
+    var back=dayDiff(per.from,DD.meta.asof)+1;return back<=7?'7':back<=30?'30':back<=90?'90':'9999';}
+  function setSilent(id,v){var e=g(id);if(!e)return false;var ok=v===''||Array.prototype.some.call(e.options,function(o){return o.value===v;});if(ok)e.value=v;return ok;}
+  function applyView(per,f){
+    var q=g('fQ');if(q)q.value='';
+    var c=g('fCategory');
+    if(c){var want='';
+      if(f.cat){if(setSilent('fCategory',f.cat))want=f.cat;else if(/^CITES/.test(f.cat)&&setSilent('fCategory','CITES'))want='CITES';}
+      c.value=want;c.dispatchEvent(new Event('change'));}   /* the change event refills the Types list for this category */
+    setSilent('fDrug',f.drugs.length===1?f.drugs[0]:'');setSilent('fBand',f.band||'');setSilent('fMode','');setSilent('fDays',viewVal(per));
+    clearCard();
+    if(f.countries.length){window.cardFilter=matcher({drugs:[],cat:null,band:null,countries:f.countries},null);window.cardName='seizures'+where(f);try{showCardBar();}catch(err){}}
+    var ic=g('fInfraClearBtn');if(ic)ic.click();
+    var d=g('fDays');if(d)d.dispatchEvent(new Event('change',{bubbles:true}));
+    go(function(){return g('evT')&&g('evT').closest('.card');});}
+  var CAVEAT='<p style="font-size:12px;color:#66758a">These come from news reports found by this tool, not official statistics. Weights are copied from the articles and some are totals for a whole operation or year, so open the article before relying on one.</p>';
+  var CAVEAT_SUM='<p style="font-size:12px;color:#66758a">Treat this total as a rough guide only. It adds up every weight stated in the articles, including totals for a whole operation or year, so it can be far higher than the real seizures. Open the articles before relying on it.</p>';
+  function showAct(per,f,label){return A(label||'Show these in the events table',function(){applyView(per,f);});}
+
+  function dataAnswer(q){
+    if(!DD)return null;
+    var n=norm(q),t=n.trim();
+    var seiz=/\b(seizure|seizures|seized|seize|busts?|hauls?|cases|events?|reports?|catch|caught|confiscat\w*|intercept\w*)\b/.test(t);
+    var isCount=/\b(how many|number of|count|total number)\b/.test(t)&&seiz;
+    var isWeight=/\b(how (many|much)|total|amount of)\b.*\b(kilos?|kilograms?|kgs?|tonnes?|tons?|weight)\b/.test(t)||/\bhow much\b.*\b(seized|drugs?|cocaine|cannabis|heroin|meth\w*)\b/.test(t);
+    var isBig=/\b(biggest|largest|heaviest|record|greatest)\b/.test(t)&&(seiz||/\bdrugs?\b/.test(t));
+    var isCtry=/\b(which|what|top)\b.*\bcountr(y|ies)\b/.test(t)&&/\b(most|biggest|largest|highest|top|seiz\w*)\b/.test(t);
+    var isDrug=/\b(which|what)\b.*\b(drugs?|substances?)\b.*\b(most|common|often|seized|frequent)\b/.test(t)||/\bmost (seized|common) (drug|substance)/.test(t);
+    var isLatest=/\b(latest|most recent|newest)\b.*\b(seizures?|busts?|events?|reports?)\b/.test(t);
+    if(!(isCount||isWeight||isBig||isCtry||isDrug||isLatest))return null;
+    var per=periodOf(t),f=parseFilters(n),pre='',post='';
+    var sel=DD.events.filter(matcher(f,per));
+    var foot=(per.partial?'<p style="font-size:12px;color:#66758a">The data only starts on '+dShort(DD.meta.first_date)+', so this period is not complete.</p>':'');
+    var when=per.label+' ('+rangeTxt(per.shownFrom||per.from>'0000'?(per.shownFrom||per.from):DD.meta.first_date,per.to)+')';
+    if(per.all)when=per.label;
+    var acts=[showAct(per,f)];
+    var wantDrugCat=!f.cat&&!f.drugs.length;
+    if(isWeight){
+      var pool=wantDrugCat?sel.filter(function(e){return e.category==='Drug';}):sel,wt=pool.filter(function(e){return e.kg>0;});
+      var tot=wt.reduce(function(s,e){return s+e.kg;},0);
+      if(!wt.length)return {a:'<p>I found no '+esc(noun(f,wantDrugCat))+'reports'+esc(where(f))+' with a stated weight '+esc(when)+'.</p>'+foot,act:[]};
+      var by=f.drugs.length?'':kgBy(wt,function(e){return e.drug;});
+      return {a:'<p><b>'+esc(fmtKg(tot))+'</b> of '+esc(noun(f,wantDrugCat))+'seizures'+esc(where(f))+' were reported '+esc(when)+', adding up the '+num(wt.length)+' reports that state a weight (there are '+num(pool.length)+' reports in all).</p>'+
+        (by&&by.length?'<p>Heaviest by type: '+topN(by,4,fmtKg)+'.</p>':'')+CAVEAT_SUM+foot,act:acts};}
+    if(isBig){
+      var pl=wantDrugCat?sel.filter(function(e){return e.category==='Drug';}):sel,top5=pl.filter(function(e){return e.kg>0;}).sort(function(a,b){return b.kg-a.kg;}).slice(0,5),useUnits=false;
+      if(top5.length<3){var u=pl.filter(function(e){return e.units>0&&!(e.kg>0);}).sort(function(a,b){return b.units-a.units;}).slice(0,5);if(u.length>top5.length){top5=u;useUnits=true;}}
+      if(!top5.length)return {a:'<p>I found no '+esc(noun(f,wantDrugCat))+'reports'+esc(where(f))+' with a stated weight '+esc(when)+'.</p>'+foot,act:[]};
+      var miss=top5.some(function(e){return !e.country;}),lead='';
+      if(/\bcountr/.test(t)&&!useUnits){var fc=pl.filter(function(e){return e.kg>0&&e.country;}).sort(function(a,b){return b.kg-a.kg;})[0];
+        if(fc)lead='<p><b>'+esc(fc.country)+'</b> had the biggest reported seizure that names a country: '+esc(fmtKg(fc.kg))+' of '+esc(String(fc.drug||'drugs').toLowerCase())+' ('+dShort(fc.date)+').'+(top5[0]!==fc&&!top5[0].country?' A heavier one is reported with no country named.':'')+'</p>';}
+      return {a:lead+'<p>Biggest reported '+esc(noun(f,wantDrugCat))+'seizures'+esc(where(f))+', '+(useUnits?'by number of items':'by weight')+', '+esc(when)+':</p><ol style="margin:4px 0 6px;padding-left:20px">'+
+        top5.map(function(e){return '<li style="margin-bottom:6px">'+evLine(e)+'</li>';}).join('')+'</ol>'+(miss?'<p style="font-size:12px;color:#66758a">"Country not identified" means the article did not say where it happened.</p>':'')+CAVEAT+foot,act:acts};}
+    if(isCtry){
+      var pc=wantDrugCat?sel.filter(function(e){return e.category==='Drug';}):sel;
+      var byN=cntBy(pc,function(e){return e.country;}),byK=kgBy(pc,function(e){return e.country;}),unk=pc.filter(function(e){return !e.country;}).length;
+      if(!byN.length)return {a:'<p>I found no matching reports with a country '+esc(when)+'.</p>'+foot,act:[]};
+      return {a:'<p>Most '+esc(noun(f,wantDrugCat))+'seizure reports '+esc(when)+': '+topN(byN,5)+'.</p>'+(byK.length?'<p>Most weight reported: '+topN(byK,5,fmtKg)+'.</p>':'')+
+        '<p style="font-size:12px;color:#66758a">'+num(unk)+' of '+num(pc.length)+' reports have no country identified, so they are not counted here. For the single biggest seizure, ask "what is the biggest drug seizure".</p>'+CAVEAT_SUM+foot,act:acts};}
+    if(isDrug){
+      var pd=sel.filter(function(e){return f.cat?true:e.category==='Drug';}),dN=cntBy(pd,function(e){return e.drug;}),dK=kgBy(pd,function(e){return e.drug;});
+      if(!dN.length)return {a:'<p>I found no matching reports '+esc(when)+'.</p>'+foot,act:[]};
+      return {a:'<p>Most reported '+esc(f.cat&&f.cat!=='Drug'?f.cat.toLowerCase()+' ':'drug ')+'types'+esc(where(f))+' '+esc(when)+': '+topN(dN,5)+'.</p>'+(dK.length?'<p>Most weight reported: '+topN(dK,4,fmtKg)+'.</p>':'')+CAVEAT_SUM+foot,act:acts};}
+    if(isLatest){
+      var lt=sel.slice().sort(function(a,b){return a.date<b.date?1:a.date>b.date?-1:(b.score||0)-(a.score||0);}).slice(0,3);
+      if(!lt.length)return {a:'<p>I found no matching reports.</p>',act:[]};
+      return {a:'<p>Latest '+esc(noun(f,false))+'reports'+esc(where(f))+' (data up to '+dShort(DD.meta.asof)+'):</p><ol style="margin:4px 0 6px;padding-left:20px">'+lt.map(function(e){return '<li style="margin-bottom:6px">'+evLine(e)+'</li>';}).join('')+'</ol>',act:acts};}
+    /* count */
+    var N=sel.length,out='<p><b>'+num(N)+'</b> '+esc(noun(f,false))+'seizure reports'+esc(where(f))+' '+esc(when)+'.</p>';
+    if(per.n>1){var pf=addD(per.from,-per.n),pt=addD(per.from,-1);
+      if(pf>=(DD.meta.first_date||'0')){var P=DD.events.filter(matcher(f,{from:pf,to:pt})).length;
+        if(P>0){var ch=Math.round((N-P)/P*100);out+='<p>The '+per.n+' days before that had '+num(P)+' ('+(ch>=0?'up '+ch:'down '+(-ch))+'%).</p>';}}}
+    if(N>0){
+      if(!f.drugs.length)out+='<p>Most reported: '+topN(cntBy(sel,function(e){return e.drug;}),5)+'.</p>';
+      if(!f.countries.some(function(c){return c.role==='country';})){var cc=cntBy(sel,function(e){return e.country;}),known=cc.reduce(function(s,x){return s+x[1];},0);
+        if(cc.length)out+='<p>Most reports came from: '+topN(cc,5)+' (country known for '+num(known)+' of '+num(N)+').</p>';}
+      if(!f.band){var hi=sel.filter(function(e){return e.band==='High';}).length;out+='<p>'+num(hi)+' of them were High risk.</p>';}}
+    return {a:out+CAVEAT+foot,act:N>0?acts:[]};}
 
   /* ---------- matching ---------- */
   function norm(s){return ' '+s.toLowerCase().replace(/[^a-z0-9À-ɏ ]+/g,' ').replace(/\s+/g,' ').trim()+' ';}
@@ -166,9 +335,10 @@
     log.appendChild(d);scrollLog();}
   function ask(q){
     q=(q||'').trim();if(!q)return;
-    addUser(q);var m=best(q);
+    addUser(q);var dm=null;try{dm=dataAnswer(q);}catch(err){dm=null;}var m=dm?null:best(q);
     setTimeout(function(){
-      if(m){addByte(m.a,m.act);}
+      if(dm){addByte(dm.a,dm.act);}
+      else if(m){addByte(m.a,m.act);}
       else{var acts=[];if(q.length<=60){acts.push(A('Search the events for "'+q+'"',function(){setQ(q);go(top);}));}
         addByte('<p>I don\'t have an answer for that one yet. I can help with the filters, searching, the map, risk scores, the watchlist, alerts, the events table, where the data comes from and its languages.</p><p>You can also search the events for your words.</p>',acts);}
     },250);}
