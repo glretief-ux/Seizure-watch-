@@ -1,88 +1,200 @@
-[1/4] Searching the web (last 2 day(s))...
-   RSS Hong Kong government press releases (includes Customs): 100 items
-   RSS UK National Crime Agency: 20 items
-   RSS UK Border Force: 20 items
-   ! https://ndlea.gov.ng/feed/... HTTPError
-   RSS NDLEA Nigeria: 0 items
-   Official websites (52 searched): 1745 headlines
-      edition MX/es: 103 headlines
-      edition ES/es: 106 headlines
-      edition CO/es: 104 headlines
-      edition FR/fr: 65 headlines
-      edition BR/pt: 212 headlines
-      edition PT/pt: 196 headlines
-      edition SA/ar: 294 headlines
-      edition EG/ar: 276 headlines
-      edition AE/ar: 303 headlines
-      edition TR/tr: 342 headlines
-      edition RU/ru: 189 headlines
-      edition UA/ru: 203 headlines
-      edition CN/zh: 31 headlines
-      edition HK/zh: 15 headlines
-      edition TW/zh: 17 headlines
-      edition IN/hi: 222 headlines
-      edition VN/vi: 147 headlines
-      edition NL/nl: 117 headlines
-      edition BE/nl: 118 headlines
-      edition AT/de: 49 headlines
-      edition DK/da: 8 headlines
-      edition EE/et: 0 headlines
-      edition ET/am: 0 headlines
-      edition IS/is: 0 headlines
-      edition MN/mn: 0 headlines
-      edition NO/no: 5 headlines
-      edition SK/sk: 13 headlines
-      edition SE/sv: 2 headlines
-   Google News: 6492 headlines
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28cocaine%20OR%20heroin%20OR%20metha... ReadTimeout
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28precursor%20chemicals%20OR%20cland... ReadTimeout
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22hazardous%20chemicals%22%20OR%2... ReadTimeout
-   ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28mercury%29%20%28smuggling%20OR%20s... ReadTimeout
-   ! GDELT failed 4 times in a row; skipping GDELT for the rest of this run
-      GDELT es: 0 headlines
-      GDELT fr: 0 headlines
-      GDELT pt: 0 headlines
-      GDELT ar: 0 headlines
-      GDELT tr: 0 headlines
-      GDELT ru: 0 headlines
-      GDELT zh: 0 headlines
-      GDELT hi: 0 headlines
-      GDELT vi: 0 headlines
-      GDELT nl: 0 headlines
-      GDELT de: 0 headlines
-      GDELT da: 0 headlines
-      GDELT et: 0 headlines
-      GDELT am: 0 headlines
-      GDELT is: 0 headlines
-      GDELT mn: 0 headlines
-      GDELT no: 0 headlines
-      GDELT sk: 0 headlines
-      GDELT sv: 0 headlines
-   GDELT: 0 headlines
-      1376 candidate headlines, 375 new
-[2/4] Reading articles...
-      link resolving stopped at its time limit after 325 of 375; the rest are read from headline + snippet
-      links resolved: 325 of 375
-      read in full: 272; headline + snippet only: 103
-      download problems: HTTPError x40, ReadTimeout x2, skipped (site kept failing) x1, ConnectionError x1, SSLError x1
+  File "/home/runner/work/Seizure-watch-/Seizure-watch-/swatch/collect.py", line 59 in _get
+  File "/home/runner/work/Seizure-watch-/Seizure-watch-/swatch/collect.py", line 374 in fetch_text
+  File "/home/runner/work/Seizure-watch-/Seizure-watch-/swatch/collect.py", line 406 in one
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/concurrent/futures/thread.py", line 59 in run
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/concurrent/futures/thread.py", line 93 in _worker
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/threading.py", line 1012 in run
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/threading.py", line 1075 in _bootstrap_inner
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/threading.py", line 1032 in _bootstrap
+
+Thread 0x00007ab6f5ffd6c0 (most recent call first):
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/ssl.py", line 1116 in read
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/ssl.py", line 1264 in recv_into
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/socket.py", line 720 in readinto
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/urllib3/response.py", line 1367 in _update_chunk_length
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/urllib3/response.py", line 1459 in read_chunked
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/urllib3/response.py", line 1284 in stream
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/requests/models.py", line 937 in generate
+  File "/home/runner/work/Seizure-watch-/Seizure-watch-/swatch/collect.py", line 62 in _get
+  File "/home/runner/work/Seizure-watch-/Seizure-watch-/swatch/collect.py", line 374 in fetch_text
+  File "/home/runner/work/Seizure-watch-/Seizure-watch-/swatch/collect.py", line 406 in one
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/concurrent/futures/thread.py", line 59 in run
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/concurrent/futures/thread.py", line 93 in _worker
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/threading.py", line 1012 in run
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/threading.py", line 1075 in _bootstrap_inner
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/threading.py", line 1032 in _bootstrap
+
+Thread 0x00007ab6f6ffe6c0 (most recent call first):
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/ssl.py", line 1116 in read
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/ssl.py", line 1264 in recv_into
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/socket.py", line 720 in readinto
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/http/client.py", line 304 in _read_status
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/http/client.py", line 343 in begin
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/http/client.py", line 1478 in getresponse
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/urllib3/connection.py", line 638 in getresponse
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/urllib3/connectionpool.py", line 540 in _make_request
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/urllib3/connectionpool.py", line 793 in urlopen
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/requests/adapters.py", line 696 in send
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/requests/sessions.py", line 784 in send
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/requests/sessions.py", line 651 in request
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/requests/api.py", line 71 in request
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/requests/api.py", line 87 in get
+  File "/home/runner/work/Seizure-watch-/Seizure-watch-/swatch/collect.py", line 59 in _get
+  File "/home/runner/work/Seizure-watch-/Seizure-watch-/swatch/collect.py", line 374 in fetch_text
+  File "/home/runner/work/Seizure-watch-/Seizure-watch-/swatch/collect.py", line 406 in one
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/concurrent/futures/thread.py", line 59 in run
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/concurrent/futures/thread.py", line 93 in _worker
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/threading.py", line 1012 in run
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/threading.py", line 1075 in _bootstrap_inner
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/threading.py", line 1032 in _bootstrap
+
+Thread 0x00007ab6f7fff6c0 (most recent call first):
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/ssl.py", line 1116 in read
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/ssl.py", line 1264 in recv_into
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/socket.py", line 720 in readinto
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/http/client.py", line 304 in _read_status
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/http/client.py", line 343 in begin
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/http/client.py", line 1478 in getresponse
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/urllib3/connection.py", line 638 in getresponse
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/urllib3/connectionpool.py", line 540 in _make_request
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/urllib3/connectionpool.py", line 793 in urlopen
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/requests/adapters.py", line 696 in send
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/requests/sessions.py", line 784 in send
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/requests/sessions.py", line 651 in request
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/requests/api.py", line 71 in request
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/requests/api.py", line 87 in get
+  File "/home/runner/work/Seizure-watch-/Seizure-watch-/swatch/collect.py", line 59 in _get
+  File "/home/runner/work/Seizure-watch-/Seizure-watch-/swatch/collect.py", line 374 in fetch_text
+  File "/home/runner/work/Seizure-watch-/Seizure-watch-/swatch/collect.py", line 406 in one
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/concurrent/futures/thread.py", line 59 in run
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/concurrent/futures/thread.py", line 93 in _worker
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/threading.py", line 1012 in run
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/threading.py", line 1075 in _bootstrap_inner
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/threading.py", line 1032 in _bootstrap
+
+Thread 0x00007ab7091256c0 (most recent call first):
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/trafilatura/htmlprocessing.py", line 130 in prune_html
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/trafilatura/htmlprocessing.py", line 124 in tree_cleaning
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/trafilatura/core.py", line 145 in _prepare_tree
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/trafilatura/core.py", line 195 in trafilatura_sequence
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/trafilatura/core.py", line 425 in bare_extraction
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/trafilatura/core.py", line 705 in _internal_extraction
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/trafilatura/core.py", line 550 in extract
+  File "/home/runner/work/Seizure-watch-/Seizure-watch-/swatch/collect.py", line 379 in fetch_text
+  File "/home/runner/work/Seizure-watch-/Seizure-watch-/swatch/collect.py", line 406 in one
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/concurrent/futures/thread.py", line 59 in run
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/concurrent/futures/thread.py", line 93 in _worker
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/threading.py", line 1012 in run
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/threading.py", line 1075 in _bootstrap_inner
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/threading.py", line 1032 in _bootstrap
+
+Thread 0x00007ab70a1266c0 (most recent call first):
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/ssl.py", line 1116 in read
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/ssl.py", line 1264 in recv_into
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/socket.py", line 720 in readinto
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/urllib3/response.py", line 1367 in _update_chunk_length
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/urllib3/response.py", line 1459 in read_chunked
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/urllib3/response.py", line 1284 in stream
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/requests/models.py", line 937 in generate
+  File "/home/runner/work/Seizure-watch-/Seizure-watch-/swatch/collect.py", line 62 in _get
+  File "/home/runner/work/Seizure-watch-/Seizure-watch-/swatch/collect.py", line 374 in fetch_text
+  File "/home/runner/work/Seizure-watch-/Seizure-watch-/swatch/collect.py", line 406 in one
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/concurrent/futures/thread.py", line 59 in run
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/concurrent/futures/thread.py", line 93 in _worker
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/threading.py", line 1012 in run
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/threading.py", line 1075 in _bootstrap_inner
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/threading.py", line 1032 in _bootstrap
+
+Thread 0x00007ab70b1276c0 (most recent call first):
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/socket.py", line 978 in getaddrinfo
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/urllib3/util/connection.py", line 60 in create_connection
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/urllib3/connection.py", line 239 in _new_conn
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/urllib3/connection.py", line 827 in connect
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/urllib3/connectionpool.py", line 1125 in _validate_conn
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/urllib3/connectionpool.py", line 470 in _make_request
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/urllib3/connectionpool.py", line 793 in urlopen
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/requests/adapters.py", line 696 in send
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/requests/sessions.py", line 784 in send
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/requests/sessions.py", line 651 in request
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/requests/api.py", line 71 in request
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/requests/api.py", line 87 in get
+  File "/home/runner/work/Seizure-watch-/Seizure-watch-/swatch/collect.py", line 59 in _get
+  File "/home/runner/work/Seizure-watch-/Seizure-watch-/swatch/collect.py", line 374 in fetch_text
+  File "/home/runner/work/Seizure-watch-/Seizure-watch-/swatch/collect.py", line 406 in one
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/concurrent/futures/thread.py", line 59 in run
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/concurrent/futures/thread.py", line 93 in _worker
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/threading.py", line 1012 in run
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/threading.py", line 1075 in _bootstrap_inner
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/threading.py", line 1032 in _bootstrap
+
+Thread 0x00007ab70c1286c0 (most recent call first):
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/ssl.py", line 1116 in read
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/ssl.py", line 1264 in recv_into
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/socket.py", line 720 in readinto
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/http/client.py", line 304 in _read_status
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/http/client.py", line 343 in begin
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/http/client.py", line 1478 in getresponse
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/urllib3/connection.py", line 638 in getresponse
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/urllib3/connectionpool.py", line 540 in _make_request
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/urllib3/connectionpool.py", line 793 in urlopen
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/requests/adapters.py", line 696 in send
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/requests/sessions.py", line 784 in send
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/requests/sessions.py", line 651 in request
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/requests/api.py", line 71 in request
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/requests/api.py", line 87 in get
+  File "/home/runner/work/Seizure-watch-/Seizure-watch-/swatch/collect.py", line 59 in _get
+  File "/home/runner/work/Seizure-watch-/Seizure-watch-/swatch/collect.py", line 374 in fetch_text
+  File "/home/runner/work/Seizure-watch-/Seizure-watch-/swatch/collect.py", line 406 in one
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/concurrent/futures/thread.py", line 59 in run
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/concurrent/futures/thread.py", line 93 in _worker
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/threading.py", line 1012 in run
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/threading.py", line 1075 in _bootstrap_inner
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/threading.py", line 1032 in _bootstrap
+
+Current thread 0x00007ab70d1296c0 (most recent call first):
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/lxml/html/__init__.py", line 740 in document_fromstring
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/lxml/html/__init__.py", line 854 in fromstring
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/trafilatura/utils.py", line 345 in load_html
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/trafilatura/core.py", line 382 in bare_extraction
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/trafilatura/core.py", line 705 in _internal_extraction
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/trafilatura/core.py", line 550 in extract
+  File "/home/runner/work/Seizure-watch-/Seizure-watch-/swatch/collect.py", line 379 in fetch_text
+  File "/home/runner/work/Seizure-watch-/Seizure-watch-/swatch/collect.py", line 406 in one
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/concurrent/futures/thread.py", line 59 in run
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/concurrent/futures/thread.py", line 93 in _worker
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/threading.py", line 1012 in run
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/threading.py", line 1075 in _bootstrap_inner
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/threading.py", line 1032 in _bootstrap
+
+Thread 0x00007ab720cb7bc0 (most recent call first):
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/threading.py", line 359 in wait
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/threading.py", line 655 in wait
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/concurrent/futures/_base.py", line 305 in wait
+  File "/home/runner/work/Seizure-watch-/Seizure-watch-/swatch/collect.py", line 411 in fetch_all
+  File "/home/runner/work/Seizure-watch-/Seizure-watch-/run_daily.py", line 183 in fetch_child
+  File "/home/runner/work/Seizure-watch-/Seizure-watch-/run_daily.py", line 191 in main
+  File "/home/runner/work/Seizure-watch-/Seizure-watch-/run_daily.py", line 283 in <module>
+
+Extension modules: yaml._yaml, charset_normalizer.md, charset_normalizer.cd, requests.packages.charset_normalizer.md, requests.packages.chardet.md, requests.packages.charset_normalizer.cd, requests.packages.chardet.cd, numpy._core._multiarray_umath, numpy.linalg._umath_linalg, _cyutility, pandas._libs._cyutility, pandas._libs.tslibs.ccalendar, pandas._libs.tslibs.np_datetime, pandas._libs.tslibs.dtypes, pandas._libs.tslibs.base, pandas._libs.tslibs.nattype, pandas._libs.tslibs.timezones, pandas._libs.properties, pandas._libs.tslibs.fields, pandas._libs.tslibs.timedeltas, pandas._libs.tslibs.tzconversion, pandas._libs.tslibs.timestamps, pandas._libs.tslibs.offsets, pandas._libs.tslibs.strptime, pandas._libs.tslibs.parsing, pandas._libs.tslibs.conversion, pandas._libs.tslibs.period, pandas._libs.tslibs.vectorized, pandas._libs.ops_dispatch, pandas._libs.missing, pandas._libs.hashtable, pandas._libs.algos, pandas._libs.interval, pandas._libs.lib, pandas._libs.ops, pandas._libs.groupby, pandas._libs.hashing, pandas._libs.arrays, numpy.random._common, numpy.random.bit_generator, numpy.random._bounded_integers, numpy.random._pcg64, numpy.random._generator, numpy.random._mt19937, numpy.random._philox, numpy.random._sfc64, numpy.random.mtrand, pandas._libs.tslib, pandas._libs.sparse, pandas._libs.internals, pandas._libs.index, pandas._libs.writers, pandas._libs.join, pandas._libs.indexing, pandas._libs.window.aggregations, pandas._libs.window.indexers, pandas._libs.reshape, pandas._libs._ujson, pandas._libs.parsers, pandas._libs.testing, selectolax.lexbor, lxml._elementpath, lxml.etree, lxml.sax (total: 64)
+      ! article reading crashed or timed out (exit -6); using headline + snippet for this run
 [3/4] Extracting facts and storing...
-      NER supplemented 84 article(s) (unrecognised place names logged to ner_places for review)
-      stored 374, of which 294 are seizure reports
+      NER supplemented 124 article(s) (unrecognised place names logged to ner_places for review)
+      stored 739, of which 401 are seizure reports
 [4/4] Analysing and building report...
-      attempted 150 older headline(s) that predate this feature (201 translated, 8 failed and kept as-is; last error: _via_google: TooManyRequests: Server Error: You made too many requests to the server.According to google, you are allowed to make 5 requests per secondand up to 200k requests per day. You can wait and try again later oryou can try the translate_batch function)
-      links resolved: 39 of 39
-      read in full: 36; headline + snippet only: 24
-      download problems: HTTPError x19
-      re-read 36 of 60 earlier headline-only report(s) in full
-Done. 12170 events in report, 447 alerts.
+      attempted 150 older headline(s) that predate this feature (205 translated, 8 failed and kept as-is; last error: _via_google: TooManyRequests: Server Error: You made too many requests to the server.According to google, you are allowed to make 5 requests per secondand up to 200k requests per day. You can wait and try again later oryou can try the translate_batch function)
+      links resolved: 59 of 59
+      read in full: 50; headline + snippet only: 10
+      download problems: HTTPError x7
+      re-read 50 of 60 earlier headline-only report(s) in full
+Done. 12447 events in report, 446 alerts.
 Weekly bulletin written (/home/runner/work/Seizure-watch-/Seizure-watch-/docs/bulletin.html).
 Open: /home/runner/work/Seizure-watch-/Seizure-watch-/docs/index.html
-  [High  ] HIGH-RISK EVENT: NSA - Miami (score 75)
   [High  ] HIGH-RISK EVENT: Methamphetamine - San Bernardino (score 75)
-  [High  ] HIGH-RISK EVENT: Methamphetamine - Tennessee (score 75)
   [High  ] HIGH-RISK EVENT: Cocaine - Callao (score 75)
-  [High  ] HIGH-RISK EVENT: NSA - Arizona (score 70)
-  [High  ] HIGH-RISK EVENT: Methamphetamine - Cork (score 70)
+  [High  ] HIGH-RISK EVENT: Cocaine - Malaga (score 75)
+  [High  ] HIGH-RISK EVENT: Methamphetamine - Tennessee (score 75)
   [High  ] HIGH-RISK EVENT: Cannabis - Antwerp (score 70)
+  [High  ] HIGH-RISK EVENT: NSA - Arizona (score 70)
   [High  ] HIGH-RISK EVENT: Cocaine - Hong Kong airport (score 70)
+  [High  ] HIGH-RISK EVENT: Cannabis - Mumbai (score 65)
 run_daily.py exit code: 0
