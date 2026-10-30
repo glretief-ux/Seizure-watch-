@@ -1,61 +1,202 @@
-<!-- BYTE-HELPER-START: "Need help?" button + Byte clip. Included by report.build_dashboard (marker __BYTE__). -->
+<!-- BYTE-HELPER-START: "Ask Byte" help button, question box and clip. Included by report.build_dashboard (marker __BYTE__). -->
 <style>
 #byteBtn{position:fixed;right:16px;bottom:16px;z-index:9998;display:flex;align-items:center;gap:8px;padding:10px 16px;border:0;border-radius:999px;background:#12355b;color:#fff;font:600 14px/1 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;box-shadow:0 4px 14px rgba(18,53,91,.35);cursor:pointer}
-#byteBtn:focus-visible{outline:3px solid #7df9ff;outline-offset:2px}
-#byteBtn .bd{width:22px;height:22px;border-radius:7px;background:#5b8def;border:2px solid #3460c4;position:relative;display:inline-block}
-#byteBtn .bd:before,#byteBtn .bd:after{content:"";position:absolute;top:6px;width:4px;height:6px;border-radius:2px;background:#7df9ff}
-#byteBtn .bd:before{left:3px}#byteBtn .bd:after{right:3px}
+#byteBtn:focus-visible,#byteBox button:focus-visible,#byteQ:focus-visible{outline:3px solid #5b8def;outline-offset:2px}
+.bd{width:22px;height:22px;border-radius:7px;background:#5b8def;border:2px solid #3460c4;position:relative;display:inline-block;flex:0 0 auto}
+.bd:before,.bd:after{content:"";position:absolute;top:6px;width:4px;height:6px;border-radius:2px;background:#7df9ff}
+.bd:before{left:3px}.bd:after{right:3px}
+#byteBtn .bd{background:#5b8def}
 #byteNudge{position:fixed;right:20px;bottom:68px;z-index:9998;max-width:240px;background:#fff;color:#1c2733;border:1px solid #cbd5e1;border-radius:14px;padding:10px 12px;font:13px/1.4 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;box-shadow:0 4px 14px rgba(0,0,0,.15);cursor:pointer}
 #byteNudge:after{content:"";position:absolute;right:34px;bottom:-8px;width:14px;height:14px;background:#fff;border-right:1px solid #cbd5e1;border-bottom:1px solid #cbd5e1;transform:rotate(45deg)}
 #byteModal{position:fixed;inset:0;z-index:9999;background:rgba(15,23,42,.6);display:flex;align-items:center;justify-content:center;padding:12px}
-#byteModal[hidden],#byteNudge[hidden]{display:none}
-#byteBox{background:#fff;border-radius:12px;max-width:760px;width:100%;max-height:96vh;overflow:auto;box-shadow:0 10px 40px rgba(0,0,0,.4)}
-#byteBox h3{margin:0;padding:12px 16px;background:#12355b;color:#fff;font-size:15px;display:flex;justify-content:space-between;align-items:center;border-radius:12px 12px 0 0}
+#byteModal[hidden],#byteNudge[hidden],#byteVidBox[hidden]{display:none}
+#byteBox{background:#fff;border-radius:12px;max-width:640px;width:100%;max-height:96vh;overflow:auto;box-shadow:0 10px 40px rgba(0,0,0,.4);font:14px/1.45 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#1c2733}
+#byteBox h3{margin:0;padding:12px 16px;background:#12355b;color:#fff;font-size:15px;display:flex;justify-content:space-between;align-items:center;border-radius:12px 12px 0 0;position:sticky;top:0;z-index:1}
 #byteBox h3 button{background:none;border:0;color:#fff;font-size:24px;line-height:1;cursor:pointer;padding:0 4px}
-#byteBox video{display:block;width:100%;background:#e8eef8}
-#byteBox .bsteps{margin:0;padding:12px 18px 16px 36px;font-size:14px;line-height:1.5;color:#1c2733}
-#byteBox .bsteps li{margin:4px 0}
-#byteBox .bnote{padding:0 16px 14px;font-size:12px;color:#66758a}
+#byteLog{padding:12px 14px 4px;max-height:44vh;min-height:150px;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.bm{display:flex;gap:8px;margin:0 0 10px;align-items:flex-start}
+.bm.u{justify-content:flex-end}
+.bm .bb{background:#eef3fb;border-radius:4px 14px 14px 14px;padding:9px 12px;max-width:88%}
+.bm.u .bb{background:#12355b;color:#fff;border-radius:14px 4px 14px 14px}
+.bm .bb p{margin:0 0 6px}.bm .bb p:last-child{margin:0}
+.bm .bb ul{margin:4px 0 0;padding-left:18px}
+.bm .bd{margin-top:2px}
+.bacts{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.bacts button,#byteChips button,#byteVidTog{font:inherit;font-size:13px;border-radius:999px;cursor:pointer}
+.bacts button{background:#12355b;color:#fff;border:1px solid #12355b;padding:6px 12px}
+#byteForm{display:flex;gap:8px;padding:8px 14px 0}
+#byteQ{flex:1 1 auto;min-width:0;padding:10px 12px;border:1px solid #cbd5e1;border-radius:10px;font-size:16px;font-family:inherit}
+#byteForm button{padding:10px 16px;border:0;border-radius:10px;background:#12355b;color:#fff;font:600 14px inherit;cursor:pointer}
+#byteChips{display:flex;flex-wrap:wrap;gap:6px;padding:8px 14px 0}
+#byteChips button{background:#fff;color:#12355b;border:1px solid #b6c6dd;padding:5px 11px}
+#byteVidWrap{padding:10px 14px 0}
+#byteVidTog{background:#fff;color:#12355b;border:1px solid #b6c6dd;padding:7px 14px;width:100%}
+#byteBox video{display:block;width:100%;background:#e8eef8;border-radius:8px;margin-top:8px}
+#byteBox .bnote{padding:10px 16px 14px;font-size:12px;color:#66758a}
 @media (prefers-reduced-motion:reduce){#byteBtn,#byteNudge{transition:none}}
 </style>
 <button type="button" id="byteBtn" aria-haspopup="dialog" aria-controls="byteModal"><span class="bd" aria-hidden="true"></span>Need help? Ask Byte</button>
-<div id="byteNudge" hidden role="status">Not sure where to start? Tap here and Byte will show you.</div>
+<div id="byteNudge" hidden role="status">Not sure where to start? Tap here and ask Byte.</div>
 <div id="byteModal" hidden role="dialog" aria-modal="true" aria-labelledby="byteTitle">
   <div id="byteBox">
-    <h3><span id="byteTitle">Hi, I'm Byte - quick start</span><button type="button" id="byteClose" aria-label="Close help">&times;</button></h3>
-    <video id="byteVideo" controls playsinline preload="none" poster="assets/byte-poster.jpg">
-      <source src="assets/byte-helper.mp4" type="video/mp4">
-    </video>
-    <ol class="bsteps">
-      <li><b>Filter</b> with the boxes at the top: category, drug type, risk band, time period, transport, or type a route or place in the search box.</li>
-      <li><b>Check Alerts</b> and the tiles to see what stands out right now.</li>
-      <li><b>Open the Route map</b> and tap a line or a number to read the reports behind it.</li>
-      <li><b>Read the Events table</b> and open the article link to verify. Use <i>How risk is scored</i> to see why an event is High, Medium or Low.</li>
-      <li><b>Use My watchlist</b> to follow a vessel, container or term, and <i>What to look for</i> for indicator cards.</li>
-    </ol>
-    <div class="bnote">Everything here is a lead to verify, not proof. The clip has sound, turn it up if you like.</div>
+    <h3><span id="byteTitle">Ask Byte</span><button type="button" id="byteClose" aria-label="Close help">&times;</button></h3>
+    <div id="byteLog" role="log" aria-live="polite"></div>
+    <form id="byteForm" autocomplete="off">
+      <input id="byteQ" type="text" enterkeyhint="send" maxlength="200" placeholder="Ask a question, e.g. how is risk scored?" aria-label="Ask Byte a question">
+      <button type="submit">Ask</button>
+    </form>
+    <div id="byteChips"></div>
+    <div id="byteVidWrap">
+      <button type="button" id="byteVidTog" aria-expanded="false" aria-controls="byteVidBox">Watch the 15-second intro clip</button>
+      <div id="byteVidBox" hidden>
+        <video id="byteVideo" controls playsinline preload="none" poster="assets/byte-poster.jpg">
+          <source src="assets/byte-helper.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+    <div class="bnote">I'm not a live AI. I answer from a built-in list of questions about this dashboard, so short, simple questions work best. Everything on this page is a lead to verify, not proof.</div>
   </div>
 </div>
 <script>
 (function(){
-  var btn=document.getElementById('byteBtn'),modal=document.getElementById('byteModal'),
-      vid=document.getElementById('byteVideo'),nudge=document.getElementById('byteNudge'),
-      closeB=document.getElementById('byteClose'),lastFocus=null;
-  if(!btn||!modal)return;
+  var g=function(i){return document.getElementById(i);};
+  var btn=g('byteBtn'),modal=g('byteModal'),vid=g('byteVideo'),nudge=g('byteNudge'),closeB=g('byteClose'),
+      log=g('byteLog'),form=g('byteForm'),inp=g('byteQ'),chips=g('byteChips'),vtog=g('byteVidTog'),vbox=g('byteVidBox');
+  if(!btn||!modal||!log||!form)return;
+  var lastFocus=null,greeted=false;
+  var reduce=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches);
+
+  /* ---------- helpers that act on the dashboard ---------- */
+  function cardByTitle(t){var h=document.querySelectorAll('.card h2');
+    for(var i=0;i<h.length;i++){if(h[i].textContent.replace(/\s+/g,' ').trim().toLowerCase().indexOf(t)===0)return h[i].closest('.card');}return null;}
+  function setSel(id,v){var e=g(id);if(!e)return;e.value=v;e.dispatchEvent(new Event('change',{bubbles:true}));}
+  function setQ(v){var e=g('fQ');if(!e)return;e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}
+  function resetFilters(){setQ('');setSel('fCategory','');setSel('fDrug','');setSel('fBand','');setSel('fMode','');setSel('fDays','90');
+    var c=g('fInfraClearBtn');if(c)c.click();}
+  function go(find,focusId){closeH(true);
+    setTimeout(function(){var el=find();if(!el)return;
+      el.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'});
+      if(focusId){setTimeout(function(){var f=g(focusId);if(f){try{f.focus({preventScroll:true});}catch(e){}}},600);}},80);}
+  function top(){return document.querySelector('.filters')||document.body;}
+  function A(label,fn){return {l:label,f:fn};}
+  var toFilters=A('Take me to the filters',function(){go(top);});
+  var toSearch=A('Go to the search box',function(){go(top,'fQ');});
+  var toMap=A('Show me the map',function(){go(function(){return g('map')&&g('map').closest('.card');});});
+  var toAlerts=A('Show me the alerts',function(){go(function(){return g('alerts')&&g('alerts').closest('.card');});});
+  var toEvents=A('Show me the events',function(){go(function(){return g('evT')&&g('evT').closest('.card');});});
+  var toLib=A('Show me the article library',function(){go(function(){return g('libCard');});});
+  var onlyHigh=A('Show only High-risk events',function(){setSel('fBand','High');go(function(){return g('evT')&&g('evT').closest('.card');});});
+  var reset=A('Reset all filters',function(){resetFilters();go(top);});
+  function days(n,l){return A(l,function(){setSel('fDays',n);go(top);});}
+
+  /* ---------- the built-in answers ---------- */
+  var E=[
+   {k:['who are you','what are you','what can you do','are you ai','are you a bot','chatbot','byte','about you'],
+    a:'<p>I\'m Byte, the helper for this dashboard. I\'m not a live AI model: I answer from a built-in list of questions about how Seizure Watch works, and I can jump to a section or set a filter for you.</p><p>Ask in simple words, or tap one of the questions below.</p>',act:[toFilters]},
+   {k:['where do i start','where to start','start','begin','what do i do','~how do i use','~how to use','help','lost','confused','dont know','getting started','first time','new here','~how does this work','~how it works'],
+    a:'<p>A quick way in:</p><ul><li><b>Filter</b> with the boxes at the top (category, type, risk, period, transport) or type a route or place in the search box.</li><li><b>Check the Alerts</b> to see what stands out.</li><li><b>Open the Route map</b> and tap a line or a number for the reports.</li><li><b>Read the Events table</b> and open the article link to verify.</li></ul>',act:[toFilters,toAlerts,toMap]},
+   {k:['filter','filters','narrow','category','categories','drug type','transport','country','dropdown','box','boxes'],
+    a:'<p>The boxes at the top narrow everything on the page: category, type (for example the drug), risk band, time period, transport and the search box. The charts, map and tables all follow them.</p><p>Categories go beyond drugs, for example CITES timber, ivory and fauna, chemicals, arms and ammunition, tobacco, cultural heritage and stolen vehicles.</p>',act:[toFilters,reset]},
+   {k:['search','find','look for','search box','type in','route','place','port','city','ghana','antwerp','rotterdam','cocaine'],
+    a:'<p>Type in the search box at the top. Examples: <i>Ghana to Hong Kong</i>, <i>cocaine Antwerp</i>, <i>food cargo</i>. It matches drug, country, place, route and cover cargo, and the whole page follows what you type.</p>',act:[toSearch,reset]},
+   {k:['high risk','high-risk','dangerous','urgent','priority','most important','worst','top risk','riskiest','highest risk','show high'],
+    a:'<p>High is the top risk band. The risk box at the top can show High only. Open the article link on an event to check it yourself: a high score is a reason to look closer, not proof.</p>',act:[onlyHigh,reset]},
+   {k:['last week','this week','last 7 days','last 30 days','last 90 days','month','recent','latest','today','newest','period','time period','how old','date','dates','all time','history'],
+    a:'<p>The time box at the top sets the period: last 7, 30 or 90 days, or all time. The page starts on 90 days.</p>',act:[days('7','Last 7 days'),days('30','Last 30 days'),days('9999','All time')]},
+   {k:['score','scored','risk score','how is risk','calculated','calculate','band','bands','medium','low risk','why is this high','points','rating','ranking','rank'],
+    a:'<p>Each report gets a score from 0 to 100 built from five separate dimensions, so no single factor decides it. Seizure weight counts for at most 10 points, and the method, network and route dimensions are capped (30, 30 and 20).</p><p>The score ranks reports for analyst attention. It is not proof, and indicators are phrases in the article, never traits of a person or nationality.</p>',
+    act:[A('Open the full explanation',function(){go(function(){var c=cardByTitle('how risk is scored');if(c){var d=c.querySelector('details');if(d)d.open=true;}return c;});})]},
+   {k:['map','route map','line','lines','arrow','arrows','origin','destination','circle','dot','dots','red dot','leaflet','zoom'],
+    a:'<p>The Route map draws reported routes as arrows from origin to destination. The colour shows risk: red High, orange Medium, green Low.</p><p>Tap a line for its report, or tap a numbered dot to list the reports for that place. Lines join country centres or ports, so they show the reported route, not the actual path. The map follows your filters.</p>',act:[toMap]},
+   {k:['watchlist','watch list','watch','follow','track','notify','monitor','save a search','my watchlist','add watch'],
+    a:'<p>My watchlist lets you follow a term, for example <i>Antwerp cocaine</i>, <i>Ecuador Belgium</i> or <i>food cargo</i>. Type it, choose the lowest risk level you care about and tap <b>Add watch</b>.</p><p>Watches are saved on this device only. "New" means not shown on your previous visit, and matching rows are highlighted in the table.</p>',
+    act:[A('Take me to my watchlist',function(){go(function(){return cardByTitle('my watchlist');},'wQ');})]},
+   {k:['alert','alerts','spike','spikes','surging','insider','warning','warnings','signal','signals','flag','flagged','stands out','unusual'],
+    a:'<p>Alerts list what stands out: high-risk events, possible insider signals, new or surging corridors and statistical spikes. Trend alerts stay quiet until about 42 days of history exist.</p>',act:[toAlerts]},
+   {k:['events','event','table','article','articles','verify','row','rows','article link','headline','outlet','newspaper','library','original'],
+    a:'<p>The Events table has one row per seizure report: the facts taken from a news article, with a link to it. Open the link to verify. The library lists every article behind the events, newest first, and you can search it by headline, drug, country, place, route or outlet.</p><p>Only the extracted facts and the link are stored, not the article text.</p>',act:[toEvents,toLib]},
+   {k:['repeat links','repeat','same vessel','same container','recurring','connection','connected','linked','links between','link analysis'],
+    a:'<p>Repeat links shows the same vessel, container, loading place or cover cargo appearing in more than one separate seizure. A recurring vessel or container number is the strongest sign. A big shipping line or a busy port appears in many seizures by chance, so treat these as leads to check.</p>',act:[A('Show me repeat links',function(){go(function(){return g('linkCard');});})]},
+   {k:['production chain','precursor','precursors','laboratory','laboratories','lab','labs','clandestine','synthetic','chemical','chemicals'],
+    a:'<p>Production chain watch follows precursor chemical seizures and clandestine laboratory reports, then synthetic drug seizures in the same country. A match on place and timing is a possible link only. Precursor seizures are rarely reported in the news, so labs are included too.</p>',act:[A('Show me the chain watch',function(){go(function(){return g('chainCard');});})]},
+   {k:['cover load','cover cargo','cover','hidden in','legitimate cargo','declared','goods','food cargo','what was it hidden'],
+    a:'<p>Cover load shows which legitimate goods the drugs were hidden in, when the article names them. The Cover load analysis below it compares the most common cover loads.</p>',act:[A('Show me cover load',function(){go(function(){return g('coverCard');});})]},
+   {k:['indicator','indicators','what to look for','concealment','concealment methods','risk indicators','pccp','wco','training','checklist','red flags'],
+    a:'<p>What to look for has indicator cards on concealment methods and route patterns, in the style of PCCP risk indicators. They are general guidance, not official PCCP or WCO material. Check them against your training and local procedures; an indicator is a reason to look closer, never proof.</p>',act:[A('Show me the indicator cards',function(){go(function(){return g('lookCard');});})]},
+   {k:['what does this suggest','what does this data suggest','suggest','suggests','pattern','patterns','analysis','trend','trends','insight','insights','summary','pie','overview','chart','charts','graph'],
+    a:'<p>What this data suggests gives a short reading of the reports in your current filter, with charts on what was seized, how it was hidden, where goods came from and the most repeated routes. Change the filters and it changes too. It shows where to look, not proof.</p>',act:[A('Show me the analysis',function(){go(function(){return g('infCard');});})]},
+   {k:['data','source','sources','where does','come from','collected','collect','gdelt','google news','how often','updated','update','refresh','fresh','generated','automatic'],
+    a:'<p>An automatic run searches Google News editions, GDELT and police and customs newsrooms for seizure reports, then pulls out the facts with fixed rules. It runs every day; the "generated" time at the top shows the last update.</p>',act:[toFilters]},
+   {k:['language','languages','translate','translated','translation','arabic','turkish','russian','chinese','hindi','spanish','french','dutch','german','coverage','blind','blind spots'],
+    a:'<p>Reports are read in around twenty languages (including Spanish, French, Portuguese, Dutch and Flemish, German, Arabic, Turkish, Russian, Chinese and Hindi) and shown in English. The Coverage card has a map of blind spots: red is a country whose main language is not searched, yellow is quiet, green has reports.</p>',act:[A('Show me the coverage map',function(){go(function(){return cardByTitle('coverage');});})]},
+   {k:['proof','accurate','accuracy','reliable','trust','wrong','mistake','error','confirmed','official','intelligence','evidence','correct','true','verify this'],
+    a:'<p>Treat everything as a lead to verify, not confirmed intelligence. Facts are pulled from news articles by fixed rules, so the tool can miss or misread things. Open the article link behind an event to check it.</p>',act:[toEvents]},
+   {k:['download','export','csv','excel','xlsx','spreadsheet','bulletin','pdf','weekly','weekly bulletin','save'],
+    a:'<p>The links under the title at the top give you the <b>Weekly bulletin</b>, the events as <b>CSV</b> and as an <b>Excel</b> file.</p>',act:[A('Take me to the top',function(){closeH(true);setTimeout(function(){window.scrollTo({top:0,behavior:reduce?'auto':'smooth'});},80);})]},
+   {k:['reset','clear','start over','remove filters','show everything','clear filters','undo'],
+    a:'<p>I can clear every filter and go back to the last 90 days.</p>',act:[reset]},
+   {k:['thanks','thank you','thx','cheers','merci','great'],a:'<p>You\'re welcome! Ask me anything else.</p>',act:[]},
+   {k:['hi','hello','hey','good morning','good evening','yo'],a:'<p>Hi! What would you like to know about the dashboard?</p>',act:[]}
+  ];
+  var STARTERS=[['Where do I start?','where do i start'],['Show me high-risk events','high risk'],['How is risk scored?','how is risk scored'],
+    ['How do I use the map?','map'],['What is the watchlist?','watchlist'],['Where does the data come from?','where does the data come from']];
+
+  /* ---------- matching ---------- */
+  function norm(s){return ' '+s.toLowerCase().replace(/[^a-z0-9À-ɏ ]+/g,' ').replace(/\s+/g,' ').trim()+' ';}
+  function stem(w){return w.length>3&&w.charAt(w.length-1)==='s'?w.slice(0,-1):w;}
+  function best(q){
+    var n=norm(q),ws=n.trim().split(' ').map(stem),bi=-1,bs=0;
+    for(var i=0;i<E.length;i++){var s=0,k=E[i].k;
+      for(var j=0;j<k.length;j++){var kk=k[j].toLowerCase().replace(/-/g,' '),weak=kk.charAt(0)==='~';
+        if(weak)kk=kk.slice(1);                      /* "~phrase" = generic phrase, counts 1 so a topic word beats it */
+        if(kk.indexOf(' ')>=0){if(n.indexOf(' '+kk+' ')>=0)s+=weak?1:3;}
+        else if(ws.indexOf(stem(kk))>=0)s+=2;}
+      if(s>bs){bs=s;bi=i;}}
+    return bs>0?E[bi]:null;}
+
+  /* ---------- chat window ---------- */
+  function scrollLog(){log.scrollTop=log.scrollHeight;}
+  function addUser(t){var d=document.createElement('div');d.className='bm u';var b=document.createElement('div');b.className='bb';b.textContent=t;d.appendChild(b);log.appendChild(d);scrollLog();}
+  function addByte(html,acts){
+    var d=document.createElement('div');d.className='bm';
+    d.innerHTML='<span class="bd" aria-hidden="true"></span><div class="bb">'+html+'</div>';
+    if(acts&&acts.length){var r=document.createElement('div');r.className='bacts';
+      acts.forEach(function(a){var b=document.createElement('button');b.type='button';b.textContent=a.l;b.addEventListener('click',a.f);r.appendChild(b);});
+      d.querySelector('.bb').appendChild(r);}
+    log.appendChild(d);scrollLog();}
+  function ask(q){
+    q=(q||'').trim();if(!q)return;
+    addUser(q);var m=best(q);
+    setTimeout(function(){
+      if(m){addByte(m.a,m.act);}
+      else{var acts=[];if(q.length<=60){acts.push(A('Search the events for "'+q+'"',function(){setQ(q);go(top);}));}
+        addByte('<p>I don\'t have an answer for that one yet. I can help with the filters, searching, the map, risk scores, the watchlist, alerts, the events table, where the data comes from and its languages.</p><p>You can also search the events for your words.</p>',acts);}
+    },250);}
+  form.addEventListener('submit',function(e){e.preventDefault();var q=inp.value;inp.value='';ask(q);});
+  STARTERS.forEach(function(s){var b=document.createElement('button');b.type='button';b.textContent=s[0];b.addEventListener('click',function(){ask(s[1]);});chips.appendChild(b);});
+  vtog.addEventListener('click',function(){var open=vbox.hidden;vbox.hidden=!open;vtog.setAttribute('aria-expanded',open?'true':'false');
+    vtog.textContent=open?'Hide the intro clip':'Watch the 15-second intro clip';
+    if(open){try{vbox.scrollIntoView({block:'nearest'});}catch(e){}}else{try{vid.pause();}catch(e){}}});
+
+  /* ---------- open / close ---------- */
   function hideNudge(){nudge.hidden=true;}
-  function openH(){hideNudge();lastFocus=document.activeElement;modal.hidden=false;closeB.focus();}
-  function closeH(){modal.hidden=true;try{vid.pause();}catch(e){}if(lastFocus&&lastFocus.focus)lastFocus.focus();}
+  function openH(){hideNudge();lastFocus=document.activeElement;modal.hidden=false;
+    if(!greeted){greeted=true;addByte('<p>Hi, I\'m Byte! Ask me how to use this dashboard, or tap one of the questions below.</p>',[]);}
+    if(!(window.matchMedia&&matchMedia('(pointer:coarse)').matches)){inp.focus();}else{closeB.focus();}}
+  function closeH(skipFocus){modal.hidden=true;try{vid.pause();}catch(e){}
+    if(!skipFocus&&lastFocus&&lastFocus.focus){try{lastFocus.focus({preventScroll:true});}catch(e){}}}
   btn.addEventListener('click',openH);
   nudge.addEventListener('click',openH);
-  closeB.addEventListener('click',closeH);
+  closeB.addEventListener('click',function(){closeH();});
   modal.addEventListener('click',function(e){if(e.target===modal)closeH();});
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!modal.hidden)closeH();});
-  // gentle nudge once per visit if nobody has touched anything for a while
+
+  /* gentle nudge once per visit if nobody has touched anything for a while */
   var seen=false;try{seen=sessionStorage.getItem('byteNudged')==='1';}catch(e){}
   if(!seen){
     var idle=null,done=false;
-    function arm(){if(done)return;clearTimeout(idle);idle=setTimeout(show,25000);}
     function show(){done=true;nudge.hidden=false;try{sessionStorage.setItem('byteNudged','1');}catch(e){}setTimeout(hideNudge,14000);}
+    function arm(){if(done)return;clearTimeout(idle);idle=setTimeout(show,25000);}
     ['click','keydown','scroll','touchstart'].forEach(function(ev){window.addEventListener(ev,arm,{passive:true});});
     arm();
   }
