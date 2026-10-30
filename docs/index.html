@@ -1185,6 +1185,14 @@ fetch('https://gertberi.goatcounter.com/counter/TOTAL.json')
 #byteForm{display:flex;gap:8px;padding:8px 14px 0}
 #byteQ{flex:1 1 auto;min-width:0;padding:10px 12px;border:1px solid #cbd5e1;border-radius:10px;font-size:16px;font-family:inherit}
 #byteForm button{padding:10px 16px;border:0;border-radius:10px;background:#12355b;color:#fff;font:600 14px inherit;cursor:pointer}
+#byteForm #byteMic{padding:0;width:44px;flex:0 0 44px;background:#fff;color:#12355b;border:1px solid #b6c6dd;display:flex;align-items:center;justify-content:center}
+#byteForm #byteMic svg{width:20px;height:20px;fill:currentColor}
+#byteForm #byteMic.on{background:#dc2626;color:#fff;border-color:#dc2626;animation:byMic 1s ease-in-out infinite}
+#byteForm #byteMic[hidden]{display:none}
+@keyframes byMic{50%{box-shadow:0 0 0 7px rgba(220,38,38,.2)}}
+#byteVoiceRow{display:flex;align-items:center;gap:8px;padding:6px 14px 0;font-size:12.5px;color:#475569}
+#byteSpk{font:inherit;font-size:12.5px;border-radius:999px;cursor:pointer;background:#fff;color:#12355b;border:1px solid #b6c6dd;padding:4px 11px}
+#byteSpk[aria-pressed=true]{background:#12355b;color:#fff;border-color:#12355b}
 #byteChips{display:flex;flex-wrap:wrap;gap:6px;padding:8px 14px 0}
 #byteChips button{background:#fff;color:#12355b;border:1px solid #b6c6dd;padding:5px 11px}
 #byteVidWrap{padding:10px 14px 0}
@@ -1324,8 +1332,10 @@ fetch('https://gertberi.goatcounter.com/counter/TOTAL.json')
     <div id="byteLog" role="log" aria-live="polite"></div>
     <form id="byteForm" autocomplete="off">
       <input id="byteQ" type="text" enterkeyhint="send" maxlength="200" placeholder="Ask a question, e.g. how is risk scored?" aria-label="Ask Byte a question">
+      <button type="button" id="byteMic" aria-label="Speak your question" title="Speak your question"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15a3.5 3.5 0 0 0 3.5-3.5V6a3.5 3.5 0 0 0-7 0v5.5A3.5 3.5 0 0 0 12 15zm6-3.5a6 6 0 0 1-12 0H4.5a7.5 7.5 0 0 0 6.75 7.46V22h1.5v-3.04A7.5 7.5 0 0 0 19.5 11.5z"/></svg></button>
       <button type="submit">Ask</button>
     </form>
+    <div id="byteVoiceRow" hidden><button type="button" id="byteSpk" aria-pressed="false">Read answers aloud</button><span id="byteVoiceMsg" aria-live="polite">Tap the microphone and speak.</span></div>
     <div id="byteChips"></div>
     <div id="byteVidWrap">
       <button type="button" id="byteVidTog" aria-expanded="false" aria-controls="byteVidBox">Watch the 15-second intro clip</button>
@@ -1621,11 +1631,42 @@ fetch('https://gertberi.goatcounter.com/counter/TOTAL.json')
     var typ=addTyping();
     setTimeout(function(){
       if(typ.parentNode)typ.parentNode.removeChild(typ);
-      if(dm){addByte(dm.a,dm.act);}
-      else if(m){addByte(m.a,m.act);}
+      if(dm){addByte(dm.a,dm.act);speakText(dm.a);}
+      else if(m){addByte(m.a,m.act);speakText(m.a);}
       else{var acts=[];if(q.length<=60){acts.push(A('Search the events for "'+q+'"',function(){setQ(q);go(top);}));}
-        addByte('<p>I don\'t have an answer for that one yet. I can help with the filters, searching, the map, risk scores, the watchlist, alerts, the events table, where the data comes from and its languages.</p><p>You can also search the events for your words.</p>',acts);}
+        speakText('I do not have an answer for that one yet. You can search the events for your words.');addByte('<p>I don\'t have an answer for that one yet. I can help with the filters, searching, the map, risk scores, the watchlist, alerts, the events table, where the data comes from and its languages.</p><p>You can also search the events for your words.</p>',acts);}
     },700);}
+  /* ---------- talking to Byte: speech in (microphone) and speech out (read answers aloud) ---------- */
+  var mic=g('byteMic'),spk=g('byteSpk'),vrow=g('byteVoiceRow'),vmsg=g('byteVoiceMsg');
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition,TTS=('speechSynthesis' in window)&&window.SpeechSynthesisUtterance,speakOn=false,rec=null,listening=false;
+  function speakText(html){if(!TTS||!speakOn)return;try{speechSynthesis.cancel();var t=document.createElement('div');t.innerHTML=html.replace(/<\/(p|li|div)>/g,'. </$1>').replace(/\.\s*\./g,'.');
+    var u=new SpeechSynthesisUtterance((t.textContent||'').replace(/\s+/g,' ').trim().slice(0,600));u.lang='en-GB';u.rate=1.02;speechSynthesis.speak(u);}catch(e){}}
+  function stopSpeak(){try{if(TTS)speechSynthesis.cancel();}catch(e){}}
+  function setSpk(on){speakOn=on;spk.setAttribute('aria-pressed',on?'true':'false');spk.textContent=on?'Reading answers aloud':'Read answers aloud';if(!on)stopSpeak();}
+  function stopListen(){if(rec&&listening){try{rec.stop();}catch(e){}}}
+  if(!SR&&!TTS){mic.hidden=true;}
+  else{
+    vrow.hidden=false;
+    if(!TTS)spk.hidden=true;else spk.addEventListener('click',function(){setSpk(!speakOn);});
+    if(!SR){mic.hidden=true;vmsg.textContent='Voice input is not supported in this browser. You can still type.';}
+    else{
+      mic.addEventListener('click',function(){
+        if(listening){stopListen();return;}
+        stopSpeak();
+        try{rec=new SR();}catch(e){mic.hidden=true;return;}
+        rec.lang='en-GB';rec.interimResults=true;rec.continuous=false;rec.maxAlternatives=1;
+        var finalText='',failed=false;
+        rec.onstart=function(){listening=true;mic.classList.add('on');mic.setAttribute('aria-label','Stop listening');vmsg.textContent='Listening... speak now.';};
+        rec.onresult=function(ev){var t='';for(var i=ev.resultIndex;i<ev.results.length;i++){t+=ev.results[i][0].transcript;if(ev.results[i].isFinal)finalText+=ev.results[i][0].transcript;}inp.value=(finalText||t).trim();};
+        rec.onerror=function(ev){failed=true;var c=ev&&ev.error;vmsg.textContent=(c==='not-allowed'||c==='service-not-allowed')?'The microphone is blocked. Allow it for this site in your browser settings, or type your question.':(c==='no-speech'?'I did not hear anything. Tap the microphone and try again.':'Voice input did not work. You can type instead.');};
+        rec.onend=function(){listening=false;mic.classList.remove('on');mic.setAttribute('aria-label','Speak your question');
+          var q=(inp.value||'').trim();
+          if(!failed&&q){vmsg.textContent='Tap the microphone and speak.';if(TTS)setSpk(true);inp.value='';ask(q);}
+          else if(!failed){vmsg.textContent='I did not hear anything. Tap the microphone and try again.';}};
+        try{rec.start();}catch(e){vmsg.textContent='Voice input did not start. Tap again.';}
+      });
+    }
+  }
   form.addEventListener('submit',function(e){e.preventDefault();var q=inp.value;inp.value='';ask(q);});
   STARTERS.forEach(function(s){var b=document.createElement('button');b.type='button';b.textContent=s[0];b.addEventListener('click',function(){ask(s[1]);});chips.appendChild(b);});
   vtog.addEventListener('click',function(){var open=vbox.hidden;vbox.hidden=!open;vtog.setAttribute('aria-expanded',open?'true':'false');
@@ -1637,7 +1678,7 @@ fetch('https://gertberi.goatcounter.com/counter/TOTAL.json')
   function openH(){hideNudge();stopAct();lastFocus=document.activeElement;modal.hidden=false;
     if(!greeted){greeted=true;addByte('<p>Hi, I\'m Byte! Ask me how to use this dashboard, or tap one of the questions below.</p>',[]);}
     if(!(window.matchMedia&&matchMedia('(pointer:coarse)').matches)){inp.focus();}else{closeB.focus();}}
-  function closeH(skipFocus){modal.hidden=true;try{vid.pause();}catch(e){}
+  function closeH(skipFocus){modal.hidden=true;try{vid.pause();}catch(e){}stopSpeak();stopListen();
     if(!skipFocus&&lastFocus&&lastFocus.focus){try{lastFocus.focus({preventScroll:true});}catch(e){}}}
   btn.addEventListener('click',openH);
   nudge.addEventListener('click',openH);
