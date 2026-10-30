@@ -170,8 +170,14 @@ def build_dashboard(path, payload):
             logo_uri = "data:image/png;base64," + base64.b64encode(lf.read()).decode()
     except OSError:
         logo_uri = ""          # logo file missing: the page still builds, just without it
+    try:                       # "Need help? Ask Byte" button; the page still builds without it
+        with open(os.path.join(os.path.dirname(__file__), "byte_helper.html"), encoding="utf-8") as bf:
+            byte_html = bf.read()
+    except OSError:
+        byte_html = ""
     with open(path, "w", encoding="utf-8") as f:
-        f.write(html.replace("__DATA__", data).replace("__GEO__", geo_json).replace("__LOGO__", logo_uri))
+        f.write(html.replace("__DATA__", data).replace("__GEO__", geo_json).replace("__LOGO__", logo_uri)
+                .replace("__BYTE__", byte_html))
 
 
 def write_all(res, out_dir, cfg, demo=False, verifications=None):

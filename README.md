@@ -41,3 +41,8 @@ German (Austria), Danish, Estonian, Amharic, Icelandic, Mongolian, Norwegian, Sl
 
 ## Weekly bulletin
 `docs/bulletin.html` is rebuilt every run. To also e-mail it every Monday, add these GitHub secrets (Settings > Secrets and variables > Actions): `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `BULLETIN_TO` (comma-separated), optionally `BULLETIN_FROM`. Never put them in the repository (it is public).
+
+## Byte, the help helper
+A floating **Need help? Ask Byte** button on the dashboard opens a 15-second clip (with sound) and a five-step quick start for people who don't know where to begin. After 25 seconds without any click or scroll a small bubble nudges first-time visitors once per visit.
+- The button lives in `swatch/byte_helper.html` and is added to the page by `report.build_dashboard` (marker `__BYTE__` in `swatch/dashboard.html`), so it survives the daily rebuild.
+- The clip and poster are `docs/assets/byte-helper.mp4` and `docs/assets/byte-poster.jpg`. `tools/byte/byte.py` draws the video and `tools/byte/sfx.py` makes the sound (needs Pillow, numpy, scipy and ffmpeg) if you want to change the script.
