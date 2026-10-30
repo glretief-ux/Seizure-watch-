@@ -1204,7 +1204,7 @@ fetch('https://gertberi.goatcounter.com/counter/TOTAL.json')
 @keyframes byDot{0%,60%,100%{transform:translateY(0);opacity:.35}30%{transform:translateY(-4px);opacity:1}}
 @keyframes byMsg{from{transform:translateY(6px);opacity:0}to{transform:none;opacity:1}}
 @keyframes byBox{from{transform:translateY(16px) scale(.97);opacity:0}to{transform:none;opacity:1}}
-.bhop{animation:byHop 10s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+.bhop{transform-box:fill-box;transform-origin:50% 100%}
 #byteBtn.hey .bhop{animation:byHey .7s ease-in-out infinite}
 .bfloat{animation:byFloat 3.2s ease-in-out infinite}
 .bshadow{animation:byShadow 3.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
@@ -1212,11 +1212,80 @@ fetch('https://gertberi.goatcounter.com/counter/TOTAL.json')
 .beye,.bd:before,.bd:after{transform-box:fill-box;transform-origin:center;animation:byBlink 4.4s infinite}
 .bant{transform-box:fill-box;transform-origin:50% 100%;animation:byAnt 1.9s ease-in-out infinite}
 .bball{animation:byBall 1.6s ease-in-out infinite}
-.barmR{transform-box:fill-box;transform-origin:0% 50%;animation:byWave 9s ease-in-out infinite}
+.barmR{transform-box:fill-box;transform-origin:0% 0%}
+.barmL{transform-box:fill-box;transform-origin:100% 0%}
 .bm{animation:byMsg .25s ease}
 #byteBox{animation:byBox .22s ease}
 .btyp span{display:inline-block;width:7px;height:7px;margin:4px 2px;border-radius:50%;background:#12355b;animation:byDot 1s infinite}
 .btyp span:nth-child(2){animation-delay:.15s}.btyp span:nth-child(3){animation-delay:.3s}
+/* ---- Byte's acts: the page picks one at random every few seconds (JS sets data-act on the button) ---- */
+.bfollow{transform:translate(var(--lx,0px),var(--ly,0px));transition:transform .12s ease-out}
+.pr{opacity:0;transform-box:fill-box;transform-origin:center}
+#byteSay{position:fixed;right:22px;bottom:150px;z-index:9997;max-width:200px;background:#fff;color:#1c2733;border:1px solid #cbd5e1;border-radius:12px;padding:6px 10px;font:600 12px/1.3 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;box-shadow:0 3px 10px rgba(0,0,0,.12);pointer-events:none;animation:byMsg .2s ease}
+#byteSay:after{content:"";position:absolute;right:64px;bottom:-7px;width:12px;height:12px;background:#fff;border-right:1px solid #cbd5e1;border-bottom:1px solid #cbd5e1;transform:rotate(45deg)}
+#byteSay[hidden]{display:none}
+@keyframes byProp{0%{opacity:0;transform:scale(.2) translateY(6px)}12%{opacity:1;transform:scale(1.15)}20%,85%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(.6)}}
+@keyframes byKnock{0%,100%{transform:rotate(0)}45%{transform:rotate(30deg)}}
+@keyframes byRip{0%,35%{opacity:0;transform:scale(.3)}40%{opacity:.9}100%{opacity:0;transform:scale(2.6)}}
+@keyframes byLeft{0%,100%{transform:translateX(0)}10%,90%{transform:translateX(-4px)}}
+@keyframes byUp{0%,100%{transform:translateY(0)}12%,85%{transform:translateY(-4px)}}
+@keyframes byDown{0%,100%{transform:translateY(0)}12%,88%{transform:translateY(3px)}}
+@keyframes byHold{0%,100%{transform:rotate(0)}12%,78%{transform:rotate(-62deg)}}
+@keyframes byMail{0%{opacity:0;transform:translateY(10px) scale(.4)}14%,80%{opacity:1;transform:none}100%{opacity:0;transform:translateY(46px) rotate(25deg)}}
+@keyframes bySweep{0%{opacity:0;transform:translate(-26px,0) scale(.6)}10%{opacity:1;transform:translate(-18px,0)}35%{transform:translate(18px,2px)}60%{transform:translate(-14px,-2px)}85%{opacity:1;transform:translate(14px,0)}100%{opacity:0;transform:translate(24px,0) scale(.6)}}
+@keyframes byDart{0%,100%{transform:translateX(0)}10%{transform:translateX(-3px)}35%{transform:translateX(3px)}60%{transform:translateX(-3px)}85%{transform:translateX(3px)}}
+@keyframes bySleepEye{0%,100%{transform:scaleY(1)}16%,80%{transform:scaleY(.08)}88%{transform:scaleY(1.25)}}
+@keyframes byDroop{0%,100%{transform:rotate(0)}18%,80%{transform:rotate(38deg)}}
+@keyframes bySink{0%,100%{transform:none}20%,78%{transform:translateY(6px) rotate(-4deg)}90%{transform:translateY(-10px) scale(1.04,.96)}}
+@keyframes byZ{0%{opacity:0;transform:translate(0,6px) scale(.6)}25%{opacity:1}100%{opacity:0;transform:translate(6px,-12px) scale(1.1)}}
+@keyframes byDance{0%,100%{transform:rotate(-7deg) translateY(0)}50%{transform:rotate(7deg) translateY(-9px)}}
+@keyframes byArmL{0%,100%{transform:rotate(0)}50%{transform:rotate(70deg)}}
+@keyframes byArmR{0%,100%{transform:rotate(0)}50%{transform:rotate(-70deg)}}
+@keyframes byHappy{0%,100%{transform:scaleY(1)}12%,88%{transform:scaleY(.45)}}
+@keyframes byNote{0%{opacity:0;transform:translateY(8px)}30%{opacity:1}100%{opacity:0;transform:translate(8px,-22px)}}
+@keyframes byCur{0%,100%{transform:none}22%,70%{transform:scale(1.15) rotate(-6deg)}}
+@keyframes byTypeL{0%,100%{transform:rotate(0)}50%{transform:rotate(-16deg)}}
+@keyframes byTypeR{0%,100%{transform:rotate(0)}50%{transform:rotate(16deg)}}
+@keyframes bySadEye{0%,70%,100%{transform:scaleY(1)}12%,62%{transform:scaleY(.7)}}
+@keyframes byTear{0%{opacity:0;transform:translateY(0)}20%{opacity:1}100%{opacity:0;transform:translateY(22px)}}
+@keyframes bySadHop{0%,62%,100%{transform:none}68%{transform:translateY(-14px) scale(.96,1.06)}74%{transform:scale(1.05,.94)}80%{transform:translateY(-14px) scale(.96,1.06)}86%{transform:scale(1.05,.94)}}
+@keyframes bySpin{0%,100%{transform:scaleX(1)}25%,75%{transform:scaleX(.04)}50%{transform:scaleX(-1)}}
+@keyframes byWave2{0%,100%{transform:rotate(0)}10%,34%,58%{transform:rotate(-50deg)}22%,46%,70%{transform:rotate(-15deg)}82%{transform:rotate(-45deg)}}
+#byteBtn[data-act=tap] .barmL{animation:byKnock .5s ease-in-out .35s 5}
+#byteBtn[data-act=tap] .p-rip{animation:byRip .5s ease-out .35s 5}
+#byteBtn[data-act=tap] .p-rip2{animation-delay:.47s}
+#byteBtn[data-act=tap] .beyes{animation:byLeft 3.2s ease both}
+#byteBtn[data-act=bulb] .p-bulb{animation:byProp 3s ease both}
+#byteBtn[data-act=bulb] .bball{animation:none;fill:#fde047}
+#byteBtn[data-act=bulb] .beyes{animation:byUp 3s ease both}
+#byteBtn[data-act=mail] .barmR{animation:byHold 3.6s ease both}
+#byteBtn[data-act=mail] .p-mail{animation:byMail 3.6s ease both}
+#byteBtn[data-act=search] .p-mag{animation:bySweep 3.4s ease-in-out both}
+#byteBtn[data-act=search] .beyes{animation:byDart 3.4s ease-in-out both}
+#byteBtn[data-act=sleep] .beye{animation:bySleepEye 4.8s ease both}
+#byteBtn[data-act=sleep] .bant{animation:byDroop 4.8s ease both}
+#byteBtn[data-act=sleep] .bfloat{animation:bySink 4.8s ease-in-out both;transform-box:fill-box;transform-origin:50% 100%}
+#byteBtn[data-act=sleep] .p-z{animation:byZ 2.2s ease-out infinite}
+#byteBtn[data-act=sleep] .p-z2{animation-delay:.7s}
+#byteBtn[data-act=sleep] .p-z3{animation-delay:1.4s}
+#byteBtn[data-act=dance] .bfloat{animation:byDance .6s ease-in-out 6;transform-box:fill-box;transform-origin:50% 100%}
+#byteBtn[data-act=dance] .barmL{animation:byArmL .6s ease-in-out 6}
+#byteBtn[data-act=dance] .barmR{animation:byArmR .6s ease-in-out 6}
+#byteBtn[data-act=dance] .beye{animation:byHappy 3.6s ease both}
+#byteBtn[data-act=dance] .p-note{animation:byNote 1.8s ease-out 2 both}
+#byteBtn[data-act=dance] .p-note2{animation-delay:.5s}
+#byteBtn[data-act=curious] .bhop{animation:byCur 2.6s ease both}
+#byteBtn[data-act=curious] .p-q{animation:byProp 2.6s ease both}
+#byteBtn[data-act=type] .p-lap{animation:byProp 4s ease both}
+#byteBtn[data-act=type] .barmL{animation:byTypeL .28s ease-in-out 0s 13}
+#byteBtn[data-act=type] .barmR{animation:byTypeR .28s ease-in-out .14s 12}
+#byteBtn[data-act=type] .beyes{animation:byDown 4s ease both}
+#byteBtn[data-act=sad] .beye{animation:bySadEye 4.3s ease both}
+#byteBtn[data-act=sad] .bant{animation:byDroop 4.3s ease both}
+#byteBtn[data-act=sad] .p-tear{animation:byTear 1.6s ease-in 2 both}
+#byteBtn[data-act=sad] .bhop{animation:bySadHop 4.3s ease both}
+#byteBtn[data-act=spin] .bfloat{animation:bySpin 1.7s ease-in-out both;transform-box:fill-box;transform-origin:50% 50%}
+#byteBtn[data-act=wave] .barmR{animation:byWave2 3.1s ease both}
 @media (max-width:480px){#byteBtn .bz{width:72px;height:78px}#byteNudge{bottom:128px}}
 @media (prefers-reduced-motion:reduce){#byteBtn,.bhop,.bfloat,.bshadow,.beyes,.beye,.bant,.bball,.barmR,.bm,#byteBox,.btyp span,.bd:before,.bd:after{animation:none!important}}
 </style>
@@ -1226,14 +1295,26 @@ fetch('https://gertberi.goatcounter.com/counter/TOTAL.json')
  <g class="bhop"><g class="bfloat">
   <g class="bant"><line x1="60" y1="24" x2="60" y2="10" stroke="#3460c4" stroke-width="4" stroke-linecap="round"/><circle class="bball" cx="60" cy="8" r="6.5" fill="#ef4444" stroke="#3460c4" stroke-width="2"/></g>
   <path d="M30 80 L22 110 L58 86 Z" fill="#5b8def" stroke="#3460c4" stroke-width="3" stroke-linejoin="round"/>
-  <g><line x1="24" y1="62" x2="9" y2="72" stroke="#4a78d6" stroke-width="5" stroke-linecap="round"/><circle cx="8" cy="73" r="6" fill="#4a78d6" stroke="#3460c4" stroke-width="2"/></g>
+  <g class="barmL"><line x1="24" y1="62" x2="9" y2="72" stroke="#4a78d6" stroke-width="5" stroke-linecap="round"/><circle cx="8" cy="73" r="6" fill="#4a78d6" stroke="#3460c4" stroke-width="2"/></g>
   <g class="barmR"><line x1="96" y1="62" x2="111" y2="72" stroke="#4a78d6" stroke-width="5" stroke-linecap="round"/><circle cx="112" cy="73" r="6" fill="#4a78d6" stroke="#3460c4" stroke-width="2"/></g>
   <rect x="22" y="22" width="76" height="66" rx="22" fill="#5b8def" stroke="#3460c4" stroke-width="3"/>
   <line x1="31" y1="31" x2="47" y2="28" stroke="#a0bffa" stroke-width="3.5" stroke-linecap="round"/>
   <rect x="30" y="32" width="60" height="44" rx="14" fill="#14213d"/>
-  <g class="beyes"><rect class="beye" x="41" y="42" width="11" height="18" rx="5.5" fill="#7df9ff"/><rect class="beye" x="68" y="42" width="11" height="18" rx="5.5" fill="#7df9ff"/></g>
+  <g class="beyes"><g class="bfollow"><rect class="beye" x="41" y="42" width="11" height="18" rx="5.5" fill="#7df9ff"/><rect class="beye" x="68" y="42" width="11" height="18" rx="5.5" fill="#7df9ff"/></g></g>
   <ellipse cx="38" cy="67" rx="5" ry="3" fill="#f9a8d4"/><ellipse cx="82" cy="67" rx="5" ry="3" fill="#f9a8d4"/>
   <path d="M53 66 Q60 71 67 66" fill="none" stroke="#7df9ff" stroke-width="2.5" stroke-linecap="round"/>
+  <g transform="translate(94 12)"><g class="pr p-bulb"><circle r="8" fill="#fde047" stroke="#d9a028" stroke-width="2"/><rect x="-4" y="7" width="8" height="5" rx="1.5" fill="#94a3b8"/><path d="M-14 -6 L-18 -9 M14 -6 L18 -9 M0 -13 L0 -18" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"/></g></g>
+  <g transform="translate(114 36)"><g class="pr p-mail"><rect x="-12" y="-8" width="24" height="16" rx="3" fill="#fff" stroke="#64748b" stroke-width="2"/><path d="M-12 -7 L0 2 L12 -7" fill="none" stroke="#64748b" stroke-width="2" stroke-linejoin="round"/></g></g>
+  <g transform="translate(60 56)"><g class="pr p-mag"><circle r="11" fill="rgba(255,255,255,.18)" stroke="#e2e8f0" stroke-width="3.5"/><line x1="8" y1="8" x2="19" y2="19" stroke="#94a3b8" stroke-width="4.5" stroke-linecap="round"/></g></g>
+  <g transform="translate(88 28)"><text class="pr p-z p-z1" text-anchor="middle" font-size="13" font-weight="700" fill="#5b8def" font-family="sans-serif">z</text></g>
+  <g transform="translate(98 17)"><text class="pr p-z p-z2" text-anchor="middle" font-size="16" font-weight="700" fill="#5b8def" font-family="sans-serif">z</text></g>
+  <g transform="translate(109 5)"><text class="pr p-z p-z3" text-anchor="middle" font-size="19" font-weight="700" fill="#5b8def" font-family="sans-serif">Z</text></g>
+  <g transform="translate(8 34)"><text class="pr p-note p-note1" text-anchor="middle" font-size="18" fill="#5b8def" font-family="Segoe UI Symbol,sans-serif">&#9834;</text></g>
+  <g transform="translate(112 30)"><text class="pr p-note p-note2" text-anchor="middle" font-size="18" fill="#f59e0b" font-family="Segoe UI Symbol,sans-serif">&#9835;</text></g>
+  <g transform="translate(98 26)"><text class="pr p-q" text-anchor="middle" font-size="24" font-weight="800" fill="#f59e0b" font-family="sans-serif">?</text></g>
+  <g transform="translate(60 101)"><g class="pr p-lap"><rect x="-22" y="-14" width="44" height="14" rx="3" fill="#cbd5e1" stroke="#64748b" stroke-width="2"/><circle cy="-7" r="2.2" fill="#64748b"/><rect x="-27" y="0" width="54" height="5" rx="2.5" fill="#94a3b8" stroke="#64748b" stroke-width="1.5"/></g></g>
+  <g transform="translate(45 63)"><path class="pr p-tear" d="M0 0 Q3 4 0 7 Q-3 4 0 0Z" fill="#7dc8ff"/></g>
+  <g transform="translate(-3 64)"><circle class="pr p-rip" r="5" fill="none" stroke="#5b8def" stroke-width="2"/><circle class="pr p-rip p-rip2" r="5" fill="none" stroke="#5b8def" stroke-width="1.5"/></g>
  </g></g>
 </svg><span class="blab">Need help? Ask Byte</span></button>
 <div id="byteNudge" hidden role="status">Not sure where to start? Tap here and ask Byte.</div>
@@ -1553,7 +1634,7 @@ fetch('https://gertberi.goatcounter.com/counter/TOTAL.json')
 
   /* ---------- open / close ---------- */
   function hideNudge(){nudge.hidden=true;btn.classList.remove('hey');}
-  function openH(){hideNudge();lastFocus=document.activeElement;modal.hidden=false;
+  function openH(){hideNudge();stopAct();lastFocus=document.activeElement;modal.hidden=false;
     if(!greeted){greeted=true;addByte('<p>Hi, I\'m Byte! Ask me how to use this dashboard, or tap one of the questions below.</p>',[]);}
     if(!(window.matchMedia&&matchMedia('(pointer:coarse)').matches)){inp.focus();}else{closeB.focus();}}
   function closeH(skipFocus){modal.hidden=true;try{vid.pause();}catch(e){}
@@ -1568,10 +1649,33 @@ fetch('https://gertberi.goatcounter.com/counter/TOTAL.json')
   var seen=false;try{seen=sessionStorage.getItem('byteNudged')==='1';}catch(e){}
   if(!seen){
     var idle=null,done=false;
-    function show(){done=true;nudge.hidden=false;btn.classList.add('hey');try{sessionStorage.setItem('byteNudged','1');}catch(e){}setTimeout(hideNudge,14000);}
+    function show(){done=true;nudge.hidden=false;btn.classList.add('hey');stopAct();try{sessionStorage.setItem('byteNudged','1');}catch(e){}setTimeout(hideNudge,14000);}
     function arm(){if(done)return;clearTimeout(idle);idle=setTimeout(show,25000);}
     ['click','keydown','scroll','touchstart'].forEach(function(ev){window.addEventListener(ev,arm,{passive:true});});
     arm();
+  }
+
+  /* ---------- Byte on the page: a random act every few seconds, and eyes that follow the pointer ---------- */
+  var say=document.createElement('div');say.id='byteSay';say.hidden=true;say.setAttribute('aria-hidden','true');document.body.appendChild(say);
+  var ACTS={tap:[3200,'Knock knock...'],bulb:[3000,'Idea!'],mail:[3600,'You have mail!'],search:[3400,'Looking for something?'],sleep:[4800,'Zzz...'],
+            dance:[3700,'Yay!'],curious:[2600,'Hm? What is that?'],type:[4000,'Writing my report...'],sad:[4300,'Nobody needs me...'],spin:[1700,'Wheee!'],wave:[3100,'Hi! Ask me anything.']};
+  var ORDER=Object.keys(ACTS),lastAct='',actTimer=null,endTimer=null;
+  function busy(){return reduce||document.hidden||!modal.hidden||btn.classList.contains('hey')||!nudge.hidden;}
+  function nextAct(ms){clearTimeout(actTimer);actTimer=setTimeout(runAct,ms);}
+  function runAct(){
+    if(busy()){nextAct(3000);return;}
+    var a;do{a=ORDER[Math.floor(Math.random()*ORDER.length)];}while(a===lastAct);lastAct=a;
+    btn.setAttribute('data-act',a);say.textContent=ACTS[a][1];say.hidden=false;
+    clearTimeout(endTimer);endTimer=setTimeout(function(){btn.removeAttribute('data-act');say.hidden=true;nextAct(4500+Math.random()*3500);},ACTS[a][0]);}
+  function stopAct(){clearTimeout(endTimer);btn.removeAttribute('data-act');say.hidden=true;nextAct(4000);}
+  btn.addEventListener('click',stopAct);
+  document.addEventListener('visibilitychange',function(){if(document.hidden)stopAct();});
+  var ptick=false;
+  function lookAt(x,y){var r=btn.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height*0.4,dx=x-cx,dy=y-cy,d=Math.sqrt(dx*dx+dy*dy)||1,k=Math.min(1,d/200);
+    btn.style.setProperty('--lx',(dx/d*3.2*k).toFixed(2)+'px');btn.style.setProperty('--ly',(dy/d*2.2*k).toFixed(2)+'px');}
+  if(!reduce){
+    nextAct(3500);
+    window.addEventListener('pointermove',function(e){if(ptick)return;ptick=true;requestAnimationFrame(function(){ptick=false;lookAt(e.clientX,e.clientY);});},{passive:true});
   }
 })();
 </script>
