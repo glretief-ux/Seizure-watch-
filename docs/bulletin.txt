@@ -1,33 +1,33 @@
-SEIZURE WATCH - weekly bulletin, 23 Oct - 29 Oct 2026
+SEIZURE WATCH - weekly bulletin, 24 Oct - 30 Oct 2026
 
-1522 seizure reports this week (previous week 1795); 86 high risk; 309.2 t reported.
-Main drugs: Cannabis (384), Cocaine (293), NSA (160)
-Main countries: India (253), Brazil (218), United States (159), Turkey (149)
+1631 seizure reports this week (previous week 1592); 94 high risk; 355.1 t reported.
+Main drugs: Cannabis (408), Cocaine (311), NSA (168)
+Main countries: India (294), Brazil (219), United States (173), Turkey (154)
 
 NEW AND SURGING CORRIDORS
-- Thailand -> India: SURGING (20 this period, 10 before; mainly Cannabis)
-- Myanmar -> India: SURGING (10 this period, 3 before; mainly Methamphetamine)
+- Thailand -> India: SURGING (22 this period, 10 before; mainly Cannabis)
+- Myanmar -> India: SURGING (10 this period, 5 before; mainly Methamphetamine)
 - United States -> Egypt: SURGING (9 this period, 1 before; mainly Cannabis)
-- United States -> Canada: SURGING (8 this period, 2 before; mainly Cocaine)
+- United States -> Canada: SURGING (7 this period, 3 before; mainly Cocaine)
 - Israel -> Jordan: NEW (7 this period, 0 before; mainly Cannabis)
 - Zambia -> Thailand: NEW (6 this period, 0 before; mainly Elephant ivory)
 
 UNUSUAL EVENTS (highest risk first)
 - [High 85] 26 Oct | Elephant ivory | 3.0 t | Laem Chabang | Zambia -> Thailand | Container structure / false compartment; Impregnation / liquid / disguised; Legitimate cargo (industrial/goods) | cargo: timber; scrap metal; aluminium
   https://thethaiger.com/hot-news/crime/customs-find-3-1-tonnes-of-ivory-hidden-inside-timber-at-laem-chabang-port
-- [High 85] 23 Oct | Methamphetamine | 2.0 t | Aceh | Malaysia -> Indonesia | Impregnation / liquid / disguised; Legitimate cargo (industrial/goods) | vessel: Global 168
-  https://www.bozemandailychronicle.com/wire/international/indonesia-seizes-over-2-tons-of-narcotics-in-one-of-the-country-s-largest-drug/article_b89c7077-07e4-5375-a511-8e465edc77e0.html
 - [High 80] 26 Oct | Cigarettes | 440 kg | Manchester | United Arab Emirates -> United Kingdom | Hidden compartment (unspecified); Legitimate cargo (industrial/goods); Luggage / passenger goods
   https://fish4news.co.uk/nearly-five-million-illegal-cigarettes-seized-manchester-airport/
 - [High 78] 26 Oct | Elephant ivory | 3.1 t | Laem Chabang | Zambia -> Thailand | Legitimate cargo (industrial/goods) | cargo: timber
   https://news.google.com/rss/articles/CBMiYkFVX3lxTE5QQUptajRPM3B2UGZTNnE0Y3BJUW0yMzN6dXd4U24tSkVOelZ1amdEa1h5bWZWaVR5T0M2Nnc2NmtkTFNnWmgzSWRkcFduaVpRWHF4ZUxJWnhDSGpDeDlQRDR3?oc=5
-- [High 75] 23 Oct | NSA | 1.1 t | Medan | Thailand -> Indonesia | Legitimate cargo (industrial/goods) | vessel: Global 168
-  https://www.bangkokpost.com/world/3342333/indonesia-seizes-11-tonnes-of-ketamine-at-sea
+- [High 75] 28 Oct | Cocaine | 3.1 t | Malaga | Portugal -> Spain | Legitimate cargo (industrial/goods) | cargo: furniture
+  https://news.google.com/rss/articles/CBMijgJBVV95cUxNbG4wMTM4MXhoazhCU1JtNkVYRndCSnhmVVB6bVRLQVdxQ0ZtbF9USWVLZVczcFgzQW5qMkxMazJRbGRTY2RGMmVud0I0bHJXY1NUZHJ6VGlCTUxVWC1mUEI2UmctNTlmSmYwNHRuWTJLa0RtM0pjRDJfQnI5SkRPZXdXb292aFNmd3kxWUtsTnd3YmExelJEX3NIR2RZdXNnel9vemJUaEgySVNUSURocGFGR1R0Q3RKZVU1RHBHUXA0OGRJSE1QOFloR3ZIUDRLSUpnbjlFeERhNzE3MEZfdUkzbGxlVGg1ZHJ3aXU1bDE2UEJwT0V6REtaaE05X2JCRkxHNXpRdy1JeThRb3c?oc=5
 - [High 75] 28 Oct | Methamphetamine | 971 kg | San Bernardino | Mexico -> United States | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods)
   https://www.bakersfield.com/news/national-first-responders-day-kern-county-sheriff-s-office-kc-hidta-drug-task-force-dismantles/article_6cdb6bc8-4756-4166-9abc-9b2446d1266d.amp.html
+- [High 75] 25 Oct | NSA | 800 kg | Lithuania | China -> Czech Republic | Legitimate cargo (industrial/goods)
+  https://tvpworld.com/96118229/polish-police-tip-off-helps-bust-massive-drug-lab-in-lithuania
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (232), Luggage / passenger goods (51), Legitimate cargo (food/produce) (50)
-Cover cargo named: toys (5), aluminium (5), fish (5), cocoa (5), tiles & ceramics (5)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (246), Legitimate cargo (food/produce) (58), Luggage / passenger goods (53)
+Cover cargo named: furniture (7), fish (7), aluminium (6), toys (5), tiles & ceramics (5)
 
 Coverage: searching 20 languages (Amharic, Arabic, Danish, German, English, Spanish, Estonian, French, Hindi, Icelandic, Mongolian, Dutch, Norwegian, Portuguese, Russian, Slovak, Swedish, Turkish, Vietnamese, Chinese). 35 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Azerbaijan, Bangladesh, Bosnia and Herzegovina).
 Leads from open sources, not confirmed facts. Verify before acting.
