@@ -2,6 +2,8 @@ name: weekly-newsletter
 # design v2.1: colourful layout
 
 on:
+  schedule:
+    - cron: "0 7 * * 1"   # Mondays 07:00 UTC = 08:00/09:00 Brussels, ready before 10:00
   workflow_dispatch:
     inputs:
       end_date:
@@ -30,7 +32,11 @@ jobs:
           python-version: "3.12"
       - run: pip install weasyprint
       - name: Build newsletter (HTML + PDF, photos embedded)
-        run: python scripts/build_newsletter.py ${{ github.event.inputs.end_date }}
+        run: |
+          END="${{ github.event.inputs.end_date }}"
+          # scheduled runs (and pushes): always the previous full Monday-Sunday week
+          if [ -z "$END" ]; then END=$(TZ=Europe/Brussels date -d "last sunday" +%F); fi
+          python scripts/build_newsletter.py "$END"
       - name: Save
         run: |
           git config user.name  "seizure-watch-bot"
