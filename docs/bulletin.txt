@@ -1,33 +1,33 @@
-SEIZURE WATCH - weekly bulletin, 26 Oct - 01 Nov 2026
+SEIZURE WATCH - weekly bulletin, 27 Oct - 02 Nov 2026
 
-1889 seizure reports this week (previous week 1463); 120 high risk; 516.9 t reported.
-Main drugs: Cannabis (491), Cocaine (406), NSA (182)
-Main countries: India (293), Brazil (284), United States (194), Turkey (163)
+1930 seizure reports this week (previous week 1388); 112 high risk; 595.0 t reported.
+Main drugs: Cannabis (492), Cocaine (451), NSA (187)
+Main countries: Brazil (303), India (299), United States (187), Turkey (163)
 
 NEW AND SURGING CORRIDORS
-- Thailand -> India: SURGING (25 this period, 9 before; mainly Cannabis)
+- Thailand -> India: SURGING (27 this period, 9 before; mainly Cannabis)
 - United States -> Egypt: SURGING (9 this period, 1 before; mainly Cannabis)
 - United States -> Canada: SURGING (7 this period, 3 before; mainly Cocaine)
 - Israel -> Jordan: NEW (7 this period, 0 before; mainly Cannabis)
+- Ghana -> Lebanon: NEW (7 this period, 0 before; mainly Cocaine)
 - Zambia -> Thailand: NEW (6 this period, 0 before; mainly Elephant ivory)
-- Thailand -> Sri Lanka: SURGING (6 this period, 1 before; mainly Cannabis)
 
 UNUSUAL EVENTS (highest risk first)
-- [High 85] 26 Oct | Elephant ivory | 3.0 t | Laem Chabang | Zambia -> Thailand | Container structure / false compartment; Impregnation / liquid / disguised; Legitimate cargo (industrial/goods) | cargo: timber; scrap metal; aluminium
-  https://thethaiger.com/hot-news/crime/customs-find-3-1-tonnes-of-ivory-hidden-inside-timber-at-laem-chabang-port
 - [High 80] 31 Oct | NSA | 17.0 t | Colombo | Legitimate cargo (industrial/goods)
   https://www.themorning.lk/articles/IbacnhbcMFEdgYR9Zlfd
-- [High 80] 26 Oct | Cigarettes | 440 kg | Manchester | United Arab Emirates -> United Kingdom | Hidden compartment (unspecified); Legitimate cargo (industrial/goods); Luggage / passenger goods
-  https://fish4news.co.uk/nearly-five-million-illegal-cigarettes-seized-manchester-airport/
-- [High 78] 26 Oct | Elephant ivory | 3.1 t | Laem Chabang | Zambia -> Thailand | Legitimate cargo (industrial/goods) | cargo: timber
-  https://news.google.com/rss/articles/CBMiYkFVX3lxTE5QQUptajRPM3B2UGZTNnE0Y3BJUW0yMzN6dXd4U24tSkVOelZ1amdEa1h5bWZWaVR5T0M2Nnc2NmtkTFNnWmgzSWRkcFduaVpRWHF4ZUxJWnhDSGpDeDlQRDR3?oc=5
 - [High 75] 30 Oct | Cocaine | 4.5 t | Leeds | Canada -> United Kingdom | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Postal / parcel | cargo: fish
   https://www.thesun.co.uk/news/40865857/gang-caught-smuggling-cocaine-in-cheese/
 - [High 75] 28 Oct | Cocaine | 3.1 t | Malaga | Portugal -> Spain | Legitimate cargo (industrial/goods) | cargo: furniture
   https://news.google.com/rss/articles/CBMijgJBVV95cUxNbG4wMTM4MXhoazhCU1JtNkVYRndCSnhmVVB6bVRLQVdxQ0ZtbF9USWVLZVczcFgzQW5qMkxMazJRbGRTY2RGMmVud0I0bHJXY1NUZHJ6VGlCTUxVWC1mUEI2UmctNTlmSmYwNHRuWTJLa0RtM0pjRDJfQnI5SkRPZXdXb292aFNmd3kxWUtsTnd3YmExelJEX3NIR2RZdXNnel9vemJUaEgySVNUSURocGFGR1R0Q3RKZVU1RHBHUXA0OGRJSE1QOFloR3ZIUDRLSUpnbjlFeERhNzE3MEZfdUkzbGxlVGg1ZHJ3aXU1bDE2UEJwT0V6REtaaE05X2JCRkxHNXpRdy1JeThRb3c?oc=5
+- [High 75] 28 Oct | Methamphetamine | 971 kg | San Bernardino | Mexico -> United States | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods)
+  https://www.bakersfield.com/news/national-first-responders-day-kern-county-sheriff-s-office-kc-hidta-drug-task-force-dismantles/article_6cdb6bc8-4756-4166-9abc-9b2446d1266d.amp.html
+- [High 75] 29 Oct | Methamphetamine | 500 kg | Tennessee | Mexico -> United States | Legitimate cargo (industrial/goods)
+  https://theucnow.com/2026/10/28/putnam-narcotics-seizure-leads-to-federal-charges/
+- [High 75] 01 Nov | Cocaine | 75 kg | Tunis | Libya -> Italy -> Tunisia | Body concealment; Impregnation / liquid / disguised; Legitimate cargo (food/produce); Luggage / passenger goods; Postal / parcel | cargo: banana; sugar
+  https://www.lapresse.tn/2026/11/01/du-fond-de-la-mer-a-laeroport-de-tunis-carthage-les-grandes-affaires-de-cocaine-en-tunisie/
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (364), Legitimate cargo (food/produce) (103), Postal / parcel (72)
-Cover cargo named: cocoa (12), furniture (11), fish (9), aluminium (6), timber (5)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (379), Legitimate cargo (food/produce) (120), Postal / parcel (81)
+Cover cargo named: cocoa (15), furniture (11), fish (8), fruit (6), aluminium (5)
 
 Coverage: searching 20 languages (Amharic, Arabic, Danish, German, English, Spanish, Estonian, French, Hindi, Icelandic, Mongolian, Dutch, Norwegian, Portuguese, Russian, Slovak, Swedish, Turkish, Vietnamese, Chinese). 35 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Azerbaijan, Bangladesh, Bosnia and Herzegovina).
 Leads from open sources, not confirmed facts. Verify before acting.
