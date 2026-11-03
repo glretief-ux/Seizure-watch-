@@ -189,7 +189,7 @@
         </video>
       </div>
     </div>
-    <div class="bnote">I'm not a live AI. I answer from a built-in list of questions and I can count and rank the reports in this dashboard's data, so short, simple questions work best. Everything on this page is a lead to verify, not proof.</div>
+    <div class="bnote">I'm not a live AI. I answer from a built-in list of questions and I can count and rank the reports in this dashboard's data, so short, simple questions work best (try a country, a drug and a period, for example cocaine seizures involving Ghana last month). Everything on this page is a lead to verify, not proof.</div>
   </div>
 </div>
 <script>
@@ -274,7 +274,7 @@
    {k:['thanks','thank you','thx','cheers','merci','great'],a:'<p>You\'re welcome! Ask me anything else.</p>',act:[]},
    {k:['hi','hello','hey','good morning','good evening','yo'],a:'<p>Hi! What would you like to know about the dashboard?</p>',act:[]}
   ];
-  var STARTERS=[['Where do I start?','where do i start'],['How many seizures last week?','How many seizures last week?'],
+  var STARTERS=[['Where do I start?','where do i start'],['How many seizures last week?','How many seizures last week?'],['Seizures involving Ghana?','How many seizures involved Ghana?'],
     ['Biggest drug seizure?','Which country made the biggest drug seizure?'],['Show me high-risk events','high risk'],
     ['How is risk scored?','how is risk scored'],['How do I use the map?','map'],['What is the watchlist?','watchlist']];
 
@@ -337,7 +337,7 @@
     names.forEach(function(p){var key=' '+p[0]+' ',i=w.indexOf(key);
       if(i>=0&&I.ctry.indexOf(p[1])>=0){
         var before=w.slice(Math.max(0,i-16),i+1);
-        var role=/\bfrom $/.test(before)?'origin':/\b(to|into|towards|bound for|destined for) $/.test(before)?'dest':'country';
+        var role=/\bfrom $/.test(before)?'origin':/\b(to|into|towards|bound for|destined for) $/.test(before)?'dest':/\b(in|at|within|inside|seized in) $/.test(before)?'country':'any';
         if(!f.countries.some(function(c){return c.name===p[1]&&c.role===role;}))f.countries.push({name:p[1],role:role});
         w=w.slice(0,i)+' '+w.slice(i+key.length);}});
     I.drugs.forEach(function(d){var dl=d.toLowerCase(),as=ALIAS[dl]||dl.split(/[\/\s,()-]+/).filter(function(x){return x.length>=4&&!STOP[x];});
@@ -352,10 +352,26 @@
       if(f.cat&&e.category!==f.cat)return false;
       if(f.drugs.length&&f.drugs.indexOf(e.drug)<0)return false;
       if(f.band&&e.band!==f.band)return false;
-      for(var r in roles){var field=r==='country'?'country':r;if(roles[r].indexOf(e[field])<0)return false;}
+      for(var r in roles){
+        if(r==='any'){if(!roles[r].some(function(nm){return involves(e,nm);}))return false;}
+        else{var field=r==='country'?'country':r;if(roles[r].indexOf(e[field])<0)return false;}}
       return true;};}
-  function where(f){var by={country:[],origin:[],dest:[]};f.countries.forEach(function(c){by[c.role].push(c.name);});
-    return (by.country.length?' in '+by.country.join(' or '):'')+(by.origin.length?' from '+by.origin.join(' or '):'')+(by.dest.length?' to '+by.dest.join(' or '):'');}
+  /* does this case involve the place: seized there, route origin/destination/transit, or named in any of its headlines */
+  function involves(e,nm){var l=nm.toLowerCase();
+    if([e.country,e.origin,e.dest,e.place,e.origin_place,e.dest_place].some(function(x){return x&&String(x).toLowerCase()===l;}))return true;
+    if(e.transit&&String(e.transit).toLowerCase().indexOf(l)>=0)return true;
+    var re=new RegExp('\\b'+l.replace(/[^a-z0-9 ]/g,'')+'\\b');
+    if(re.test(String(e.title_en||e.title||'').toLowerCase()))return true;
+    if(e.arts)for(var i=0;i<e.arts.length;i++){if(re.test(String(e.arts[i].t||'').toLowerCase()))return true;}
+    return false;}
+  function roleOf(e,nm){var l=nm.toLowerCase(),r=[];
+    if(e.country&&e.country.toLowerCase()===l)r.push('seized in');
+    if(e.origin&&e.origin.toLowerCase()===l)r.push('origin');
+    if(e.dest&&e.dest.toLowerCase()===l)r.push('destination');
+    if(e.transit&&String(e.transit).toLowerCase().indexOf(l)>=0)r.push('transit');
+    return r.length?r:['named in the reports'];}
+  function where(f){var by={country:[],origin:[],dest:[],any:[]};f.countries.forEach(function(c){by[c.role].push(c.name);});
+    return (by.any.length?' involving '+by.any.join(' or '):'')+(by.country.length?' in '+by.country.join(' or '):'')+(by.origin.length?' from '+by.origin.join(' or '):'')+(by.dest.length?' to '+by.dest.join(' or '):'');}
   function noun(f,dflt){
     var s=f.drugs.length?f.drugs.join(' or ').toLowerCase()+' ':f.cat?(f.cat==='Drug'?'drug ':f.cat.toLowerCase()+' '):(dflt?'drug ':'');
     return (f.band?'high-risk ':'')+s;}
@@ -387,9 +403,10 @@
 
   function dataAnswer(q){
     if(!DD)return null;
-    var n=norm(q),t=n.trim();
+    var n=norm(q).replace(/\b(how|hw|hoe) (may|mant|mny|mnay|nany|mamy|manny|any)\b/g,'how many').replace(/\b(seizurs|seisures|seizers|siezures|seiszures|seizuers)\b/g,'seizures').replace(/\b(mentoned|mentionned|mentiond|mentoin\w*)\b/g,'mentioned').replace(/\b(involvd|involed|invloved)\b/g,'involved'),t=n.trim();
     var seiz=/\b(seizure|seizures|seized|seize|busts?|hauls?|cases|events?|reports?|catch|caught|confiscat\w*|intercept\w*)\b/.test(t);
-    var isCount=/\b(how many|number of|count|total number)\b/.test(t)&&seiz;
+    var f0=parseFilters(n),hasWhat=f0.countries.length>0||f0.drugs.length>0||!!f0.cat;
+    var isCount=(/\b(how many|number of|count|total number)\b/.test(t)&&(seiz||hasWhat))||(hasWhat&&seiz&&/\b(involv\w*|mention\w*|link\w*|connect\w*|relat\w*|about|show|list|find|give)\b/.test(t))||(hasWhat&&/^(show|list|find|give|tell|what about|anything)\b/.test(t))||((f0.countries.length>0||f0.drugs.length>0)&&seiz&&!/^(how (do|can|to|does|is|are)|where|what is|what does|why|can i)\b/.test(t));
     var isWeight=/\b(how (many|much)|total|amount of)\b.*\b(kilos?|kilograms?|kgs?|tonnes?|tons?|weight)\b/.test(t)||/\bhow much\b.*\b(seized|drugs?|cocaine|cannabis|heroin|meth\w*)\b/.test(t);
     var isBig=/\b(biggest|largest|heaviest|record|greatest)\b/.test(t)&&(seiz||/\bdrugs?\b/.test(t));
     var isCtry=/\b(which|what|top)\b.*\bcountr(y|ies)\b/.test(t)&&/\b(most|biggest|largest|highest|top|seiz\w*)\b/.test(t);
@@ -434,16 +451,31 @@
       if(!lt.length)return {a:'<p>I found no matching reports.</p>',act:[]};
       return {a:'<p>Latest '+esc(noun(f,false))+'reports'+esc(where(f))+' (data up to '+dShort(DD.meta.asof)+'):</p><ol style="margin:4px 0 6px;padding-left:20px">'+lt.map(function(e){return '<li style="margin-bottom:6px">'+evLine(e)+'</li>';}).join('')+'</ol>',act:acts};}
     /* count */
-    var N=sel.length,out='<p><b>'+num(N)+'</b> '+esc(noun(f,false))+'seizure reports'+esc(where(f))+' '+esc(when)+'.</p>';
+    var N=sel.length,nArt=sel.reduce(function(a,e){return a+(e.n||1);},0),out='<p><b>'+num(N)+'</b> '+esc(noun(f,false))+(N===1?'seizure':'seizures')+esc(where(f))+' '+esc(when)+(nArt>N?', reported in <b>'+num(nArt)+'</b> news articles (reports of the same seizure are counted once)':'')+'.</p>';
     if(per.n>1){var pf=addD(per.from,-per.n),pt=addD(per.from,-1);
       if(pf>=(DD.meta.first_date||'0')){var P=DD.events.filter(matcher(f,{from:pf,to:pt})).length;
         if(P>0){var ch=Math.round((N-P)/P*100);out+='<p>The '+per.n+' days before that had '+num(P)+' ('+(ch>=0?'up '+ch:'down '+(-ch))+'%).</p>';}}}
     if(N>0){
+      var anyC=f.countries.filter(function(c){return c.role==='any';});
+      if(anyC.length===1){var rc={};sel.forEach(function(e){roleOf(e,anyC[0].name).forEach(function(r){rc[r]=(rc[r]||0)+1;});});
+        out+='<p>'+esc(anyC[0].name)+' appears as: '+Object.keys(rc).sort(function(a,b){return rc[b]-rc[a];}).map(function(k){return esc(k)+' ('+num(rc[k])+')';}).join(', ')+'.</p>';}
       if(!f.drugs.length)out+='<p>Most reported: '+topN(cntBy(sel,function(e){return e.drug;}),5)+'.</p>';
-      if(!f.countries.some(function(c){return c.role==='country';})){var cc=cntBy(sel,function(e){return e.country;}),known=cc.reduce(function(s,x){return s+x[1];},0);
+      if(!f.countries.some(function(c){return c.role==='country'||c.role==='any';})){var cc=cntBy(sel,function(e){return e.country;}),known=cc.reduce(function(s,x){return s+x[1];},0);
         if(cc.length)out+='<p>Most reports came from: '+topN(cc,5)+' (country known for '+num(known)+' of '+num(N)+').</p>';}
-      if(!f.band){var hi=sel.filter(function(e){return e.band==='High';}).length;out+='<p>'+num(hi)+' of them were High risk.</p>';}}
-    return {a:out+CAVEAT+foot,act:N>0?acts:[]};}
+      if(!f.band){var hi=sel.filter(function(e){return e.band==='High';}).length;out+='<p>'+num(hi)+' of them were High risk.</p>';}
+      var lt=sel.slice().sort(function(a,b){return a.date<b.date?1:a.date>b.date?-1:(b.score||0)-(a.score||0);}).slice(0,6);
+      out+='<p><b>Latest seizures</b> (each with its news articles):</p>'+lt.map(function(e){
+        var val=e.kg>0?fmtKg(e.kg):(e.units?num(e.units)+' '+esc(e.unit_type||'units'):'');
+        var arts=(e.arts&&e.arts.length>1)?e.arts.slice(0,4):[{u:e.url,t:e.title_en||e.title,o:e.outlets,d:e.date}];
+        return '<details style="margin:4px 0"><summary style="cursor:pointer"><b>'+dShort(e.date)+'</b> '+(val?esc(val)+' ':'')+esc(e.drug||e.category||'')+' - '+esc([e.place,e.country].filter(Boolean).join(', ')||'place not identified')+(e.n>1?' <span style="color:#66758a">('+e.n+' articles)</span>':'')+'</summary>'+
+          '<ul style="margin:4px 0 4px;padding-left:18px">'+arts.map(function(a){var u=safeUrl(a.u);return '<li style="margin-bottom:3px">'+(u?'<a href="'+u+'" target="_blank" rel="noopener noreferrer">':'')+esc(String(a.t||a.u||'article').slice(0,110))+(u?'</a>':'')+(a.o?' <span style="color:#66758a;font-size:12px">('+esc(a.o)+')</span>':'')+'</li>';}).join('')+
+          (e.n>arts.length?'<li style="color:#66758a;font-size:12px">+ '+(e.n-arts.length)+' more in the events table</li>':'')+'</ul></details>';}).join('')+
+        (N>lt.length?'<p style="font-size:12px;color:#66758a">Showing the latest '+lt.length+' of '+num(N)+'. The buttons below put all of them on the map, in the events table and in the news article library.</p>':'');}
+    var libTerms=f.countries.map(function(c){return c.name;}).concat(f.drugs).join(' ').toLowerCase();
+    var acts2=N>0?[A('Show on the map',function(){applyView(per,f);go(function(){return g('map')&&g('map').closest('.card');});}),
+      showAct(per,f,'Show in the events table'),
+      A('Show all '+num(nArt)+' news articles',function(){applyView(per,f);var lq=g('libQ');if(lq){lq.value=libTerms;lq.dispatchEvent(new Event('input',{bubbles:true}));}go(function(){return g('libCard');});})]:[];
+    return {a:out+CAVEAT+foot,act:acts2};}
 
   /* ---------- matching ---------- */
   function norm(s){return ' '+s.toLowerCase().replace(/[^a-z0-9À-ɏ ]+/g,' ').replace(/\s+/g,' ').trim()+' ';}
