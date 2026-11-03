@@ -70,6 +70,7 @@ def event_records(ev, homes=None):
             "container": bool(r.in_container == 1), "insider": bool(r.insider == 1), "score": int(r.risk_score),
             "band": r.risk_band, "flags": r.risk_flags, "why": r.risk_why,
             "parts": [int(r.risk_method), int(r.risk_network), int(r.risk_route), int(r.risk_scale), int(r.risk_commodity)], "mo": _clean(r.mo_summary), "n": int(r.n_sources),
+            "arts": [{"u": a[0], "t": a[2] or a[1], "o": a[3], "d": a[4]} for a in (r.arts if isinstance(getattr(r, "arts", None), list) else [])] if int(r.n_sources) > 1 else None,
             "url": r.urls[0] if r.urls else None, "title": r.title, "title_en": _clean(getattr(r, "title_en", None)), "outlets": ", ".join(r.outlets),
             "arrests": _clean(r.arrests), "mode": r.text_mode, "lang": _clean(r.lang),
             "origin_place": _clean(r.origin_place), "dest_place": _clean(r.destination_place),

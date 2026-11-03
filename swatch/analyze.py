@@ -73,11 +73,15 @@ def load_events(conn):
     # the stored cover cargo is whatever goods word the extractor matched, in any language and with some noise:
     # keep recognised goods only, named in English (see cover.py)
     df["cover_cargo"] = [_cover.clean(c, t, te) for c, t, te in zip(df["cover_cargo"], df["title"], df["title_en"])]
+    from .cases import merge_cases
+    df = merge_cases(df)          # events that clearly describe the same seizure become one case
     df = df.sort_values(["event_id", "completeness", "qty_kg"], ascending=[True, False, False], na_position="last")
     g = df.groupby("event_id", sort=False)
     best = g.head(1).set_index("event_id")
     agg = g.agg(n_sources=("id", "size"), first_seen=("published", "min"),
                 urls=("url", lambda s: list(s)[:5]),
+                arts=("url", lambda s: [[u, t if isinstance(t, str) else "", te if isinstance(te, str) else "", o if isinstance(o, str) else "", pd.Timestamp(d).strftime("%Y-%m-%d")] for u, t, te, o, d in zip(
+                    s, df.loc[s.index, "title"], df.loc[s.index, "title_en"], df.loc[s.index, "source"], df.loc[s.index, "published"])][:40]),
                 outlets=("source", lambda s: sorted({x for x in s if x})[:6]),
                 # indicators found in ANY report of the event count for the event
                 in_container_any=("in_container", "max"), insider_any=("insider", "max"),
