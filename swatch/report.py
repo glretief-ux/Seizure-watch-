@@ -117,7 +117,7 @@ def export_table(ev, verifications=None):
     return df.sort_values(["Date", "Risk score"], ascending=[False, False]).reset_index(drop=True)
 
 
-def write_excel(path, res, ev_export, alerts_df):
+def write_excel(path, res, ev_export, alerts_df, ev=None, verifications=None):
     with pd.ExcelWriter(path, engine="openpyxl") as xw:
         sheets = [("Events", ev_export), ("Alerts", alerts_df), ("Corridors", res["corridors"]),
                   ("Hotspots", res["hotspots"]),
@@ -131,6 +131,9 @@ def write_excel(path, res, ev_export, alerts_df):
             for col in ws.columns:
                 width = min(60, max(10, max(len(str(c.value or "")) for c in list(col)[:200]) + 2))
                 ws.column_dimensions[col[0].column_letter].width = width
+        if ev is not None:      # first sheet: the seizures laid out like the open-source workbook template
+            from . import template_export
+            template_export.write_template_sheet(xw, ev, verifications)
 
 
 METHOD_NOTES = [
@@ -190,7 +193,7 @@ def write_all(res, out_dir, cfg, demo=False, verifications=None):
     alerts_df = pd.DataFrame([{"Severity": a["severity"], "Type": a["type"], "Title": a["title"],
                                "Detail": a["detail"], "Links": "\n".join(a.get("urls", []))} for a in res["alerts"]])
     ev_export.to_csv(os.path.join(out_dir, "events.csv"), index=False, encoding="utf-8-sig")
-    write_excel(os.path.join(out_dir, "seizure_watch.xlsx"), res, ev_export, alerts_df)
+    write_excel(os.path.join(out_dir, "seizure_watch.xlsx"), res, ev_export, alerts_df, ev_r, verifications)
     payload = {
         "meta": {"asof": res["asof"].strftime("%Y-%m-%d"), "generated": dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
                  "demo": demo, "history_days": res["history_days"], "history_ok": res["history_ok"],
