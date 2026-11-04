@@ -255,6 +255,7 @@ def main():
     where = collections.Counter(r["Seizure country"] for r in wk if r["Seizure country"]).most_common(8)
     routes = collections.Counter(f'{r["Origin"]} → {r["Destination"]}' for r in wk if r["Origin"] and r["Destination"]).most_common(6)
     conc = collections.Counter(r["Concealment"] for r in wk if r["Concealment"]).most_common(5)
+    cover = [(k[:1].upper() + k[1:], v) for k, v in collections.Counter(r["Cover cargo"].strip() for r in wk if r["Cover cargo"].strip()).most_common(6)]
 
     feat, also_l = FEATURED, ALSO
     if not all(any(r["Link"] == f[0] for r in wk) for f in FEATURED):   # hand-picked list is for another week
@@ -315,7 +316,8 @@ def main():
 {sect("Also making news", AMBER, '<ul class="also">' + also + '</ul>')}
 {sect("The week in numbers", BLUE, f'<div class="legend">Reports by risk band {legend}</div><div class="band">{band_html}</div>'
       + '<div class="cols">' + pan("What was seized", drugs, ORANGE, "#fff1e1") + pan("Where seizures were made", where, TEAL, "#e2f5f2") + '</div>'
-      + '<div class="cols">' + pan("Busiest routes", routes, RED, "#fde9eb") + pan("How it was hidden", conc, "#B07A00", "#fdf4d6") + '</div>')}
+      + '<div class="cols">' + pan("Busiest routes", routes, RED, "#fde9eb") + pan("How it was hidden", conc, "#B07A00", "#fdf4d6") + '</div>'
+      + '<div class="cols">' + pan("Cover load", cover, PURPLE, "#f0ebfa") + '<div class="panel"></div></div>')}
 <p class="note">These are leads from open news sources, not confirmed facts. Verify before acting. Counts reflect what the tool found in the news it searches; a quiet country may mean no news or no coverage. Photos belong to the cited outlets and link back to their articles. Data runs to {latest}{' (the last day is partial)' if latest == end.isoformat() and dc[latest] < 50 else ''}.</p>
 <div class="foot"><b>Seizure Watch</b> &middot; AIRCOP / Container Control Programme &middot; <a href="{SITE}">Full dashboard</a> &middot; <a href="{SITE}bulletin.html">Weekly bulletin</a></div>
 </div>"""
