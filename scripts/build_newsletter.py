@@ -319,7 +319,6 @@ def main():
       + '<div class="cols">' + pan("Busiest routes", routes, RED, "#fde9eb") + pan("How it was hidden", conc, "#B07A00", "#fdf4d6") + '</div>'
       + '<div class="cols">' + pan("Cover load", cover, PURPLE, "#f0ebfa") + '<div class="panel"></div></div>')}
 <p class="note">These are leads from open news sources, not confirmed facts. Verify before acting. Counts reflect what the tool found in the news it searches; a quiet country may mean no news or no coverage. Photos belong to the cited outlets and link back to their articles. Data runs to {latest}{' (the last day is partial)' if latest == end.isoformat() and dc[latest] < 50 else ''}.</p>
-<div class="foot"><b>Seizure Watch</b> &middot; AIRCOP / Container Control Programme &middot; <a href="{SITE}">Full dashboard</a> &middot; <a href="{SITE}bulletin.html">Weekly bulletin</a></div>
 </div>"""
     page = (f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
             f'<title>Seizure Watch Weekly {fmt(start)} - {fmt(end)} {end.year}</title><style>{CSS}</style></head><body>{body}</body></html>')
