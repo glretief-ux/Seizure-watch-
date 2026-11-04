@@ -4,36 +4,36 @@
    RSS UK Border Force: 20 items
    ! https://ndlea.gov.ng/feed/... HTTPError
    RSS NDLEA Nigeria: 0 items
-   Official websites (52 searched): 1986 headlines
-      edition MX/es: 65 headlines
-      edition ES/es: 65 headlines
-      edition CO/es: 82 headlines
-      edition FR/fr: 59 headlines
-      edition BR/pt: 140 headlines
-      edition PT/pt: 138 headlines
-      edition SA/ar: 225 headlines
-      edition EG/ar: 227 headlines
-      edition AE/ar: 187 headlines
-      edition TR/tr: 371 headlines
-      edition RU/ru: 210 headlines
-      edition UA/ru: 216 headlines
-      edition CN/zh: 35 headlines
+   Official websites (52 searched): 1449 headlines
+      edition MX/es: 71 headlines
+      edition ES/es: 70 headlines
+      edition CO/es: 72 headlines
+      edition FR/fr: 91 headlines
+      edition BR/pt: 134 headlines
+      edition PT/pt: 125 headlines
+      edition SA/ar: 227 headlines
+      edition EG/ar: 223 headlines
+      edition AE/ar: 231 headlines
+      edition TR/tr: 415 headlines
+      edition RU/ru: 155 headlines
+      edition UA/ru: 159 headlines
+      edition CN/zh: 32 headlines
       edition HK/zh: 19 headlines
-      edition TW/zh: 19 headlines
-      edition IN/hi: 191 headlines
-      edition VN/vi: 132 headlines
-      edition NL/nl: 78 headlines
-      edition BE/nl: 74 headlines
-      edition AT/de: 61 headlines
-      edition DK/da: 2 headlines
+      edition TW/zh: 20 headlines
+      edition IN/hi: 183 headlines
+      edition VN/vi: 143 headlines
+      edition NL/nl: 102 headlines
+      edition BE/nl: 103 headlines
+      edition AT/de: 41 headlines
+      edition DK/da: 3 headlines
       edition EE/et: 0 headlines
       edition ET/am: 0 headlines
       edition IS/is: 0 headlines
       edition MN/mn: 0 headlines
-      edition NO/no: 2 headlines
-      edition SK/sk: 2 headlines
-      edition SE/sv: 2 headlines
-   Google News: 5415 headlines
+      edition NO/no: 4 headlines
+      edition SK/sk: 1 headlines
+      edition SE/sv: 9 headlines
+   Google News: 5565 headlines
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28cocaine%20OR%20heroin%20OR%20metha... ReadTimeout
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28precursor%20chemicals%20OR%20cland... ReadTimeout
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22hazardous%20chemicals%22%20OR%2... ReadTimeout
@@ -59,30 +59,34 @@
       GDELT sk: 0 headlines
       GDELT sv: 0 headlines
    GDELT: 0 headlines
-      1175 candidate headlines, 605 new
+      1232 candidate headlines, 742 new
 [2/4] Reading articles...
-      link resolving stopped at its time limit after 275 of 603; the rest are read from headline + snippet
-      links resolved: 275 of 603
-      read in full: 223; headline + snippet only: 382
-      download problems: HTTPError x41, ReadTimeout x3, skipped (site kept failing) x1, ContentDecodingError x1
+      link resolving stopped at its time limit after 325 of 735; the rest are read from headline + snippet
+      links resolved: 325 of 735
+      read in full: 266; headline + snippet only: 476
+      download problems: HTTPError x40, ConnectionError x4, SSLError x2, ReadTimeout x1, ConnectTimeout x1
 [3/4] Extracting facts and storing...
-      NER supplemented 112 article(s) (unrecognised place names logged to ner_places for review)
-      stored 604, of which 385 are seizure reports
+      NER supplemented 105 article(s) (unrecognised place names logged to ner_places for review)
+      stored 739, of which 488 are seizure reports
 [4/4] Analysing and building report...
-      attempted 150 older headline(s) that predate this feature (185 translated, 8 failed and kept as-is; last error: _via_google: TooManyRequests: Server Error: You made too many requests to the server.According to google, you are allowed to make 5 requests per secondand up to 200k requests per day. You can wait and try again later oryou can try the translate_batch function)
-      links resolved: 42 of 42
-      read in full: 34; headline + snippet only: 26
-      download problems: HTTPError x20
-      re-read 34 of 60 earlier headline-only report(s) in full
-Done. 11277 events in report, 460 alerts.
+      attempted 150 older headline(s) that predate this feature (190 translated, 8 failed and kept as-is; last error: _via_google: TooManyRequests: Server Error: You made too many requests to the server.According to google, you are allowed to make 5 requests per secondand up to 200k requests per day. You can wait and try again later oryou can try the translate_batch function)
+      links resolved: 31 of 31
+      read in full: 26; headline + snippet only: 34
+      download problems: HTTPError x22, ConnectionError x2
+      re-read 26 of 60 earlier headline-only report(s) in full
+      links resolved: 4 of 4
+      read in full: 63; headline + snippet only: 3
+      download problems: HTTPError x2, ReadTimeout x1
+      insider flag: re-read 66 earlier report(s) in full, 26 show a staff conspiracy
+Done. 11532 events in report, 467 alerts.
 Weekly bulletin written (/home/runner/work/Seizure-watch-/Seizure-watch-/docs/bulletin.html).
 Open: /home/runner/work/Seizure-watch-/Seizure-watch-/docs/index.html
-  [High  ] HIGH-RISK EVENT: Cocaine - Tunis (score 75)
+  [High  ] HIGH-RISK EVENT: Cocaine - Tanger Med (score 95)
+  [High  ] HIGH-RISK EVENT: Cocaine - Spain (score 83)
+  [High  ] HIGH-RISK EVENT: Methamphetamine - Nagaland (score 80)
   [High  ] HIGH-RISK EVENT: NSA - Gujarat (score 75)
-  [High  ] HIGH-RISK EVENT: Cocaine - Hong Kong airport (score 70)
-  [High  ] HIGH-RISK EVENT: Cocaine - Beirut (score 70)
+  [High  ] HIGH-RISK EVENT: Methamphetamine - Jalisco (score 70)
   [High  ] HIGH-RISK EVENT: NSA - Baghdad (score 70)
-  [High  ] HIGH-RISK EVENT: Cigarettes - Ontario (score 65)
-  [High  ] HIGH-RISK EVENT: Methamphetamine - Assam (score 65)
-  [High  ] HIGH-RISK EVENT: Cocaine - Marseille (score 65)
+  [High  ] HIGH-RISK EVENT: Cocaine - Caucedo (score 70)
+  [High  ] HIGH-RISK EVENT: Ammunition - Bihar (score 68)
 run_daily.py exit code: 0
