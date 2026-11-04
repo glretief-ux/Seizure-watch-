@@ -314,8 +314,7 @@ def main():
 {sect("Top stories", RED, lead_html + '<div class="cards">' + "".join(cards) + '</div>')}
 {sect("Also making news", AMBER, '<ul class="also">' + also + '</ul>')}
 {sect("The week in numbers", BLUE, f'<div class="legend">Reports by risk band {legend}</div><div class="band">{band_html}</div>'
-      + '<div class="cols">' + pan("Reports per day", daily, BLUE, "#e6f4fb") + pan("Most reported drugs and goods", drugs, ORANGE, "#fff1e1") + '</div>'
-      + '<div class="cols">' + pan("What was seized", cats, PURPLE, "#f0ebfa") + pan("Where seizures were made", where, TEAL, "#e2f5f2") + '</div>'
+      + '<div class="cols">' + pan("What was seized", drugs, ORANGE, "#fff1e1") + pan("Where seizures were made", where, TEAL, "#e2f5f2") + '</div>'
       + '<div class="cols">' + pan("Busiest routes", routes, RED, "#fde9eb") + pan("How it was hidden", conc, "#B07A00", "#fdf4d6") + '</div>')}
 <p class="note">These are leads from open news sources, not confirmed facts. Verify before acting. Counts reflect what the tool found in the news it searches; a quiet country may mean no news or no coverage. Photos belong to the cited outlets and link back to their articles. Data runs to {latest}{' (the last day is partial)' if latest == end.isoformat() and dc[latest] < 50 else ''}.</p>
 <div class="foot"><b>Seizure Watch</b> &middot; AIRCOP / Container Control Programme &middot; <a href="{SITE}">Full dashboard</a> &middot; <a href="{SITE}bulletin.html">Weekly bulletin</a></div>
