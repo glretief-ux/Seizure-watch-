@@ -131,6 +131,8 @@ def write_excel(path, res, ev_export, alerts_df, ev=None, verifications=None):
             for col in ws.columns:
                 width = min(60, max(10, max(len(str(c.value or "")) for c in list(col)[:200]) + 2))
                 ws.column_dimensions[col[0].column_letter].width = width
+            from . import template_export
+            template_export.link_columns(ws, ["Link", "Links"])      # clickable web addresses
         if ev is not None:      # first sheet: the seizures laid out like the open-source workbook template
             from . import template_export
             template_export.write_template_sheet(xw, ev, verifications)

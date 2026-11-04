@@ -173,7 +173,26 @@ def write_template_sheet(xw, ev, verifications=None):
     for rec in df.itertuples(index=False, name=None):
         ws.append([None if (isinstance(x, float) and pd.isna(x)) else x for x in rec])
     ws.auto_filter.ref = ws.dimensions
+    link_columns(ws, ["article_url"])
     for i, w in template_widths(headers).items():
         ws.column_dimensions[ws.cell(1, i).column_letter].width = w
     xw.book.active = 0
     return ws
+
+
+def link_columns(ws, names):
+    """Make web addresses in the named columns clickable (blue, underlined). Excel allows one link per cell, so a cell that
+    holds several addresses (one per line) links to the first; addresses longer than Excel's 2,079-character limit stay as text."""
+    from openpyxl.styles import Font
+    blue = Font(color="0563C1", underline="single")
+    cols = [c.column for c in ws[1] if c.value in names]
+    for col in cols:
+        for row in range(2, ws.max_row + 1):
+            cell = ws.cell(row, col)
+            v = cell.value
+            if not isinstance(v, str):
+                continue
+            url = v.strip().split()[0] if v.strip() else ""
+            if url.lower().startswith(("http://", "https://")) and len(url) <= 2079:
+                cell.hyperlink = url
+                cell.font = blue
