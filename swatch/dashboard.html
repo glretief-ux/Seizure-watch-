@@ -239,7 +239,7 @@ table.mini{border-collapse:collapse;font-size:13px;margin-top:6px}table.mini td{
 </div>
 
 <div class="grid2">
-  <div class="card"><h2>Corridors <span class="small">(all history; trend = last 30 days vs the 30 before)</span></h2><div class="tw" id="corr"></div></div>
+  <div class="card"><h2>Corridors <span class="small">(all history, follows the filters above except the period; trend = last 30 days vs the 30 before)</span></h2><div class="tw" id="corr"></div></div>
   <div class="card"><h2>Seizure hotspots <span class="small">(countries)</span></h2><div class="tw" id="hot"></div></div>
 </div>
 
@@ -480,23 +480,63 @@ function kpis(v) {
   $('kpis').innerHTML = evCard(v) + K.map(k => '<div class="kpi"><div class="l">' + k[0] + '</div><div class="v">' + k[1] + '</div><div class="d">' + esc(k[2]) + '</div></div>').join('');
 }
 
-// Alerts follow the filters above (category, type, transport, infrastructure, search, indicator cards; not the period).
-// An alert belongs to the reports it links to, so it is shown when at least one of those reports passes the filters.
-let alertUrlMap = null;
-function alertsInView() {
-  const all = D.alerts || [], dr = $('fDrug').value, cg = $('fCategory').value, md = $('fMode').value, q = $('fQ').value.trim();
-  const other = cg || md || q || infraSelected.size || cardFilter;
-  if (!dr && !other) return all;
-  if (!alertUrlMap) {
-    alertUrlMap = new Map();
-    D.events.forEach(e => [e.url].concat((e.arts || []).map(a => a.u)).filter(Boolean).forEach(u => { if (!alertUrlMap.has(u)) alertUrlMap.set(u, []); alertUrlMap.get(u).push(e); }));
+// ---- every section follows the filters at the top (category, type, risk band, transport, infrastructure, search, indicator cards)
+function filtersActive() { return !!($('fDrug').value || $('fCategory').value || $('fBand').value || $('fMode').value || $('fQ').value.trim() || infraSelected.size || cardFilter); }
+var urlMapCache = null, evByIdCache = null;
+function urlMap() {
+  if (!urlMapCache) {
+    urlMapCache = new Map();
+    D.events.forEach(e => [e.url].concat((e.arts || []).map(a => a.u)).filter(Boolean).forEach(u => { if (!urlMapCache.has(u)) urlMapCache.set(u, []); urlMapCache.get(u).push(e); }));
   }
-  const ok = matcher();
+  return urlMapCache;
+}
+// Alerts: shown when every report they link to passes the filters (the period does not apply: alerts are about today).
+function alertsInView() {
+  const all = D.alerts || [], dr = $('fDrug').value;
+  if (!filtersActive()) return all;
+  const um = urlMap(), ok = matcher(), onlyDrug = dr && !$('fCategory').value && !$('fBand').value && !$('fMode').value && !$('fQ').value.trim() && !infraSelected.size && !cardFilter;
   return all.filter(a => {
-    const ev = []; (a.urls || []).forEach(u => (alertUrlMap.get(u) || []).forEach(e => ev.push(e)));
+    const ev = []; (a.urls || []).forEach(u => (um.get(u) || []).forEach(e => ev.push(e)));
     if (ev.length) return ev.every(ok);
-    return !!dr && !other && (a.title + ' ' + a.detail).toLowerCase().includes(dr.toLowerCase());   // no linked report found: match on the drug name
+    return !!onlyDrug && (a.title + ' ' + a.detail).toLowerCase().includes(dr.toLowerCase());   // no linked report found: match on the drug name
   });
+}
+// Corridors and hotspots: recomputed from the reports that pass the filters (all history, trend = last 30 days vs the 30 before).
+function statsInView() {
+  if (!filtersActive()) return {corr: D.corridors, hot: D.hotspots};
+  const TW = 30, rs = addDays(D.meta.asof, -(TW - 1)), ps = addDays(rs, -TW), ev = D.events.filter(matcher());
+  const mode = a => { const m = {}; a.forEach(x => { if (x) m[x] = (m[x] || 0) + 1; }); const t = Object.entries(m).sort((x, y) => y[1] - x[1])[0]; return t ? t[0] : ''; };
+  const grp = key => { const m = new Map(); ev.forEach(e => { const k = e[key]; if (k) { if (!m.has(k)) m.set(k, []); m.get(k).push(e); } }); return [...m]; };
+  const corr = grp('corridor').map(([c, g]) => {
+    const r = g.filter(e => e.date >= rs), p = g.filter(e => e.date >= ps && e.date < rs), first = g.reduce((a, e) => e.date < a ? e.date : a, g[0].date);
+    const trend = (D.meta.history_ok && first >= rs && r.length > 0) ? 'NEW' : (r.length >= 3 && r.length >= 2 * Math.max(p.length, 1)) ? 'SURGING' : (r.length || p.length) ? (r.length < p.length ? 'DECLINING' : 'STABLE') : 'INACTIVE';
+    return {corridor: c, events_recent: r.length, events_prior: p.length, events_total: g.length, top_drug: mode(g.map(e => e.drug)), avg_risk: Math.round(10 * g.reduce((s, e) => s + (e.score || 0), 0) / g.length) / 10, trend};
+  }).sort((a, b) => b.events_recent - a.events_recent || b.avg_risk - a.avg_risk || b.events_total - a.events_total);
+  const hot = grp('country').map(([c, g]) => ({country: c, events_total: g.length, events_recent: g.filter(e => e.date >= rs).length, events_prior: g.filter(e => e.date >= ps && e.date < rs).length,
+    high_risk: g.filter(e => e.band === 'High').length, top_drug: mode(g.map(e => e.drug)), top_place: mode(g.map(e => e.place))}))
+    .sort((a, b) => b.events_recent - a.events_recent || b.events_total - a.events_total);
+  return {corr, hot};
+}
+// Repeat links: only the reports that pass the filters count; a link needs at least two of them.
+function linksInView() {
+  const all = D.links || [];
+  if (!filtersActive()) return all;
+  if (!evByIdCache) evByIdCache = new Map(D.events.map(e => [e.id, e]));
+  const ok = matcher(), cut = addDays(D.meta.asof, -29);
+  return all.map(r => {
+    const ev = (r.ids || []).map(i => evByIdCache.get(i)).filter(e => e && ok(e));
+    if (ev.length < 2) return null;
+    return Object.assign({}, r, {n: ev.length, recent: ev.filter(e => e.date >= cut).length, last: ev.reduce((a, e) => e.date > a ? e.date : a, ''),
+      countries: [...new Set(ev.map(e => e.country).filter(Boolean))], items: [...new Set(ev.map(e => e.drug).filter(Boolean))], urls: ev.map(e => e.url).filter(Boolean).slice(0, 5)});
+  }).filter(Boolean);
+}
+// Production chain: a country row stays when at least one of the reports behind it passes the filters.
+function chainInView() {
+  const C0 = D.chain || {countries: []};
+  if (!filtersActive()) return C0;
+  const um = urlMap(), ok = matcher(), rows = C0.countries.filter(r => (r.urls || []).some(u => (um.get(u) || []).some(ok)));
+  const sum = k => rows.reduce((s, r) => s + (r[k] || 0), 0);
+  return Object.assign({}, C0, {countries: rows, n_precursor: sum('n_precursor'), n_lab: sum('n_lab')});
 }
 function alerts() {
   const ALL = D.alerts || [], A = alertsInView(), SHOW = 5, of = A.length !== ALL.length ? ' of ' + ALL.length : '';
@@ -635,10 +675,11 @@ function coverAnalysis(v) {
 }
 
 function staticTables() {
-  $('corr').innerHTML = D.corridors.length ? '<table><tr><th>Corridor</th><th>Trend</th><th>30d</th><th>Prev 30d</th><th>Total</th><th>Main drug</th><th>Avg risk</th></tr>' +
-    D.corridors.slice(0, 25).map(c => '<tr><td>' + esc(c.corridor) + '</td><td><span class="chip ' + esc(c.trend) + '">' + esc(c.trend) + '</span></td><td>' + c.events_recent + '</td><td>' + c.events_prior + '</td><td>' + c.events_total + '</td><td>' + esc(c.top_drug) + '</td><td>' + c.avg_risk + '</td></tr>').join('') + '</table>' : '<div class="small">No corridors with a known origin/destination yet.</div>';
-  $('hot').innerHTML = D.hotspots.length ? '<table><tr><th>Country</th><th>30d</th><th>Prev 30d</th><th>Total</th><th>High risk</th><th>Main drug</th><th>Main place</th></tr>' +
-    D.hotspots.slice(0, 20).map(c => '<tr><td>' + esc(c.country) + '</td><td>' + c.events_recent + '</td><td>' + c.events_prior + '</td><td>' + c.events_total + '</td><td>' + c.high_risk + '</td><td>' + esc(c.top_drug) + '</td><td>' + esc(c.top_place) + '</td></tr>').join('') + '</table>' : '';
+  const ST = statsInView(), none = filtersActive();
+  $('corr').innerHTML = ST.corr.length ? '<table><tr><th>Corridor</th><th>Trend</th><th>30d</th><th>Prev 30d</th><th>Total</th><th>Main drug</th><th>Avg risk</th></tr>' +
+    ST.corr.slice(0, 25).map(c => '<tr><td>' + esc(c.corridor) + '</td><td><span class="chip ' + esc(c.trend) + '">' + esc(c.trend) + '</span></td><td>' + c.events_recent + '</td><td>' + c.events_prior + '</td><td>' + c.events_total + '</td><td>' + esc(c.top_drug) + '</td><td>' + c.avg_risk + '</td></tr>').join('') + '</table>' : '<div class="small">' + (none ? 'No corridors match the filters.' : 'No corridors with a known origin/destination yet.') + '</div>';
+  $('hot').innerHTML = ST.hot.length ? '<table><tr><th>Country</th><th>30d</th><th>Prev 30d</th><th>Total</th><th>High risk</th><th>Main drug</th><th>Main place</th></tr>' +
+    ST.hot.slice(0, 20).map(c => '<tr><td>' + esc(c.country) + '</td><td>' + c.events_recent + '</td><td>' + c.events_prior + '</td><td>' + c.events_total + '</td><td>' + c.high_risk + '</td><td>' + esc(c.top_drug) + '</td><td>' + esc(c.top_place) + '</td></tr>').join('') + '</table>' : '';
 }
 
 const detailText = e => [e.vessel && ('vessel ' + e.vessel), e.line && ('line ' + e.line), e.cover && ('cargo: ' + e.cover),
@@ -673,7 +714,7 @@ function riskBox() {
   $('riskHow').innerHTML = h;
 }
 function render() {
-  alerts();
+  alerts(); staticTables(); linksPanel(); chainPanel(); if (window.libRefresh) window.libRefresh();
   const v = view();
   kpis(v); timeChart(v);
   hbar('cConc', topN(by(v.flatMap(e => e.conceal ? e.conceal.split('; ') : []), x => x), 10), '#2a6f97');
@@ -1072,13 +1113,13 @@ $('watchList').addEventListener('click', ev => {
 renderWatch();
 
 $('fDays').innerHTML = periodOptions('90');   // months and years added to the period filter
-staticTables(); render();
+render();
 
 // ---- Repeat links, production chain, event detail with officer checklist
 function linksPanel() {
-  const L = D.links || [];
+  const L = linksInView();
   $('linkNote').textContent = L.length ? '(' + L.length + ' leads still active in the last 30 days)' : '';
-  if (!L.length) { $('linkT').innerHTML = '<tr><td class="small">No repeat links found right now.</td></tr>'; return; }
+  if (!L.length) { $('linkT').innerHTML = '<tr><td class="small">' + (filtersActive() ? 'No repeat links match the filters.' : 'No repeat links found right now.') + '</td></tr>'; return; }
   $('linkT').innerHTML = '<tr><th>What repeats</th><th>Reports</th><th>Last 30 d</th><th>Seen in</th><th>Items</th><th>Latest</th><th>Sources</th></tr>' +
     L.slice(0, 60).map(r => '<tr class="lkrow"><td><b>' + esc(r.name) + '</b><span class="small"> ' + esc(r.type) + '</span>' +
       (r.note ? '<span class="nt">' + esc(r.note) + '</span>' : '') + '</td><td>' + r.n + '</td><td>' + r.recent + '</td><td class="small">' + esc((r.countries || []).join(', ')) +
@@ -1086,10 +1127,10 @@ function linksPanel() {
       (r.urls || []).map((u, i) => '<a href="' + esc(safe(u)) + '" target="_blank" rel="noopener noreferrer">' + (i + 1) + '</a>').join(' ') + '</td></tr>').join('');
 }
 function chainPanel() {
-  const C = D.chain || {countries: []};
+  const C = chainInView();
   const lk = C.countries.filter(r => r.linked);
   $('chainNote').textContent = '(last ' + (C.days || 90) + ' days: ' + C.n_precursor + ' precursor seizures, ' + C.n_lab + ' laboratory reports; ' + lk.length + ' countries with a possible link)';
-  if (!C.countries.length) { $('chainT').innerHTML = '<tr><td class="small">No precursor seizures or laboratory reports found.</td></tr>'; return; }
+  if (!C.countries.length) { $('chainT').innerHTML = '<tr><td class="small">' + (filtersActive() ? 'No production-chain rows match the filters.' : 'No precursor seizures or laboratory reports found.') + '</td></tr>'; return; }
   $('chainT').innerHTML = '<tr><th>Country</th><th>Possible link</th><th>Precursor seizures</th><th>Lab reports</th><th>Synthetic-drug seizures nearby (same place)</th><th>Latest lab / precursor</th><th>Sources</th></tr>' +
     C.countries.slice(0, 40).map(r => '<tr class="lkrow"><td><b>' + esc(r.country) + '</b></td><td>' + (r.linked ? '<span class="stg Medium">possible</span>' : '<span class="stg Low">no match</span>') +
       '</td><td>' + r.n_precursor + (r.precursors.length ? '<span class="small"> ' + esc(r.precursors.join(', ')) + (r.kg_precursor ? ', ' + r.kg_precursor + ' kg' : '') + '</span>' : '') +
@@ -1151,14 +1192,18 @@ $('evT').addEventListener('click', ev => { const c = ev.target.closest('.chip[da
     shown += next.length;
     $('libCount').textContent = '(' + hits.length + ' of ' + all.length + ' articles)';
     sizeBox();
-    if (!hits.length) $('libList').innerHTML = '<div class="small">No articles match your search.</div>';
+    if (!hits.length) $('libList').innerHTML = '<div class="small">No articles match the filters or your search.</div>';
   }
-  let t; $('libQ').addEventListener('input', () => { clearTimeout(t); t = setTimeout(() => {
-    const w = $('libQ').value.toLowerCase().split(/\s+/).filter(Boolean);
-    hits = []; hay.forEach((h, i) => { if (w.every(x => h.includes(x))) hits.push(i); }); draw(true); }, 150); });
+  // the library follows the filters at the top (including the period) and its own search box
+  function refresh() {
+    const w = $('libQ').value.toLowerCase().split(/\s+/).filter(Boolean), [a, b] = periodRange($('fDays').value), ok = matcher();
+    hits = []; hay.forEach((h, i) => { const e = all[i]; if (e.date >= a && e.date <= b && ok(e) && w.every(x => h.includes(x))) hits.push(i); }); draw(true);
+  }
+  window.libRefresh = refresh;
+  let t; $('libQ').addEventListener('input', () => { clearTimeout(t); t = setTimeout(refresh, 150); });
   $('libList').addEventListener('scroll', () => { const b = $('libList'); if (shown < hits.length && b.scrollTop + b.clientHeight >= b.scrollHeight - 80) draw(false); });
   window.addEventListener('resize', sizeBox);
-  draw(true);
+  refresh();
 })();
 $('evClose').onclick = () => $('evModal').classList.remove('on');
 $('evModal').addEventListener('click', ev => { if (ev.target.id === 'evModal') $('evModal').classList.remove('on'); });
