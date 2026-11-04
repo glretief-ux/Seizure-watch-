@@ -134,6 +134,7 @@ table.mini{border-collapse:collapse;font-size:13px;margin-top:6px}table.mini td{
 .mselList input{margin:2px 0 0 0;flex:0 0 auto}
 .mselList label>span{flex:1 1 auto}
 .mselEmpty{color:var(--mute);font-size:12px;padding:4px 2px}
+.kpi-click{cursor:pointer;transition:box-shadow .15s}.kpi-click:hover{box-shadow:0 0 0 2px #2a6f97}.kpi-click.on{box-shadow:0 0 0 2px #2a6f97;background:#eef5fb}
 </style>
 </head>
 <body>
@@ -474,11 +475,21 @@ function kpis(v) {
   const catSummary = Object.entries(byCat).sort((a,b) => b[1]-a[1]).map(([c,n]) => n + ' ' + c).join(', ');
   const K = [['High risk', hi, v.length ? Math.round(100*hi/v.length) + '% of events' : ''],
     ['Container cases', cont, v.length ? Math.round(100*cont/v.length) + '% of events' : ''],
-    ['Insider signals', ins, 'port / airport / customs staff'],
+    ['Insider signals', ins, 'staff involved in the conspiracy (port / airport / customs / police)'],
     ['Total weight', kg >= 1000 ? (kg/1000).toFixed(1) + ' t' : Math.round(kg) + ' kg', 'excl. pills / sticks'],
     ['Other contraband', nd.length, catSummary || 'stolen vehicles, precursor and hazardous chemicals, cultural heritage, CITES timber, ivory and fauna, arms']];
-  $('kpis').innerHTML = evCard(v) + K.map(k => '<div class="kpi"><div class="l">' + k[0] + '</div><div class="v">' + k[1] + '</div><div class="d">' + esc(k[2]) + '</div></div>').join('');
+  $('kpis').innerHTML = evCard(v) + K.map(k => k[0] === 'Insider signals'
+    ? '<div class="kpi kpi-click' + (cardName === INS_NAME && cardFilter ? ' on' : '') + '" id="kpiIns" role="button" tabindex="0" title="Click to list every news article about an internal conspiracy involving staff"><div class="l">' + k[0] + '</div><div class="v">' + k[1] + '</div><div class="d">' + esc(k[2]) + '</div><div class="d" style="color:#2a6f97;font-weight:600">' + (cardName === INS_NAME && cardFilter ? 'Showing these - click to show all' : 'Click to see the articles') + '</div></div>'
+    : '<div class="kpi"><div class="l">' + k[0] + '</div><div class="v">' + k[1] + '</div><div class="d">' + esc(k[2]) + '</div></div>').join('');
 }
+var INS_NAME = 'Insider signals - internal conspiracy involving staff';
+function toggleInsider() {
+  if (cardFilter && cardName === INS_NAME) { cardFilter = null; cardName = ''; showCardBar(); render(); return; }
+  cardFilter = e => !!e.insider; cardName = INS_NAME;
+  showCardBar(); render(); const t = $('libCard') || $('evT'); if (t) t.scrollIntoView({behavior: 'smooth', block: 'start'});
+}
+$('kpis').addEventListener('click', ev => { if (ev.target.closest('#kpiIns')) toggleInsider(); });
+$('kpis').addEventListener('keydown', ev => { if ((ev.key === 'Enter' || ev.key === ' ') && ev.target.closest('#kpiIns')) { ev.preventDefault(); toggleInsider(); } });
 
 // ---- every section follows the filters at the top (category, type, risk band, transport, infrastructure, search, indicator cards)
 function filtersActive() { return !!($('fDrug').value || $('fCategory').value || $('fBand').value || $('fMode').value || $('fQ').value.trim() || infraSelected.size || cardFilter); }

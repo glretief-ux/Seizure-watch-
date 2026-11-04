@@ -19,6 +19,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
 from swatch.lexicon import LANG_COUNTRY  # noqa: E402
+from swatch import lexicon as L  # noqa: E402
 from swatch import db, collect, extract, analyze, report, translate, ner, verify  # noqa: E402
 
 
@@ -175,6 +176,54 @@ def reread_snippets(conn, cfg, limit=60, days=3):
     return done, len(items)
 
 
+def _set_insider(conn, aid, on):
+    r = conn.execute("SELECT mo_summary FROM articles WHERE id=?", (aid,)).fetchone()
+    parts = [x for x in (r[0] or "").split(" | ") if x and x != "insider indicators"] if r else []
+    if on:
+        i = next((k for k, x in enumerate(parts) if x.startswith(("controlled delivery", "signs:"))), len(parts))
+        parts.insert(i, "insider indicators")
+    conn.execute("UPDATE articles SET insider=?, mo_summary=? WHERE id=?", (1 if on else 0, " | ".join(parts), aid))
+
+
+def recheck_insiders(conn, cfg, limit=80):
+    """The insider flag used to fire on routine arrests made BY customs staff. It now means an internal conspiracy (staff
+    suspected, arrested, bribed or colluding). Reports flagged under the old rule are parked in meta('insider_recheck'),
+    un-flagged, and re-read in full a batch at a time; the ones whose text passes the stricter rule get the flag back."""
+    import json
+    row = conn.execute("SELECT v FROM meta WHERE k='insider_recheck'").fetchone()
+    if not row:
+        if conn.execute("SELECT 1 FROM meta WHERE k='insider_recheck_done'").fetchone():
+            return 0, 0
+        ids = [r[0] for r in conn.execute("SELECT id FROM articles WHERE insider=1")]
+        for r in conn.execute("SELECT id, title, title_en FROM articles WHERE insider=1").fetchall():
+            if L.INSIDER.search(((r[1] or "") + " " + (r[2] or "")).lower()) and not (r[1] or "").lower().startswith("insider:"):
+                ids.remove(r[0])          # the headline itself already shows a staff conspiracy: keep the flag
+            else:
+                _set_insider(conn, r[0], False)
+        conn.execute("INSERT OR REPLACE INTO meta(k,v) VALUES('insider_recheck', ?)", (json.dumps(ids),))
+        conn.commit()
+        row = (json.dumps(ids),)
+    ids = json.loads(row[0])
+    batch, rest = ids[:limit], ids[limit:]
+    if not batch:
+        conn.execute("DELETE FROM meta WHERE k='insider_recheck'")
+        conn.execute("INSERT OR REPLACE INTO meta(k,v) VALUES('insider_recheck_done','1')")
+        conn.commit()
+        return 0, 0
+    q = ",".join("?" * len(batch))
+    rows = conn.execute(f"SELECT id, url, title, lang, source_country FROM articles WHERE id IN ({q})", batch).fetchall()
+    items = [{"url": r[1], "title": r[2], "snippet": "", "id": r[0], "lang": r[3], "source_country": r[4]} for r in rows]
+    items = collect.fetch_all(items, cfg["run"]["resolve_google_links"], budget_min=fetch_budget_min(cap=4))
+    back = 0
+    for it in items:
+        if it.get("text_mode") == "full" and L.INSIDER.search(L.norm(it["title"] + ". " + it["text"])):
+            _set_insider(conn, it["id"], True)
+            back += 1
+    conn.execute("UPDATE meta SET v=? WHERE k='insider_recheck'", (json.dumps(rest),))
+    conn.commit()
+    return back, len(items)
+
+
 def fetch_child(argv):
     import json
     fin, fout, budget, resolve = argv
@@ -248,6 +297,12 @@ def main():
                 log(f"      re-read {got} of {tried} earlier headline-only report(s) in full")
         except Exception as exc:  # an extra: never stop the run
             log(f"      re-reading earlier reports skipped ({type(exc).__name__}: {exc})")
+    try:
+        back, tried = (0, 0) if args.demo else recheck_insiders(conn, cfg)
+        if tried:
+            log(f"      insider flag: re-read {tried} earlier report(s) in full, {back} show a staff conspiracy")
+    except Exception as exc:  # an extra: never stop the run
+        log(f"      insider re-check skipped ({type(exc).__name__}: {exc})")
     db.backfill_drug_types(conn, extract._nsa_type)
     db.recategorise_tobacco(conn)
     n_loc = db.backfill_locations(conn, extract.locate)

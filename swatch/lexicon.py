@@ -420,12 +420,25 @@ ORGANIZED = rx(r"cartel", r"criminal\s+(?:network|organi[sz]ation|group|gang|syn
                r"organi[sz]ed\s+crime", r"trafficking\s+(?:network|ring|organi[sz]ation)", r"drug\s+(?:ring|gang)",
                r"mafia", r"narcotrafic", r"organizacion\s+criminal", r"red\s+criminal", r"banda\s+criminal",
                r"organisation\s+criminelle", r"reseau\s+criminel", r"'?ndrangheta", r"camorra", r"transnational")
-INSIDER = rx(r"(?:port|dock|terminal|customs|airport|airline|baggage|cargo|shipping|harbou?r)\s+"
-             r"(?:workers?|employees?|officials?|officers?|staff|agents?|handlers?|inspectors?|guards?)"
-             r"\s+(?:\w+\s+){0,4}?(?:arrested|detained|charged|suspected|involved|accused|bribed|corrupt)",
-             r"\binsiders?\b", r"corrupt\s+(?:customs|official|officer|port)", r"rip[- ]?on", r"rip[- ]?off",
-             r"extraction\s+(?:team|crew|gang)", r"\bcollusion\b", r"\bbribe", r"complicit",
-             r"funcionarios?\s+(?:aduaner|portuari)\w*", r"douaniers?\s+(?:corrompus|arretes|interpelles)")
+# Insider = an internal conspiracy: port / airport / customs / shipping / police staff who are THEMSELVES suspected, arrested,
+# bribed or colluding. Staff who simply made the seizure or arrested a smuggler ("customs officers arrested a passenger") do not count.
+_STAFF = (r"(?:port|dock|docker|terminal|customs|airport|airline|baggage|cargo|shipping|harbou?r|border|police|prison|security|"
+          r"immigration|quay|stevedore|warehouse|freight|logistics)\s+(?:workers?|employees?|officials?|officers?|staff|agents?|"
+          r"handlers?|inspectors?|guards?|personnel|constables?|brokers?|clerks?|supervisors?|operators?|crane\s+operators?)")
+INSIDER = rx(_STAFF + r"\s+(?:\w+\s+){0,2}?(?:was|were|been|are|is|being|got|has been|have been)\s+(?:\w+\s+){0,2}?"
+                      r"(?:arrested|detained|charged|suspended|sacked|dismissed|fired|jailed|sentenced|bribed|accused|implicated|suspected|"
+                      r"involved|indicted|convicted|remanded)",
+             _STAFF + r"s?\s+(?:\w+\s+){0,1}(?:arrested|detained|charged)\s+(?:over|in\s+connection|on\s+suspicion|amid)",
+             _STAFF + r"s?\s+(?:suspended|sacked|dismissed|fired|jailed|sentenced|bribed|accused|implicated|indicted|convicted|remanded)",
+             r"(?:arrests?|arrested|detention|detained|charges?|charged)\s+(?:of|against|for)?\s*(?:\w+\s+){0,3}?" + _STAFF,
+             _STAFF + r"\s+(?:\w+\s+){0,3}?(?:in\s+(?:cahoots|league)|working\s+with|linked\s+to|tied\s+to)\s+(?:\w+\s+){0,3}?"
+                      r"(?:traffick|smuggl|cartel|gang|syndicate|network|ring)",
+             r"\binsiders?\b", r"\binside\s+(?:help|information|man|job|accomplice)", r"corrupt(?:ed)?\s+(?:\w+\s+){0,2}?"
+                      r"(?:customs|official|officer|port|police|staff|worker|employee|agent|inspector)",
+             r"bribe[sd]?\s+(?:\w+\s+){0,3}?(?:customs|official|officer|port|police|staff|worker|employee|agent|inspector)",
+             r"(?:customs|official|officer|port|police|staff|worker|employee|agent|inspector)\w*\s+(?:\w+\s+){0,3}?(?:took|accepted|received)\s+bribe",
+             r"extraction\s+(?:team|crew|gang)", r"\bcollu(?:sion|ded|ding)\b", r"\bcomplicit",
+             r"funcionarios?\s+(?:aduaner|portuari)\w*\s+(?:detenid|arrestad|implicad)\w*", r"douaniers?\s+(?:corrompus|arretes|interpelles)")
 CONTROLLED_DELIVERY = rx(r"controlled\s+(?:delivery|operation)", r"entrega\s+(?:vigilada|controlada)",
                          r"livraison\s+(?:controlee|surveillee)")
 
