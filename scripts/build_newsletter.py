@@ -88,7 +88,7 @@ def og_image(url):
     return None
 
 
-def auto_pick(wk, n_feat=4, n_also=7, max_fetch=40):
+def auto_pick(wk, n_feat=7, n_also=5, max_fetch=70):
     """Pick the week's stories automatically: highest risk first, real seizures only, one per outlet."""
     cands = sorted((r for r in wk if r["Link"] and r["Headline (English)"] and fnum(r["Total quantity (kg)"]) > 0),
                    key=lambda r: (-fnum(r["Risk score"]), -fnum(r["Total quantity (kg)"])))
@@ -190,7 +190,7 @@ section{padding:26px 32px 0}
 .lead h3{margin:8px 0 10px;font-size:21px;line-height:1.25}.lead h3 a{color:#0B2A4A;text-decoration:none}
 .lead p{margin:0 0 12px}
 .btn{display:inline-block;background:#0B2A4A;color:#fff!important;text-decoration:none;font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:7px 12px;border-radius:3px}
-.cards{display:flex;gap:14px}
+.cards{display:flex;gap:14px;margin-bottom:14px;break-inside:avoid}.card.spacer{border:0}
 .card{flex:1;min-width:0;border:1px solid #d9e0e6}
 .card .ph{height:130px}
 .card .cb{padding:12px 13px 14px}
@@ -216,12 +216,13 @@ table.risk .it b{display:block}.risk small{color:#5b6a76}
 .bar{display:flex;align-items:center;gap:8px;margin:6px 0;font-size:11.5px}
 .bl{width:34%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:none}
 .bt{flex:1;background:rgba(255,255,255,.75);height:10px}.bt i{display:block;height:10px}
+.cols3 .bl{width:48%}.cols3 .bar{gap:5px;font-size:10.5px}.cols3 .bv{width:26px}
 .bv{width:40px;text-align:right;flex:none;color:#3c4b57}
 .note{padding:24px 32px 26px;font-size:10.5px;color:#5b6a76}
 .foot{background:#0B2A4A;color:#cfe3f1;padding:20px 32px;font-size:11px}.foot a{color:#fff}
 .foot b{color:#F28C28;letter-spacing:.14em;text-transform:uppercase}
 @page{size:A4;margin:8mm 0}
-@media print{body{background:#fff}.card,.lead,.tile,.panel,table.risk tr,.also li{break-inside:avoid}.sh{break-after:avoid}}
+@media print{section.pb{break-before:page}body{background:#fff}.card,.lead,.tile,.panel,table.risk tr,.also li{break-inside:avoid}.sh{break-after:avoid}}
 @media(max-width:640px){.mast{display:block}.mast .r{margin-top:14px;text-align:left}.mast h1{font-size:28px}.tiles,.cards,.cols,.lead{display:block}.tile{margin-bottom:8px}.card,.panel{margin-bottom:12px}.lead>a{width:100%}.lead .ph{height:210px}section,.intro,.tiles,.note,.foot,.mast{padding-left:18px;padding-right:18px}table.risk .d{display:none}}
 """
 
@@ -289,6 +290,9 @@ def main():
             cards.append(f'<article class="card">{img}<div class="cb">{pills}<h3><a href="{esc(link)}">{esc(head)}</a></h3>'
                          f'<p>{esc(text)}</p><p class="src">Photo and report: <a href="{esc(link)}">{esc(outlet)}</a></p></div></article>')
 
+    per_row = 3
+    cards += ['<div class="card spacer"></div>'] * (-len(cards) % per_row)   # keep the last row the same width
+    card_rows = "".join('<div class="cards">' + "".join(cards[i:i + per_row]) + '</div>' for i in range(0, len(cards), per_row))
     also = "\n".join(f'<li><a href="{esc(l)}">{esc(t)}</a></li>' for l, t in also_l)
 
     def sect(title, color, body):
@@ -314,12 +318,11 @@ def main():
 <div class="tile" style="background:{RED}"><b>{len(ins)}</b><span>Insider threat</span><em>{delta(len(ins), len(pins))}</em></div>
 <div class="tile" style="background:{ORANGE}"><b>{tons:,.0f} t</b><span>Reported weight</span><em>{delta(tons, ptons)}</em></div>
 <div class="tile" style="background:{TEAL}"><b>{cont}</b><span>Container cases</span><em>&nbsp;</em></div></div>
-{sect("Top stories", RED, lead_html + '<div class="cards">' + "".join(cards) + '</div>')}
-{sect("Also making news", AMBER, '<ul class="also">' + also + '</ul>')}
+{sect("Top stories", RED, lead_html + card_rows)}
+{sect("Also making news", AMBER, '<ul class="also">' + also + '</ul>').replace("<section>", '<section class="pb">', 1)}
 {sect("The week in numbers", BLUE, f'<div class="legend">Reports by risk band {legend}</div><div class="band">{band_html}</div>'
       + '<div class="cols">' + pan("What was seized", drugs, ORANGE, "#fff1e1") + pan("Where seizures were made", where, TEAL, "#e2f5f2") + '</div>'
-      + '<div class="cols">' + pan("Busiest routes", routes, RED, "#fde9eb") + pan("How it was hidden", conc, "#B07A00", "#fdf4d6") + '</div>'
-      + '<div class="cols">' + pan("Cover load", cover, PURPLE, "#f0ebfa") + '<div class="panel"></div></div>')}
+      + '<div class="cols cols3">' + pan("Busiest routes", routes, RED, "#fde9eb") + pan("How it was hidden", conc, "#B07A00", "#fdf4d6") + pan("Cover load", cover, PURPLE, "#f0ebfa") + '</div>')}
 <p class="note">These are leads from open news sources, not confirmed facts. Verify before acting. Counts reflect what the tool found in the news it searches; a quiet country may mean no news or no coverage. Photos belong to the cited outlets and link back to their articles. Data runs to {latest}{' (the last day is partial)' if latest == end.isoformat() and dc[latest] < 50 else ''}.</p>
 </div>"""
     page = (f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
