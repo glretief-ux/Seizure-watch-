@@ -240,6 +240,8 @@ def main():
     pv = [r for r in rows if inr(r, pstart, pend)]
     hi = [r for r in wk if r["Risk band"] == "High"]
     phi = [r for r in pv if r["Risk band"] == "High"]
+    ins = [r for r in wk if "Insider indicator" in r["Risk flags"]]
+    pins = [r for r in pv if "Insider indicator" in r["Risk flags"]]
     bands = collections.Counter(r["Risk band"] for r in wk)
     tons = sum(fnum(r["Total quantity (kg)"]) for r in wk) / 1000
     ptons = sum(fnum(r["Total quantity (kg)"]) for r in pv) / 1000
@@ -309,7 +311,7 @@ def main():
 <div class="intro">{len(wk):,} seizure reports from {ctry} countries, {abs(chg):.0f}% {'more' if chg >= 0 else 'fewer'} than the week before. {len(hi)} were rated high risk. Cannabis ({drugs[0][1]}) and cocaine ({drugs[1][1] if len(drugs) > 1 else 0}) led the reports.{fill_note}</div>
 <div class="tiles">
 <div class="tile" style="background:{BLUE}"><b>{len(wk):,}</b><span>Seizure reports</span><em>{delta(len(wk), len(pv))}</em></div>
-<div class="tile" style="background:{RED}"><b>{len(hi)}</b><span>High risk</span><em>{delta(len(hi), len(phi))}</em></div>
+<div class="tile" style="background:{RED}"><b>{len(ins)}</b><span>Insider threat</span><em>{delta(len(ins), len(pins))}</em></div>
 <div class="tile" style="background:{ORANGE}"><b>{tons:,.0f} t</b><span>Reported weight</span><em>{delta(tons, ptons)}</em></div>
 <div class="tile" style="background:{TEAL}"><b>{cont}</b><span>Container cases</span><em>&nbsp;</em></div></div>
 {sect("Top stories", RED, lead_html + '<div class="cards">' + "".join(cards) + '</div>')}
