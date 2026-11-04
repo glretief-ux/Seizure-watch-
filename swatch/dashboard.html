@@ -480,12 +480,30 @@ function kpis(v) {
   $('kpis').innerHTML = evCard(v) + K.map(k => '<div class="kpi"><div class="l">' + k[0] + '</div><div class="v">' + k[1] + '</div><div class="d">' + esc(k[2]) + '</div></div>').join('');
 }
 
+// Alerts follow the filters above (category, type, transport, infrastructure, search, indicator cards; not the period).
+// An alert belongs to the reports it links to, so it is shown when at least one of those reports passes the filters.
+let alertUrlMap = null;
+function alertsInView() {
+  const all = D.alerts || [], dr = $('fDrug').value, cg = $('fCategory').value, md = $('fMode').value, q = $('fQ').value.trim();
+  const other = cg || md || q || infraSelected.size || cardFilter;
+  if (!dr && !other) return all;
+  if (!alertUrlMap) {
+    alertUrlMap = new Map();
+    D.events.forEach(e => [e.url].concat((e.arts || []).map(a => a.u)).filter(Boolean).forEach(u => { if (!alertUrlMap.has(u)) alertUrlMap.set(u, []); alertUrlMap.get(u).push(e); }));
+  }
+  const ok = matcher();
+  return all.filter(a => {
+    const ev = []; (a.urls || []).forEach(u => (alertUrlMap.get(u) || []).forEach(e => ev.push(e)));
+    if (ev.length) return ev.every(ok);
+    return !!dr && !other && (a.title + ' ' + a.detail).toLowerCase().includes(dr.toLowerCase());   // no linked report found: match on the drug name
+  });
+}
 function alerts() {
-  const A = D.alerts, SHOW = 5;
-  $('alertNote').textContent = A.length ? (A.length > SHOW ? '(' + A.length + ' today; ' + SHOW + ' shown, scroll for ' + (A.length > 100 ? 'the top 100' : 'more') + ')' : '(' + A.length + ' today)') : '';
+  const ALL = D.alerts || [], A = alertsInView(), SHOW = 5, of = A.length !== ALL.length ? ' of ' + ALL.length : '';
+  $('alertNote').textContent = A.length ? (A.length > SHOW ? '(' + A.length + of + ' today; ' + SHOW + ' shown, scroll for ' + (A.length > 100 ? 'the top 100' : 'more') + ')' : '(' + A.length + of + ' today)') : '';
   $('alerts').innerHTML = A.length ? A.slice(0, 100).map(a => '<div class="alert ' + esc(a.severity) + '"><div class="k">' + esc(a.type) + ' | ' + esc(a.severity) + '</div><div class="t">' + esc(a.title) + '</div><div class="d">' + esc(a.detail) + '</div><div class="small">' +
     (a.urls || []).map((u,i) => '<a href="' + esc(safe(u)) + '" target="_blank" rel="noopener noreferrer">source ' + (i+1) + '</a>').join(' &middot; ') + '</div></div>').join('')
-    : '<div class="small">No alerts today. (Trend alerts need ' + D.meta.min_history + '+ days of history.)</div>';
+    : (ALL.length ? '<div class="small">No alerts match the current filters.</div>' : '<div class="small">No alerts today. (Trend alerts need ' + D.meta.min_history + '+ days of history.)</div>');
   fitAlerts(SHOW);
 }
 
@@ -655,6 +673,7 @@ function riskBox() {
   $('riskHow').innerHTML = h;
 }
 function render() {
+  alerts();
   const v = view();
   kpis(v); timeChart(v);
   hbar('cConc', topN(by(v.flatMap(e => e.conceal ? e.conceal.split('; ') : []), x => x), 10), '#2a6f97');
@@ -1053,7 +1072,7 @@ $('watchList').addEventListener('click', ev => {
 renderWatch();
 
 $('fDays').innerHTML = periodOptions('90');   // months and years added to the period filter
-alerts(); staticTables(); render();
+staticTables(); render();
 
 // ---- Repeat links, production chain, event detail with officer checklist
 function linksPanel() {
