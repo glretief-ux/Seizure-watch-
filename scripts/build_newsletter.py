@@ -286,23 +286,6 @@ def main():
             cards.append(f'<article class="card">{img}<div class="cb">{pills}<h3><a href="{esc(link)}">{esc(head)}</a></h3>'
                          f'<p>{esc(text)}</p><p class="src">Photo and report: <a href="{esc(link)}">{esc(outlet)}</a></p></div></article>')
 
-    seen, risk_rows = set(), []
-    for r in sorted(hi, key=lambda r: -fnum(r["Risk score"])):
-        key = (r["Seizure place"], r["Drug type"], r["Date"])
-        if key in seen or not r["Link"]:
-            continue
-        seen.add(key)
-        sc = int(fnum(r["Risk score"]))
-        col = RED if sc >= 90 else ORANGE if sc >= 75 else AMBER
-        place = ", ".join(x for x in (r["Seizure place"], r["Seizure country"]) if x) or "Place not named"
-        route = f'{r["Origin"]} → {r["Destination"]}' if r["Origin"] and r["Destination"] else ""
-        d = dt.date.fromisoformat(r["Date"]).strftime("%-d %b")
-        risk_rows.append(f'<tr><td class="sc"><span class="badge" style="background:{col}">{sc}</span></td><td class="d">{d}</td>'
-                         f'<td class="it"><b><a href="{esc(r["Link"])}">{esc(r["Drug type"])} {esc(qty(r["Total quantity (kg)"]))}</a></b>'
-                         f'<small>{esc(place)}{" · " + esc(route) if route else ""}</small></td></tr>')
-        if len(risk_rows) == 6:
-            break
-
     also = "\n".join(f'<li><a href="{esc(l)}">{esc(t)}</a></li>' for l, t in also_l)
 
     def sect(title, color, body):
@@ -329,7 +312,6 @@ def main():
 <div class="tile" style="background:{ORANGE}"><b>{tons:,.0f} t</b><span>Reported weight</span><em>{delta(tons, ptons)}</em></div>
 <div class="tile" style="background:{TEAL}"><b>{cont}</b><span>Container cases</span><em>&nbsp;</em></div></div>
 {sect("Top stories", RED, lead_html + '<div class="cards">' + "".join(cards) + '</div>')}
-{sect("Risk watch: highest-risk events", ORANGE, '<table class="risk">' + "".join(risk_rows) + '</table>')}
 {sect("Also making news", AMBER, '<ul class="also">' + also + '</ul>')}
 {sect("The week in numbers", BLUE, f'<div class="legend">Reports by risk band {legend}</div><div class="band">{band_html}</div>'
       + '<div class="cols">' + pan("Reports per day", daily, BLUE, "#e6f4fb") + pan("Most reported drugs and goods", drugs, ORANGE, "#fff1e1") + '</div>'
