@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Seizure Watch - open-source drug seizure news</title>
+<title>Seizure Watch - open-source drug seizure risk indicators</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -150,7 +150,7 @@ table.mini{border-collapse:collapse;font-size:13px;margin-top:6px}table.mini td{
 <div class="filters">
   <select id="fCategory"><option value="">All categories</option></select>
   <select id="fDrug"><option value="">All types</option></select>
-  <input type="hidden" id="fBand" value="">
+  <select id="fBand"><option value="">All risk bands</option><option>High</option><option>Medium</option><option>Low</option></select>
   <select id="fDays"><option value="7">Last 7 days</option><option value="30">Last 30 days</option><option value="90" selected>Last 90 days</option><option value="9999">All time</option></select>
   <select id="fMode"><option value="">All transport</option></select>
   <div class="msel" id="fInfraWrap">
@@ -203,7 +203,7 @@ table.mini{border-collapse:collapse;font-size:13px;margin-top:6px}table.mini td{
 <div class="card"><h2>My watchlist <span class="small" id="watchNote"></span></h2>
   <div id="watchNew"></div>
   <div class="wrow"><input id="wQ" type="search" placeholder="Watch for... e.g. Antwerp cocaine, Ecuador Belgium, food cargo, OR Tambo">
-    <input type="hidden" id="wBand" value="1">
+    <select id="wBand"><option value="1">Any risk</option><option value="2">Medium and above</option><option value="3">High only</option></select>
     <button id="wAdd" type="button">Add watch</button></div>
   <div id="watchList"></div>
   <div class="small" style="margin-top:10px">Watches are saved on this device only (not on the website). "New" means not shown on your previous visit. Tap a watch to see its events; highlighted rows in the table match a watch.</div>
@@ -228,7 +228,7 @@ table.mini{border-collapse:collapse;font-size:13px;margin-top:6px}table.mini td{
 </div>
 
 <div class="card" id="coverAnCard"><h2>Cover load analysis <span class="small" id="coverAnNote"></span></h2>
-  <div class="small" style="line-height:1.45;margin-bottom:10px">What the cover loads in the block above add up to: which goods were used most, what was hidden in them, and where they were seized. It uses only the reports that name the goods (see the note above), follows the filters at the top, and is a lead to check, not proof. News coverage favours large and unusual seizures.</div>
+  <div class="small" style="line-height:1.45;margin-bottom:10px">What the cover loads in the block above add up to: which goods were used most, what was hidden in them, where they were seized and how risky those cases were. It uses only the reports that name the goods (see the note above), follows the filters at the top, and is a lead to check, not proof. News coverage favours large and unusual seizures.</div>
   <ul id="coverAnList" style="margin:4px 0 12px 18px;padding:0;line-height:1.5"></ul>
   <div class="grid2">
     <div><h4 style="margin:0 0 6px;font-size:12.5px;color:var(--brand)">What the cover load was (share of goods mentions)</h4><div class="chartbox"><canvas id="cCovPie"></canvas></div></div>
@@ -268,6 +268,10 @@ table.mini{border-collapse:collapse;font-size:13px;margin-top:6px}table.mini td{
     <h4 style="margin:14px 0 4px;font-size:12.5px;color:var(--brand)">What this suggests</h4>
     <ul id="rtList" style="margin:4px 0 0 18px;padding:0;line-height:1.5"></ul>
   </div>
+</div>
+
+<div class="card"><h2>How risk is scored</h2>
+  <details class="lk"><summary><b>Open the explanation</b><span class="lks">The score (0-100) ranks reports for analyst attention. It is built from five separate dimensions, so no single factor decides it. Seizure weight is capped at 10 points.</span></summary><div class="lkb small" id="riskHow"></div></details>
 </div>
 
 <div class="card"><h2>Events <span class="small" id="evCount"></span></h2><div id="cardBar" class="small"></div><div class="tw2" id="evTop"><div></div></div><div class="tw" id="evWrap" style="max-height:640px"><table id="evT"></table></div></div>
@@ -409,7 +413,7 @@ function periodList() {
   return {months, years};
 }
 // count events between two dates (inclusive). Inside the loaded window every filter applies;
-// further back the monthly summary is used, which knows category and type only.
+// further back the monthly summary is used, which knows category, type and risk band only.
 function countRange(a, b) {
   if (a >= winStart) { const ok = matcher(); return {n: D.events.filter(e => e.date >= a && e.date <= b && ok(e)).length, partial: false}; }
   const cg = $('fCategory').value, dr = $('fDrug').value, bd = $('fBand').value, ma = a.slice(0,7), mb = b.slice(0,7);
@@ -451,7 +455,7 @@ function evCard(v) {
     const py = String(+y - 1), pb = cur ? (py + asofS.slice(4)) : py + '-12-31';
     d = cmp((cur ? 'same period ' : '') + py, py + '-01-01', pb, n);
   }
-  if (part) d += '<br>older months: category and type filters only';
+  if (part) d += '<br>older months: category, type and risk filters only';
   if (periodRange(evPeriod)[0] < winStart && firstDate < winStart) d += '<br>map and tables hold the last ' + Math.round((new Date(asofS) - new Date(winStart)) / 864e5 + 1) + ' days';
   return '<div class="kpi"><div class="lr"><div class="l">Seizure events</div>' + sel + '</div><div class="v">' + n.toLocaleString('en-GB') + '</div><div class="d">' + d + '</div></div>';
 }
@@ -463,12 +467,13 @@ const by = (arr, f) => { const m = {}; arr.forEach(x => { const k = f(x); if (k 
 const topN = (m, n) => Object.entries(m).sort((a,b) => b[1]-a[1]).slice(0, n);
 
 function kpis(v) {
-  const cont = v.filter(e => e.container).length,
+  const hi = v.filter(e => e.band === 'High').length, cont = v.filter(e => e.container).length,
         ins = v.filter(e => e.insider).length, kg = v.reduce((s,e) => s + (e.kg || 0), 0);
   const nd = v.filter(e => e.category && e.category !== 'Drug');
   const byCat = {}; nd.forEach(e => byCat[e.category] = (byCat[e.category]||0)+1);
   const catSummary = Object.entries(byCat).sort((a,b) => b[1]-a[1]).map(([c,n]) => n + ' ' + c).join(', ');
-  const K = [['Container cases', cont, v.length ? Math.round(100*cont/v.length) + '% of events' : ''],
+  const K = [['High risk', hi, v.length ? Math.round(100*hi/v.length) + '% of events' : ''],
+    ['Container cases', cont, v.length ? Math.round(100*cont/v.length) + '% of events' : ''],
     ['Insider signals', ins, 'port / airport / customs staff'],
     ['Total weight', kg >= 1000 ? (kg/1000).toFixed(1) + ' t' : Math.round(kg) + ' kg', 'excl. pills / sticks'],
     ['Other contraband', nd.length, catSummary || 'stolen vehicles, precursor and hazardous chemicals, cultural heritage, CITES timber, ivory and fauna, arms']];
@@ -476,7 +481,7 @@ function kpis(v) {
 }
 
 function alerts() {
-  const A = (D.alerts || []).filter(a => a.type !== 'HIGH-RISK EVENT'), SHOW = 5;
+  const A = D.alerts, SHOW = 5;
   $('alertNote').textContent = A.length ? (A.length > SHOW ? '(' + A.length + ' today; ' + SHOW + ' shown, scroll for ' + (A.length > 100 ? 'the top 100' : 'more') + ')' : '(' + A.length + ' today)') : '';
   $('alerts').innerHTML = A.length ? A.slice(0, 100).map(a => '<div class="alert ' + esc(a.severity) + '"><div class="k">' + esc(a.type) + ' | ' + esc(a.severity) + '</div><div class="t">' + esc(a.title) + '</div><div class="d">' + esc(a.detail) + '</div><div class="small">' +
     (a.urls || []).map((u,i) => '<a href="' + esc(safe(u)) + '" target="_blank" rel="noopener noreferrer">source ' + (i+1) + '</a>').join(' &middot; ') + '</div></div>').join('')
@@ -551,12 +556,12 @@ function coverLoad(v) {
   // one drop-down per group, newest cases first, each with its news article
   const open = new Set([...document.querySelectorAll('#coverList details[open]')].map(d => d.dataset.g));
   $('coverList').innerHTML = topN(by(w.flatMap(e => e.cover_g), x => x), 99).map(([g, n]) => {
-    const ev = w.filter(e => e.cover_g.includes(g)).sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+    const ev = w.filter(e => e.cover_g.includes(g)).sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : b.score - a.score));
     const items = topN(by(ev.flatMap(e => (e.cover || '').split('; ').filter(x => GOODS_OF[x] === g)), x => x), 6).map(([k, c]) => esc(k) + ' ' + c).join(', ');
     return '<details class="lk" data-g="' + esc(g) + '"' + (open.has(g) ? ' open' : '') + '><summary><b>' + esc(g) + '</b><span class="cnt">' + n + '</span><span class="lks">' + items + '</span></summary>' +
-      '<div class="lkb tw cscroll"><table><tr><th>Date</th><th>Goods</th><th>Item</th><th>Route</th><th>Seized in</th><th>Report</th></tr>' +
+      '<div class="lkb tw cscroll"><table><tr><th>Date</th><th>Goods</th><th>Item</th><th>Route</th><th>Seized in</th><th>Risk</th><th>Report</th></tr>' +
       ev.map(e => '<tr><td>' + esc(e.date) + '</td><td>' + esc(e.cover) + '</td><td>' + esc(e.drug_label || e.drug) + '</td><td class="w2">' + esc(e.route || e.corridor || '') + '</td><td class="w2">' +
-        esc([e.place, e.country].filter(Boolean).join(', ')) + '</td><td><a href="' + esc(safe(e.url)) + '" target="_blank" rel="noopener noreferrer" title="' + esc(e.title_en || e.title) + '">news article</a></td></tr>').join('') +
+        esc([e.place, e.country].filter(Boolean).join(', ')) + '</td><td><span class="chip ' + esc(e.band) + '">' + esc(e.band) + '</span></td><td><a href="' + esc(safe(e.url)) + '" target="_blank" rel="noopener noreferrer" title="' + esc(e.title_en || e.title) + '">news article</a></td></tr>').join('') +
       '</table>' + '<div class="small" style="margin-top:6px">All ' + ev.length + ' shown, newest first. Scroll inside the block to see them all.</div>' + '</div></details>';
   }).join('');
 }
@@ -593,7 +598,7 @@ function coverAnalysis(v) {
   const ctry = topN(by(w, e => e.country), 10);
   hbar('cCovCountry', ctry, '#2a6f97', true);
   // plain-language reading
-  const L = [];
+  const L = [], hi = w.filter(e => e.band === 'High').length;
   L.push('<b>' + esc(grp[0][0]) + '</b> was the most common cover load: ' + grp[0][1] + ' of the ' + n + ' reports that name the goods (' + pct(grp[0][1], n) + '%)' +
     (grp[1] ? ', followed by ' + esc(grp[1][0]) + ' (' + pct(grp[1][1], n) + '%)' : '') + (grp[2] ? ' and ' + esc(grp[2][0]) + ' (' + pct(grp[2][1], n) + '%).' : '.'));
   if (items[0]) L.push('The single most named goods were <b>' + esc(items[0][0]) + '</b> (' + items[0][1] + ')' + (items[1] ? ', ' + esc(items[1][0]) + ' (' + items[1][1] + ')' : '') + (items[2] ? ' and ' + esc(items[2][0]) + ' (' + items[2][1] + ')' : '') +
@@ -604,15 +609,18 @@ function coverAnalysis(v) {
   grp.filter(g => g[1] >= 4).forEach(([g]) => { const ev = w.filter(e => e.cover_g.includes(g)), top = topN(by(ev, e => e.drug), 1)[0], s = top[1] / ev.length;
     if (!lean || s > lean.s) lean = {g, d: top[0], s, n: ev.length}; });
   if (lean && lean.s >= 0.5) L.push('<b>' + esc(lean.g) + '</b> leans strongly one way: ' + pct(lean.s * lean.n, lean.n) + '% of its ' + lean.n + ' reports involved ' + esc(lean.d) + '.');
+  // riskiest group (needs at least 4 reports)
+  const riskG = grp.filter(g => g[1] >= 4).map(([g, c]) => { const ev = w.filter(e => e.cover_g.includes(g)); return {g, c, avg: ev.reduce((s, e) => s + (e.score || 0), 0) / ev.length, hi: ev.filter(e => e.band === 'High').length}; }).sort((a, b) => b.avg - a.avg);
+  if (riskG[0]) L.push('Overall ' + pct(hi, n) + '% of these cases are High risk. The highest average risk score is for <b>' + esc(riskG[0].g) + '</b> (' + riskG[0].avg.toFixed(0) + ', ' + riskG[0].hi + ' of ' + riskG[0].c + ' High).');
   if (ctry[0]) { const t3 = ctry.slice(0, 3); L.push('Cover loads were seized most in <b>' + t3.map(x => esc(x[0])).join(', ') + '</b> (' + pct(t3.reduce((s, x) => s + x[1], 0), n) + '% of these reports).'); }
   $('coverAnList').innerHTML = L.map(x => '<li style="margin:6px 0">' + x + '</li>').join('');
 }
 
 function staticTables() {
-  $('corr').innerHTML = D.corridors.length ? '<table><tr><th>Corridor</th><th>Trend</th><th>30d</th><th>Prev 30d</th><th>Total</th><th>Main drug</th></tr>' +
-    D.corridors.slice(0, 25).map(c => '<tr><td>' + esc(c.corridor) + '</td><td><span class="chip ' + esc(c.trend) + '">' + esc(c.trend) + '</span></td><td>' + c.events_recent + '</td><td>' + c.events_prior + '</td><td>' + c.events_total + '</td><td>' + esc(c.top_drug) + '</td></tr>').join('') + '</table>' : '<div class="small">No corridors with a known origin/destination yet.</div>';
-  $('hot').innerHTML = D.hotspots.length ? '<table><tr><th>Country</th><th>30d</th><th>Prev 30d</th><th>Total</th><th>Main drug</th><th>Main place</th></tr>' +
-    D.hotspots.slice(0, 20).map(c => '<tr><td>' + esc(c.country) + '</td><td>' + c.events_recent + '</td><td>' + c.events_prior + '</td><td>' + c.events_total + '</td><td>' + esc(c.top_drug) + '</td><td>' + esc(c.top_place) + '</td></tr>').join('') + '</table>' : '';
+  $('corr').innerHTML = D.corridors.length ? '<table><tr><th>Corridor</th><th>Trend</th><th>30d</th><th>Prev 30d</th><th>Total</th><th>Main drug</th><th>Avg risk</th></tr>' +
+    D.corridors.slice(0, 25).map(c => '<tr><td>' + esc(c.corridor) + '</td><td><span class="chip ' + esc(c.trend) + '">' + esc(c.trend) + '</span></td><td>' + c.events_recent + '</td><td>' + c.events_prior + '</td><td>' + c.events_total + '</td><td>' + esc(c.top_drug) + '</td><td>' + c.avg_risk + '</td></tr>').join('') + '</table>' : '<div class="small">No corridors with a known origin/destination yet.</div>';
+  $('hot').innerHTML = D.hotspots.length ? '<table><tr><th>Country</th><th>30d</th><th>Prev 30d</th><th>Total</th><th>High risk</th><th>Main drug</th><th>Main place</th></tr>' +
+    D.hotspots.slice(0, 20).map(c => '<tr><td>' + esc(c.country) + '</td><td>' + c.events_recent + '</td><td>' + c.events_prior + '</td><td>' + c.events_total + '</td><td>' + c.high_risk + '</td><td>' + esc(c.top_drug) + '</td><td>' + esc(c.top_place) + '</td></tr>').join('') + '</table>' : '';
 }
 
 const detailText = e => [e.vessel && ('vessel ' + e.vessel), e.line && ('line ' + e.line), e.cover && ('cargo: ' + e.cover),
@@ -625,7 +633,7 @@ const artCell = e => (e.arts && e.arts.length > 1)
 const COLS = [['date','Date'],['url','News article'],['drug','Item'],['qty','Quantity'],['corridor','Route'],['country','Seized in'],['conceal','Concealment'],['detail','Details'],['transport','Transport'],['flags','Flags'],['n','Reports']];
 function evTable(v) {
   const val = (e, k) => k === 'qty' ? (e.kg || 0) : k === 'corridor' ? (e.corridor || '') : k === 'detail' ? detailText(e) : (e[k] ?? '');
-  const s = v.slice().sort((a,b) => { const x = val(a, sortKey), y = val(b, sortKey); return (x > y ? 1 : x < y ? -1 : 0) * sortDir || 0; });
+  const s = v.slice().sort((a,b) => { const x = val(a, sortKey), y = val(b, sortKey); return (x > y ? 1 : x < y ? -1 : 0) * sortDir || (b.score - a.score); });
   $('evCount').textContent = '(' + v.length + ' in view' + (v.length > 300 ? ', first 300 shown' : '') + ')';
   $('evT').innerHTML = '<tr>' + COLS.map(c => '<th data-k="' + c[0] + '">' + c[1] + (sortKey === c[0] ? (sortDir > 0 ? ' &#9650;' : ' &#9660;') : '') + '</th>').join('') + '</tr>' +
     s.slice(0, 300).map(e => '<tr' + (isWatched(e) ? ' class="watched"' : '') + '><td>' + esc(e.date) + '</td><td>' + artCell(e) + '<br><a href="#" class="dtl" data-id="' + e.id + '">checklist</a></td><td>' + esc(e.drug_label || e.drug) + '</td><td>' + esc(qty(e)) + '</td><td class="w2">' + esc(e.route || e.corridor || '') + '</td><td class="w2">' + esc([e.place, e.country].filter(Boolean).join(', ')) + '</td><td class="w2">' + esc(e.conceal || '') + '</td><td class="small w2">' + esc(detailText(e)) + '</td><td>' + esc(e.transport || '') + '</td><td class="small w3">' + esc(e.flags) + '</td><td>' + e.n + '</td></tr>').join('');
@@ -633,6 +641,19 @@ function evTable(v) {
 }
 
 
+function riskBox() {
+  const M = D.risk_model; if (!M) return;
+  let h = '<table class="rm"><tr><th>Dimension</th><th>What counts</th><th>Max</th></tr>';
+  M.dimensions.forEach(d => { h += '<tr><td><b>' + esc(d.name) + '</b></td><td>' + d.items.map(i => esc(i.label) + ' <b>+' + i.points + '</b>').join('<br>') + '</td><td>' + d.max + '</td></tr>'; });
+  h += '</table><p><b>Bands.</b> High = ' + M.high + ' or more, Medium = ' + M.medium + ' to ' + (M.high - 1) + ', Low = below ' + M.medium +
+    '. To be High an event must also show indicators in at least ' + M.min_high + ' of the three operational dimensions (concealment &amp; method, insiders &amp; organised crime, route); to be Medium, in at least ' + M.min_medium +
+    '. Scale and commodity alone can never raise an event, so a large seizure with no other warning signs stays low.</p>' +
+    '<p><b>Reading a score.</b> Tap a risk number in the table to open the event detail, with its score breakdown and an officer checklist, e.g. "Route 15/20". The Excel and CSV downloads carry the same breakdown per event.</p>' +
+    '<p><b>Source of the indicators.</b> They follow the Cargo Risk Indicators master list. Only the part of that list that a news article can reveal is used: how the goods were declared or documented, front or new companies, transshipment and free zones, route changes, repeat vessels or containers, intelligence-led finds, concealment and commodity. Pre-arrival data (manifests, payments, company registries) is not visible in news, so those indicators are not scored. Each dimension is capped, so no pile of weak signs can outweigh the rest.</p>' +
+    '<p><b>Watchlist.</b> ' + (M.watchlist_on ? 'A vessel, container or term on your watchlist forces an event to High, whatever its score.' : 'No watchlist is set. Names added under risk.watchlist in config.yaml force a matching event to High.') + ' <b>Data gaps.</b> Missing origin, destination, concealment or quantity are shown per event in the downloads as "Data gaps" and are never scored as risk.</p>' +
+    '<p><b>Limits.</b> Indicators come from automated reading of news text. A thorough article shows more indicators than a short one, so well-reported cases can score higher. Treat the score as a prompt to look, not a finding.</p>';
+  $('riskHow').innerHTML = h;
+}
 function render() {
   const v = view();
   kpis(v); timeChart(v);
@@ -728,6 +749,7 @@ function showInfTab(t) {
 document.querySelectorAll('#infCard .tabs button').forEach(b => b.onclick = () => showInfTab(b.dataset.itab));
 // ---- route map (Leaflet; needs internet for the map tiles)
 const GEO = __GEO__;
+const BC = {High:'#c0392b', Medium:'#e08a00', Low:'#2e8b57'};
 let map = null, mapLayer = null;
 // base maps: a coloured map by default (with our own bold, dark country names), with a switch for terrain, satellite and light grey
 function countryNames(m) {
@@ -805,10 +827,10 @@ function drawMap(v) {
     mapLayer = L.layerGroup().addTo(map);
   }
   mapLayer.clearLayers();
-  const ev = v.slice().sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0)).slice(0, 500);
+  const ev = v.slice().sort((a, b) => b.score - a.score).slice(0, 500);
   const bounds = [], groups = {}; let routes = 0;
   ev.forEach(e => {
-    const col = '#2a6f97', pts = eventPoints(e);
+    const col = BC[e.band] || '#666', pts = eventPoints(e);
     if (!pts.length) return;
     pts.forEach(q => bounds.push(q.c));
     const s = pts.find(q => q.role === 'seizure');
@@ -828,7 +850,7 @@ function drawMap(v) {
       }
     }
     pts.filter(q => q.role !== 'seizure').forEach(q => {
-      const o = q.role === 'origin' ? {radius: 5, color: '#555', weight: 2, fillColor: '#fff', fillOpacity: 1}
+      const o = q.role === 'origin' ? {radius: 5, color: col, weight: 2, fillColor: '#fff', fillOpacity: 1}
         : q.role === 'dest' ? {radius: 5, color: '#fff', weight: 1, fillColor: '#12355b', fillOpacity: 1}
         : {radius: 4, color: '#666', weight: 1, fillColor: '#bbb', fillOpacity: 1};
       L.circleMarker(q.c, o).bindTooltip(esc(q.name) + ' (' + (q.role === 'dest' ? 'destination' : q.role) + ')').bindPopup(popupHtml(e)).addTo(mapLayer);
@@ -836,8 +858,9 @@ function drawMap(v) {
   });
   // one dot per place; the number is how many reports are there; tap it to list them
   Object.values(groups).forEach(g => {
-    const n = g.evs.length, list = g.evs.slice().sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
-    const col = '#c0392b', size = Math.round(22 + Math.min(16, 4 * Math.sqrt(n)));
+    const n = g.evs.length, list = g.evs.slice().sort((a, b) => b.score - a.score);
+    const rank = list.reduce((m, e) => Math.max(m, e.band === 'High' ? 3 : e.band === 'Medium' ? 2 : 1), 1);
+    const col = rank === 3 ? BC.High : rank === 2 ? BC.Medium : BC.Low, size = Math.round(22 + Math.min(16, 4 * Math.sqrt(n)));
     const icon = L.divIcon({className: 'seizdot', iconSize: [size, size], iconAnchor: [size / 2, size / 2],
       html: g.approx
         ? '<div style="width:' + size + 'px;height:' + size + 'px;border-radius:50%;background:#fff;border:2px dashed ' + col + ';box-shadow:0 0 0 1px rgba(0,0,0,.15);' +
@@ -846,7 +869,7 @@ function drawMap(v) {
           'color:#fff;font:700 11px/' + (size - 4) + 'px sans-serif;text-align:center">' + (n > 1 ? n : '') + '</div>'});
     const html = '<b>' + esc(g.name) + '</b> - ' + n + ' report' + (n > 1 ? 's' : '') +
       (g.approx ? '<div class="small">Approximate: the report names no place, so it is shown in the country of the news outlet.</div>' : '') + '<div class="plist">' +
-      list.slice(0, 12).map(e => '<div class="pi">' + esc(e.date) + ' | ' + esc(e.drug) + (qty(e) ? ' (' + esc(qty(e)) + ')' : '') +
+      list.slice(0, 12).map(e => '<div class="pi"><span class="chip ' + esc(e.band) + '">' + e.score + '</span> ' + esc(e.date) + ' | ' + esc(e.drug) + (qty(e) ? ' (' + esc(qty(e)) + ')' : '') +
         (e.route || e.corridor ? '<br><span class="small">' + esc(e.route || e.corridor) + '</span>' : '') +
         '<br>' + esc((e.title_en || e.title || '').slice(0, 110)) + ' <a class="pop-open" href="' + esc(safe(e.url)) + '" target="_blank" rel="noopener noreferrer">open</a></div>').join('') +
       (n > 12 ? '<div class="small">+ ' + (n - 12) + ' more, see the events table</div>' : '') + '</div>';
@@ -854,7 +877,7 @@ function drawMap(v) {
   });
   const noPlace = v.filter(e => !eventPoints(e).length).length;   // nothing named that the map can place
   const approxN = v.filter(e => { const p = eventPoints(e); return p.length && p[0].approx; }).length;
-  $('mapNote').textContent = '(' + routes + ' routes, ' + Object.keys(groups).length + ' places with seizures' + (v.length > 500 ? '; newest 500 shown' : '') +
+  $('mapNote').textContent = '(' + routes + ' routes, ' + Object.keys(groups).length + ' places with seizures' + (v.length > 500 ? '; top 500 by risk shown' : '') +
     (approxN ? '; ' + approxN + ' placed approximately (dashed)' : '') +
     (noPlace ? '; ' + noPlace + (noPlace === 1 ? ' seizure has' : ' seizures have') + ' no place named and ' + (noPlace === 1 ? 'is' : 'are') + ' listed in the table only' : '') + ')';
   setTimeout(() => { map.invalidateSize(); if (bounds.length) map.fitBounds(bounds, {padding: [30, 30], maxZoom: 5}); else map.setView([20, 10], 2); }, 50);
@@ -980,7 +1003,7 @@ const store = {
 const RANK = {High: 3, Medium: 2, Low: 1};
 const tokens = q => q.toLowerCase().split(/[\s>\u2192,;]+/).filter(t => t && !['to', 'from', 'via', '-', '->'].includes(t));
 const hay = e => [e.country, e.place, e.origin, e.dest, e.transit, e.conceal, e.title, e.title_en, e.corridor, e.route, e.drug, e.vessel, e.line, e.cover, e.containers, e.origin_place, e.dest_place].join(' ').toLowerCase();
-const matchW = (e, w) => tokens(w.q).every(t => hay(e).includes(t));
+const matchW = (e, w) => (RANK[e.band] || 1) >= w.min && tokens(w.q).every(t => hay(e).includes(t));
 let watches = store.get('sw_watches', []);
 const prevSeen = store.get('sw_seen', null);                 // null = first visit on this device
 const seenSet = new Set(prevSeen || []);
@@ -993,16 +1016,16 @@ function renderWatch() {
   $('watchList').innerHTML = watches.length ? watches.map((w, i) => {
     const hits = D.events.filter(e => matchW(e, w)), nn = hits.filter(isNew);
     nn.forEach(e => { if (!newHits.includes(e)) newHits.push(e); });
-    return '<span class="wchip"><a class="wgo" data-go="' + i + '">' + esc(w.q) + '' + '</a> <b>' + hits.length + '</b>' +
+    return '<span class="wchip"><a class="wgo" data-go="' + i + '">' + esc(w.q) + (w.min > 1 ? ' <span class="small">(' + (w.min === 3 ? 'high only' : 'medium+') + ')</span>' : '') + '</a> <b>' + hits.length + '</b>' +
       (nn.length ? ' <span class="wnew">' + nn.length + ' new</span>' : '') + ' <a class="wx" data-x="' + i + '" title="Remove">&times;</a></span>';
   }).join('') : '<div class="small" style="margin-top:10px">No watches yet. Add a port, a route, a drug or a concealment method above.</div>';
-  newHits.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+  newHits.sort((a, b) => b.score - a.score);
   const lines = newHits.slice(0, 12).map(e => e.date + ' | ' + e.drug + (qty(e) ? ' (' + qty(e) + ')' : '') + ' | ' + (e.route || e.corridor || e.country || '') + '\n' + (e.title_en || e.title) + '\n' + safe(e.url));
   const body = 'New Seizure Watch events matching my watchlist:\n\n' + lines.join('\n\n');
   $('watchNew').innerHTML = newHits.length
     ? '<div class="wbanner"><b>' + newHits.length + ' new event' + (newHits.length > 1 ? 's' : '') + ' match your watchlist</b> &nbsp; <a href="mailto:?subject=' +
       encodeURIComponent('Seizure Watch: ' + newHits.length + ' new matches') + '&body=' + encodeURIComponent(body.slice(0, 1800)) + '" id="wMail">Email these</a>' +
-      newHits.slice(0, 8).map(e => '<div class="wi">' + esc(e.date) + ' | ' + esc(e.drug) + ' | ' + esc(e.route || e.corridor || e.country || '') +
+      newHits.slice(0, 8).map(e => '<div class="wi"><span class="chip ' + esc(e.band) + '">' + e.score + '</span> ' + esc(e.date) + ' | ' + esc(e.drug) + ' | ' + esc(e.route || e.corridor || e.country || '') +
         '<br>' + esc((e.title_en || e.title || '').slice(0, 120)) + ' <a href="' + esc(safe(e.url)) + '" target="_blank" rel="noopener noreferrer">open</a></div>').join('') +
       (newHits.length > 8 ? '<div class="wi small">+ ' + (newHits.length - 8) + ' more: tap a watch below</div>' : '') + '</div>'
     : (watches.length && prevSeen !== null ? '<div class="small" style="margin-bottom:8px">No new events match your watchlist since your last visit.</div>' : '');
@@ -1037,8 +1060,8 @@ function linksPanel() {
   const L = D.links || [];
   $('linkNote').textContent = L.length ? '(' + L.length + ' leads still active in the last 30 days)' : '';
   if (!L.length) { $('linkT').innerHTML = '<tr><td class="small">No repeat links found right now.</td></tr>'; return; }
-  $('linkT').innerHTML = '<tr><th>Strength</th><th>What repeats</th><th>Reports</th><th>Last 30 d</th><th>Seen in</th><th>Items</th><th>Latest</th><th>Sources</th></tr>' +
-    L.slice(0, 60).map(r => '<tr class="lkrow"><td><span class="stg ' + esc(r.strength) + '">' + esc(r.strength) + '</span></td><td><b>' + esc(r.name) + '</b><span class="small"> ' + esc(r.type) + '</span>' +
+  $('linkT').innerHTML = '<tr><th>What repeats</th><th>Reports</th><th>Last 30 d</th><th>Seen in</th><th>Items</th><th>Latest</th><th>Sources</th></tr>' +
+    L.slice(0, 60).map(r => '<tr class="lkrow"><td><b>' + esc(r.name) + '</b><span class="small"> ' + esc(r.type) + '</span>' +
       (r.note ? '<span class="nt">' + esc(r.note) + '</span>' : '') + '</td><td>' + r.n + '</td><td>' + r.recent + '</td><td class="small">' + esc((r.countries || []).join(', ')) +
       '</td><td class="small">' + esc((r.items || []).join(', ')) + '</td><td>' + esc(r.last) + '</td><td class="small">' +
       (r.urls || []).map((u, i) => '<a href="' + esc(safe(u)) + '" target="_blank" rel="noopener noreferrer">' + (i + 1) + '</a>').join(' ') + '</td></tr>').join('');
@@ -1066,6 +1089,7 @@ function checklistFor(e) {
 }
 function openEvent(id) {
   const e = D.events.find(x => x.id === id); if (!e) return;
+  const M = D.risk_model, names = M ? M.dimensions.map(d => [d.name, d.max]) : [];
   $('evTitle').textContent = e.title_en || e.title || (e.drug + ' seizure');
   let h = '<p class="small" style="margin:0 0 10px">' + [e.date, e.drug_label || e.drug, qty(e), e.route || e.corridor, [e.place, e.country].filter(Boolean).join(', ')].filter(Boolean).map(esc).join(' | ') +
     '</p>';
@@ -1121,7 +1145,8 @@ $('evClose').onclick = () => $('evModal').classList.remove('on');
 $('evModal').addEventListener('click', ev => { if (ev.target.id === 'evModal') $('evModal').classList.remove('on'); });
 document.addEventListener('keydown', ev => { if (ev.key === 'Escape') $('evModal').classList.remove('on'); });
 linksPanel(); chainPanel();
-$('foot').innerHTML = 'Open-source news only. Facts are extracted automatically from headlines and articles and can be wrong - always verify through the link. Only extracted facts and links are stored, not article text.';
+riskBox();
+$('foot').innerHTML = 'Open-source news only. Facts are extracted automatically from headlines and articles and can be wrong - always verify through the link. Risk scores rank reports for analyst attention; they are indicators, not findings. Only extracted facts and links are stored, not article text.';
 </script>
 <!-- GoatCounter: privacy-friendly view counter (no cookies, no personal data) -->
 <script data-goatcounter="https://gertberi.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>

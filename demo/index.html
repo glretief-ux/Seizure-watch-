@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Seizure Watch - open-source drug seizure news</title>
+<title>Seizure Watch - open-source drug seizure risk indicators</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1"></script>
 <style>
 :root{--ink:#1c2733;--mute:#66758a;--line:#e3e8ef;--bg:#f5f7fa;--card:#fff;--brand:#12355b;
@@ -60,7 +60,7 @@ footer{color:var(--mute);font-size:11.5px;padding:8px 2px 24px}
 
 <div class="filters">
   <select id="fDrug"><option value="">All drug types</option></select>
-  <input type="hidden" id="fBand" value="">
+  <select id="fBand"><option value="">All risk bands</option><option>High</option><option>Medium</option><option>Low</option></select>
   <select id="fDays"><option value="7">Last 7 days</option><option value="30">Last 30 days</option><option value="90" selected>Last 90 days</option><option value="9999">All loaded</option></select>
   <select id="fMode"><option value="">All transport</option></select>
   <input id="fQ" type="search" placeholder="Search country, port, concealment, headline...">
@@ -101,7 +101,7 @@ const num = n => n == null ? '' : Number(n).toLocaleString(undefined, {maximumFr
 const qty = e => { const p = []; if (e.kg) p.push(e.kg >= 1000 ? (e.kg/1000).toFixed(1) + ' t' : Math.round(e.kg) + ' kg'); if (e.units) p.push(num(e.units) + ' ' + (e.unit_type||'')); return p.join(', '); };
 const asof = new Date(D.meta.asof + 'T00:00:00Z');
 const fmt = d => d.toISOString().slice(0,10);
-let sortKey = 'date', sortDir = -1, charts = {};
+let sortKey = 'score', sortDir = -1, charts = {};
 
 // ---- static bits
 $('sub').textContent = 'Data as of ' + D.meta.asof + ' | generated ' + D.meta.generated + ' | ' + D.meta.total_events + ' seizure events tracked';
@@ -124,9 +124,10 @@ const by = (arr, f) => { const m = {}; arr.forEach(x => { const k = f(x); if (k 
 const topN = (m, n) => Object.entries(m).sort((a,b) => b[1]-a[1]).slice(0, n);
 
 function kpis(v) {
-  const cont = v.filter(e => e.container).length,
+  const hi = v.filter(e => e.band === 'High').length, cont = v.filter(e => e.container).length,
         ins = v.filter(e => e.insider).length, kg = v.reduce((s,e) => s + (e.kg || 0), 0);
   const K = [['Seizure events', v.length, D.kpis.events_7d + ' in last 7 days (prev ' + D.kpis.events_prev_7d + ')'],
+    ['High risk', hi, v.length ? Math.round(100*hi/v.length) + '% of events' : ''],
     ['Container cases', cont, v.length ? Math.round(100*cont/v.length) + '% of events' : ''],
     ['Insider signals', ins, 'port / airport / customs staff'],
     ['Total weight', kg >= 1000 ? (kg/1000).toFixed(1) + ' t' : Math.round(kg) + ' kg', 'excl. pills / sticks']];
@@ -178,19 +179,19 @@ function matrix(v) {
 }
 
 function staticTables() {
-  $('corr').innerHTML = D.corridors.length ? '<table><tr><th>Corridor</th><th>Trend</th><th>30d</th><th>Prev 30d</th><th>Total</th><th>Main drug</th></tr>' +
-    D.corridors.slice(0, 25).map(c => '<tr><td>' + esc(c.corridor) + '</td><td><span class="chip ' + esc(c.trend) + '">' + esc(c.trend) + '</span></td><td>' + c.events_recent + '</td><td>' + c.events_prior + '</td><td>' + c.events_total + '</td><td>' + esc(c.top_drug) + '</td></tr>').join('') + '</table>' : '<div class="small">No corridors with a known origin/destination yet.</div>';
-  $('hot').innerHTML = D.hotspots.length ? '<table><tr><th>Country</th><th>30d</th><th>Prev 30d</th><th>Total</th><th>Main drug</th><th>Main place</th></tr>' +
-    D.hotspots.slice(0, 20).map(c => '<tr><td>' + esc(c.country) + '</td><td>' + c.events_recent + '</td><td>' + c.events_prior + '</td><td>' + c.events_total + '</td><td>' + esc(c.top_drug) + '</td><td>' + esc(c.top_place) + '</td></tr>').join('') + '</table>' : '';
+  $('corr').innerHTML = D.corridors.length ? '<table><tr><th>Corridor</th><th>Trend</th><th>30d</th><th>Prev 30d</th><th>Total</th><th>Main drug</th><th>Avg risk</th></tr>' +
+    D.corridors.slice(0, 25).map(c => '<tr><td>' + esc(c.corridor) + '</td><td><span class="chip ' + esc(c.trend) + '">' + esc(c.trend) + '</span></td><td>' + c.events_recent + '</td><td>' + c.events_prior + '</td><td>' + c.events_total + '</td><td>' + esc(c.top_drug) + '</td><td>' + c.avg_risk + '</td></tr>').join('') + '</table>' : '<div class="small">No corridors with a known origin/destination yet.</div>';
+  $('hot').innerHTML = D.hotspots.length ? '<table><tr><th>Country</th><th>30d</th><th>Prev 30d</th><th>Total</th><th>High risk</th><th>Main drug</th><th>Main place</th></tr>' +
+    D.hotspots.slice(0, 20).map(c => '<tr><td>' + esc(c.country) + '</td><td>' + c.events_recent + '</td><td>' + c.events_prior + '</td><td>' + c.events_total + '</td><td>' + c.high_risk + '</td><td>' + esc(c.top_drug) + '</td><td>' + esc(c.top_place) + '</td></tr>').join('') + '</table>' : '';
 }
 
-const COLS = [['date','Date'],['drug','Drug'],['qty','Quantity'],['corridor','Route'],['country','Seized in'],['conceal','Concealment'],['transport','Transport'],['flags','Flags'],['n','Reports'],['url','Link']];
+const COLS = [['date','Date'],['score','Risk'],['drug','Drug'],['qty','Quantity'],['corridor','Route'],['country','Seized in'],['conceal','Concealment'],['transport','Transport'],['flags','Flags'],['n','Reports'],['url','Link']];
 function evTable(v) {
   const val = (e, k) => k === 'qty' ? (e.kg || 0) : k === 'corridor' ? (e.corridor || '') : (e[k] ?? '');
-  const s = v.slice().sort((a,b) => { const x = val(a, sortKey), y = val(b, sortKey); return (x > y ? 1 : x < y ? -1 : 0) * sortDir || 0; });
+  const s = v.slice().sort((a,b) => { const x = val(a, sortKey), y = val(b, sortKey); return (x > y ? 1 : x < y ? -1 : 0) * sortDir || (b.score - a.score); });
   $('evCount').textContent = '(' + v.length + ' in view' + (v.length > 300 ? ', first 300 shown' : '') + ')';
   $('evT').innerHTML = '<tr>' + COLS.map(c => '<th data-k="' + c[0] + '">' + c[1] + (sortKey === c[0] ? (sortDir > 0 ? ' &#9650;' : ' &#9660;') : '') + '</th>').join('') + '</tr>' +
-    s.slice(0, 300).map(e => '<tr><td>' + esc(e.date) + '</td><td>' + esc(e.drug) + '</td><td>' + esc(qty(e)) + '</td><td class="w2">' + esc(e.route || e.corridor || '') + '</td><td class="w2">' + esc([e.place, e.country].filter(Boolean).join(', ')) + '</td><td class="w2">' + esc(e.conceal || '') + '</td><td>' + esc(e.transport || '') + '</td><td class="small w3">' + esc(e.flags) + '</td><td>' + e.n + '</td><td><a href="' + esc(safe(e.url)) + '" target="_blank" rel="noopener noreferrer" title="' + esc(e.title) + '">open</a></td></tr>').join('');
+    s.slice(0, 300).map(e => '<tr><td>' + esc(e.date) + '</td><td><span class="chip ' + esc(e.band) + '">' + e.score + '</span></td><td>' + esc(e.drug) + '</td><td>' + esc(qty(e)) + '</td><td class="w2">' + esc(e.route || e.corridor || '') + '</td><td class="w2">' + esc([e.place, e.country].filter(Boolean).join(', ')) + '</td><td class="w2">' + esc(e.conceal || '') + '</td><td>' + esc(e.transport || '') + '</td><td class="small w3">' + esc(e.flags) + '</td><td>' + e.n + '</td><td><a href="' + esc(safe(e.url)) + '" target="_blank" rel="noopener noreferrer" title="' + esc(e.title) + '">open</a></td></tr>').join('');
   $('evT').querySelectorAll('th').forEach(th => th.onclick = () => { const k = th.dataset.k; if (k === 'url' || k === 'flags') return; sortDir = (sortKey === k) ? -sortDir : -1; sortKey = k; render(); });
 }
 
@@ -202,7 +203,7 @@ function render() {
   mode(v); matrix(v); evTable(v);
 }
 alerts(); staticTables(); render();
-$('foot').innerHTML = 'Open-source news only. Facts are extracted automatically from headlines and articles and can be wrong - always verify through the link. they are indicators, not findings. Only extracted facts and links are stored, not article text.';
+$('foot').innerHTML = 'Open-source news only. Facts are extracted automatically from headlines and articles and can be wrong - always verify through the link. Risk scores rank reports for analyst attention; they are indicators, not findings. Only extracted facts and links are stored, not article text.';
 </script>
 </body>
 </html>
