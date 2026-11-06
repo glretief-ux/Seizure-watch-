@@ -1,16 +1,16 @@
 SEIZURE WATCH - weekly bulletin, 31 Oct - 06 Nov 2026
 
-1543 seizure reports this week (previous week 1596); 138 high risk; 575.1 t reported.
-Main drugs: Cocaine (406), Cannabis (360), NSA (157)
-Main countries: India (257), Brazil (197), United States (154), Turkey (122)
+1537 seizure reports this week (previous week 1594); 135 high risk; 568.7 t reported.
+Main drugs: Cocaine (402), Cannabis (360), NSA (157)
+Main countries: India (257), Brazil (196), United States (153), Turkey (122)
 
 NEW AND SURGING CORRIDORS
-- Thailand -> India: SURGING (25 this period, 8 before; mainly Cannabis)
+- Thailand -> India: SURGING (26 this period, 9 before; mainly Cannabis)
+- Laos -> Philippines: NEW (8 this period, 0 before; mainly Methamphetamine)
 - Iran -> Turkey: SURGING (8 this period, 4 before; mainly Methamphetamine)
 - United States -> Mexico: SURGING (7 this period, 3 before; mainly NSA)
-- Laos -> Philippines: NEW (7 this period, 0 before; mainly Methamphetamine)
+- Israel -> Jordan: NEW (7 this period, 0 before; mainly Cannabis)
 - United States -> Canada: SURGING (7 this period, 2 before; mainly Cocaine)
-- Israel -> Jordan: NEW (6 this period, 0 before; mainly Cannabis)
 
 UNUSUAL EVENTS (highest risk first)
 - [High 95] 03 Nov | Cocaine | 971 kg | Tanger Med | Ecuador -> Morocco | Impregnation / liquid / disguised; Legitimate cargo (food/produce); Legitimate cargo (industrial/goods) | cargo: fruit; banana
@@ -23,10 +23,10 @@ UNUSUAL EVENTS (highest risk first)
   https://www.india.com/news/india/mexican-drug-cartels-join-hands-with-dawood-ibrahim-syndicate-northeast-insurgents-myanmar-to-turn-india-a-global-narcotics-hub-report-8542129/amp/
 - [High 80] 04 Nov | Cocaine | 4.5 t | Accra | Netherlands -> Ghana -> Lebanon | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods) | cargo: coal & charcoal
   https://www.graphic.com.gh/news/general-news/npp-on-why-president-must-act-to-stop-illicit-drug-trafficking-through-ghana-and-publish-taskforce-roadmap.html
-- [High 80] 06 Nov | Cocaine | 400 kg | Antwerp | Egypt -> Malta -> Belgium | Legitimate cargo (industrial/goods)
+- [High 80] 06 Nov | Cocaine | 400 kg | Libya | Egypt -> Malta -> Libya | Legitimate cargo (industrial/goods)
   https://middle-east-online.com/en/captagon-convictions-put-libya%E2%80%99s-growing-drug-crisis-focus
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (349), Legitimate cargo (food/produce) (126), Postal / parcel (76)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (347), Legitimate cargo (food/produce) (126), Postal / parcel (76)
 Cover cargo named: cocoa (15), rice (7), toys (5), fish (5), coffee (5)
 
 Coverage: searching 20 languages (Amharic, Arabic, Danish, German, English, Spanish, Estonian, French, Hindi, Icelandic, Mongolian, Dutch, Norwegian, Portuguese, Russian, Slovak, Swedish, Turkish, Vietnamese, Chinese). 35 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Azerbaijan, Bangladesh, Bosnia and Herzegovina).

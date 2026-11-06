@@ -70,7 +70,8 @@ SEIZURE = rx(r"seiz", r"confiscat", r"intercept", r"\bbust(?:ed)?\b", r"\bhaul\b
              r"discovered", r"found\s+(?:hidden|concealed)", r"incaut", r"decomis", r"aprehen",
              r"asegur", r"desarticul", r"frustr", r"saisi", r"demantel", r"apreen", r"detect",
              r"trafficking", r"trafico\s+de\s+drogas", r"tentative\s+de\s+trafic")
-EXCLUDE = rx(r"\bstock\s+market\b", r"dispensar", r"legali[sz]", r"netflix", r"\bmovie\b", r"\bfilm\b",
+EXCLUDE = rx(r"\b(?:increase|rise|surge|growth|progression|hausse|augmentation|jump)\s+(?:in|of|des|de|du)\s+(?:cocaine\s+|cocaina\s+)?(?:seizures|saisies)\b",
+             r"\bstock\s+market\b", r"dispensar", r"legali[sz]", r"netflix", r"\bmovie\b", r"\bfilm\b",
              r"\bepisode\b", r"video\s+game", r"\bseason\s+\d",
              r"car\s+(?:dealership|insurance|show|auction|rental|wash)\b", r"\bused\s+cars?\b",
              r"\btoy\s+cars?\b", r"model\s+car", r"\bfsc[- ]certifi", r"sustainable\s+forestry",

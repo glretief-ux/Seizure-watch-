@@ -389,3 +389,12 @@ def test_outlet_country_from_domain():
 def test_outlet_beats_edition_fallback():
     r = extract("Drugs worth more than R1-million seized in Ballito bust", "", "United States", "South Africa")
     assert r["seizure_country"] == "South Africa"
+
+
+def test_headline_country_beats_body_port():
+    r = extract("Tunisie : progression des saisies de cocaïne",
+                "La frontière libyenne est poreuse. Des flux partent aussi de Marseille vers La Goulette. 140 kg saisis.", "France", None)
+    assert r["relevant"] == 0     # a statistics headline, not a seizure
+    r = extract("Tunisia: customs seize 140 kg of cocaine",
+                "Flows also leave Marseille for the port of La Goulette. The cocaine was found by customs officers.", None, None)
+    assert r["relevant"] == 1 and r["seizure_country"] == "Tunisia"

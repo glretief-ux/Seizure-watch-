@@ -691,6 +691,30 @@ def _indicators(t):
     return found
 
 
+def title_countries(title_n):
+    """Distinct countries named by a normalised headline (places count for their country)."""
+    return {m[4] for m in _mentions(title_n)}
+
+
+def _headline_first(route, title_n, source_country, outlet):
+    """The country a headline names ("Tunisia: increase in cocaine seizures") beats a town met later in the body
+    (a port mentioned as a trade route). Only when the headline itself names a country or town without a from/to role."""
+    if len(title_countries(title_n)) != 1:                  # two countries in a headline: which one is it? leave it to the body
+        return route
+    h = _route(title_n, source_country, outlet)
+    if h["location_conf"] not in ("high", "medium") or not h["seizure_country"] or h["seizure_country"] == route["seizure_country"]:
+        return route
+    out = dict(route)
+    out.update(seizure_country=h["seizure_country"], seizure_place=h["seizure_place"], location_conf=h["location_conf"])
+    for k, pk in (("origin", "origin_place"), ("destination", "destination_place")):
+        if out[k] == out["seizure_country"]:
+            out[k] = out[pk] = None
+    transit = [x for x in (out["transit"] or "").split("|") if x and x != out["seizure_country"]]
+    out["transit"] = "|".join(transit) or None
+    out["corridor"], out["route"] = compose_route(out["origin"], out["destination"], transit, out["seizure_country"])
+    return out
+
+
 def locate(title, source_country=None, outlet=None):
     """Only the place facts of a headline (country, place, route), for re-reading reports stored without a country."""
     return _route(L.norm(title), source_country, outlet)
@@ -712,6 +736,7 @@ def extract(title, text="", source_country=None, outlet=None):
     in_container = 1 if L.CONTAINER.search(NON_SHIP_CONTAINER.sub(" ", t)) else 0
     cats, detail = _concealment(t, in_container)
     route = _route(t, outlet or source_country, outlet)
+    route = _headline_first(route, title_n, outlet or source_country, outlet)
     drug_type = _nsa_type(title_n, text_n) if primary == "NSA" else None
     arrests = _arrests(t)
     # A headline that names the item and says it was seized is a real report even without a weight
