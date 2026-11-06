@@ -457,7 +457,21 @@ def _mentions(t):
     return out
 
 
-def _route(t, source_country):
+def compose_route(origin, dest, transit, seizure_country):
+    """(corridor, route) strings from the countries found; either may be None."""
+    corridor = None
+    if origin and dest and origin != dest:
+        corridor = f"{origin} -> {dest}"
+    elif origin and seizure_country and origin != seizure_country and not dest:
+        corridor = f"{origin} -> {seizure_country}"
+    elif dest and seizure_country and dest != seizure_country and not origin:
+        corridor = f"{seizure_country} -> {dest}"
+    parts = [p for p in [origin] + list(transit) + [dest or (seizure_country if seizure_country != origin else None)] if p]
+    dedup = [p for i, p in enumerate(parts) if i == 0 or p != parts[i - 1]]
+    return corridor, (" -> ".join(dedup) if len(dedup) >= 2 else None)
+
+
+def _route(t, source_country, outlet=None):
     ments = _mentions(t)
     roles = []
     for i, (s, e, kind, disp, ctry) in enumerate(ments):
@@ -509,23 +523,20 @@ def _route(t, source_country):
             seizure_country = source_country
     origin = o[4] if o else None
     dest = d[4] if d else None
+    o_place = o[3] if o and o[2] == "place" else None
+    # A national outlet that names its own country as the origin and no town of the seizure is reporting a home case
+    # ("from the capital to Annaba"); a bare mention of some other country must not turn it into a foreign seizure.
+    if outlet and origin == outlet and seizure_country and seizure_country != outlet and conf != "high":
+        seizure_country, seizure_place, conf = outlet, None, "medium"
+        origin, o_place = None, None
+        transit = [x for x in transit if x != outlet]
     res = {
-        "origin": origin, "origin_place": o[3] if o and o[2] == "place" else None,
+        "origin": origin, "origin_place": o_place,
         "destination": dest, "destination_place": d[3] if d and d[2] == "place" else None,
         "transit": "|".join(transit) or None,
         "seizure_country": seizure_country, "seizure_place": seizure_place, "location_conf": conf,
     }
-    corridor = None
-    if origin and dest and origin != dest:
-        corridor = f"{origin} -> {dest}"
-    elif origin and seizure_country and origin != seizure_country and not dest:
-        corridor = f"{origin} -> {seizure_country}"
-    elif dest and seizure_country and dest != seizure_country and not origin:
-        corridor = f"{seizure_country} -> {dest}"
-    res["corridor"] = corridor
-    parts = [p for p in [origin] + transit + [dest or (seizure_country if seizure_country != origin else None)] if p]
-    dedup = [p for i, p in enumerate(parts) if i == 0 or p != parts[i - 1]]
-    res["route"] = " -> ".join(dedup) if len(dedup) >= 2 else None
+    res["corridor"], res["route"] = compose_route(origin, dest, transit, seizure_country)
     return res
 
 
@@ -680,12 +691,12 @@ def _indicators(t):
     return found
 
 
-def locate(title, source_country=None):
+def locate(title, source_country=None, outlet=None):
     """Only the place facts of a headline (country, place, route), for re-reading reports stored without a country."""
-    return _route(L.norm(title), source_country)
+    return _route(L.norm(title), source_country, outlet)
 
 
-def extract(title, text="", source_country=None):
+def extract(title, text="", source_country=None, outlet=None):
     """Return a dict of facts. rec['relevant'] tells whether it is a real seizure story.
     Covers drug seizures and the non-drug contraband categories (precursor
     chemicals, CITES-protected timber / elephant ivory / other fauna, stolen vehicles) via rec['category']."""
@@ -700,7 +711,7 @@ def extract(title, text="", source_country=None):
                                         skip_precursor_filter=(category not in ("Drug", "Tobacco")))
     in_container = 1 if L.CONTAINER.search(NON_SHIP_CONTAINER.sub(" ", t)) else 0
     cats, detail = _concealment(t, in_container)
-    route = _route(t, source_country)
+    route = _route(t, outlet or source_country, outlet)
     drug_type = _nsa_type(title_n, text_n) if primary == "NSA" else None
     arrests = _arrests(t)
     # A headline that names the item and says it was seized is a real report even without a weight

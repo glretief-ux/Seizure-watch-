@@ -2129,5 +2129,16 @@ PLACE.update({
 
 # German (Austria), Nordic, Baltic, Slovak, Icelandic, Mongolian and Ethiopian places (see lang_more.py)
 from .lang_more import GEO_PLACES as _GP, GEO_COUNTRIES as _GC  # noqa: E402
+# Algerian towns added so local reports stay in Algeria (latitude, longitude)
+PLACE.update({"Annaba": [36.90, 7.77], "Constantine": [36.37, 6.61], "El Meniaa": [30.58, 2.88], "Zeralda": [36.71, 2.84],
+              "Medea": [36.26, 2.75], "Bechar": [31.62, -2.22], "Djelfa": [34.67, 3.26], "Laghouat": [33.80, 2.87],
+              "Ouargla": [31.95, 5.32], "Setif": [36.19, 5.41], "Blida": [36.47, 2.83], "Tipaza": [36.59, 2.45],
+              "Boumerdes": [36.76, 3.48], "Tizi Ouzou": [36.71, 4.05], "Bejaia": [36.75, 5.06], "Skikda": [36.88, 6.91],
+              "Mostaganem": [35.93, 0.09], "Tlemcen": [34.88, -1.32], "Sidi Bel Abbes": [35.19, -0.63], "Batna": [35.56, 6.17],
+              "Biskra": [34.85, 5.73], "Tebessa": [35.40, 8.12], "Ghardaia": [32.49, 3.67], "In Salah": [27.20, 2.48],
+              "Illizi": [26.51, 8.48], "Tindouf": [27.67, -8.15], "Djanet": [24.55, 9.48], "Ain Temouchent": [35.30, -1.14],
+              "Jijel": [36.82, 5.77], "Chlef": [36.17, 1.33], "Tiaret": [35.37, 1.32], "Relizane": [35.74, 0.56],
+              "Guelma": [36.46, 7.43], "Souk Ahras": [36.29, 7.95], "El Tarf": [36.77, 8.31], "Khenchela": [35.43, 7.14],
+              "Bordj Bou Arreridj": [36.07, 4.76], "Bouira": [36.37, 3.90], "Ain Defla": [36.26, 1.97]})
 PLACE.update({k: list(v) for k, v in _GP.items() if k not in PLACE})
 COUNTRY.update({k: list(v) for k, v in _GC.items() if k not in COUNTRY})

@@ -94,7 +94,8 @@ def ingest(conn, items, is_demo=False):
         if n and n % 50 == 0:
             conn.commit()  # keep progress even if the job is cut off
         try:
-            rec = extract.extract(it["title"], it.get("text", ""), it.get("source_country") or LANG_COUNTRY.get(it.get("lang")))
+            outlet = L.outlet_country(it.get("url"))
+            rec = extract.extract(it["title"], it.get("text", ""), it.get("source_country") or LANG_COUNTRY.get(it.get("lang")), outlet)
         except Exception as exc:  # one bad article must never stop the whole run
             log(f"      skipped one article ({type(exc).__name__}: {exc}): {str(it.get('title'))[:80]}")
             continue
@@ -160,7 +161,7 @@ def reread_snippets(conn, cfg, limit=60, days=3):
         if it.get("text_mode") != "full":
             conn.execute("UPDATE articles SET text_mode='snippet-retried' WHERE id=?", (it["id"],))
             continue
-        rec = extract.extract(it["title"], it["text"], it.get("source_country") or LANG_COUNTRY.get(it.get("lang")))
+        rec = extract.extract(it["title"], it["text"], it.get("source_country") or LANG_COUNTRY.get(it.get("lang")), L.outlet_country(it.get("url")))
         if not rec.get("relevant"):
             conn.execute("UPDATE articles SET text_mode='full' WHERE id=?", (it["id"],))
             continue

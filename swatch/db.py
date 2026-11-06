@@ -126,7 +126,7 @@ _STOP = set("with from that this into after over their they were have been will 
             "drugs drug worth million found".split())
 
 
-from .lexicon import LANG_COUNTRY  # noqa: E402
+from .lexicon import LANG_COUNTRY, outlet_country  # noqa: E402
 
 LOCATION_COLS = ["seizure_country", "seizure_place", "location_conf", "origin", "origin_place", "destination",
                  "destination_place", "transit", "route", "corridor"]
@@ -136,12 +136,13 @@ def backfill_locations(conn, locate_fn, days=7):
     """Re-read the headline of every seizure report that has no country yet, now that the place list, agency and
     currency cues have grown. Only fills what is empty; never changes a country that was found before.
     Returns how many reports gained a country."""
-    rows = conn.execute("SELECT id, title, COALESCE(source_country, ''), lang FROM articles WHERE relevant=1 AND seizure_country IS NULL "
+    rows = conn.execute("SELECT id, title, COALESCE(source_country, ''), lang, url FROM articles WHERE relevant=1 AND seizure_country IS NULL "
                         "AND COALESCE(published, fetched) >= date('now', ?)", (f"-{int(days)} day",)).fetchall()
     gained = 0
     for r in rows:
         try:
-            rec = locate_fn(r[1], r[2] or LANG_COUNTRY.get(r[3]))
+            outlet = outlet_country(r[4])
+            rec = locate_fn(r[1], outlet or r[2] or LANG_COUNTRY.get(r[3]), outlet)
         except Exception:
             continue
         if not rec.get("seizure_country"):

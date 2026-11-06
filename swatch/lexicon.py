@@ -1982,3 +1982,28 @@ NSA_TYPES = [
     ("LSD", rx(r"\blsd\b", r"\bacid tabs?\b")),
     ("Synthetic opioids", rx(r"synthetic\s+opioid", r"\bnps\b", r"psychoactive", r"new psychoactive")),
 ]
+
+
+# The country an outlet belongs to, read from its domain suffix. A national outlet mostly reports on its own country, so
+# this is a better fallback than the Google News edition a headline happened to come through. Only suffixes that really
+# are country codes in practice are listed (no .co, .io, .tv, .me, .ai, .eu or generic ones).
+TLD_COUNTRY = {
+    "dz": "Algeria", "ma": "Morocco", "tn": "Tunisia", "eg": "Egypt", "ly": "Libya", "sn": "Senegal", "gh": "Ghana", "ke": "Kenya",
+    "ng": "Nigeria", "za": "South Africa", "et": "Ethiopia", "fr": "France", "es": "Spain", "pt": "Portugal", "it": "Italy",
+    "de": "Germany", "nl": "Netherlands", "be": "Belgium", "uk": "United Kingdom", "ie": "Ireland", "se": "Sweden", "no": "Norway",
+    "dk": "Denmark", "fi": "Finland", "is": "Iceland", "ee": "Estonia", "at": "Austria", "ch": "Switzerland", "gr": "Greece",
+    "ro": "Romania", "bg": "Bulgaria", "hr": "Croatia", "cz": "Czechia", "sk": "Slovakia", "hu": "Hungary", "pl": "Poland",
+    "ua": "Ukraine", "ru": "Russia", "tr": "Turkey", "sa": "Saudi Arabia", "ae": "United Arab Emirates", "kw": "Kuwait",
+    "jo": "Jordan", "lb": "Lebanon", "iq": "Iraq", "in": "India", "pk": "Pakistan", "id": "Indonesia", "my": "Malaysia",
+    "ph": "Philippines", "th": "Thailand", "vn": "Vietnam", "jp": "Japan", "kr": "South Korea", "cn": "China", "hk": "Hong Kong",
+    "tw": "Taiwan", "sg": "Singapore", "au": "Australia", "nz": "New Zealand", "br": "Brazil", "mx": "Mexico", "ar": "Argentina",
+    "cl": "Chile", "pe": "Peru", "ec": "Ecuador", "mn": "Mongolia",
+}
+
+
+def outlet_country(url):
+    """Country of the outlet behind a URL, from its domain suffix (None for .com, .org, Google redirect links and so on)."""
+    m = re.match(r"^(?:https?://)?([^/:?#]+)", (url or "").strip().lower())
+    if not m or m.group(1).endswith("google.com"):
+        return None
+    return TLD_COUNTRY.get(m.group(1).rsplit(".", 1)[-1])
