@@ -165,6 +165,9 @@ def score_events(ev, cfg, asof):
     for k in ("false_declaration", "front_company", "transshipment", "route_change", "intel_tip"):
         f[k] = ind.apply(lambda s_, k=k: k in s_)
     # the same vessel or container in more than one seizure (a repeat is a lead, not proof)
+    for _c in ("vessel", "container_numbers"):
+        if _c not in ev:
+            ev[_c] = None       # older or minimal tables may lack these columns
     seen = {}
     for r in ev.itertuples():
         for name in ([str(r.vessel).strip().lower()] if isinstance(r.vessel, str) and r.vessel else []) + \

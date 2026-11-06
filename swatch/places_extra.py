@@ -6,6 +6,23 @@ Georgia, Punjab...) are left out on purpose."""
 
 # (display name, country, [aliases])
 PLACES = [
+    # --- Algeria (Latin and Arabic spellings; local outlets name towns, not the country)
+    ("Annaba", "Algeria", ["annaba", "عنابة"]), ("Constantine", "Algeria", ["constantine", "قسنطينة"]),
+    ("El Meniaa", "Algeria", ["el meniaa", "el menia", "el-meniaa", "المنيعة"]), ("Zeralda", "Algeria", ["zeralda", "زرالدة"]),
+    ("Medea", "Algeria", ["medea", "المدية"]), ("Bechar", "Algeria", ["bechar"]), ("Djelfa", "Algeria", ["djelfa", "الجلفة"]),
+    ("Laghouat", "Algeria", ["laghouat", "الاغواط"]), ("Ouargla", "Algeria", ["ouargla", "ورقلة"]), ("Setif", "Algeria", ["setif", "سطيف"]),
+    ("Blida", "Algeria", ["blida", "البليدة"]), ("Tipaza", "Algeria", ["tipaza", "تيبازة"]), ("Boumerdes", "Algeria", ["boumerdes", "بومرداس"]),
+    ("Tizi Ouzou", "Algeria", ["tizi ouzou", "تيزي وزو"]), ("Bejaia", "Algeria", ["bejaia", "بجاية"]), ("Skikda", "Algeria", ["skikda", "سكيكدة"]),
+    ("Mostaganem", "Algeria", ["mostaganem", "مستغانم"]), ("Tlemcen", "Algeria", ["tlemcen", "تلمسان"]),
+    ("Sidi Bel Abbes", "Algeria", ["sidi bel abbes", "سيدي بلعباس"]), ("Batna", "Algeria", ["batna", "باتنة"]), ("Biskra", "Algeria", ["biskra", "بسكرة"]),
+    ("Tebessa", "Algeria", ["tebessa", "تبسة"]), ("Ghardaia", "Algeria", ["ghardaia", "غرداية"]), ("In Salah", "Algeria", ["in salah", "ain salah", "عين صالح"]),
+    ("Illizi", "Algeria", ["illizi"]), ("Tindouf", "Algeria", ["tindouf", "تندوف"]), ("Djanet", "Algeria", ["djanet"]),
+    ("Ain Temouchent", "Algeria", ["ain temouchent", "عين تموشنت"]), ("Jijel", "Algeria", ["jijel", "جيجل"]), ("Chlef", "Algeria", ["chlef", "الشلف"]),
+    ("Tiaret", "Algeria", ["tiaret", "تيارت"]), ("Relizane", "Algeria", ["relizane", "غليزان"]), ("Guelma", "Algeria", ["guelma", "قالمة"]),
+    ("Souk Ahras", "Algeria", ["souk ahras", "سوق اهراس"]), ("El Tarf", "Algeria", ["el tarf", "الطارف"]), ("Khenchela", "Algeria", ["khenchela", "خنشلة"]),
+    ("Bordj Bou Arreridj", "Algeria", ["bordj bou arreridj", "برج بوعريريج"]), ("Bouira", "Algeria", ["bouira", "البويرة"]),
+    ("Ain Defla", "Algeria", ["ain defla", "عين الدفلى"]), ("Algiers", "Algeria", ["الجزائر العاصمة", "الجزائر العاصمه"]),
+    ("Tamanrasset", "Algeria", ["تمنراست", "تمنغست", "tamangiste"]), ("Oran", "Algeria", ["وهران"]),
     # --- Malaysia
     ("Penang", "Malaysia", ["penang", "pulau pinang", "george town penang", "butterworth"]), ("Kuching", "Malaysia", ["kuching"]),
     ("Sarawak", "Malaysia", ["sarawak", "miri"]), ("Sabah", "Malaysia", ["sabah", "kota kinabalu", "tawau", "sandakan"]),
@@ -59,7 +76,7 @@ PLACES = [
     ("Albany", "United States", ["albany, n"]), ("Providence", "United States", ["providence"]), ("Hartford", "United States", ["hartford"]), ("Greenville", "United States", ["greenville"]),
     ("Charleston", "United States", ["charleston, s"]), ("Raleigh", "United States", ["raleigh"]), ("Richmond (VA)", "United States", ["richmond, va"]), ("Lewiston", "United States", ["lewiston"]),
     ("Dyersburg", "United States", ["dyersburg"]), ("Laredo", "United States", ["laredo"]), ("Brownsville", "United States", ["brownsville"]), ("McAllen", "United States", ["mcallen"]),
-    ("Eagle Pass", "United States", ["eagle pass"]), ("Del Rio", "United States", ["del rio"]), ("Yuma", "United States", ["yuma"]), ("Calexico", "United States", ["calexico"]),
+    ("Eagle Pass", "United States", ["eagle pass"]), ("Del Rio", "United States", ["del rio tx", "del rio, tx", "del rio texas", "del rio, texas"]), ("Yuma", "United States", ["yuma"]), ("Calexico", "United States", ["calexico"]),
     ("Otay Mesa", "United States", ["otay mesa"]), ("Nogales (AZ)", "United States", ["nogales, ariz"]), ("Interstate 15", "United States", ["interstate 15", "interstate 5", "interstate 10", "interstate 95", "interstate 40", "interstate 35", "interstate 80", "interstate 70"]),
     # --- Mexico, Colombia and others in Spanish
     ("Sinaloa", "Mexico", ["sinaloa", "culiacan", "mazatlan"]), ("Sonora", "Mexico", ["sonora", "hermosillo"]), ("Baja California", "Mexico", ["baja california", "tijuana", "mexicali", "ensenada"]),

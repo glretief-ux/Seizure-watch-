@@ -368,3 +368,24 @@ def test_country_from_county_agency_currency_and_small_town():
     for title, country in cases.items():
         assert extract.locate(title)["seizure_country"] == country, title
     assert extract.locate("Cocaine seized in County Meath")["seizure_country"] == "Ireland"
+
+
+def test_algerian_home_case_stays_in_algeria():
+    # Arabic outlet in Algeria: "from the capital to Annaba" is a home case, a stray mention of France must not move it
+    r = extract("المؤبد لشرطي حاول تمرير شحنة من الكوكايين من العاصمة إلى عنابة",
+                "ضبطت شحنة من الكوكايين قادمة من الجزائر العاصمة الى عنابة داخل ملابس والات. فرنسا", None, "Algeria")
+    assert r["seizure_country"] == "Algeria" and r["seizure_place"] == "Annaba"
+    assert r["corridor"] != "Algeria -> France"
+
+
+def test_outlet_country_from_domain():
+    from swatch.lexicon import outlet_country
+    assert outlet_country("https://sarih.dz/sarih-dz-18/") == "Algeria"
+    assert outlet_country("https://www.citizen.co.za/north-coast-courier/x") == "South Africa"
+    assert outlet_country("https://news.google.com/rss/articles/abc.uk") is None
+    assert outlet_country("https://example.com/a") is None
+
+
+def test_outlet_beats_edition_fallback():
+    r = extract("Drugs worth more than R1-million seized in Ballito bust", "", "United States", "South Africa")
+    assert r["seizure_country"] == "South Africa"
