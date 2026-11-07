@@ -1,33 +1,33 @@
-SEIZURE WATCH - weekly bulletin, 31 Oct - 06 Nov 2026
+SEIZURE WATCH - weekly bulletin, 01 Nov - 07 Nov 2026
 
-1550 seizure reports this week (previous week 1598); 138 high risk; 575.1 t reported.
-Main drugs: Cocaine (412), Cannabis (360), NSA (157)
-Main countries: India (256), Brazil (191), United States (164), Turkey (122)
+1540 seizure reports this week (previous week 1730); 148 high risk; 497.4 t reported.
+Main drugs: Cocaine (420), Cannabis (346), NSA (166)
+Main countries: India (238), United States (182), Brazil (173), Turkey (121)
 
 NEW AND SURGING CORRIDORS
-- Thailand -> India: SURGING (25 this period, 8 before; mainly Cannabis)
-- Iran -> Turkey: SURGING (8 this period, 4 before; mainly Methamphetamine)
-- United States -> Mexico: SURGING (7 this period, 3 before; mainly NSA)
-- Laos -> Philippines: NEW (7 this period, 0 before; mainly Methamphetamine)
-- United States -> Canada: SURGING (7 this period, 2 before; mainly Cocaine)
+- Thailand -> India: SURGING (26 this period, 8 before; mainly Cannabis)
+- Laos -> Philippines: NEW (8 this period, 0 before; mainly Methamphetamine)
+- United States -> Mexico: SURGING (8 this period, 3 before; mainly NSA)
+- United States -> Canada: SURGING (8 this period, 2 before; mainly Cocaine)
 - Israel -> Jordan: NEW (6 this period, 0 before; mainly Cannabis)
+- Morocco -> Algeria: NEW (5 this period, 0 before; mainly Cocaine)
 
 UNUSUAL EVENTS (highest risk first)
-- [High 95] 03 Nov | Cocaine | 971 kg | Tanger Med | Ecuador -> Morocco | Impregnation / liquid / disguised; Legitimate cargo (food/produce); Legitimate cargo (industrial/goods) | cargo: fruit; banana
-  https://fr.le360.ma/societe/trafic-de-drogue-importante-saisie-de-cocaine-au-port-de-tanger-med_IWI2FBDZY5G2RONEHQY6BNAPAY/
+- [High 95] 03 Nov | Cocaine | 1.0 t | Cartagena | Ecuador -> Malta | Container structure / false compartment; Impregnation / liquid / disguised; Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Vehicle compartment | cargo: banana; coffee; fruit | vessel: MSC Firenze
+  https://en.vijesti.me/amp/835260/Cocaine-traces-lead-to-Balkan-clan
 - [High 83] 03 Nov | Cocaine | 1.2 t | Spain | Impregnation / liquid / disguised; Luggage / passenger goods
   https://www.elconfidencial.com/espana/comunidad-valenciana/2026-11-03/incautan-cocaina-barco-pesquero-santa-pola-1tna-1tps_4457820/
-- [High 80] 31 Oct | NSA | 17.0 t | Colombo | Legitimate cargo (industrial/goods)
-  https://www.themorning.lk/articles/IbacnhbcMFEdgYR9Zlfd
 - [High 80] 04 Nov | Methamphetamine | 6.0 t | Nagaland | Myanmar -> India | Legitimate cargo (industrial/goods)
   https://www.india.com/news/india/mexican-drug-cartels-join-hands-with-dawood-ibrahim-syndicate-northeast-insurgents-myanmar-to-turn-india-a-global-narcotics-hub-report-8542129/amp/
 - [High 80] 04 Nov | Cocaine | 4.5 t | Accra | Netherlands -> Ghana -> Lebanon | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods) | cargo: coal & charcoal
   https://www.graphic.com.gh/news/general-news/npp-on-why-president-must-act-to-stop-illicit-drug-trafficking-through-ghana-and-publish-taskforce-roadmap.html
+- [High 80] 06 Nov | Methamphetamine | 1.7 t | Manila | Laos -> Vietnam -> Philippines | Container structure / false compartment; Legitimate cargo (industrial/goods)
+  https://qa.philstar.com/opinion/2026/11/07/2568359/editorial-illegal-drug-destination
 - [High 80] 06 Nov | Cocaine | 400 kg | Antwerp | Egypt -> Malta -> Belgium | Legitimate cargo (industrial/goods)
   https://middle-east-online.com/en/captagon-convictions-put-libya%E2%80%99s-growing-drug-crisis-focus
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (349), Legitimate cargo (food/produce) (126), Postal / parcel (76)
-Cover cargo named: cocoa (15), rice (7), toys (5), fish (5), coffee (5)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (354), Legitimate cargo (food/produce) (120), Postal / parcel (84)
+Cover cargo named: cocoa (14), rice (7), coffee (6), toys (6), fruit (5)
 
 Coverage: searching 20 languages (Amharic, Arabic, Danish, German, English, Spanish, Estonian, French, Hindi, Icelandic, Mongolian, Dutch, Norwegian, Portuguese, Russian, Slovak, Swedish, Turkish, Vietnamese, Chinese). 35 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Azerbaijan, Bangladesh, Bosnia and Herzegovina).
 Leads from open sources, not confirmed facts. Verify before acting.
