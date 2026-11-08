@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Seizure Watch Dashboard</title>
+<meta name="description" content="Interactive dashboard of open-source drug seizure events and risk indicators.">
+<link rel="stylesheet" href="dashboard.css">
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+</head>
+<body>
+<div id="dash-root">
+<div class='sw' id='seizure-watch'>
+<header class='sw-hero' id='top'>
+<div class='sw-eyebrow'><span class='sw-dot'></span>Open-source drug seizure risk indicators</div>
+<h1>Seizure Watch</h1>
+<p class='sw-lead'>Showing <b data-draw='kpi' data-metric='events'>—</b> seizure events in <b data-draw='kpi' data-metric='countries'>—</b> countries between <b data-draw='kpi' data-metric='first'>—</b> and <b data-draw='kpi' data-metric='last'>—</b>. <b data-draw='kpi' data-metric='hishare'>—</b> were scored high risk.</p>
+<p class='sw-hint'>Click any bar, slice, bubble or legend item to filter everything else. Drag across the daily chart to pick dates. Click again to undo.</p>
+<div class='sw-chips'><span class='sw-chip'>Source: Seizure Watch events export, updated daily</span><span class='sw-chip'>News-based and unverified</span><span class='sw-chip'>Risk scored 0–100</span><a class='sw-chip sw-link' href='../'>Open the full Seizure Watch site</a></div>
+</header>
+<div class='sw-bar' id='filters'>
+<div class='sw-bar-chips' data-draw='chips'></div>
+<label class='sw-slider'>Minimum risk score <input type='range' min='10' max='100' step='5' value='10' aria-label='Minimum risk score'> <b data-draw='minscore'>—</b></label>
+</div>
+<section class='sw-kpis' aria-label='Headline figures'>
+<div class='sw-kpi' style='--a:var(--sw-c0)'><div class='sw-kpi-l'>Events in view</div><div class='sw-kpi-v' data-draw='kpi' data-metric='events'>—</div><div class='sw-kpi-n'><b data-draw='kpi' data-metric='share'>—</b> of all logged events</div></div>
+<div class='sw-kpi' style='--a:var(--cds-chart-status-critical)'><div class='sw-kpi-l'>High-risk events</div><div class='sw-kpi-v' data-draw='kpi' data-metric='high'>—</div><div class='sw-kpi-n'><b data-draw='kpi' data-metric='hishare'>—</b> of events in view</div></div>
+<div class='sw-kpi' style='--a:var(--sw-c1)'><div class='sw-kpi-l'>Drug seizures</div><div class='sw-kpi-v' data-draw='kpi' data-metric='drugs'>—</div><div class='sw-kpi-n'><b data-draw='kpi' data-metric='dshare'>—</b> of events in view</div></div>
+<div class='sw-kpi' style='--a:var(--sw-c2)'><div class='sw-kpi-l'>Countries</div><div class='sw-kpi-v' data-draw='kpi' data-metric='countries'>—</div><div class='sw-kpi-n'>Seizure locations reported</div></div>
+<div class='sw-kpi' style='--a:var(--sw-c3)'><div class='sw-kpi-l'>Arrests reported</div><div class='sw-kpi-v' data-draw='kpi' data-metric='arrests'>—</div><div class='sw-kpi-n'>Where the report gives a number</div></div>
+<div class='sw-kpi' style='--a:var(--sw-c4)'><div class='sw-kpi-l'>Reported quantity</div><div class='sw-kpi-v'><span data-draw='kpi' data-metric='kg'>—</span> kg</div><div class='sw-kpi-n'>Events that state a weight</div></div>
+</section>
+<h2 class='sw-sec' id='where'>Where it is happening</h2>
+<section class='sw-card' id='map-card'>
+<div class='sw-head'><div><h3>Seizures and corridors</h3><p class='sw-note'>Bubble size is events; the red core is the share scored high risk. Curves are the most frequent origin to destination corridors. Click a bubble or curve to filter. Drag to pan; Ctrl or ⌘ and scroll to zoom.</p></div>
+<div class='sw-ctl'><div class='sw-seg' role='group' aria-label='Map layers'><button type='button' data-mode='both' aria-pressed='true'>Both</button><button type='button' data-mode='seizures' aria-pressed='false'>Seizures</button><button type='button' data-mode='corridors' aria-pressed='false'>Corridors</button></div><div class='sw-seg' role='group' aria-label='Zoom'><button type='button' data-zoom='in' aria-label='Zoom in'>+</button><button type='button' data-zoom='out' aria-label='Zoom out'>−</button><button type='button' data-zoom='reset'>Reset</button></div></div></div>
+<div class='sw-box sw-map' data-draw='map'></div>
+</section>
+<div class='sw-g3'>
+<section class='sw-card'><h3>Top seizure countries</h3><p class='sw-note'>Events; red share is high risk</p><div class='sw-box sw-chart' data-draw='countries'></div></section>
+<section class='sw-card'><h3>Top corridors</h3><p class='sw-note'>Origin to destination, where both are known</p><div class='sw-box sw-chart' data-draw='corridors'></div></section>
+<section class='sw-card'><h3>Seizure hotspots</h3><p class='sw-note'>Towns, ports and regions with the most events</p><div class='sw-box sw-chart' data-draw='hotspots'></div></section>
+</div>
+<h2 class='sw-sec' id='what'>What is being seized</h2>
+<section class='sw-card'><h3>Events per day</h3><p class='sw-note'>Stacked by drug group. Click the legend to filter by group; drag across the bars to pick a date range. Early days have far fewer reports than later weeks, so the rise reflects wider coverage as well as activity.</p><div class='sw-box sw-chart' data-draw='daily'></div></section>
+<div class='sw-g3'>
+<section class='sw-card'><h3>By drug type</h3><p class='sw-note'>Events; red share is high risk</p><div class='sw-box sw-chart' data-draw='drugs'></div></section>
+<section class='sw-card'><h3>By category</h3><p class='sw-note'>Drugs, arms, tobacco, heritage, wildlife and more</p><div class='sw-box sw-chart' data-draw='categories'></div></section>
+<section class='sw-card'><h3>Reports by language</h3><p class='sw-note'>Language of the source article</p><div class='sw-box sw-chart' data-draw='languages'></div></section>
+</div>
+<h2 class='sw-sec' id='risk'>Risk and how it is hidden</h2>
+<div class='sw-g3'>
+<section class='sw-card'><h3>High-risk events per day</h3><p class='sw-note'>Events scored in the High band</p><div class='sw-box sw-chart-s' data-draw='highday'></div></section>
+<section class='sw-card'><h3>Risk bands</h3><p class='sw-note'>Click a slice or a band to filter</p><div class='sw-box sw-chart-s' data-draw='bands'></div></section>
+<section class='sw-card'><h3>What drives the score</h3><p class='sw-note'>Average points against the most each dimension can add</p><div class='sw-box sw-chart-s' data-draw='dims'></div></section>
+</div>
+<div class='sw-g3'>
+<section class='sw-card'><h3>Concealment methods</h3><p class='sw-note'>An event can name more than one method</p><div class='sw-box sw-chart' data-draw='concealment'></div></section>
+<section class='sw-card'><h3>Transport type</h3><p class='sw-note'>Events where the transport mode is known</p><div class='sw-box sw-chart' data-draw='transport'></div></section>
+<section class='sw-card'><h3>Cover cargo</h3><p class='sw-note'>Goods used to hide consignments</p><div class='sw-box sw-chart' data-draw='cargo'></div></section>
+</div>
+<section class='sw-card'><h3>Most common risk flags</h3><p class='sw-note'>Events carrying each flag</p><div class='sw-box sw-chart' data-draw='flags'></div></section>
+<h2 class='sw-sec' id='events'>Events</h2>
+<section class='sw-card'>
+<div class='sw-head'><div><h3>Events in view</h3><p class='sw-note'><span data-draw='evcount'>—</span> Click a column to sort; click a country or drug to filter by it. Headlines link to the original report.</p></div><input class='sw-search' type='search' placeholder='Search headlines, places, drugs' aria-label='Search events'></div>
+<div class='sw-scroll'><table class='sw-t'><thead><tr><th data-field='id'>Event</th><th data-field='d'>Date</th><th data-field='k'>Country</th><th data-field='g'>Drug</th><th data-field='s'>Score</th><th data-field='q'>Kg</th><th data-field='h'>Headline</th></tr></thead><tbody data-draw='events'></tbody></table></div>
+</section>
+<details><summary>Definitions and limits</summary>
+<p><b>Event.</b> One seizure, with the news and official reports about it merged. <b>Risk score.</b> 0–100, built from five dimensions: concealment and method, insiders and organised crime, route, scale and commodity. Seizure weight is capped at 10 points. <b>Bands.</b> High, Medium and Low as assigned by Seizure Watch.</p>
+<p><b>Filters.</b> Each chart ignores its own selection so you can compare alternatives, and respects every other one. Selecting several items in one chart shows events matching any of them.</p>
+<p><b>Left out.</b> Every event is unverified news-based reporting, so counts follow what is published and which languages are searched, not what is seized. Quantities are only available where a report states a weight, and transport type is unknown for most events, so it is left out of the transport chart. The repeat vessel or container flag is left out of the flags chart. Countries without a map position (Hong Kong, Taiwan, Ivory Coast, Cape Verde) are counted everywhere except on the map.</p>
+<p><b>Source.</b> The events export of this repository (<code>docs/events.csv</code>), read directly by this page, so it follows the daily update.</p></details>
+</div>
+</div>
+<script src="dashboard.js"></script>
+</body>
+</html>
