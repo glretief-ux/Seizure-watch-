@@ -1,33 +1,33 @@
-SEIZURE WATCH - weekly bulletin, 04 Nov - 10 Nov 2026
+SEIZURE WATCH - weekly bulletin, 05 Nov - 11 Nov 2026
 
-1402 seizure reports this week (previous week 1748); 115 high risk; 467.6 t reported.
-Main drugs: Cocaine (359), Cannabis (340), NSA (137)
-Main countries: India (192), United States (175), Brazil (167), Turkey (119)
+1344 seizure reports this week (previous week 1695); 90 high risk; 538.8 t reported.
+Main drugs: Cocaine (352), Cannabis (325), NSA (137)
+Main countries: United States (177), India (175), Brazil (161), Turkey (112)
 
 NEW AND SURGING CORRIDORS
 - Laos -> Philippines: NEW (8 this period, 0 before; mainly Methamphetamine)
 - United States -> Mexico: SURGING (8 this period, 3 before; mainly NSA)
 - United States -> Canada: SURGING (7 this period, 3 before; mainly Cocaine)
 - Morocco -> Algeria: NEW (6 this period, 0 before; mainly Cannabis)
-- Israel -> Jordan: NEW (6 this period, 0 before; mainly Cannabis)
 - Ghana -> Lebanon: NEW (5 this period, 0 before; mainly Cocaine)
+- Israel -> Jordan: SURGING (5 this period, 1 before; mainly Cannabis)
 
 UNUSUAL EVENTS (highest risk first)
 - [High 90] 07 Nov | Cocaine | 358 kg | Cartagena | Panama -> Colombia | Impregnation / liquid / disguised; Legitimate cargo (industrial/goods); Postal / parcel | cargo: timber
   https://libyaobserver.ly/news/colombia-seizes-358kg-cocaine-bound-tripoli
 - [High 88] 05 Nov | Cocaine | 1 kg | Lagos | India -> United Kingdom | Body concealment; Legitimate cargo (industrial/goods); Luggage / passenger goods; Postal / parcel
   https://www.nigeriainfo.fm/lagos/news/homepageabuja/ndlea-arrests-ugandan-woman-with-1-15kg-of-cocaine-at-lagos-airport/
-- [High 85] 04 Nov | Cocaine | 20 kg | Hong Kong airport | Spain -> South Korea -> Hong Kong -> China | Impregnation / liquid / disguised; Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Luggage / passenger goods | cargo: fruit
-  https://www.bastillepost.com/global/article/6336061-hong-kong-customs-seizes-4-5-kg-liquid-cocaine-and-15-4-kg-ketamine-arrests-two-passengers
-- [High 80] 04 Nov | Methamphetamine | 6.0 t | Nagaland | Myanmar -> India | Legitimate cargo (industrial/goods)
-  https://www.india.com/news/india/mexican-drug-cartels-join-hands-with-dawood-ibrahim-syndicate-northeast-insurgents-myanmar-to-turn-india-a-global-narcotics-hub-report-8542129/amp/
-- [High 80] 04 Nov | Cocaine | 4.5 t | Accra | Netherlands -> Ghana -> Lebanon | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods) | cargo: coal & charcoal
-  https://www.graphic.com.gh/news/general-news/npp-on-why-president-must-act-to-stop-illicit-drug-trafficking-through-ghana-and-publish-taskforce-roadmap.html
+- [High 85] 11 Nov | Pangolin | 3.0 t | Jakarta | Indonesia -> Cambodia | Legitimate cargo (industrial/goods); Vehicle compartment
+  https://news.mongabay.com/2026/11/investigation-continues-in-indonesia-after-first-conviction-in-3-ton-pangolin-trafficking-case/
+- [High 85] 11 Nov | Cocaine | 2.6 t | Valencia | Ghana -> Spain | Container structure / false compartment; Legitimate cargo (industrial/goods)
+  https://www.theolivepress.es/spain-news/2026/11/11/huge-cocaine-stash-hidden-among-coconuts-is-seized-in-valencia/
+- [High 85] 06 Nov | Cocaine | 635 kg | Port Everglades | Mexico -> United States | Hidden compartment (unspecified); Legitimate cargo (industrial/goods); Postal / parcel
+  https://hoodline.com/2026/11/san-clemente-checkpoint-agents-nab-10-million-in-cocaine-in-two-vans-minutes-apart/
 - [High 80] 06 Nov | Methamphetamine | 1.7 t | Manila | Laos -> Vietnam -> Philippines | Container structure / false compartment; Legitimate cargo (industrial/goods)
   https://qa.philstar.com/opinion/2026/11/07/2568359/editorial-illegal-drug-destination
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (303), Legitimate cargo (food/produce) (105), Postal / parcel (72)
-Cover cargo named: cocoa (9), electronics (7), toys (6), fish (5), timber (4)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (286), Legitimate cargo (food/produce) (88), Postal / parcel (74)
+Cover cargo named: cocoa (9), electronics (8), toys (6), fish (4), machinery (4)
 
 Coverage: searching 20 languages (Amharic, Arabic, Danish, German, English, Spanish, Estonian, French, Hindi, Icelandic, Mongolian, Dutch, Norwegian, Portuguese, Russian, Slovak, Swedish, Turkish, Vietnamese, Chinese). 35 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Azerbaijan, Bangladesh, Bosnia and Herzegovina).
 Leads from open sources, not confirmed facts. Verify before acting.
