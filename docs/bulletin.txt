@@ -1,33 +1,33 @@
-SEIZURE WATCH - weekly bulletin, 06 Nov - 12 Nov 2026
+SEIZURE WATCH - weekly bulletin, 07 Nov - 13 Nov 2026
 
-1275 seizure reports this week (previous week 1739); 89 high risk; 528.9 t reported.
-Main drugs: Cocaine (338), Cannabis (309), NSA (123)
-Main countries: United States (165), Brazil (155), India (149), Turkey (119)
+1239 seizure reports this week (previous week 1706); 83 high risk; 543.7 t reported.
+Main drugs: Cocaine (329), Cannabis (298), NSA (126)
+Main countries: Brazil (159), India (151), United States (150), Turkey (120)
 
 NEW AND SURGING CORRIDORS
 - Laos -> Philippines: NEW (8 this period, 0 before; mainly Methamphetamine)
-- United States -> Mexico: SURGING (8 this period, 3 before; mainly NSA)
+- Thailand -> Philippines: SURGING (6 this period, 2 before; mainly Cannabis)
 - Morocco -> Algeria: NEW (6 this period, 0 before; mainly Cannabis)
-- Thailand -> Philippines: SURGING (5 this period, 2 before; mainly Cannabis)
 - Ghana -> Lebanon: NEW (5 this period, 0 before; mainly Cocaine)
 - India -> Nigeria: SURGING (4 this period, 2 before; mainly Cannabis)
+- Zambia -> Thailand: NEW (4 this period, 0 before; mainly Elephant ivory)
 
 UNUSUAL EVENTS (highest risk first)
 - [High 100] 12 Nov | Cocaine | 17.6 t | Valencia | Ghana -> Spain | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Postal / parcel; Vehicle compartment | cargo: timber; flour
   https://www.modernghana.com/news/1543848/from-coconuts-to-containers-is-ghana-becoming-a.html
 - [High 100] 11 Nov | Cocaine | 2.6 t | Dunkirk | Ghana -> Belgium | Container structure / false compartment; Hidden compartment (unspecified); Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Luggage / passenger goods; Postal / parcel; Vehicle compartment | cargo: flour; timber; fruit; sugar
   https://www.myjoyonline.com/spain-intercepts-2-6-tonnes-of-cocaine-shipped-from-tema-port/
-- [High 90] 07 Nov | Cocaine | 358 kg | Cartagena | Panama -> Colombia | Impregnation / liquid / disguised; Legitimate cargo (industrial/goods); Postal / parcel | cargo: timber
+- [High 90] 07 Nov | Cocaine | 358 kg | Cartagena | Panama -> Colombia | Impregnation / liquid / disguised; Legitimate cargo (industrial/goods); Postal / parcel | cargo: timber; toys
   https://libyaobserver.ly/news/colombia-seizes-358kg-cocaine-bound-tripoli
 - [High 85] 11 Nov | Pangolin | 3.0 t | Jakarta | Indonesia -> Cambodia | Legitimate cargo (industrial/goods); Vehicle compartment
   https://news.mongabay.com/2026/11/investigation-continues-in-indonesia-after-first-conviction-in-3-ton-pangolin-trafficking-case/
-- [High 85] 06 Nov | Cocaine | 635 kg | Port Everglades | Mexico -> United States | Hidden compartment (unspecified); Legitimate cargo (industrial/goods); Postal / parcel
-  https://hoodline.com/2026/11/san-clemente-checkpoint-agents-nab-10-million-in-cocaine-in-two-vans-minutes-apart/
-- [High 80] 06 Nov | Methamphetamine | 1.7 t | Manila | Laos -> Vietnam -> Philippines | Container structure / false compartment; Legitimate cargo (industrial/goods)
-  https://qa.philstar.com/opinion/2026/11/07/2568359/editorial-illegal-drug-destination
+- [High 80] 12 Nov | Cocaine | 750 kg | The Hague | Switzerland -> Netherlands | Impregnation / liquid / disguised
+  https://ieu-monitoring.com/editorial/eurojust-and-europol-help-dismantle-major-cocaine-trafficking-network-in-europe/1254622
+- [High 80] 07 Nov | Cocaine | 500 kg | Parana | Bolivia -> Paraguay -> Brazil | Legitimate cargo (food/produce) | cargo: cocoa
+  https://www.balkanweb.com/en/kitchen--boarding--exit--spak--sent-the-cocaine-trafficking-group-for-trial--how-was-the-work-divided-between-the-two-leaders-of-the-group--the-fees-for/
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (287), Legitimate cargo (food/produce) (94), Postal / parcel (81)
-Cover cargo named: cocoa (9), toys (8), timber (8), electronics (7), machinery (5)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (261), Legitimate cargo (food/produce) (94), Postal / parcel (82)
+Cover cargo named: cocoa (12), timber (8), electronics (7), toys (5), machinery (5)
 
 Coverage: searching 20 languages (Amharic, Arabic, Danish, German, English, Spanish, Estonian, French, Hindi, Icelandic, Mongolian, Dutch, Norwegian, Portuguese, Russian, Slovak, Swedish, Turkish, Vietnamese, Chinese). 35 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Azerbaijan, Bangladesh, Bosnia and Herzegovina).
 Leads from open sources, not confirmed facts. Verify before acting.
