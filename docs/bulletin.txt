@@ -1,8 +1,8 @@
-SEIZURE WATCH - weekly bulletin, 08 Nov - 14 Nov 2026
+SEIZURE WATCH - weekly bulletin, 09 Nov - 15 Nov 2026
 
-1274 seizure reports this week (previous week 1643); 80 high risk; 504.7 t reported.
-Main drugs: Cocaine (331), Cannabis (290), NSA (126)
-Main countries: India (170), United States (165), Brazil (158), Turkey (118)
+1343 seizure reports this week (previous week 1575); 89 high risk; 531.8 t reported.
+Main drugs: Cocaine (358), Cannabis (315), NSA (135)
+Main countries: Brazil (180), India (176), United States (174), Turkey (110)
 
 NEW AND SURGING CORRIDORS
 - Laos -> Philippines: NEW (8 this period, 0 before; mainly Methamphetamine)
@@ -17,17 +17,17 @@ UNUSUAL EVENTS (highest risk first)
   https://www.modernghana.com/news/1543848/from-coconuts-to-containers-is-ghana-becoming-a.html
 - [High 100] 11 Nov | Cocaine | 2.6 t | Dunkirk | Ghana -> Belgium | Container structure / false compartment; Hidden compartment (unspecified); Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Luggage / passenger goods; Postal / parcel; Vehicle compartment | cargo: flour; timber; plastic waste; fruit
   https://www.myjoyonline.com/spain-intercepts-2-6-tonnes-of-cocaine-shipped-from-tema-port/
+- [High 100] 15 Nov | Cocaine | 1.8 t | Valencia | Ecuador -> Spain | Impregnation / liquid / disguised; Legitimate cargo (food/produce); Legitimate cargo (industrial/goods) | cargo: timber; banana; sugar
+  https://woodcentral.com.au/cocaine-hidden-timber-logs-valencia/
 - [High 93] 14 Nov | Heroin/Opium | 3.0 t | Gujarat | China -> United States | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods) | cargo: fruit
   https://businessupturn.com/trade-policy/india/india-reports-19-drug-seizures-at-major-ports-raising-questions-over-maritime-security-and-u-s-china-trade-relations/
 - [High 85] 11 Nov | Pangolin | 3.0 t | Jakarta | Indonesia -> Cambodia | Legitimate cargo (industrial/goods); Vehicle compartment
   https://news.mongabay.com/2026/11/investigation-continues-in-indonesia-after-first-conviction-in-3-ton-pangolin-trafficking-case/
 - [High 80] 12 Nov | Cocaine | 750 kg | The Hague | Switzerland -> Netherlands | Impregnation / liquid / disguised
   https://ieu-monitoring.com/editorial/eurojust-and-europol-help-dismantle-major-cocaine-trafficking-network-in-europe/1254622
-- [High 80] 10 Nov | NSA | 346 kg | South Carolina | Mexico -> United States | Legitimate cargo (industrial/goods); Postal / parcel
-  https://www.swlexledger.com/single-post/36-indicted-in-major-multi-state-drug-trafficking-investigation-millions-in-assets-seized-across-so
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (271), Legitimate cargo (food/produce) (94), Postal / parcel (76)
-Cover cargo named: cocoa (15), timber (8), electronics (7), fruit (5), fish (5)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (286), Legitimate cargo (food/produce) (109), Postal / parcel (85)
+Cover cargo named: cocoa (17), timber (12), fruit (5), toys (5), fish (5)
 
 Coverage: searching 20 languages (Amharic, Arabic, Danish, German, English, Spanish, Estonian, French, Hindi, Icelandic, Mongolian, Dutch, Norwegian, Portuguese, Russian, Slovak, Swedish, Turkish, Vietnamese, Chinese). 35 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Azerbaijan, Bangladesh, Bosnia and Herzegovina).
 Leads from open sources, not confirmed facts. Verify before acting.
