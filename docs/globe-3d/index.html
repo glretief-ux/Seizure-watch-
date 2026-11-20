@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CEN Seizure Risk Board – 3D Globe</title>
+<style>
+:root{--high:#ff2d6f;--med:#ffb800;--low:#19e3a5;--ink:#f4f1ff;--mut:#b7aee0;--glass:rgba(24,12,66,.62);--edge:rgba(190,160,255,.35)}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:radial-gradient(ellipse at 30% 20%,#2a0f6b 0%,#120640 45%,#05021a 100%);font-family:"Segoe UI",-apple-system,Roboto,Arial,sans-serif;color:var(--ink)}
+#stage{position:fixed;inset:0}
+#stage canvas{display:block;touch-action:none}
+.panel{position:fixed;background:var(--glass);border:1px solid var(--edge);border-radius:16px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);padding:12px 14px;box-shadow:0 8px 30px rgba(0,0,0,.35)}
+#hud{top:12px;left:12px;width:310px;max-width:calc(100vw - 24px);display:grid;gap:10px}
+#hud img{width:100%;background:#fff;border-radius:8px;padding:4px}
+#hud h1{margin:0;font-size:1.05rem;font-weight:700;background:linear-gradient(90deg,#4cc9f0,#ff6bd6,#ffd23f);-webkit-background-clip:text;background-clip:text;color:transparent}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.kpi{background:rgba(255,255,255,.07);border-radius:10px;padding:6px 4px;text-align:center}
+.kpi b{display:block;font-size:1.15rem;font-variant-numeric:tabular-nums}
+.kpi span{font-size:.62rem;color:var(--mut);text-transform:uppercase;letter-spacing:.04em}
+.kpi:nth-child(1) b{color:#4cc9f0}.kpi:nth-child(2) b{color:#ffd23f}.kpi:nth-child(3) b{color:#ff6bd6}.kpi:nth-child(4) b{color:var(--high)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+label{display:grid;gap:3px;font-size:.7rem;color:var(--mut);font-weight:600}
+select{font:inherit;font-size:.85rem;color:var(--ink);background:rgba(10,4,40,.8);border:1px solid var(--edge);border-radius:8px;padding:6px}
+#bar{bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:8px;flex-wrap:wrap;justify-content:center;padding:8px 10px;max-width:calc(100vw - 24px)}
+.chip{font:600 .8rem inherit;font-family:inherit;color:var(--ink);background:rgba(255,255,255,.08);border:1px solid var(--edge);border-radius:999px;padding:7px 13px;cursor:pointer}
+.chip[aria-pressed="true"]{background:linear-gradient(90deg,#7b2ff7,#f107a3);border-color:transparent}
+#legend{bottom:12px;left:12px;font-size:.75rem;display:grid;gap:4px}
+#legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-2px}
+#card{top:12px;right:12px;width:290px;max-width:calc(100vw - 24px);display:none;gap:8px;font-size:.84rem}
+#card h2{margin:0;font-size:1.15rem;background:linear-gradient(90deg,#ffd23f,#ff6bd6);-webkit-background-clip:text;background-clip:text;color:transparent}
+#card dl{display:grid;grid-template-columns:auto 1fr;gap:3px 10px;margin:0}
+#card dt{color:var(--mut);font-weight:600}#card dd{margin:0}
+.band{display:flex;height:10px;border-radius:5px;overflow:hidden}
+#card button{justify-self:end}
+#tip{position:fixed;pointer-events:none;display:none;background:rgba(15,6,50,.92);border:1px solid var(--edge);border-radius:8px;padding:6px 9px;font-size:.78rem;z-index:5}
+#msg{position:fixed;inset:0;display:none;place-items:center;text-align:center;padding:20px;color:#ffb3c7}
+@media(max-width:700px){#legend{display:none}#hud{width:calc(100vw - 24px)}#card{top:auto;bottom:70px;right:12px;left:12px;width:auto}#bar{bottom:8px}}
+</style></head>
+<body>
+<div id="stage"></div>
+<div id="msg"></div>
+<div id="tip"></div>
+<div class="panel" id="hud">
+  <img src="pccp-logo-banner.jpg" alt="UNODC, AIRCOP, Container Control Programme, WCO">
+  <h1>CEN Seizure Risk Board · 3D</h1>
+  <div class="kpis">
+    <div class="kpi"><b id="k1">–</b><span>Countries</span></div>
+    <div class="kpi"><b id="k2">–</b><span>Cases</span></div>
+    <div class="kpi"><b id="k3">–</b><span>Routes</span></div>
+    <div class="kpi"><b id="k4">–</b><span>High</span></div>
+  </div>
+  <div class="row">
+    <label>Year<select id="fy"></select></label>
+    <label>Risk band<select id="fb"><option value="">All</option><option>High</option><option>Medium</option><option>Low</option></select></label>
+  </div>
+</div>
+<div class="panel" id="legend">
+  <div><i style="background:var(--high)"></i>High risk cases</div>
+  <div><i style="background:var(--med)"></i>Medium risk cases</div>
+  <div><i style="background:var(--low)"></i>Low risk cases</div>
+  <div style="color:var(--mut)">Bar height = cases · arcs = departure → destination</div>
+</div>
+<div class="panel" id="card"></div>
+<div class="panel" id="bar">
+  <button class="chip" id="t-spin" aria-pressed="true">Spin</button>
+  <button class="chip" id="t-bars" aria-pressed="true">Bars</button>
+  <button class="chip" id="t-arcs" aria-pressed="true">Routes</button>
+  <button class="chip" id="t-labs" aria-pressed="true">Labels</button>
+  <button class="chip" id="t-reset">Reset view</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<script src="https://unpkg.com/three@0.128.0/build/three.min.js"></script>
+<script src="https://unpkg.com/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script src="world.js"></script>
+<script src="data.js"></script>
+<script>
+(() => {
+const $ = id => document.getElementById(id);
+const fmt = n => Number(n).toLocaleString("en-GB");
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const DATA = window.CEN_DATA, WORLD = window.CEN_WORLD;
+if (!DATA || !DATA.cases || !window.THREE || !window.d3 || !WORLD) {
+  const m = $("msg"); m.style.display = "grid"; m.textContent = "Couldn't load the 3D libraries or data. Check your connection and reload."; return;
+}
+const GEO = DATA.geo || {};
+const COL = { High: 0xff2d6f, Medium: 0xffb800, Low: 0x19e3a5 };
+const RANK = { High: 3, Medium: 2, Low: 1 };
+const R = 1;
+
+/* ---------- renderer / scene ---------- */
+const stage = $("stage");
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+stage.appendChild(renderer.domElement);
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(42, 1, 0.05, 100);
+const HOME = new THREE.Vector3(0.6, 1.1, 3.6);
+camera.position.copy(HOME);
+const controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true; controls.dampingFactor = 0.07; controls.minDistance = 1.5; controls.maxDistance = 7; controls.autoRotate = true; controls.autoRotateSpeed = 0.6; controls.enablePan = false;
+scene.add(new THREE.AmbientLight(0xffffff, 0.85));
+const sun = new THREE.DirectionalLight(0xffffff, 0.8); scene.add(sun);
+
+/* ---------- stars ---------- */
+{
+  const n = 3000, p = new Float32Array(n * 3), c = new Float32Array(n * 3), col = new THREE.Color();
+  for (let i = 0; i < n; i++) {
+    const v = new THREE.Vector3().randomDirection ? new THREE.Vector3().randomDirection() : new THREE.Vector3(Math.random()-.5, Math.random()-.5, Math.random()-.5).normalize();
+    v.multiplyScalar(30 + Math.random() * 20); p.set([v.x, v.y, v.z], i * 3);
+    col.setHSL(Math.random(), 0.9, 0.7); c.set([col.r, col.g, col.b], i * 3);
+  }
+  const g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.BufferAttribute(p, 3)); g.setAttribute("color", new THREE.BufferAttribute(c, 3));
+  scene.add(new THREE.Points(g, new THREE.PointsMaterial({ size: 0.12, vertexColors: true, transparent: true, opacity: 0.9 })));
+}
+
+/* ---------- globe texture (colourful land on deep ocean) ---------- */
+function globeTexture() {
+  const W = 2048, H = 1024, cv = document.createElement("canvas"); cv.width = W; cv.height = H;
+  const x = cv.getContext("2d");
+  let g = x.createLinearGradient(0, 0, 0, H);
+  g.addColorStop(0, "#3a1c9e"); g.addColorStop(.35, "#1559c7"); g.addColorStop(.5, "#0aa6c9"); g.addColorStop(.65, "#1559c7"); g.addColorStop(1, "#4a1a9e");
+  x.fillStyle = g; x.fillRect(0, 0, W, H);
+  const proj = d3.geoEquirectangular().scale(W / (2 * Math.PI)).translate([W / 2, H / 2]), path = d3.geoPath(proj, x);
+  x.strokeStyle = "rgba(255,255,255,.12)"; x.lineWidth = 1; x.beginPath(); path(d3.geoGraticule10()); x.stroke();
+  const land = topojson.feature(WORLD.land, WORLD.land.objects.land);
+  const lg = x.createLinearGradient(0, 0, W, 0);
+  [["#ff7a59", 0], ["#ffd23f", .2], ["#7bed9f", .4], ["#4cc9f0", .55], ["#c77dff", .75], ["#ff6bd6", .9], ["#ff7a59", 1]].forEach(([c, s]) => lg.addColorStop(s, c));
+  x.beginPath(); path(land); x.fillStyle = lg; x.fill();
+  const vg = x.createLinearGradient(0, 0, 0, H); vg.addColorStop(0, "rgba(255,255,255,.35)"); vg.addColorStop(.5, "rgba(255,255,255,0)"); vg.addColorStop(1, "rgba(255,255,255,.35)");
+  x.fillStyle = vg; x.beginPath(); path(land); x.fill();
+  x.strokeStyle = "rgba(255,255,255,.75)"; x.lineWidth = 1.4; x.beginPath(); path(land); x.stroke();
+  const t = new THREE.CanvasTexture(cv); t.anisotropy = 8; return t;
+}
+const globe = new THREE.Mesh(new THREE.SphereGeometry(R, 96, 64), new THREE.MeshPhongMaterial({ map: globeTexture(), shininess: 18, specular: 0x6666aa }));
+scene.add(globe);
+scene.add(new THREE.Mesh(new THREE.SphereGeometry(R * 1.2, 64, 48), new THREE.ShaderMaterial({
+  side: THREE.BackSide, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false,
+  vertexShader: "varying vec3 vN;void main(){vN=normalize(normalMatrix*normal);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}",
+  fragmentShader: "varying vec3 vN;void main(){float i=pow(max(0.0,0.72-dot(vN,vec3(0,0,1.0))),3.0);vec3 c=mix(vec3(0.2,0.9,1.0),vec3(1.0,0.3,0.8),vN.y*0.5+0.5);gl_FragColor=vec4(c,1.0)*i*1.6;}"
+})));
+
+/* ---------- helpers ---------- */
+function ll(lat, lon, r = R) {
+  const phi = (90 - lat) * Math.PI / 180, th = (lon + 180) * Math.PI / 180;
+  return new THREE.Vector3(-r * Math.sin(phi) * Math.cos(th), r * Math.cos(phi), r * Math.sin(phi) * Math.sin(th));
+}
+const pos = name => GEO[name] ? ll(GEO[name][0], GEO[name][1]) : null;
+const UP = new THREE.Vector3(0, 1, 0);
+function disposeGroup(g) { g.traverse(o => { if (o.geometry) o.geometry.dispose(); if (o.material) { if (o.material.map) o.material.map.dispose(); o.material.dispose(); } }); g.clear(); }
+function label(text) {
+  const cv = document.createElement("canvas"); cv.width = 256; cv.height = 64; const x = cv.getContext("2d");
+  x.font = "700 30px Segoe UI, Arial"; x.textAlign = "center"; x.textBaseline = "middle"; x.lineWidth = 7; x.strokeStyle = "rgba(20,5,70,.95)"; x.strokeText(text, 128, 32); x.fillStyle = "#fff"; x.fillText(text, 128, 32);
+  const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(cv), transparent: true, depthTest: false }));
+  s.scale.set(0.34, 0.085, 1); s.renderOrder = 10; return s;
+}
+const dotTex = (() => { const c = document.createElement("canvas"); c.width = c.height = 64; const x = c.getContext("2d"), g = x.createRadialGradient(32, 32, 0, 32, 32, 32); g.addColorStop(0, "#fff"); g.addColorStop(.4, "rgba(255,255,255,.7)"); g.addColorStop(1, "rgba(255,255,255,0)"); x.fillStyle = g; x.fillRect(0, 0, 64, 64); return new THREE.CanvasTexture(c); })();
+
+/* ---------- dynamic groups ---------- */
+const barsG = new THREE.Group(), arcsG = new THREE.Group(), labsG = new THREE.Group(), ringG = new THREE.Group();
+scene.add(barsG, arcsG, labsG, ringG);
+let pickables = [], arcs = [], particles = null, STATE = { sel: null, rows: [], seiz: new Map() };
+
+function filtered() {
+  const y = $("fy").value, b = $("fb").value;
+  return DATA.cases.filter(c => (!y || (c.d && c.d.startsWith(y))) && (!b || c.b === b));
+}
+
+function build() {
+  disposeGroup(barsG); disposeGroup(arcsG); disposeGroup(labsG); disposeGroup(ringG);
+  pickables = []; arcs = []; if (particles) { scene.remove(particles); particles.geometry.dispose(); particles.material.dispose(); particles = null; }
+  const rows = filtered(); STATE.rows = rows;
+  /* seizing countries */
+  const seiz = new Map();
+  for (const c of rows) if (c.sz && GEO[c.sz]) {
+    const s = seiz.get(c.sz) || { n: 0, High: 0, Medium: 0, Low: 0 }; s.n++; s[c.b]++; seiz.set(c.sz, s);
+  }
+  STATE.seiz = seiz; if (STATE.sel && !seiz.has(STATE.sel)) { STATE.sel = null; $("card").style.display = "none"; }
+  const maxN = Math.max(1, ...[...seiz.values()].map(s => s.n));
+  const sorted = [...seiz].sort((a, b) => b[1].n - a[1].n);
+  sorted.forEach(([name, s], idx) => {
+    const dir = pos(name).normalize(), q = new THREE.Quaternion().setFromUnitVectors(UP, dir);
+    const total = 0.06 + 0.5 * Math.sqrt(s.n / maxN), rad = 0.011 + 0.014 * Math.sqrt(s.n / maxN);
+    let base = 0;
+    for (const bd of ["Low", "Medium", "High"]) {
+      if (!s[bd]) continue;
+      const h = total * s[bd] / s.n, col = COL[bd];
+      const m = new THREE.Mesh(new THREE.CylinderGeometry(rad, rad * 1.15, h, 14), new THREE.MeshPhongMaterial({ color: col, emissive: col, emissiveIntensity: 0.55, shininess: 80 }));
+      m.position.copy(dir).multiplyScalar(R + base + h / 2); m.quaternion.copy(q); m.userData.country = name; barsG.add(m); pickables.push(m); base += h;
+    }
+    const cap = new THREE.Mesh(new THREE.SphereGeometry(rad * 1.5, 14, 10), new THREE.MeshBasicMaterial({ color: 0xffffff }));
+    cap.position.copy(dir).multiplyScalar(R + total + rad); cap.userData.country = name; barsG.add(cap); pickables.push(cap);
+    const worst = s.High ? "High" : s.Medium ? "Medium" : "Low";
+    const ring = new THREE.Sprite(new THREE.SpriteMaterial({ map: dotTex, color: COL[worst], transparent: true, blending: THREE.AdditiveBlending, depthWrite: false }));
+    ring.scale.set(0.16, 0.16, 1); ring.position.copy(dir).multiplyScalar(R + 0.004); ringG.add(ring);
+    if (idx < 14 || name === STATE.sel) { const l = label(name); l.position.copy(dir).multiplyScalar(R + total + 0.09); labsG.add(l); }
+  });
+  /* corridors */
+  const corr = new Map();
+  for (const c of rows) {
+    if (!(c.dep && c.dest && c.dep !== c.dest && GEO[c.dep] && GEO[c.dest])) continue;
+    const k = c.dep + "|" + c.dest; let e = corr.get(k);
+    if (!e) corr.set(k, e = { a: c.dep, b: c.dest, n: 0, top: "Low", sz: new Set() });
+    e.n++; if (RANK[c.b] > RANK[e.top]) e.top = c.b; if (c.sz) e.sz.add(c.sz);
+  }
+  const list = [...corr.values()].sort((a, b) => b.n - a.n).slice(0, 140);
+  const maxC = Math.max(1, ...list.map(e => e.n));
+  list.forEach(e => {
+    const A = pos(e.a), B = pos(e.b), ang = A.angleTo(B);
+    const mid = A.clone().add(B).normalize().multiplyScalar(R + 0.12 + 0.75 * ang / Math.PI);
+    const curve = new THREE.QuadraticBezierCurve3(A.clone().multiplyScalar(1.004), mid, B.clone().multiplyScalar(1.004));
+    const mat = new THREE.MeshBasicMaterial({ color: COL[e.top], transparent: true, opacity: 0.7, depthWrite: false });
+    const tube = new THREE.Mesh(new THREE.TubeGeometry(curve, 48, 0.0025 + 0.006 * Math.sqrt(e.n / maxC), 6, false), mat);
+    arcsG.add(tube); arcs.push({ e, curve, mat, off: Math.random() });
+  });
+  const pg = new THREE.BufferGeometry(); pg.setAttribute("position", new THREE.BufferAttribute(new Float32Array(arcs.length * 9), 3));
+  const pc = new Float32Array(arcs.length * 9), cc = new THREE.Color();
+  arcs.forEach((a, i) => { cc.set(0xffffff).lerp(new THREE.Color(COL[a.e.top]), 0.35); for (let j = 0; j < 3; j++) pc.set([cc.r, cc.g, cc.b], (i * 3 + j) * 3); });
+  pg.setAttribute("color", new THREE.BufferAttribute(pc, 3));
+  particles = new THREE.Points(pg, new THREE.PointsMaterial({ size: 0.06, map: dotTex, vertexColors: true, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false }));
+  scene.add(particles); particles.visible = $("t-arcs").getAttribute("aria-pressed") === "true";
+  applyToggles(); applySelection();
+  $("k1").textContent = fmt(seiz.size); $("k2").textContent = fmt(rows.length); $("k3").textContent = fmt(corr.size); $("k4").textContent = fmt(rows.filter(c => c.b === "High").length);
+}
+
+function applySelection() {
+  const sel = STATE.sel;
+  arcs.forEach(a => { const mine = sel && (a.e.a === sel || a.e.b === sel || a.e.sz.has(sel)); a.mat.opacity = !sel ? 0.7 : mine ? 1 : 0.07; });
+}
+function applyToggles() {
+  barsG.visible = ringG.visible = $("t-bars").getAttribute("aria-pressed") === "true";
+  arcsG.visible = $("t-arcs").getAttribute("aria-pressed") === "true"; if (particles) particles.visible = arcsG.visible;
+  labsG.visible = $("t-labs").getAttribute("aria-pressed") === "true";
+}
+
+/* ---------- selection card + fly-to ---------- */
+let fly = null;
+function top(arr, f, n = 3) { const m = new Map(); arr.forEach(x => { const k = f(x); if (k) m.set(k, (m.get(k) || 0) + 1); }); return [...m].sort((a, b) => b[1] - a[1]).slice(0, n).map(([k, v]) => `${esc(k)} <span style="color:var(--mut)">${v}</span>`).join(", ") || "–"; }
+function select(name) {
+  STATE.sel = name; applySelection();
+  const card = $("card");
+  if (!name) { card.style.display = "none"; return; }
+  const cs = STATE.rows.filter(c => c.sz === name), s = STATE.seiz.get(name);
+  const avg = (cs.reduce((a, c) => a + c.s, 0) / cs.length).toFixed(1);
+  card.innerHTML = `<h2>${esc(name)}</h2>
+    <div><b>${fmt(s.n)}</b> cases · avg score <b>${avg}</b></div>
+    <div class="band">${["High", "Medium", "Low"].map(b => s[b] ? `<span style="flex:${s[b]};background:#${COL[b].toString(16).padStart(6, "0")}" title="${b}: ${s[b]}"></span>` : "").join("")}</div>
+    <div style="color:var(--mut);font-size:.75rem">${s.High} High · ${s.Medium} Medium · ${s.Low} Low</div>
+    <dl><dt>Commodities</dt><dd>${top(cs, c => c.cat)}</dd><dt>Departed from</dt><dd>${top(cs, c => c.dep)}</dd><dt>Headed to</dt><dd>${top(cs, c => c.dest)}</dd></dl>
+    <button class="chip" id="card-x">Clear</button>`;
+  card.style.display = "grid"; $("card-x").onclick = () => select(null);
+  const dir = pos(name).normalize();
+  fly = { to: dir.multiplyScalar(3.2), t: 0, from: camera.position.clone() }; controls.autoRotate = false; $("t-spin").setAttribute("aria-pressed", "false");
+}
+
+/* ---------- picking ---------- */
+const ray = new THREE.Raycaster(), ptr = new THREE.Vector2(); let down = null;
+function pick(e) {
+  const r = renderer.domElement.getBoundingClientRect(); ptr.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+  ray.setFromCamera(ptr, camera);
+  const hit = ray.intersectObjects(pickables, false)[0]; if (!hit) return null;
+  /* hidden behind the globe? */
+  const g = ray.intersectObject(globe)[0]; if (g && g.distance < hit.distance - 0.001) return null;
+  return hit.object.userData.country;
+}
+const tip = $("tip");
+renderer.domElement.addEventListener("pointermove", e => {
+  if (e.pointerType !== "mouse" || e.buttons) { tip.style.display = "none"; return; }
+  const n = pick(e);
+  if (!n) { tip.style.display = "none"; renderer.domElement.style.cursor = "grab"; return; }
+  const s = STATE.seiz.get(n); renderer.domElement.style.cursor = "pointer";
+  tip.innerHTML = `<b>${esc(n)}</b><br>${fmt(s.n)} cases<br><span style="color:#ff6b9a">${s.High} High</span> · <span style="color:#ffd23f">${s.Medium} Med</span> · <span style="color:#19e3a5">${s.Low} Low</span>`;
+  tip.style.display = "block"; tip.style.left = Math.min(e.clientX + 14, innerWidth - 170) + "px"; tip.style.top = e.clientY + 14 + "px";
+});
+renderer.domElement.addEventListener("pointerdown", e => down = { x: e.clientX, y: e.clientY });
+renderer.domElement.addEventListener("pointerup", e => {
+  if (!down || Math.hypot(e.clientX - down.x, e.clientY - down.y) > 5) return;
+  const n = pick(e); select(n === STATE.sel ? null : n);
+});
+
+/* ---------- UI ---------- */
+const years = [...new Set(DATA.cases.map(c => c.d && c.d.slice(0, 4)).filter(Boolean))].sort().reverse();
+$("fy").innerHTML = '<option value="">All</option>' + years.map(y => `<option>${y}</option>`).join("");
+["fy", "fb"].forEach(id => $(id).addEventListener("change", build));
+["t-bars", "t-arcs", "t-labs"].forEach(id => $(id).addEventListener("click", e => { const b = e.currentTarget; b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") !== "true"); applyToggles(); }));
+$("t-spin").addEventListener("click", e => { const b = e.currentTarget, on = b.getAttribute("aria-pressed") !== "true"; b.setAttribute("aria-pressed", on); controls.autoRotate = on; });
+$("t-reset").addEventListener("click", () => { select(null); fly = { to: HOME.clone(), t: 0, from: camera.position.clone() }; });
+
+function resize() { const w = innerWidth, h = innerHeight; renderer.setSize(w, h); camera.aspect = w / h; camera.updateProjectionMatrix(); }
+addEventListener("resize", resize); resize();
+
+/* ---------- loop ---------- */
+const clock = new THREE.Clock();
+function frame() {
+  requestAnimationFrame(frame);
+  const dt = clock.getDelta(), t = clock.elapsedTime;
+  if (fly) { fly.t = Math.min(1, fly.t + dt / 1.1); const k = 1 - Math.pow(1 - fly.t, 3); camera.position.lerpVectors(fly.from, fly.to, k); if (fly.t >= 1) fly = null; }
+  sun.position.copy(camera.position).add(new THREE.Vector3(2, 2, 1));
+  if (particles && particles.visible) {
+    const p = particles.geometry.attributes.position.array;
+    arcs.forEach((a, i) => { for (let j = 0; j < 3; j++) { const v = a.curve.getPoint((t * 0.12 + a.off + j / 3) % 1); p[(i * 3 + j) * 3] = v.x; p[(i * 3 + j) * 3 + 1] = v.y; p[(i * 3 + j) * 3 + 2] = v.z; } });
+    particles.geometry.attributes.position.needsUpdate = true;
+  }
+  controls.update(); renderer.render(scene, camera);
+}
+build(); frame();
+})();
+</script>
+</body></html>
