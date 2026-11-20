@@ -22,5 +22,5 @@ print(len(ev), "events", days[0], "->", days[-1], round(os.path.getsize(path) / 
 # also publish on the GitHub Pages site (docs/motion/) so it opens from a normal web link on any device
 import shutil
 dst = os.path.join(ROOT, "docs", "motion"); os.makedirs(dst, exist_ok=True)
-for f in ("index.html", "data.js", "world.js"):
+for f in ("index.html", "globe.html", "data.js", "world.js"):
     shutil.copy2(os.path.join(ROOT, "motion", f), os.path.join(dst, f))
