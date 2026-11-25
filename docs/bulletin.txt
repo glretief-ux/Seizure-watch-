@@ -1,33 +1,33 @@
-SEIZURE WATCH - weekly bulletin, 18 Nov - 24 Nov 2026
+SEIZURE WATCH - weekly bulletin, 19 Nov - 25 Nov 2026
 
-1640 seizure reports this week (previous week 1535); 107 high risk; 477.3 t reported.
-Main drugs: Cannabis (395), Cocaine (339), NSA (162)
-Main countries: India (196), United States (183), Brazil (180), Turkey (135)
+1646 seizure reports this week (previous week 1616); 112 high risk; 504.9 t reported.
+Main drugs: Cannabis (377), Cocaine (336), NSA (167)
+Main countries: India (193), Brazil (188), United States (181), Turkey (132)
 
 NEW AND SURGING CORRIDORS
-- Mexico -> United States: SURGING (24 this period, 7 before; mainly Methamphetamine)
+- Mexico -> United States: SURGING (25 this period, 7 before; mainly Methamphetamine)
 - Laos -> Philippines: SURGING (7 this period, 2 before; mainly Methamphetamine)
-- Thailand -> Philippines: SURGING (6 this period, 0 before; mainly Cannabis)
+- Thailand -> Philippines: SURGING (7 this period, 0 before; mainly Cannabis)
 - Morocco -> Algeria: SURGING (5 this period, 2 before; mainly Cannabis)
 - Ghana -> Lebanon: NEW (5 this period, 0 before; mainly Cocaine)
 - South Africa -> Nigeria: NEW (4 this period, 0 before; mainly Cannabis)
 
 UNUSUAL EVENTS (highest risk first)
-- [High 100] 24 Nov | Pangolin | 13.3 t | Vietnam | Indonesia -> Vietnam | Legitimate cargo (industrial/goods); Vehicle compartment | cargo: timber
+- [High 100] 24 Nov | Pangolin | 13.3 t | Vietnam | Indonesia -> Vietnam | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Postal / parcel; Vehicle compartment | cargo: timber
   https://mg.co.za/the-green-guardian/2026-11-24-how-investigators-dismantled-a-major-africa-asia-wildlife-trafficking-network/
-- [High 90] 18 Nov | NSA | 1.3 t | Uttar Pradesh | Nepal -> India | Impregnation / liquid / disguised; Legitimate cargo (industrial/goods) | cargo: machinery
-  https://organiser.org/2026/11/18/427093/bharat/uttar-pradesh/from-jalaun-to-greater-noida-how-uttar-pradesh-is-tightening-the-net-around-synthetic-drug-manufacturing-networks/
+- [High 95] 25 Nov | Methamphetamine | 1.5 t | Enugu | Mexico -> Colombia -> France -> Nigeria | Impregnation / liquid / disguised; Legitimate cargo (industrial/goods)
+  https://ndlea.gov.ng/blog/ndlea-dismantles-another-industrial-meth-lab-in-enugu-arrests-drug-baron-5-mexicans
 - [High 90] 20 Nov | Stolen car | 2,394 vehicles | Buenos Aires | Canada -> Morocco -> Argentina | Legitimate cargo (industrial/goods); Vehicle compartment
   https://en.hespress.com/149550-morocco-seizes-two-stolen-canadian-luxury-cars-in-interpol-operation.html
-- [High 85] 18 Nov | Cocaine | 7.3 t | Santos | Legitimate cargo (food/produce); Vessel hull / underwater | cargo: cocoa
-  https://g1.globo.com/sp/santos-regiao/porto-mar/noticia/2026/11/18/entenda-como-traficantes-fazem-do-casco-de-navios-esconderijo-de-cocaina.ghtml
-- [High 85] 18 Nov | Cocaine | 1.1 t | Miami | Jamaica -> United States | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods); Postal / parcel; Vehicle compartment
-  https://www.stvincenttimes.com/st-kitts-jamaica-nationals-nabbed-in-18m-in-cocaine-bust/
 - [High 85] 24 Nov | Cocaine | 128 kg | Antwerp | Sierra Leone -> Spain -> Belgium | Legitimate cargo (food/produce); Legitimate cargo (industrial/goods) | vessel: Arconian
   https://mondafrique.com/decryptage/libye-cocaine-2-2-une-meme-destination-plusieurs-route/
+- [High 85] 24 Nov | Firearms | Buenos Aires | Portugal -> Argentina | Legitimate cargo (industrial/goods); Vehicle compartment
+  https://thesun.ng/688-suspects-arrested-2394-stolen-vehicles-seized-in-nigeria-64-other-countries/
+- [High 80] 23 Nov | NSA | 1.1 t | Mexico City | United States -> Chile | Legitimate cargo (industrial/goods); Postal / parcel | cargo: steel
+  https://latinus.us/mexico/2026/11/22/aseguran-cargamentos-de-metanfetamina-ketamina-y-cannabis-en-la-aduana-del-aicm-183159.html
 
-HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (341), Legitimate cargo (food/produce) (118), Postal / parcel (72)
-Cover cargo named: fruit (19), cocoa (14), machinery (7), furniture (6), coffee (6)
+HOW IT WAS HIDDEN: Legitimate cargo (industrial/goods) (351), Legitimate cargo (food/produce) (112), Postal / parcel (77)
+Cover cargo named: fruit (18), cocoa (15), furniture (7), coffee (7), machinery (6)
 
 Coverage: searching 20 languages (Amharic, Arabic, Danish, German, English, Spanish, Estonian, French, Hindi, Icelandic, Mongolian, Dutch, Norwegian, Portuguese, Russian, Slovak, Swedish, Turkish, Vietnamese, Chinese). 35 countries have no main language searched (e.g. Afghanistan, Albania, Armenia, Azerbaijan, Bangladesh, Bosnia and Herzegovina).
 Leads from open sources, not confirmed facts. Verify before acting.
