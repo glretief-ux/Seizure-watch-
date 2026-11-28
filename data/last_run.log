@@ -4,57 +4,38 @@
    RSS UK Border Force: 20 items
    ! https://ndlea.gov.ng/feed/... HTTPError
    RSS NDLEA Nigeria: 0 items
-   Official websites (52 searched): 1710 headlines
-   ! https://news.google.com/rss/search?q=tiger%20skin%20bones%20seized%20when%3A2d&hl=en-ZA&gl... HTTPError
-   ! https://news.google.com/rss/search?q=fentanyl%20seized%20when%3A2d&hl=en-NG&gl=NG&ceid=NG:... HTTPError
-   ! https://news.google.com/rss/search?q=MDMA%20ecstasy%20seized%20when%3A2d&hl=en-NG&gl=NG&ce... HTTPError
-   ! https://news.google.com/rss/search?q=ozone-depleting%20refrigerant%20gas%20smuggling%20sei... HTTPError
-   ! https://news.google.com/rss/search?q=counterfeit%20pesticides%20seized%20when%3A2d&hl=en-N... HTTPError
-   ! https://news.google.com/rss/search?q=rhino%20horn%20seized%20when%3A2d&hl=en-NG&gl=NG&ceid... HTTPError
-   ! https://news.google.com/rss/search?q=shark%20fins%20seized%20when%3A2d&hl=en-NG&gl=NG&ceid... HTTPError
-   ! https://news.google.com/rss/search?q=arms%20trafficking%20seized%20when%3A2d&hl=en-NG&gl=N... HTTPError
-   ! https://news.google.com/rss/search?q=antiquities%20seized%20customs%20when%3A2d&hl=en-NG&g... HTTPError
-   ! https://news.google.com/rss/search?q=stolen%20idols%20recovered%20when%3A2d&hl=en-NG&gl=NG... HTTPError
-   ! https://news.google.com/rss/search?q=stolen%20paintings%20recovered%20police%20when%3A2d&h... HTTPError
-   ! https://news.google.com/rss/search?q=incautan%20drogas%20sint%C3%A9ticas%20aeropuerto%20wh... HTTPError
-   ! https://news.google.com/rss/search?q=incautan%20mercurio%20when%3A2d&hl=es-419&gl=MX&ceid=... HTTPError
-      edition MX/es: 94 headlines
-      edition ES/es: 95 headlines
-      edition CO/es: 91 headlines
-      edition FR/fr: 112 headlines
-      edition BR/pt: 215 headlines
-      edition PT/pt: 221 headlines
-      edition SA/ar: 327 headlines
-      edition EG/ar: 388 headlines
-      edition AE/ar: 346 headlines
-   ! https://news.google.com/rss/search?q=esrar%20ele%20ge%C3%A7irildi%20when%3A2d&hl=tr&gl=TR&... HTTPError
-   ! https://news.google.com/rss/search?q=uyu%C5%9Fturucu%20hap%20ele%20ge%C3%A7irildi%20when%3... HTTPError
-      edition TR/tr: 193 headlines
-   ! https://news.google.com/rss/search?q=%D0%B8%D0%B7%D1%8A%D1%8F%D0%BB%D0%B8%20%D1%80%D1%82%D... HTTPError
-      edition RU/ru: 176 headlines
-   ! https://news.google.com/rss/search?q=%D0%B8%D0%B7%D1%8A%D1%8F%D0%BB%D0%B8%20%D0%BA%D1%83%D... HTTPError
-      edition UA/ru: 191 headlines
-   ! https://news.google.com/rss/search?q=%E6%B5%B7%E5%85%B3%20%E6%9F%A5%E8%8E%B7%20%E6%AF%92%E... HTTPError
-      edition CN/zh: 15 headlines
-   ! https://news.google.com/rss/search?q=%E7%B7%9D%E7%8D%B2%20%E5%86%B0%E6%AF%92%20when%3A2d&h... HTTPError
-      edition HK/zh: 4 headlines
-   ! https://news.google.com/rss/search?q=%E6%9F%A5%E8%8E%B7%E5%8F%AF%E5%8D%A1%E5%9B%A0%20when%... HTTPError
-      edition TW/zh: 4 headlines
-      edition IN/hi: 231 headlines
-      edition VN/vi: 221 headlines
-      edition NL/nl: 135 headlines
-      edition BE/nl: 121 headlines
-      edition AT/de: 42 headlines
-      edition DK/da: 4 headlines
-   ! https://news.google.com/rss/search?q=relvad%20konfiskeeriti%20salakaubavedu%20when%3A2d&hl... HTTPError
+   ! https://news.google.com/rss/search?q=site%3Acustoms.gov.mn%20%28seized%20OR%20seizure%20OR... HTTPError
+   Official websites (52 searched): 1697 headlines
+      edition MX/es: 77 headlines
+      edition ES/es: 100 headlines
+      edition CO/es: 101 headlines
+      edition FR/fr: 97 headlines
+      edition BR/pt: 216 headlines
+      edition PT/pt: 200 headlines
+      edition SA/ar: 298 headlines
+   ! https://news.google.com/rss/search?q=%D8%B6%D8%A8%D8%B7%20%D8%BA%D8%A7%D8%B2%20%D8%A7%D9%8... HTTPError
+      edition EG/ar: 297 headlines
+      edition AE/ar: 260 headlines
+      edition TR/tr: 329 headlines
+      edition RU/ru: 202 headlines
+      edition UA/ru: 148 headlines
+      edition CN/zh: 20 headlines
+      edition HK/zh: 5 headlines
+      edition TW/zh: 5 headlines
+      edition IN/hi: 240 headlines
+      edition VN/vi: 207 headlines
+      edition NL/nl: 102 headlines
+      edition BE/nl: 95 headlines
+      edition AT/de: 35 headlines
+      edition DK/da: 2 headlines
       edition EE/et: 0 headlines
       edition ET/am: 0 headlines
       edition IS/is: 0 headlines
       edition MN/mn: 0 headlines
-      edition NO/no: 5 headlines
-      edition SK/sk: 6 headlines
+      edition NO/no: 2 headlines
+      edition SK/sk: 1 headlines
       edition SE/sv: 4 headlines
-   Google News: 6203 headlines
+   Google News: 5704 headlines
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28cocaine%20OR%20heroin%20OR%20metha... ReadTimeout
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28precursor%20chemicals%20OR%20cland... ReadTimeout
    ! https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22hazardous%20chemicals%22%20OR%2... ReadTimeout
@@ -80,31 +61,30 @@
       GDELT sk: 0 headlines
       GDELT sv: 0 headlines
    GDELT: 0 headlines
-      1360 candidate headlines, 742 new
+      1263 candidate headlines, 617 new
 [2/4] Reading articles...
-      link resolving stopped at its time limit after 300 of 736; the rest are read from headline + snippet
-      links resolved: 300 of 736
-      read in full: 248; headline + snippet only: 494
-      download problems: HTTPError x47, ReadTimeout x3, ContentDecodingError x1
+      link resolving stopped at its time limit after 325 of 615; the rest are read from headline + snippet
+      links resolved: 325 of 615
+      read in full: 267; headline + snippet only: 350
+      download problems: HTTPError x37, ReadTimeout x5
 [3/4] Extracting facts and storing...
-      NER supplemented 127 article(s) (unrecognised place names logged to ner_places for review)
-      stored 740, of which 480 are seizure reports
+      NER supplemented 100 article(s) (unrecognised place names logged to ner_places for review)
+      stored 613, of which 405 are seizure reports
 [4/4] Analysing and building report...
-      attempted 150 older headline(s) that predate this feature (191 translated, 8 failed and kept as-is; last error: _via_google: TooManyRequests: Server Error: You made too many requests to the server.According to google, you are allowed to make 5 requests per secondand up to 200k requests per day. You can wait and try again later oryou can try the translate_batch function)
-      links resolved: 38 of 39
-   ! 1 links failed: Failed to fetch data attributes from Google News.
-      read in full: 27; headline + snippet only: 33
-      download problems: HTTPError x28, ReadTimeout x1
-      re-read 27 of 60 earlier headline-only report(s) in full
-Done. 16946 events in report, 372 alerts.
+      attempted 150 older headline(s) that predate this feature (194 translated, 8 failed and kept as-is; last error: _via_google: TooManyRequests: Server Error: You made too many requests to the server.According to google, you are allowed to make 5 requests per secondand up to 200k requests per day. You can wait and try again later oryou can try the translate_batch function)
+      links resolved: 41 of 41
+      read in full: 39; headline + snippet only: 21
+      download problems: HTTPError x14, ReadTimeout x2
+      re-read 39 of 60 earlier headline-only report(s) in full
+Done. 17170 events in report, 382 alerts.
 Weekly bulletin written (/home/runner/work/Seizure-watch-/Seizure-watch-/docs/bulletin.html).
 Open: /home/runner/work/Seizure-watch-/Seizure-watch-/docs/index.html
-  [High  ] HIGH-RISK EVENT: Methamphetamine - Enugu (score 95)
-  [High  ] HIGH-RISK EVENT: Methamphetamine - New Zealand (score 90)
-  [High  ] HIGH-RISK EVENT: Methamphetamine - France (score 85)
-  [High  ] HIGH-RISK EVENT: NSA - Enugu (score 83)
+  [High  ] HIGH-RISK EVENT: Cocaine - Kingston (score 100)
   [High  ] HIGH-RISK EVENT: Methamphetamine - Mexico (score 80)
-  [High  ] HIGH-RISK EVENT: Cigarettes - Hong Kong (score 73)
   [High  ] HIGH-RISK EVENT: Reptiles and turtles - Sydney (score 73)
-  [High  ] HIGH-RISK EVENT: Methamphetamine - Anambra (score 70)
+  [High  ] HIGH-RISK EVENT: Methamphetamine - Selangor (score 70)
+  [High  ] HIGH-RISK EVENT: NSA - Umm Qasr (score 70)
+  [High  ] HIGH-RISK EVENT: Cocaine - Bahia (score 65)
+  [High  ] HIGH-RISK EVENT: Cocaine - Western Australia (score 65)
+  [High  ] HIGH-RISK EVENT: Cocaine - Santo Domingo (score 65)
 run_daily.py exit code: 0
